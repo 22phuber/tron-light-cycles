@@ -1,4 +1,6 @@
-# PSIT3
+# Tron light cycles computer game
+
+*ZHAW PSIT3 Project*
 
 ## Team
 * Deniz Akca (akcaden1@students.zhaw.ch)
