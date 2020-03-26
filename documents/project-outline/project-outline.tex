@@ -1,0 +1,316 @@
+\documentclass[11pt,ngerman]{article}
+\usepackage{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{babel}
+\usepackage{lmodern}%get scalable font
+\usepackage{titling}
+\usepackage{relsize}
+\usepackage{biblatex}
+\usepackage{hyperref}
+\usepackage{glossaries}
+\usepackage{paralist}
+\usepackage[table, dvipsnames]{xcolor}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{float}
+\restylefloat{table}
+\usepackage{setspace}
+
+\geometry{a4paper, top=25mm, left=25mm, right=25mm, bottom=20mm,
+    headsep=10mm, footskip=12mm}
+
+% bibliography file
+\addbibresource{\jobname.bib}
+
+% glossary
+% Das Glossar definiert alle wichtigen Begriffe zur Sicherstellung einer einheitlichen Terminologie. Es sollen keine allgemeinen Begriffe erklärt werden, die den Adressaten bekannt sind (z. B. Java, CPU etc.).
+\makeglossaries
+\newglossaryentry{Adobe Flash Player}
+{
+    name=Adobe Flash Player,
+    description={Der Adobe Flash Player ist eine kostenlose Software, die multimediale Inhalte auf Webseiten, die auf Adobe Flash erstellt wurden, anzeigen lässt. Die Software ist in den letzten Jahren wegen Sicherheitslücken stark in Kritik geraten}
+}
+\newglossaryentry{Arena}{
+    name={Arena},
+    description={Eine Arena bezeichnet im Kontext von Online-Computerspielen der Raum, in dem das Spiel stattfindet}
+}
+\newglossaryentry{Battle Royale}{
+    name=Battle Royale,
+    description={Battle Royale bezeichnet ein Online-Computerspiel-Genre. Es befinden sich bis zu 100 Spieler in einem abgegrenzten Spielbereich. Dieser, wird kontinuierlich kleiner. Gewinner ist, wer am längsten überlebt}
+}
+\newglossaryentry{Game Server}{
+    name={Game Server},
+    description={Spieleserver (engl. game server) sind speziell für Mehrspieler-Spiele eingerichtete Server. Spieler können sich mit ihnen verbinden, um miteinander zu spielen. Sie verwalten die Spieldaten und synchronisieren die Handlungen der Spieler gegenseitig. Spieleserver kommen sowohl im Internet, um verschiedene Spieler weltweit zusammenzubringen, als auch lokal auf LAN-Partys, insbesondere wenn keine ausreichend schnelle Verbindung zum Internet besteht, zum Einsatz}
+}
+\newglossaryentry{Latenz}{
+    name={Latenz},
+    description={Ein sehr bekannter Begriff ist der Ping (benannt nach dem Ping-Kommando in Windows). Der Ping bezeichnet die Zeit, die ein Datenpaket von Ihrem PC zu einem Server im Internet und wieder zurück benötigt – diese Verzögerung wird auch als Latenz bezeichnet. Ist die Latenz (zu) hoch, nennt man dies auch Lag}
+}
+\newglossaryentry{Lobby}{
+    name=Lobby,
+    description={Eine Lobby bezeichnet im Kontext von Online-Computerspielen einen Warteraum. Die für eine Spielrunde angemeldeten Spieler befinden sich in diesem, bis die Runde beginnt}
+}
+\newglossaryentry{Multiplayer}{
+    name={Multiplayer},
+    description={Der Begriff Mehrspieler (englisch multiplayer, multi-player) beschreibt im Bereich der Computerspiele eine Spielart (im Computerspieler-Jargon auch Modus), bei der man mit oder gegen andere Menschen spielt. Sie ist das Gegenstück zur Einzelspieler-Spielweise, bei der ein einzelner Spieler alleine mit bzw. gegen den Computer spielt}
+}
+\newglossaryentry{OOP}{
+    name={OOP},
+    description={Die objektorientierte Programmierung (kurz OOP) ist ein auf dem Konzept der Objektorientierung basierendes Programmierparadigma. Die Grundidee besteht darin, die Architektur einer Software an den Grundstrukturen desjenigen Bereichs der Wirklichkeit auszurichten, der die gegebene Anwendung betrifft. Ein Modell dieser Strukturen wird in der Entwurfsphase aufgestellt. Es enthält Informationen über die auftretenden Objekte und deren Abstraktionen, ihre Typen. Die Umsetzung dieser Denkweise erfordert die Einführung verschiedener Konzepte, insbesondere Klassen, Vererbung, Polymorphie und spätes Binden}
+}
+\newglossaryentry{Unified Process (UP)}{
+    name=Unified Process,
+    description={UP definiert ein iterativer Entwicklungsprozess für objektorientierte Systeme}
+}
+
+\pretitle{\begin{center}\linespread{1.5}\huge}
+    \posttitle{\par\end{center}\vspace{0.5em}}
+
+\begin{document}
+
+    \title{Tron Licht-Motorräder Computerspiel\\
+        \vspace{1cm}
+        \smaller{}Projektskizze \\
+        \vspace{0.5cm}
+        \small{}ZHAW  School of Engineering
+        \vspace{1.5cm}
+    }
+    \author{
+        Akca, Deniz\\
+        \small{akcaden1@students.zhaw.ch}
+        \and
+        Holenstein, Christian\\
+        \small{holenchr@students.zhaw.ch}
+        \and
+        Huber, Patrick\\
+        \small{huberpa4@students.zhaw.ch}
+        \and
+        Iten, Mike\\
+        \small{itenmik1@students.zhaw.ch}
+        \vspace{1.5cm}
+    }
+   \date{\today}
+
+    \maketitle
+    \newpage
+
+    \tableofcontents
+    \newpage
+
+    % MIKE
+    % Die Ausgangslage beschreibt die heute Situation möglichst neutral in wenigen  prägnanten Sätzen.
+    \section{Ausgangslage}
+
+    \subsection{Original Tron}
+    1982 wurde der Film "Tron"\ von Steven Lisberger ausgestrahlt, der grosse Beliebtheit erlangte \cite{lisbergerTRON1982}\cite{TronFilm2020}. Danach wurden verschiedene Spielversionen von Tron produziert.
+
+    \subsection{Spielbeschreibung}
+    Ein Spieler besitzt ein sogenanntes Licht-Motorrad. Dieses zieht während der Fahrt eine Linie nach sich, die bestehen bleibt. Fährt ein Spieler in eine dieser Linien, scheidet dieser aus. Gewinner ist, wer im Spiel bleibt, bis alle anderen Spieler ausgeschieden sind.
+
+    % MIKE
+    % Die grundlegende Idee des Projekts soll mit ein paar Sätzen möglichst klar erläutert  werden. Dies umfasst insbesondere die Problemstellung des Kunden, die mit dem Software-Produkt gelöst werden soll, sowie den Kern-Nutzen für den Kunden bezüglich dieses Problems.
+    \section{Idee}
+	Es soll ein Tron-Spiel entwickelt werden, welches eine ansprechende und simple Benutzeroberfläche besitzt, sodass schnell und einfach gespielt werden kann. Das Spiel wird im Multiplayer-Modus angeboten werden. Ein Spieler wird gegen ihm bekannte Spieler oder zufällig ausgewählte Spieler antreten können.
+
+    % MIKE
+    % In diesem Kapitel beschreiben Sie den Kundennutzen im Detail. Wieso soll ein Kunde überhaupt unser Produkt später einmal kaufen? Kann er damit eine bisherige Tätigkeit schneller oder effizienter durchführen? Kann er damit neue Tätigkeiten ausüben, die für ihn einen Nutzen bringen?
+    \section{Kundennutzen}
+    Als kleine, spassige Ablenkungen in der Pause oder als sonstiger Zeitvertreib, versüsst unser Spiel den Alltag des Anwenders. Es besticht durch seine Einfachheit. Dies führt dazu, dass die Konzentration des Spielers voll und ganz auf das Spiel selbst gelenkt ist und er dieses in vollen Zügen geniessen kann. Danach wird er erholt zu seinen täglichen Aufgaben zurückkehren. Über ein Gastkonto ist es einem Spieler möglich, ohne jegliche Registrierung, sofort zu spielen. Möchte ein Spieler seine Fortschritte gespeichert und abrufbar haben, kann er einen Account einrichten. Die gespeicherten Punkte dienen dann als Indiz für die Applikation, um den Spieler gegen ähnlich starke Gegner antreten zu lassen. Ausserdem kann das Spiel mit Freunden gespielt werden. Ein spannender Feierabend oder Samstagnachmittag - reich an sozialer Interaktion - ist garantiert.
+    Es gibt reichlich weitere Features, die gegebenenfalls implementiert werden können (siehe \ref{Weiterführende Ideen}), um kontinuierlicher Spielspass gewährleisten zu können.
+
+    % PATRICK
+    % In einem kurzen Überblick soll die Konkurrenzsituation bezüglich der Problemstellung in Abschnitt 2.2.1 dargelegt werden: Welche Lösungen gibt es bereits? Wie grenzt sich das geplante Software-Produkt von diesen ab? Die gemachten Aussagen sollen mit korrekt formulierten Literaturreferenzen (gemäss Zitierleitfaden) abgestützt werden.
+    \section{Stand der Technik / Konkurrenzanalyse}
+    Es gibt mehrere kostenlose online Spiele, welche im Browser gespielt werden können. \Gls{Multiplayer} ist teilweise möglich. Mindestens Drei dieser Tron-Spiele können ebenfalls über das Netzwerk (\Gls{Game Server}) gespielt werden. \cite{TronGameBasisKostenlosOnline}\cite{sphinxCyclewarsIoOnline}\cite{TronLightCyclesEu}\cite{PlayersOnlineXtremeTron}
+    Viele der vorhandenen Spiele nutzen veraltete Technologien wie den \Gls{Adobe Flash Player} \cite{SayingGoodbyeFlash2017}\cite{FlashFutureInteractive2017} und nicht mehr zeitgemässe Grafiken. Ausserdem sind die grafischen Oberflächen häufig schwer verständlich.
+    Momentan sind zwei moderne Tron Spiele auf dem Markt, die sich jedoch nicht nur auf das fahren von Licht-Motorräder beschränken. Vielmehr handelt es sich dabei um komplexe Action Spiele in 3-D Grafik, jeweils mit geführter Storyline.\cite{TronEvolution2020}\cite{TRONRUNr}
+
+    % DENIZ
+    % Auf einer halben Seite wird der Hauptanwendungsfall der fertigen Software in schriftsprachlicher Prosa beschrieben. Dazu versetzt sich der Autor in die Rolle des neutralen Beobachters und beschreibt Schritt für Schritt, wie der/die Anwender und die fertige Software miteinander interagieren, um das vom Anwender gewünschte Resultat zu erreichen. Diese Beschreibung sollte möglichst lösungsneutral beschrieben sein.
+    \section{Hauptablauf (Kontextszenario)}
+
+    \subsection{Anwender-Identifikation/-Verifikation}
+	Der Anwender meldet sich anonym als Gast in der Applikation an oder loggt sich mit einem bestehenden Account ein. Um in ein Spiel zu gelangen, kann der Anwender entscheiden, ob er eine Lobby erstellen oder einer bestehenden Lobby beitreten möchten.
+
+	\subsection{\Gls{Lobby} erstellen}
+	Falls der Anwender eine Lobby erstellt, kann er auswählen ob diese nur für Freunde sichtbar ist oder auch andere Spieler beitreten können. Als Ersteller der Lobby kann der Anwender das Spiel starten, wenn alle anderen Spieler in der Lobby den Status auf 'bereit' gewechselt haben.
+
+	\subsection{\Gls{Lobby} beitreten}
+	Falls der Anwender einer Lobby beitreten möchte, kann er sich eine gewünschte Lobby aus der Lobby-Liste aussuchen. Als Nicht-Ersteller der Lobby kann der Status auf 'bereit' gewechselt werden und auf den Start des Spiels gewartet werden.
+
+	\subsection{Spielstart und Rangliste}
+	Die Anwendung wechselt zur \Gls{Arena} und das Spiel beginnt. Der Anwender spielt 5 Runden. Am Ende der 5 Runden zeigt die Anwendung dem Anwender die Rangliste an.
+
+    % DENIZ
+    % Hier werden alle weiteren wichtigen Funktionen aufgelistet. Ebenfalls sollten alle nicht- funktionalen Anforderungen – wie z. B. minimale Antwortzeiten oder spezielle Sicherheitsaspekte – beschrieben werden. Zuletzt sollten auch ein paar weiterführende Ideen aufgeführt werden, in welche Richtung sich die Anwendung noch entwickeln kann.
+    \section{Weitere Anforderungen}
+
+    \subsection{Nicht-funktionale Anforderungen}
+    \begin{itemize}
+        \item Zentraler Server, um die Spiele zu koordinieren.
+        \item Die \Gls{Latenz} soll maximal 100 Millisekunden betragen.
+        \item Sichere Account Verwaltung.
+    \end{itemize}
+
+    \subsection{Weiterführende Ideen}\label{Weiterführende Ideen}
+    \begin{itemize}
+        \item Einen \Gls{Battle Royale}-Modus mit bis zu 100 Teilnehmern pro Spiel.
+        \item Aufzeichnen und Auswertung von Scores, Levels und Statistiken.
+        \item In App-Käufe, wie z.B. das Kaufen eines neues Licht-Motorrads.
+    \end{itemize}
+
+    % PATRICK
+    % In diesem Kapitel werden die notwendigen Ressourcen grob beschrieben. Dazu gehören die Fähigkeiten der Projektmitarbeiter, eventuell mit bereits vorgesehenen oder möglichen Teammitgliedern; aber auch das Know-how, welches sich nicht im Projektteam oder in der Organisation befindet, muss aufgelistet werden. Eine grobe Aufwandsschätzung für die Entwicklung des gesamten Softwareprodukts darf natürlich auch nicht fehlen.
+    \section{Ressourcen}
+    Das Projekt ist realisierbar mit einem Team aus 4 Personen. Grundlegendes Wissen im Bereich der Server-Client-Kommunikation ist notwendig, sowie Kenntnisse von objektorientierter Programmierung (\Gls{OOP}), Java und Javascript. Dieses Wissen ist im Team vorhanden. Des Weiteren bestehen Kenntnisse zum Web-Design mit React, HTML5 und CSS3.
+    Der Gesamtaufwand für das finale Spiel mit Basisfunktionen und Original-Spielmodus wird auf ca. 500 - 600 Stunden geschätzt. Dies entspricht ungefähr 138 Stunden Aufwand pro Person.
+
+    % CHRISTIAN
+    % Alle über das übliche Mass hinausgehenden Risiken müssen offen und klar genannt werden. Das können neue, unbekannte Technologien sein, besonders kritische Anforderungen oder einfach fehlendes Wissen.
+    \section{Risiken}
+    Ein Risiko stellt die graphischen Umsetzung des Spiels dar, da es diesbezüglich an Wissen und Erfahrung mangelt.
+
+    % CHRISTIAN
+    % Für die Erstellung einer ersten Version müssen die funktionalen Anforderungen mit Use Cases aufgelistet sowie eine Grobplanung mit den vorgegebenen Iterationen und Meilensteinen gemacht werden. Dazu gehört auch das Ziel jeder Iteration festzulegen.
+    \section{Grobplanung}
+    Das Spiel wird in insgesamt 12 Wochen iterativ und Anwendungsfall-orientiert nach dem \Gls{Unified Process (UP)} entwickelt. Die Länge einer Iteration ist auf zwei Wochen gesetzt. Anwendungsfälle wurden definiert und priorisiert und ein grober Projektplan erstellt:
+
+    \subsection{Anwendungsfälle (nach Priorität geordnet)}
+    \begin{enumerate}
+        \item Spiel beitreten.
+        \item Spiel spielen.
+        \item Spiel generieren.
+        \item Spiel auswählen.
+        \item Spieler einladen.
+        \item In Applikation einloggen.
+        \item Statistiken betrachten.
+    \end{enumerate}
+
+    \subsection{Gesamtprojektplan}
+    \begin{table}[H]
+        \caption{Gesamtprojektplan}
+        \begin{tabularx}{\textwidth}{X}
+            \toprule
+            Phase: \textbf{Inception} Iteration: \textbf{1} Woche: \textbf{1}\\
+            \begin{compactitem}
+                \item Erstellen der Projektskizze.
+                \item Erstellen einer ersten Version des Domänenmodells.
+                \item Einrichten der Entwicklungsumgebung.
+            \end{compactitem}\\
+            \toprule
+            \rowcolor{lightgray}
+            \textbf{Meilenstein 1} Woche: \textbf{2 Ende}\\
+            \rowcolor{lightgray}
+            \begin{compactitem}
+                \item \textbf{Vision definiert.}
+                \item \textbf{Geschäftsmodel definiert.}
+                \item \textbf{Anwendungsfälle definiert und Priorisierung vorgenommen.}
+                \item \textbf{Wichtigste nicht-funktionalen Anforderungen definiert.}
+            \end{compactitem}\\
+            \toprule
+            Phase: \textbf{Elaboration} Iteration: \textbf{2} Woche: \textbf{3}\\
+            \begin{compactitem}
+                \item Erstellen einer ersten Version des Softwaremodells.
+                \item Detailierte Spezifizierung der Anwendungsfälle 1, 2, 3.
+                \item PoC Anwendungsfall 1.
+            \end{compactitem}\\
+            \toprule
+            Phase: \textbf{Elaboration} Iteration: \textbf{3} Woche: \textbf{5}\\
+            \begin{compactitem}
+                \item Detailierte Spezifizierung der Anwendungsfälle 4, 5, 6, 7.
+                \item PoC Anwendungsfall 2.
+                \item Erstes UI.
+            \end{compactitem}\\
+            \toprule
+            \rowcolor{lightgray}
+            \textbf{Meilenstein 2} Woche: \textbf{2 Ende}\\
+            \rowcolor{lightgray}
+            \begin{compactitem}
+                \item \textbf{Alle Anforderungen stabilisiert.}
+                \item \textbf{Kern-Architektur implementiert und getestet.}
+            \end{compactitem}\\
+            \toprule
+            Phase: \textbf{Construction} Iteration: \textbf{4} Woche: \textbf{7}\\
+            \begin{compactitem}
+                \item Anwendungsfälle 3, 4 implementiert und getestet.
+            \end{compactitem}\\
+            \toprule
+            Phase: \textbf{Construction} Iteration: \textbf{5} Woche: \textbf{9}\\
+            \begin{compactitem}
+                \item Anwendungsfälle 5, 6 implementiert und getestet.
+            \end{compactitem}\\
+            \toprule
+            Phase: \textbf{Construction} Iteration: \textbf{6} Woche: \textbf{11}\\
+            \begin{compactitem}
+                \item Anwendungsfall 7 implementiert und getestet.
+            \end{compactitem}\\
+            \toprule
+            \rowcolor{lightgray}
+            \textbf{Meilenstein 3} Woche: \textbf{12 Ende}\\
+            \rowcolor{lightgray}
+            \begin{compactitem}
+                \item \textbf{System produktionsreif.}
+                \item \textbf{Bedienungsanleitung geschrieben.}
+            \end{compactitem}\\
+            \bottomrule
+        \end{tabularx}
+        \label{tab:Gesamtprojektplan}
+    \end{table}
+
+    % PATRICK
+    % Bei jeder Investition – und ein Software-Projekt ist eine Investition – stellt sich schliesslich die Frage nach der Rentabilität. Diese ist die zinsbereinigte Differenz zwischen den Aufwendungen und den Erträgen einer Investition. Schätzen Sie dazu den Aufwand für das gesamte Software-Produkt (meistens reicht Personalaufwand für die Entwicklung). Berechnen Sie sodann, basierend auf realistischen Annahmen, wieviel Einnahmen und Gewinn Sie in den nächsten 5 Jahren erwarten.
+    \section{Wirtschaftlichkeit}
+
+    \subsection{Aufwand erste Version}
+    Um die erste, initiale, über das Netzwerk (\Gls{Game Server}) spielbare Version fertigzustellen, rechnen wir mit folgendem Aufwand. \\
+    \\
+    Kalkulationsformel:
+        \begin{center}
+            \begin{itshape}
+                Projektplanung + Entwicklung + Dokumentation/Testing/Deployment = \\
+                \vspace{0.5em}
+                2 Wochen * 1.5 Arbeitstage * 4 Mitarbeiter * 8 Arbeitsstunden + \\
+                \vspace{0.5em}
+                9 Wochen * 1.5 Arbeitstage * 4 Mitarbeiter * 8 Arbeitsstunden + \\
+                \vspace{0.5em}
+                1 Woche * 1.5 Arbeitstage * 4 Mitarbeiter * 8 Arbeitsstunden \\
+                \vspace{0.5em}
+                \textbf{= 576 Arbeitsstunden}
+            \end{itshape}
+        \end{center}
+
+    \subsection{Werbung als Einnahmequelle}
+    Einnahmen werden hauptsächlich durch Werbeanzeigen generiert. Genaue Berechnungen sind relativ schwierig, da sich die Besucheranzahl auf der Webseite über die Zeit ändern kann. Ebenfalls hat die Bezahlstrategie, welche abhängig ist von der "Werbemethode" (CPC, CPM, CPA), einen grossen Einfluss auf die Einnahmen, sowie die Relevanz des Inhaltes der angezeigten Werbung, auf den Webseitenbesucher\cite{CPCVsCPA2019}\cite{daswani2008online}. \\
+    \\
+    Berechnung nach Google Adsense Calculator \cite{GoogleAdSenseEarn}:
+    \begin{center}
+        \begin{tabular}{ | l | l | l | p{5cm} |}
+            \hline
+            Monthly page views & Monthly revenue [\$]  \\ \hline
+            500'000 & 1'925 \\ \hline
+            1'000'000 & 3'850 \\ \hline
+            2'500'000 & 9'625 \\ \hline
+            5'000'000 & 19'250 \\ \hline
+            10'000'000 & 38'500 \\ \hline
+        \end{tabular}
+    \end{center}
+    \subsection{Return of Invest}
+    Die geschätzte initiale Investition beträgt bei 576 Arbeitsstunden Aufwand und einem Stundensatz von 50.- pro Stunde plus einer kleinen Reserve für zusätzliche Ausgaben:
+    \[576\ h * 50.- + 5'000 = 33'800\ CHF\]
+    Die Einnahmen bei 2'500'000 monatlichen Besuchern (Laden der Webseite)  würden sich auf monatlich 9'625 CHF belaufen. Wenn wir die monatlichen Kosten für den Webseitenbetrieb vernachlässigen, hätten wir nach ca. 4 Monaten die Entwicklungskosten amortisiert    .\\
+
+    \newpage
+
+    \section{Literatur}
+    \printbibliography[heading=none]
+
+     \newpage
+
+    \section{Appendix}
+    \textit{Hinweis: Glossar-Referenznummern sind Seitennummern}
+    \printglossary
+
+
+\end{document}
+

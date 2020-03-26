@@ -1,0 +1,93 @@
+\documentclass[11pt,ngerman]{article}
+\usepackage{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{babel}
+\usepackage{lmodern}%get scalable font
+\usepackage{titling}
+\usepackage{relsize}
+\usepackage{biblatex}
+\usepackage{hyperref}
+\usepackage{glossaries}
+\usepackage{paralist}
+\usepackage[table, dvipsnames]{xcolor}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{float}
+\restylefloat{table}
+\usepackage{setspace}
+
+\geometry{a4paper, top=25mm, left=25mm, right=25mm, bottom=20mm,
+    headsep=10mm, footskip=12mm}
+
+% bibliography file
+\addbibresource{\jobname.bib}
+
+% glossary
+% Das Glossar definiert alle wichtigen Begriffe zur Sicherstellung einer einheitlichen Terminologie. Es sollen keine allgemeinen Begriffe erklärt werden, die den Adressaten bekannt sind (z. B. Java, CPU etc.).
+\makeglossaries
+\newglossaryentry{Adobe Flash Player}
+{
+    name=Adobe Flash Player,
+    description={Der Adobe Flash Player ist eine kostenlose Software, die multimediale Inhalte auf Webseiten, die auf Adobe Flash erstellt wurden, anzeigen lässt. Die Software ist in den letzten Jahren wegen Sicherheitslücken stark in Kritik geraten}
+}
+
+\renewcommand{\arraystretch}{1.5}
+
+\pretitle{\begin{center}\linespread{1.5}\huge}
+    \posttitle{\par\end{center}\vspace{0.5em}}
+
+\begin{document}
+
+    \title{SWEN1\\Praktikum 01\\
+        \vspace{1cm}
+        \small{ZHAW  School of Engineering\\Klasse: IT18tb\_zh}
+        \vspace{1.5cm}
+    }
+    \author{
+        Huber, Patrick\\
+        \small{huberpa4@students.zhaw.ch}
+        \vspace{1.5cm}
+    }
+   \date{\today}
+
+    \maketitle
+    \newpage
+
+    \tableofcontents
+    \newpage
+
+    \section{Use cases}
+
+    \subsection{Brief}
+
+    \subsection{Casual}
+
+    \subsection{Fully dressed}
+    \begin{tabularx}{\textwidth}{|l|X|}
+        \hline
+        \textbf{Anwendungsfall} & … le ânwendungsfall \\ \hline
+        \textbf{Umfang} & Tron Licht-Motorräder Computerspiel \\ \hline
+        \textbf{Ebene} & Anwenderziel \\ \hline
+        \textbf{Primärakteur} & Spieler (user) \\ \hline
+        \textbf{Stakeholder und Interessenten} & lorem ipsum \\ \hline
+        \textbf{Vorbedingungen} & lorem ipsum \\ \hline
+        \textbf{Erfolgsgarantie, Nachbedigungen} & lorem ipsum \\ \hline
+        \textbf{Standardablauf} & lorem ipsum \\ \hline
+        \textbf{Spezielle Anforderungen} & lorem ipsum \\ \hline
+        \textbf{Technik- und Datenvariationen (Liste)} & lorem ipsum \\ \hline
+        \textbf{Häufigkeit des Auftretens} & lorem ipsum \\ \hline
+        \textbf{Verschiedenes} & lorem ipsum \\
+        \hline
+    \end{tabularx}
+
+
+     \newpage
+
+    \section{Appendix}
+    \textit{Hinweis: Glossar-Referenznummern sind Seitennummern}
+    \printglossary
+
+
+\end{document}
+

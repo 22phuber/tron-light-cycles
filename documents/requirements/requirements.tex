@@ -1,0 +1,130 @@
+\documentclass[11pt,ngerman]{article}
+\usepackage{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{babel}
+\usepackage{lmodern}%get scalable font
+\usepackage{titling}
+\usepackage{relsize}
+\usepackage{biblatex}
+\usepackage{hyperref}
+\usepackage{glossaries}
+\usepackage{paralist}
+\usepackage[table, dvipsnames]{xcolor}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{float}
+\restylefloat{table}
+\usepackage{setspace}
+
+\geometry{a4paper, top=25mm, left=25mm, right=25mm, bottom=20mm,
+    headsep=10mm, footskip=12mm}
+
+% bibliography file
+\addbibresource{\jobname.bib}
+
+% glossary
+% Das Glossar definiert alle wichtigen Begriffe zur Sicherstellung einer einheitlichen Terminologie. Es sollen keine allgemeinen Begriffe erklärt werden, die den Adressaten bekannt sind (z. B. Java, CPU etc.).
+\makeglossaries
+\newglossaryentry{Game Server}{
+    name={Game Server},
+    description={Spieleserver (engl. game server) sind speziell für Mehrspieler-Spiele eingerichtete Server. Spieler können sich mit ihnen verbinden, um miteinander zu spielen. Sie verwalten die Spieldaten und synchronisieren die Handlungen der Spieler gegenseitig. Spieleserver kommen sowohl im Internet, um verschiedene Spieler weltweit zusammenzubringen, als auch lokal auf LAN-Partys, insbesondere wenn keine ausreichend schnelle Verbindung zum Internet besteht, zum Einsatz}
+}
+\newglossaryentry{Lobby}{
+    name=Lobby,
+    description={Eine Lobby bezeichnet im Kontext von Online-Computerspielen einen Warteraum. Die für eine Spielrunde angemeldeten Spieler befinden sich in diesem, bis die Runde beginnt}
+}
+\newglossaryentry{Multiplayer}{
+    name={Multiplayer},
+    description={Der Begriff Mehrspieler (englisch multiplayer, multi-player) beschreibt im Bereich der Computerspiele eine Spielart (im Computerspieler-Jargon auch Modus), bei der man mit oder gegen andere Menschen spielt. Sie ist das Gegenstück zur Einzelspieler-Spielweise, bei der ein einzelner Spieler alleine mit bzw. gegen den Computer spielt}
+}
+
+\pretitle{\begin{center}\linespread{1.5}\huge}
+    \posttitle{\par\end{center}\vspace{0.5em}}
+
+\begin{document}
+
+    \title{Tron Licht-Motorräder Computerspiel\\
+        \vspace{1cm}
+        \smaller{}Anforderungsanalyse \\
+        \vspace{0.5cm}
+        \small{}ZHAW  School of Engineering
+        \vspace{1.5cm}
+    }
+    \author{
+        Akca, Deniz\\
+        \small{akcaden1@students.zhaw.ch}
+        \and
+        Holenstein, Christian\\
+        \small{holenchr@students.zhaw.ch}
+        \and
+        Huber, Patrick\\
+        \small{huberpa4@students.zhaw.ch}
+        \and
+        Iten, Mike\\
+        \small{itenmik1@students.zhaw.ch}
+        \vspace{1.5cm}
+    }
+   \date{\today}
+
+    \maketitle
+    \newpage
+
+    \tableofcontents
+    \newpage
+
+    \section{Vision}
+
+
+    \section{Funktionale Anforderungen}
+
+        \subsection{Genre}
+        \subsection{Story}
+        \subsection{Setting}
+        \subsection{Charaktere}
+        \subsection{Spielmechanik}
+        \subsection{Physik}
+        \subsection{Künstliche Intelligenz}
+        \subsection{Unterstützte Plattformen}
+        \subsection{Spielmodi}
+        \subsection{Benutzeroberfläche}
+        \subsection{Grafikstil}
+        \subsection{Grafik Engine}
+        \subsection{Soundeffekte}
+
+    \section{Nichtfunktionale Anforderungen}
+
+        \subsection{Performanz}
+        \subsection{Funktionalität}
+        \subsection{Benutzerfreundlichkeit}
+        \subsection{Portabilität}
+        \subsection{Sicherheit}
+        \subsection{Wartbarkeit}
+        \subsection{Skalierbarkeit}
+        \subsection{Lizenz}
+
+    \section{Anwendungsfälle}
+
+        \subsection{Hauptanwendungsfälle}
+
+        \subsection{Anwendungsfalldiagramm}
+
+    \section{System-Sequenzdiagramm}
+
+        \subsection{sub1}
+
+
+    \newpage
+
+    \section{Literatur}
+    \printbibliography[heading=none]
+
+     \newpage
+
+    \section{Anhänge}
+    \textit{Hinweis: Glossar-Referenznummern sind Seitennummern}
+    \printglossary
+
+
+\end{document}
+
