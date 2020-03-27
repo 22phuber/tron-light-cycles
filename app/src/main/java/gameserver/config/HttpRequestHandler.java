@@ -3,10 +3,8 @@ package gameserver.config;
 import io.netty.channel.*;
 import io.netty.handler.codec.http.*;
 
-import java.io.File;
-import java.io.RandomAccessFile;
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
 
@@ -17,17 +15,27 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest request) throws Exception {
 
-        final String indexRelativeURI = "../../src/main/resources/static/index.html";
-        final String path = getAbsoluteURI(indexRelativeURI).toString().substring(5);
-        final File indexFile = new File(path);
-
         if (request.uri().equalsIgnoreCase(wsURI)) {
 
             System.out.println("Upgrade requested");
 
             ctx.fireChannelRead(request.retain());
         } else {
-            RandomAccessFile file = new RandomAccessFile(indexFile, "r");
+
+            //final File indexFile = new File(getClass().getResource("/static/index.html").toURI());
+            final InputStream in = getClass().getResourceAsStream("/static/index.html");
+
+            // Workaround:
+            // Creating a temporary file as param for RandomAccessFile-Instance
+            // Stays empty and will be deleted after file was sent.
+            final File tempFile = File.createTempFile("tempFile", ".txt");
+
+            final String fileString = inputStreamToString(in);
+
+            RandomAccessFile file = new RandomAccessFile(tempFile, "rw");
+
+            file.writeUTF(fileString);
+
             HttpResponse response = new DefaultHttpResponse(
                     request.protocolVersion(),
                     HttpResponseStatus.OK);
@@ -36,11 +44,14 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
                     .set(HttpHeaderNames.CONTENT_LENGTH, file.length());
 
             ctx.write(response);
-            ctx.write(new DefaultFileRegion(
-                    file.getChannel(), 0, file.length()
-            ));
+
+            // First two Bytes in a RandomAccessFile where writeUTF is used are used for file length
+            ctx.write(new DefaultFileRegion(file.getChannel(), 2, file.length()));
+
             ctx.writeAndFlush(LastHttpContent.EMPTY_LAST_CONTENT)
                     .addListener(ChannelFutureListener.CLOSE);
+
+            tempFile.delete();
         }
     }
 
@@ -50,16 +61,15 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
         ctx.close();
     }
 
-    private URI getAbsoluteURI(String relativeURI) {
-        try {
-            URI basingURI = HttpRequestHandler.class
-                    .getProtectionDomain()
-                    .getCodeSource()
-                    .getLocation()
-                    .toURI();
-            return basingURI.resolve(relativeURI);
-        } catch (URISyntaxException e) {
-            throw new IllegalStateException("Is not URI", e);
+    private String inputStreamToString(InputStream in) throws IOException {
+        StringBuilder textBuilder = new StringBuilder();
+        try (Reader reader = new BufferedReader(new InputStreamReader
+                (in, StandardCharsets.UTF_8.name()))) {
+            int c = 0;
+            while ((c = reader.read()) != -1) {
+                textBuilder.append((char) c);
+            }
         }
+        return textBuilder.toString();
     }
 }
