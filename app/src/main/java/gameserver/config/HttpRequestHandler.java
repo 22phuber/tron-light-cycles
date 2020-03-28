@@ -41,7 +41,7 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
                     HttpResponseStatus.OK);
             response.headers()
                     .set(HttpHeaderNames.CONTENT_TYPE, "text/html; charset=UTF-8")
-                    .set(HttpHeaderNames.CONTENT_LENGTH, file.length());
+                    .set(HttpHeaderNames.CONTENT_LENGTH, file.length()-2);
 
             ctx.write(response);
 
