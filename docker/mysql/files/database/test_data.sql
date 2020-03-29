@@ -1,11 +1,12 @@
+
 /*
 	testdata for tron_light_cycles database
-	
+
 	SHA256 Hash is generated from first name
-	user without firstname has is generated from 'firstname'
+	user without firstname hasH is generated from 'firstname'
 */
-use tron_light_cycles;
-insert into rider values
+USE tron_light_cycles;
+INSERT INTO rider VALUES
 	('xX_420NoScope_Xx', 'Anna', 'Bolika', 'bf4fccd616251b678c56b9cb7a46819b1266853c180637642f5bc7d6b01f5554', 'anna_bolika@active.com', 'red', '69'),
 	('qw65ef4asd6fq4q', 'Wifi', 'Password', '24188cc53315dd9e11238f12d9e2999da4caf49e276dba4f9c63161e7f5bcbd6', 'wifi@password.com', 'blue', '1'),
 	('6erMike', 'Mike', 'Iten', '9dc415325a95c6e2558bf141a8772a175de49b08f0a027c8720ad942d6ec63f7', 'mike@iten.ch', 'orange', '6'),

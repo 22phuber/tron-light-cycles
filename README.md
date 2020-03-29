@@ -28,8 +28,8 @@ Use Visual Studio Code or another Javascript/React compatible IDE. Open project 
 
 ## NGiNX Reverse Proxy and Database
 
-Start the react frontend priot to this steps
-Optionally you can also start the java Gameserver
+Start the react frontend prior to these steps.
+*Optionally*: You can also start the java Gameserver if needed
 
 1. Install Docker and docker-compose
 2. Open `docker/` folder

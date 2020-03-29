@@ -1,6 +1,6 @@
 /*
 	tron_light_cycles database
-	
+
 	this script delete existing tron_light_cycles database
 	and creates a new empty tron_light_cycles database
 */
@@ -21,3 +21,4 @@ CREATE TABLE rider(
 	cycle_color varchar(20) DEFAULT 'white',
 	ranking int UNSIGNED DEFAULT 0
 );
+
