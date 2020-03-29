@@ -6,6 +6,7 @@
 */
 DROP DATABASE IF EXISTS tron_light_cycles;
 CREATE DATABASE tron_light_cycles;
+ALTER DATABASE tron_light_cycles CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE tron_light_cycles;
 
 /*
