@@ -16,7 +16,8 @@ jobs:
         with:
           java-version: ${{ matrix.java }}
       - run: |
+          ls -la *
           cd app
-          mvn -f github-actions-java-maven/pom.xml clean compile
+          mvn -f pom.xml clean compile
           mvn test
 
