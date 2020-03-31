@@ -27,8 +27,6 @@ public class GameRound {
 
     public void addPlayer(Channel channel, Player pl) {
         channelGroup.add(channel);
-        channel.writeAndFlush(new TextWebSocketFrame(CanvasConfig.getCanvasConfig().toString()));
-
         players.put(pl.getId(), pl);
     }
 

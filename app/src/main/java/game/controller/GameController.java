@@ -51,6 +51,9 @@ public class GameController {
                 50*player_count,
                 1,
                 colors10[player_count % colors10.length]);
+
+        out.sendConfig(channel);
+
         round.addPlayer(channel, pl);
     }
 
