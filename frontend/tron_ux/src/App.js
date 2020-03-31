@@ -21,9 +21,9 @@ function App() {
           </a>
         </header>
       </div>
-      <div>
+      {/* <div>
         <WSClient />
-      </div>
+      </div> */}
     </div>
   );
 }
