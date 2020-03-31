@@ -1,4 +1,4 @@
-name: Build and Test
+name: CI
  
 on: [push, pull_request]
  
@@ -8,18 +8,18 @@ jobs:
     strategy:
       matrix:
         java: [ 11, 12, 13 ]
-    name: Build and test on ${{ matrix.java }}
+    name: Maven build & test on java ${{ matrix.java }}
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v1
       - name: Setup java
         uses: actions/setup-java@v1
         with:
           java-version: ${{ matrix.java }}
-      - name: Maven clean compile
+      - name: Run maven clean compile
         run: mvn -f pom.xml clean compile
         working-directory: ./app
-      - name: Maven test
+      - name: Run maven test
         run: mvn test
         working-directory: ./app
   npm_react:
@@ -28,18 +28,20 @@ jobs:
       matrix:
         node-version: [8.x, 10.x, 12.x]
     steps:
-     - name: Checkout
+     - name: Checkout repository
        uses: actions/checkout@v1
      - name: Setup Node.js ${{ matrix.node-version }}
        uses: actions/setup-node@v1
        with:
          node-version: ${{ matrix.node-version }}
-     - name: npm install
+     - name: Run npm install
        run: npm install
        working-directory: ./frontend/tron_ux
-     - name: npm run build
+     - name: Run npm run build
        run: npm run build
        working-directory: ./frontend/tron_ux
-     - name: npm test
+     - name: Run npm test
        run: npm test
+       env:
+        CI: true
        working-directory: ./frontend/tron_ux
