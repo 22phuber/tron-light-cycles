@@ -1,4 +1,4 @@
-package gameserver;
+package transport;
 
 import org.junit.jupiter.api.Test;
 
