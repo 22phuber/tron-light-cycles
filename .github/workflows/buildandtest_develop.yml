@@ -22,4 +22,24 @@ jobs:
       - name: Maven test
         run: mvn test
         working-directory: ./app
-
+  npm_react:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [8.x, 10.x, 12.x]
+    steps:
+     - name: Checkout
+       uses: actions/checkout@v1
+     - name: Setup Node.js ${{ matrix.node-version }}
+       uses: actions/setup-node@v1
+       with:
+         node-version: ${{ matrix.node-version }}
+     - name: npm install
+       run: npm install
+       working-directory: ./frontend/tron_ux
+     - name: npm run build
+       run: npm run build
+       working-directory: ./frontend/tron_ux
+     - name: npm test
+       run: npm test
+       working-directory: ./frontend/tron_ux
