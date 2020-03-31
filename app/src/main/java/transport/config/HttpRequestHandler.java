@@ -1,4 +1,4 @@
-package gameserver.config;
+package transport.config;
 
 import io.netty.channel.*;
 import io.netty.handler.codec.http.*;
@@ -51,7 +51,12 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
             ctx.writeAndFlush(LastHttpContent.EMPTY_LAST_CONTENT)
                     .addListener(ChannelFutureListener.CLOSE);
 
-            tempFile.delete();
+            if (tempFile.delete()) {
+                System.out.println("HTTPRequestHandler: tempFile successfully deleted");
+            } else {
+                System.out.println("HTTPRequestHandler: tempFile couldn't be deleted");
+            }
+
         }
     }
 
