@@ -38,5 +38,3 @@ Start the react frontend prior to these steps.
 5. Open `http://localhost/` in your browser
 
 
-
-
