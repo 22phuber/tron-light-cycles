@@ -25,6 +25,7 @@ const GameAnimation = props => {
   useEffect(() => {
     return () => {
       cancelAnimationFrame(rAF);
+      if(ws && ws.readyState === WebSocket.OPEN) ws.close();
     };
   }, [ws, rAF]);
 
@@ -50,7 +51,7 @@ const GameAnimation = props => {
   }
 
   function sendWsData(data) {
-    if (ws) ws.send(JSON.stringify(data));
+    if(ws && ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify(data));
   }
 
   function handleWebsocket() {
