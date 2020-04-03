@@ -1,17 +1,15 @@
-import React, { Component } from "react";
-import './gameCanvas.styles.css';
+import React, { useRef, useEffect } from "react";
+import "./gameCanvas.styles.css";
 
-class GameCanvas extends Component {
-  constructor(props) {
-    super(props);
-    this.canvasRef = React.createRef();
-    this.lineThickness = 5;
-  }
+const GameCanvas = props => {
+  const canvasRef = useRef(null);
+  const lineThickness = 5;
+  const canvasId = "gameCanvas";
 
-  componentDidUpdate() {
-    const { playersData, width, height } = this.props;
+  useEffect(() => {
+    const { playersData, width, height } = props;
     //console.log(playersData + " width:" + width + " height:" + height);
-    const canvas = this.canvasRef.current;
+    const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
     if (playersData) {
       playersData.forEach(player => {
@@ -19,23 +17,21 @@ class GameCanvas extends Component {
         ctx.fillRect(
           player.posx % width,
           player.posy % height,
-          this.lineThickness,
-          this.lineThickness
+          lineThickness,
+          lineThickness
         );
       });
     }
-  }
+  });
 
-  render() {
-    return (
-      <canvas id={"gameCanvas"}
-        width={this.props.width}
-        height={this.props.height}
-        ref={this.canvasRef}
-      ></canvas>
-    );
-  }
-}
+  return (
+    <canvas
+      id={canvasId}
+      width={props.width}
+      height={props.height}
+      ref={canvasRef}
+    ></canvas>
+  );
+};
 
 export default GameCanvas;
-

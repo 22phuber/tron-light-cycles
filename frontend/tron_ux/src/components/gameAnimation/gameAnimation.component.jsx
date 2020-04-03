@@ -1,127 +1,150 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import GameCanvas from "../gameCanvas/gameCanvas.component";
+import { makeStyles } from "@material-ui/core/styles";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 // TODO: refactor that url is a property
 const wsURL = "ws://localhost:9000/ws";
-const wsReconnectTimeout = 250;
+let wsReconnectTimeout = 250;
 // Allowed direction keys
 const directionKeys = ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"];
 
-class GameAnimation extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { ws: null, wsdata: null };
-    this.handleData = this.handleData.bind(this);
+const useStyles = makeStyles(theme => ({
+  circularProgress: {
+    margin: "25px"
+  }
+}));
+
+const GameAnimation = props => {
+  const [ws, setWs] = useState(null);
+  const [wsdata, setWsData] = useState(null);
+  const [wserror, setWsError] = useState(false);
+  const [gameCanvas, setGameCanvas] = useState(null);
+  let rAF;
+
+  useEffect(() => {
+    return () => {
+      cancelAnimationFrame(rAF);
+    };
+  }, [ws, rAF]);
+
+  useEffect(handleWebsocket, []);
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyPress, false);
+    return () => {
+      document.removeEventListener("keydown", handleKeyPress, false);
+    };
+  });
+
+  function handleData(data) {
+    setWsData(data);
   }
 
-  componentDidMount() {
-    document.addEventListener("keydown", this.handleKeyPress, false);
-    this.handleWebsocket();
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener("keydown", this.escFunction, false);
-    const { ws } = this.state;
-    cancelAnimationFrame(this.rAF);
-    ws.close();
-  }
-
-  handleData = data => {
-    this.setState({ wsdata: data });
-  };
-
-  handleKeyPress = event => {
-    let pressedKey = event.key;
+  function handleKeyPress(event) {
+    const pressedKey = event.key;
     const data = { subject: "update dir", key: pressedKey };
     if (directionKeys.includes(event.key)) {
-      this.sendwsData(data);
+      sendWsData(data);
     }
-  };
+  }
 
-  sendwsData = data => {
-    const { ws } = this.state;
-    if (ws) {
-      ws.send(JSON.stringify(data));
-    }
-  };
+  function sendWsData(data) {
+    if (ws) ws.send(JSON.stringify(data));
+  }
 
-  timeout = wsReconnectTimeout;
-
-  handleWebsocket = () => {
-    var ws = new WebSocket(wsURL);
-    let that = this; // cache the this
+  function handleWebsocket() {
+    var websocket = new WebSocket(wsURL);
     var connectInterval;
 
     // Websocket: onopen event listener
-    ws.onopen = () => {
+    websocket.onopen = () => {
+      setWs(websocket);
+      setWsError(false);
       console.log("Websocket connected");
-      this.setState({ ws: ws });
-      that.timeout = 250; // reset timer to 250 on open of websocket connection
       clearTimeout(connectInterval); // clear Interval on on open of websocket connection
     };
 
     // Websocket: onclose event listener
-    ws.onclose = e => {
+    websocket.onclose = e => {
+      setWsData(null); // reset data (removes artifacts)
       console.log(
         `Websocket is closed. Reconnect will be attempted in ${Math.min(
           10000 / 1000,
-          (that.timeout + that.timeout) / 1000
+          (wsReconnectTimeout + wsReconnectTimeout) / 1000
         )} second.`,
         e.reason
       );
-      that.timeout = that.timeout + that.timeout;
-      connectInterval = setTimeout(this.check, Math.min(10000, that.timeout)); //call check function after timeout
+      wsReconnectTimeout = wsReconnectTimeout + wsReconnectTimeout;
+      connectInterval = setTimeout(
+        checkWsState,
+        Math.min(10000, wsReconnectTimeout)
+      ); //call check function after timeout
     };
 
     // Websocket: when a message has been received
-    ws.onmessage = msg => {
+    websocket.onmessage = msg => {
       const data = JSON.parse(msg.data);
       if (data.width && data.height) {
-        this.setState({
-          gameCanvas: { height: data.height, width: data.width }
-        });
+        setGameCanvas({ height: data.height, width: data.width });
       } else {
-        this.rAF = window.requestAnimationFrame(() => {
-          this.handleData(data);
+        rAF = window.requestAnimationFrame(() => {
+          handleData(data);
         });
       }
     };
 
     // Websocket: onerror event listener
-    ws.onerror = err => {
+    websocket.onerror = err => {
       console.error(
-        "Websocket encountered error: ",
+        "Websocket couldn't connect ",
         err.message,
         "Closing websocket"
       );
-      ws.close();
+      setWsError(true);
+      websocket.close();
     };
-  };
+  }
 
   // Check if connection ist lost and try to reconnect
-  check = () => {
-    const { ws } = this.state;
-    if (!ws || ws.readyState === WebSocket.CLOSED) this.handleWebsocket();
-  };
-
-  render() {
-    const isData = this.state.wsdata;
-    let canvas;
-
-    if (isData) {
-      canvas = (
-        <GameCanvas
-          width={this.state.gameCanvas.width}
-          height={this.state.gameCanvas.height}
-          playersData={this.state.wsdata.players}
-        />
-      );
-    } else {
-      canvas = <GameCanvas width={400} height={400} playersData={null} />;
+  function checkWsState() {
+    if (!ws || ws.readyState === WebSocket.CLOSED) {
+      handleWebsocket();
     }
-
-    return <div>{canvas}</div>;
   }
-}
+
+  let renderElement;
+  const classes = useStyles();
+
+  if (wsdata && gameCanvas && !wserror) {
+    renderElement = (
+      <GameCanvas
+        width={gameCanvas.width}
+        height={gameCanvas.height}
+        playersData={wsdata.players}
+      />
+    );
+  } else if (wserror) {
+    renderElement = (
+      <div>
+        Game server seems to be offline or is not reachable.
+        <br />
+        Trying to reconnect...
+        <br />
+        <CircularProgress className={classes.circularProgress} />
+      </div>
+    );
+  } else {
+    renderElement = (
+      <div>
+        Connecting to Game server...
+        <br />
+        <CircularProgress className={classes.circularProgress} />
+      </div>
+    );
+  }
+
+  return <div>{renderElement}</div>;
+};
 
 export default GameAnimation;
