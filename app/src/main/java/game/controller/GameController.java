@@ -23,16 +23,16 @@ public class GameController {
 
     public GameController(int canvasWidth, int canvasHeight) {
         colors10 = new Color[10];
-        colors10[0] = new Color(44,123,246);
-        colors10[1] = new Color(155,86,163);
-        colors10[2] = new Color(229,93,156);
-        colors10[3] = new Color(237,95,93);
-        colors10[4] = new Color(233,135,58);
-        colors10[5] = new Color(243,185,75);
-        colors10[6] = new Color(120,183,86);
-        colors10[7] = new Color(140,140,140);
-        colors10[8] = new Color(67,70,74);
-        colors10[9] = new Color(28,29,30);
+        colors10[0] = new Color(44, 123, 246);
+        colors10[1] = new Color(155, 86, 163);
+        colors10[2] = new Color(229, 93, 156);
+        colors10[3] = new Color(237, 95, 93);
+        colors10[4] = new Color(233, 135, 58);
+        colors10[5] = new Color(243, 185, 75);
+        colors10[6] = new Color(120, 183, 86);
+        colors10[7] = new Color(140, 140, 140);
+        colors10[8] = new Color(67, 70, 74);
+        colors10[9] = new Color(28, 29, 30);
 
         round = new GameRound();
         out = new JSONOutboundHandler();
@@ -47,8 +47,8 @@ public class GameController {
 
         Player pl = new Player(
                 channel.id(),
-                50*player_count,
-                50*player_count,
+                50 * player_count,
+                50 * player_count,
                 1,
                 colors10[player_count % colors10.length]);
 
@@ -73,11 +73,18 @@ public class GameController {
         //            (dir = 1)
         switch (key) {
             case "ArrowLeft":
-                pl_dir = (pl_dir == 0) ? 3 : --pl_dir;
+                pl_dir = (pl_dir != 0)? 2 : 0;
                 break;
             case "ArrowRight":
-                pl_dir = (pl_dir == 3) ? 0 : ++pl_dir;
+                pl_dir = (pl_dir != 2)? 0 : 2;
                 break;
+            case "ArrowUp":
+                pl_dir = (pl_dir != 1)? 3 : 1;
+                break;
+            case "ArrowDown":
+                pl_dir = (pl_dir != 3)? 1 : 3;
+                break;
+            default: // do nothing
         }
         pl.setDir(pl_dir);
     }
@@ -100,13 +107,19 @@ public class GameController {
                             break;
                         case 2:
                             int x = player.getPosx();
-                            if (x == 0) { player.setPosx(CanvasConfig.WIDTH.value()); }
-                            else { player.setPosx(x - 1); }
+                            if (x == 0) {
+                                player.setPosx(CanvasConfig.WIDTH.value());
+                            } else {
+                                player.setPosx(x - 1);
+                            }
                             break;
                         case 3:
                             int y = player.getPosy();
-                            if (y == 0) { player.setPosy(CanvasConfig.HEIGHT.value()); }
-                            else { player.setPosy(y - 1); }
+                            if (y == 0) {
+                                player.setPosy(CanvasConfig.HEIGHT.value());
+                            } else {
+                                player.setPosy(y - 1);
+                            }
                             break;
                     }
                 });

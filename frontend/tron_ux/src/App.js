@@ -1,6 +1,7 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.css";
+
+import GameAnimation from "./components/gameAnimation/gameAnimation.component";
 
 function App() {
   return (
@@ -18,6 +19,9 @@ function App() {
           Learn Frodo hallo
         </a>
       </header>
+      <div>
+        <GameAnimation />
+      </div>
     </div>
   );
 }
