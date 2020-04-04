@@ -51,7 +51,7 @@ mysqlConnection.prototype.addRider = function(username, firstname, name, passwor
     How to use this shite ...
 
     var mysqlCon = new mysqlConnection();
-    mysqlCon.getRiders(function(result){
+    mysqlCon.getAllRiders(function(result){
         console.log(result);
     });
 */
