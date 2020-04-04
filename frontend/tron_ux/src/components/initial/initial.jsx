@@ -1,19 +1,67 @@
 import React from "react";
-import { AppBar, Toolbar, Typography } from "@material-ui/core";
+import Button from '@material-ui/core/Button';
+import { withStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
 
 
-const initial = () => {
+const styles = (theme) => ({
+    background: {
+        backgroundPosition: 'center',
+      },
+    paper: {
+      marginTop: theme.spacing(20),
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center'
+    },
+
+    submit: {
+      margin: theme.spacing(2, 0, 2),
+    },
+  });
+  
+
+    function initial(props) {
+        const { classes } = props;
+      
     return (
+      <Container component="main">
+       
 
-        <AppBar position="static">
-        <Toolbar>
-            <Typography variant="headline" gutterBottom>
-                Test
-            </Typography>
-        </Toolbar>
-    </AppBar>
 
-    )
-};
+        <div className={classes.paper} maxWidth="xs">
+            
+            <Button
+              type="submit"
+              
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+            >
+              Register
+            </Button>
+            <Button
+              type="submit"
+              
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+            >
+              Guest Login
+            </Button>
+            
+            <Button
+              type="submit"
+              
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+            >
+              Login
+            </Button>
+        </div>
 
-export default initial;
+      </Container>
+    );
+  };
+  export default withStyles(styles)(initial);
