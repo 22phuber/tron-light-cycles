@@ -1,3 +1,4 @@
+//  mysqlConnection Prototype
 function mysqlConnection(){
     this.mysql = require('mysql');
     this.param = {
@@ -8,6 +9,7 @@ function mysqlConnection(){
     };
 }
 
+//  mysqlConnection functions represent sql queries
 mysqlConnection.prototype.getAllRiders = function(callback){
     con = this.mysql.createConnection(this.param);
     con.connect(function(err){
