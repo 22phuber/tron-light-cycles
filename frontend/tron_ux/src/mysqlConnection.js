@@ -22,6 +22,22 @@ mysqlConnection.prototype.getAllRiders = function(callback){
     });
 };
 
+mysqlConnection.prototype.getRiderById = function(id, callback){
+    con = this.mysql.createConnection(this.param);
+    con.connect(function(err){
+        if(err) throw err;
+        //console.log("Connected!");
+        con.query("SELECT * FROM rider where id=?;", [id], function(err, result){
+            if(err) throw err;
+            //console.log("Result: " + result);
+            con.end();
+            return callback(result);
+        });
+    });
+};
+
+
+
 
 /*
     How to use this shite ...
