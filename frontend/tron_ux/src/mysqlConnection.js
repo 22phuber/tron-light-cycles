@@ -20,7 +20,7 @@ mysqlConnection.prototype.getAllRiders = function(callback){
     });
 };
 
-mysqlConnection.prototype.getRiderById = function(username, callback){
+mysqlConnection.prototype.getRiderByUsername = function(username, callback){
     con = this.mysql.createConnection(this.param);
     con.connect(function(err){
         if(err) throw err;
@@ -55,3 +55,5 @@ mysqlConnection.prototype.addRider = function(username, firstname, name, passwor
         console.log(result);
     });
 */
+
+
