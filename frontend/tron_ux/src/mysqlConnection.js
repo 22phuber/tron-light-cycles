@@ -8,7 +8,7 @@ function mysqlConnection(){
     };
 }
 
-mysqlConnection.prototype.getRiders = function(callback){
+mysqlConnection.prototype.getAllRiders = function(callback){
     con = this.mysql.createConnection(this.param);
     con.connect(function(err){
         if(err) throw err;
@@ -25,7 +25,7 @@ mysqlConnection.prototype.getRiders = function(callback){
 
 /*
     How to use this shite ...
-    
+
     var mysqlCon = new mysqlConnection();
     mysqlCon.getRiders(function(result){
         console.log(result);
