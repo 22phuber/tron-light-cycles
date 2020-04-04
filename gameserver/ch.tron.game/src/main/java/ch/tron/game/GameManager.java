@@ -1,13 +1,15 @@
 package ch.tron.game;
 
+import ch.tron.game.config.CanvasConfig;
 import ch.tron.game.controller.GameController;
 import ch.tron.game.controller.GameRoundController;
 import ch.tron.game.model.Game;
+import ch.tron.middleman.messagedto.gametotransport.GameConfigMessage;
 import ch.tron.middleman.messagedto.transporttogame.NewGameRound;
 import ch.tron.middleman.messagehandler.ToTransportMessageForwarder;
 import ch.tron.middleman.messagedto.InAppMessage;
 import ch.tron.middleman.messagedto.transporttogame.NewPlayerMessage;
-import ch.tron.middleman.messagedto.gametotransport.PlayerUpdateMessage;
+import ch.tron.middleman.messagedto.transporttogame.PlayerUpdateMessage;
 
 public class GameManager {
 
@@ -31,15 +33,28 @@ public class GameManager {
     public static ToTransportMessageForwarder getMessageForwarder() { return MESSAGE_FORWARDER; }
 
     public static <T extends InAppMessage> void handleInAppIncomingMessage(T msg) {
-        System.out.println("GameManager: reflection works");
 
         if (msg instanceof NewPlayerMessage) {
+
+            System.out.println("GameManager: NewPlayerMessage arrived");
+
+            String groupId = ((NewPlayerMessage) msg).getGroupId();
+
             String playerId = ((NewPlayerMessage) msg).getPlayerId();
-            getGameRoundController(playerId).addPlayer(playerId);
+
+            MESSAGE_FORWARDER.forwardMessage(new GameConfigMessage(playerId, CanvasConfig.WIDTH.value(), CanvasConfig.HEIGHT.value()));
+
+            DEFAULT_GAME_CONTROLLER.getGameRoundControllerById(groupId).addPlayer(playerId);
         }
         else if (msg instanceof PlayerUpdateMessage) {
+
+            System.out.println("GameManager: PlayerUpdateMessage arrived");
+
+            String groupId = ((PlayerUpdateMessage) msg).getGroupId();
+
             String playerId = ((PlayerUpdateMessage) msg).getPlayerId();
-            getGameRoundController(playerId).updatePlayer(playerId, ((PlayerUpdateMessage) msg).getKey());
+
+            getGameRoundController(groupId).updatePlayer(playerId, ((PlayerUpdateMessage) msg).getKey());
         }
         // TODO: M3: Implement
         else if (msg instanceof NewGameRound) {
@@ -50,7 +65,7 @@ public class GameManager {
         }
     }
 
-    private static GameRoundController getGameRoundController(String playerId) {
-        return DEFAULT_GAME_CONTROLLER.getGameRoundControllerById(playerId);
+    private static GameRoundController getGameRoundController(String groupId) {
+        return DEFAULT_GAME_CONTROLLER.getGameRoundControllerById(groupId);
     }
 }

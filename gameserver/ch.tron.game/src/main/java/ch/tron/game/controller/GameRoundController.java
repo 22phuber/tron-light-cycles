@@ -23,7 +23,7 @@ public class GameRoundController {
 
     public GameRoundController(GameRound round) {
         this.round = round;
-        gameStateUpdateMessage = new GameStateUpdateMessage(round.getId(), round.playersMap());
+        gameStateUpdateMessage = new GameStateUpdateMessage(round.getId());
         gameLoop = new Thread(this::run);
         gameLoop.start();
     }
@@ -41,7 +41,7 @@ public class GameRoundController {
                 colors[player_count % colors.length]);
 
         GameManager.getMessageForwarder()
-                .forwardMessage(new GameConfigMessage(CanvasConfig.WIDTH.value(), CanvasConfig.HEIGHT.value()));
+                .forwardMessage(new GameConfigMessage(playerId, CanvasConfig.WIDTH.value(), CanvasConfig.HEIGHT.value()));
 
         round.addPlayer(pl);
     }
@@ -98,10 +98,7 @@ public class GameRoundController {
                             break;
                     }
                 });
-
-                // TODO: Send players seperately
-                // Send counter with them and assemble on arrival in package transport
-                // when counter reached number of Players for that specific GameRound
+                gameStateUpdateMessage.setUpdate(round.playersJSON());
                 GameManager.getMessageForwarder().forwardMessage(gameStateUpdateMessage);
             }
         }

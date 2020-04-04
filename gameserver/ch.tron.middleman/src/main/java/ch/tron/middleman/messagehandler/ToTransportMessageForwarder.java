@@ -14,7 +14,7 @@ public class ToTransportMessageForwarder implements InAppMessageForwarder {
             Method handleMessage = TransportManager.getDeclaredMethod("handleInAppIncomingMessage", InAppMessage.class);
             handleMessage.invoke(null, msg);
         } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
+            e.getCause();
         }
     }
 }

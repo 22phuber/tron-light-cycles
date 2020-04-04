@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tron</title>
+</head>
+<body>
+<!--<button id="play_btn" onclick="startGame()">Play</button>-->
+</body>
+
+
+<script>
+
+    const ws_uri = "ws://localhost:9000/ws";
+    let ws = new WebSocket(ws_uri);
+
+    let canvas;
+    let ctx;
+    let canvas_width;
+    let canvas_height;
+
+    document.body.addEventListener('keydown', (event) => {
+        let key = event.key;
+    if (key === "ArrowLeft" || key === "ArrowRight") {
+        sendPlayerUpdate(key);
+    }
+    });
+
+    ws.onmessage = (msg) => {
+        msg = JSON.parse(msg.data);
+        switch (msg.subject) {
+            case "canvas config":
+                if (canvas === undefined) {
+                    canvas_width = msg.width;
+                    canvas_height = msg.height;
+                    setUpCanvas(canvas_width, canvas_height);
+                }
+                break;
+            case "player update":
+                if (ctx !== undefined) {
+                    updateCanvas(msg.players);
+                }
+                break;
+        }
+    };
+
+    sendPlayerUpdate = (key) => {
+        let msg = { "subject": "update dir", "key": key };
+        let jsonstring = JSON.stringify(msg);
+        ws.send(jsonstring);
+    };
+
+    /*
+    startGame = () => {
+        ws = new WebSocket(ws_uri);
+        setUpCanvas();
+    }
+    */
+
+    setUpCanvas = (width, height) => {
+        // document.getElementById("play_btn").remove();
+        canvas = document.createElement('canvas');
+        canvas.id = "canvas";
+        canvas.width = width;
+        canvas.height = height;
+        document.body.appendChild(canvas);
+        ctx = canvas.getContext("2d");
+    };
+
+    updateCanvas = (players) => {
+        players.forEach(player => {
+            ctx.fillStyle = player.color;
+        ctx.fillRect(player.posx % canvas_width, player.posy % canvas_height, 10, 10);
+    });
+    };
+
+</script>
+</html>

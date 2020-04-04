@@ -17,7 +17,7 @@ public class GameController {
         this.game = game;
     }
 
-    public GameRound newGameRound(String groupId) {
+    public void newGameRound(String groupId) {
 
         GameRound newRound = new GameRound(groupId);
 
@@ -26,7 +26,7 @@ public class GameController {
         GameRoundController newRoundController = new GameRoundController(newRound);
         roundControllers.put(groupId, newRoundController);
 
-        return newRound;
+        System.out.println("GameController: new GameRound with id " + groupId +"added");
     }
 
     public Game getGame() {
@@ -37,7 +37,7 @@ public class GameController {
         return roundControllers;
     }
 
-    public GameRoundController getGameRoundControllerById(String id) {
-        return roundControllers.get(id);
+    public GameRoundController getGameRoundControllerById(String groupId) {
+        return roundControllers.get(groupId);
     }
 }

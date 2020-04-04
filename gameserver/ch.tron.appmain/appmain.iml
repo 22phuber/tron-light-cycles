@@ -12,12 +12,12 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="middleman" />
+    <orderEntry type="library" name="Maven: org.json:json:20160212" level="project" />
     <orderEntry type="module" module-name="transport" />
     <orderEntry type="library" name="Maven: io.netty:netty-transport:4.1.48.Final" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-common:4.1.48.Final" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-buffer:4.1.48.Final" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-resolver:4.1.48.Final" level="project" />
-    <orderEntry type="library" name="Maven: org.json:json:20160212" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-codec-http:4.1.48.Final" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-codec:4.1.48.Final" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-handler:4.1.48.Final" level="project" />

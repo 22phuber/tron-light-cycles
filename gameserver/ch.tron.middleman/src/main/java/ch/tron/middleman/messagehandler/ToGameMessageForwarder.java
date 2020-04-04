@@ -14,7 +14,7 @@ public class ToGameMessageForwarder implements InAppMessageForwarder {
             Method handleMessage = GameManager.getDeclaredMethod("handleInAppIncomingMessage", InAppMessage.class);
             handleMessage.invoke(null, msg);
         } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
+            e.getCause();
         }
     }
 }

@@ -23,6 +23,9 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
             System.out.println("Upgrade requested");
 
             ctx.fireChannelRead(request.retain());
+
+            // TODO: index.html is sent twice
+            // Implement check
         } else {
 
             final InputStream in = getClass().getResourceAsStream("/static/index.html");

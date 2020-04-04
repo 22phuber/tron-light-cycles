@@ -1,6 +1,6 @@
 package ch.tron.transport.websocketinboundhandler;
 
-import ch.tron.middleman.messagedto.gametotransport.PlayerUpdateMessage;
+import ch.tron.middleman.messagedto.transporttogame.PlayerUpdateMessage;
 import ch.tron.transport.TransportManager;
 import org.json.JSONObject;
 
@@ -18,9 +18,13 @@ public class JsonInboundHandler {
 
         if (jo.getString("subject").equals("update dir")) {
 
+            System.out.println("JsonInboundHandler: handle update message: " + jo);
+
             String key = jo.getString("key");
 
-            TransportManager.getMessageForwarder().forwardMessage(new PlayerUpdateMessage(playerId, key));
+            // default-groupId here is temporary
+            // will come with the message from client in the future
+            TransportManager.getMessageForwarder().forwardMessage(new PlayerUpdateMessage("defaultId", playerId, key));
         }
     }
 }

@@ -2,14 +2,12 @@ package ch.tron.middleman.messagedto.transporttogame;
 
 import ch.tron.middleman.messagedto.InAppMessage;
 
-import java.util.UUID;
-
 public class NewPlayerMessage extends InAppMessage {
 
     private final String playerId;
-    private final UUID groupId;
+    private final String  groupId;
 
-    public NewPlayerMessage(String playerId, UUID groupId) {
+    public NewPlayerMessage(String playerId, String groupId) {
         this.playerId = playerId;
         this.groupId = groupId;
     }
@@ -18,7 +16,7 @@ public class NewPlayerMessage extends InAppMessage {
         return playerId;
     }
 
-    public UUID getGroupId() {
+    public String getGroupId() {
         return groupId;
     }
 }
