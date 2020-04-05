@@ -11,12 +11,9 @@ module ch.tron.transport {
 
     // Tron
     requires ch.tron.middleman;
-    requires java.desktop;
+
 
     exports ch.tron.transport;
 
-
-    // TODO: Answer:
-    // This is not needed here. Why?
     opens ch.tron.transport to ch.tron.middleman;
 }

@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>middleman</artifactId>
+
     <dependencies>
         <dependency>
             <groupId>org.json</groupId>
@@ -17,6 +18,5 @@
             <version>20160212</version>
         </dependency>
     </dependencies>
-
 
 </project>

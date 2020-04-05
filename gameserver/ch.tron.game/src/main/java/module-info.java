@@ -1,8 +1,4 @@
 module ch.tron.game {
-    // Netty
-    requires io.netty.transport;
-    requires io.netty.common;
-
     // Java
     requires java.desktop;
 

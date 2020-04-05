@@ -8,6 +8,7 @@
     <artifactId>gameserver</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
+
     <modules>
         <module>ch.tron.transport</module>
         <module>ch.tron.game</module>
@@ -30,9 +31,9 @@
             </plugins>
         </pluginManagement>
     </build>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
 
 </project>
