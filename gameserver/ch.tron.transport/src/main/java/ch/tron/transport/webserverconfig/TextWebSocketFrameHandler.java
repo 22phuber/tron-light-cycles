@@ -1,7 +1,6 @@
 package ch.tron.transport.webserverconfig;
 
 import ch.tron.transport.TransportManager;
-import ch.tron.transport.websocketcontroller.WebSocketController;
 import ch.tron.transport.websocketinboundhandler.JsonInboundHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;

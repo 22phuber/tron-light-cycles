@@ -1,12 +1,13 @@
 module ch.tron.transport {
 
     // Netty
+    requires io.netty.codec;
     requires io.netty.codec.http;
+    requires io.netty.common;
     requires io.netty.transport;
 
     // JSON
     requires json;
-    requires io.netty.common;
 
     // Tron
     requires ch.tron.middleman;
