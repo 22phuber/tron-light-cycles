@@ -16,6 +16,8 @@
 \usepackage{float}
 \restylefloat{table}
 \usepackage{setspace}
+\usepackage{multicol}
+\usepackage{graphicx}
 
 \usepackage{lipsum} % generates lorem ipsum => remove again when finished
 
@@ -66,10 +68,27 @@
     \newpage
 
     % First section
-    \section{Use-Case-Modell}
+    \section{Anwendungsfälle}
+        Anwendungsfälle Übersicht:
+        \begin{multicols}{2}
+            \begin{itemize}
+               \item Ein-  \& Ausloggen
+               \item Registrieren
+               \item Passwort zurücksetzen
+               \item Lobby erstellen
+               \item Freunde einladen
+               \item Lobby beitreten
+               \item Spiel starten
+               \item Statistiken betrachten
+               \item Authentifizierung
+           \end{itemize}
+        \end{multicols}
 
-    \subsection{Use-Case-1}
-    \lipsum[1-2]
+    \subsection{Anwendungsfalldiagramm}
+        \begin{figure}[H]
+            \includegraphics[scale=0.77]{figures/Use-case-modell.png}
+            \caption{Anwendungsfalldiagramm - Tron Licht-Motorräder Computerspiel}
+        \end{figure}
 
     \subsection{Use-Case-2}
     \lipsum[1]
