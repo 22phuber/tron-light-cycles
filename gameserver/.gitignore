@@ -1,6 +1,6 @@
 *.idea
 *.iml
-/target/**
+**/target/**
 /**/META-INF/**
 *.tmp
 # Word temporary

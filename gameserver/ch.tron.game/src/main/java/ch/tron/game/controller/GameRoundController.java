@@ -24,6 +24,7 @@ public class GameRoundController {
     public GameRoundController(GameRound round) {
         this.round = round;
         gameStateUpdateMessage = new GameStateUpdateMessage(round.getId());
+
         gameLoop = new Thread(this::run);
         gameLoop.start();
     }
@@ -61,11 +62,18 @@ public class GameRoundController {
         //            (dir = 1)
         switch (key) {
             case "ArrowLeft":
-                pl_dir = (pl_dir == 0) ? 3 : --pl_dir;
+                pl_dir = (pl_dir != 0)? 2 : 0;
                 break;
             case "ArrowRight":
-                pl_dir = (pl_dir == 3) ? 0 : ++pl_dir;
+                pl_dir = (pl_dir != 2)? 0 : 2;
                 break;
+            case "ArrowUp":
+                pl_dir = (pl_dir != 1)? 3 : 1;
+                break;
+            case "ArrowDown":
+                pl_dir = (pl_dir != 3)? 1 : 3;
+                break;
+            default: // do nothing
         }
         pl.setDir(pl_dir);
     }
@@ -88,13 +96,19 @@ public class GameRoundController {
                             break;
                         case 2:
                             int x = player.getPosx();
-                            if (x == 0) { player.setPosx(CanvasConfig.WIDTH.value()); }
-                            else { player.setPosx(x - 1); }
+                            if (x == 0) {
+                                player.setPosx(CanvasConfig.WIDTH.value());
+                            } else {
+                                player.setPosx(x - 1);
+                            }
                             break;
                         case 3:
                             int y = player.getPosy();
-                            if (y == 0) { player.setPosy(CanvasConfig.HEIGHT.value()); }
-                            else { player.setPosy(y - 1); }
+                            if (y == 0) {
+                                player.setPosy(CanvasConfig.HEIGHT.value());
+                            } else {
+                                player.setPosy(y - 1);
+                            }
                             break;
                     }
                 });
