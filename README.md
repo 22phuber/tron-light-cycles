@@ -12,7 +12,7 @@
 
 ## Java Gameserver
 
-* Use Intellij for java development. Open project folder: `app`
+* Use Intellij for java development. Open project folder: `gameserver`
 
 1. Start `GameServer.main()` in Intellij
 2. Goto `http://localhost:9000` to connect to the Gameserver
