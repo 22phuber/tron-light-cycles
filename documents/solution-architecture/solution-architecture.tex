@@ -102,13 +102,12 @@
         \end{itemize}
         Die zwei Hauptanwendungsfälle werden wir im nächsten Abschnitt detailliert ausgeführt.
 
-        \subsubsection{\quotes{fully dressed}}
-            \begin{tcolorbox}[breakable,sharp corners,colback=white,colframe=gray,width=\dimexpr\textwidth-15mm\relax,enlarge left by=10mm,fontupper=\linespread{1.1}\selectfont]
+        \subsubsection{UC1: Lobby erstellen - \quotes{fully dressed}}
+            \begin{tcolorbox}[enhanced, breakable, sharp corners, width=\dimexpr\textwidth-15mm\relax ,enlarge left by=10mm ,fontupper=\linespread{1.1}\selectfont, boxrule=1pt, title={UC1: Lobby erstellen}, colback=white, colframe=gray!22, coltitle=black]
 
                 \textbf{Anwendungsfall:} Lobby erstellen \\
                 \textbf{Ebene:} Anwenderziel \\
                 \textbf{Primärakteur:} Spieler \\
-                \textbf{Sekundärakteur:} Mitspieler \\
                 \textbf{Stakeholder und Interessen:}
                 \begin{itemize}
                     \item \textit{Spieler}: Möchte mit anderen Spielern zusammen in einer Lobby beitreten oder seine eigene Lobby erstellen. Kann die Rolle des Lobby-Erstellers haben.
@@ -118,7 +117,7 @@
                 \end{itemize}
                 \textbf{Vorbedingungen:} Alle Spieler sind entweder mit einem persönlichen oder Gastkonto angemeldet.\\
                 \textbf{Nachbedingungen:} Mehrere Spieler oder auch einzelne Spieler befinden sich in Lobbys. Das System ist in der Lage in den Lobbys mit mehreren Spielern ein Spielgang zu starten. \\
-                \textbf{Standardablauf:}
+               \\  \textbf{Standardablauf:}
                 \begin{enumerate}
                     \item Spieler/Mitspieler wechselt zur Lobbyansicht der Anwendung.
                     \item Spieler/Mitspieler wählt eine bestehende öffentliche Lobby aus.
@@ -138,7 +137,7 @@
                     \item System öffnet Lobby wieder
                 \end{enumerate}
                 \textit{Spieler/Mitspieler können Lobby beitreten. Punkt 3 bis 9 wiederholen sich, bis Spieler sich entscheidet, das Spiel oder die Lobby zu verlassen.} \\
-                \textbf{Erweiterungen (oder alternative Abläufe):}
+                \\ \textbf{Erweiterungen (oder alternative Abläufe):}
                 \begin{itemize}
                     \item[2a.] Spieler können eigene Lobby erstellen:
                         \begin{enumerate}
@@ -162,6 +161,12 @@
                             \item Spieler/Mitspieler verlassen die Lobby nicht
                         \end{enumerate}
                 \end{itemize}
+                \textbf{Spezielle Anforderungen:}
+                 \begin{itemize}
+                    \item Sobald ein Mitspieler der Lobby beigetreten ist, läuft ein Timer. Falls der Timer abgelaufen ist und der Mitspieler noch nicht bestätigt hat, wird dieser automatisch abgelehnt.
+                    \item Maximale Spieleranzahl muss eingehalten werden. Es gibt eine obere Grenze von Mitspielern, die durch den Spieler definiert wird.
+                    \item Internationalisierung der Sprache in den Textanzeigen.
+                \end{itemize}
 
             \end{tcolorbox}
 
@@ -170,7 +175,6 @@
     \section{Zusätzliche Anforderungen}
 
     \subsection{Funktionalität}
-
 
     \subsection{Benutzbarkeit}
 
