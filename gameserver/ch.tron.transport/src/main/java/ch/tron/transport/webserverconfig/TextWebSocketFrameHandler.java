@@ -1,7 +1,7 @@
 package ch.tron.transport.webserverconfig;
 
 import ch.tron.transport.TransportManager;
-import ch.tron.transport.websocketinboundhandler.JsonInboundHandler;
+import ch.tron.transport.websocket.inboundhandler.JsonInboundHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
@@ -11,6 +11,11 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Updates {@link io.netty.channel.ChannelPipeline} of a specific
+ * client-server-connection on websocket handshake.
+ * Handles incoming text-websocket-frames of a specific client.
+ */
 public class TextWebSocketFrameHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
 
     private final Logger logger = LoggerFactory.getLogger(TextWebSocketFrameHandler.class);

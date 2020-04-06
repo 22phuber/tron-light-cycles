@@ -12,6 +12,10 @@ import org.slf4j.LoggerFactory;
 
 import java.awt.Color;
 
+/**
+ * Controls an instance of {@link GameRound}.
+ * Manages the {@link GameRound}'s {@link Player} and game state.
+ */
 public class GameRoundController {
 
     private final Logger logger = LoggerFactory.getLogger(GameRoundController.class);
@@ -33,6 +37,12 @@ public class GameRoundController {
         gameLoop.start();
     }
 
+    /**
+     * Adds a {@link Player} to the {@link GameRound} which
+     * the enclosing {@link GameRoundController} controls.
+     *
+     * @param playerId  The id of the {@link Player} being added.
+     */
     public void addPlayer(String playerId) {
 
         int player_count = round.playersMap().size();
@@ -51,6 +61,12 @@ public class GameRoundController {
         round.addPlayer(pl);
     }
 
+    /**
+     * Updates a {@link Player}'s direction.
+     *
+     * @param playerId  The id of the {@link Player}.
+     * @param key       The key that represents the change in direction.
+     */
     public void updatePlayer(String playerId, String key) {
         Player pl = round.playersMap().get(playerId);
         int pl_dir = pl.getDir();

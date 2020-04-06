@@ -3,6 +3,9 @@ package ch.tron.game.model;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Represents a tron game.
+ */
 public class Game {
 
     private final String name;
