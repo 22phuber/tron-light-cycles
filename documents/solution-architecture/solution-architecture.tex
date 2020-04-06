@@ -20,6 +20,7 @@
 \usepackage{graphicx}
 \usepackage[most]{tcolorbox}
 \usepackage{enumitem}
+\usepackage{textcomp}
 
 \usepackage{lipsum} % generates lorem ipsum => remove again when finished
 
@@ -100,9 +101,9 @@
             \item Lobby erstellen
             \item Spiel spielen
         \end{itemize}
-        Die zwei Hauptanwendungsfälle werden wir im nächsten Abschnitt detailliert ausgeführt.
+        Die Hauptanwendungsfälle werden in den nächsten zwei Abschnitten detailliert ausgeführt.
 
-        \subsubsection{UC1: Lobby erstellen - \quotes{fully dressed}}
+       \subsubsection{UC1: Lobby erstellen - \quotes{fully dressed}}
             \begin{tcolorbox}[enhanced, breakable, sharp corners, width=\dimexpr\textwidth-15mm\relax ,enlarge left by=10mm ,fontupper=\linespread{1.1}\selectfont, boxrule=1pt, title={UC1: Lobby erstellen}, colback=white, colframe=gray!22, coltitle=black]
 
                 \textbf{Anwendungsfall:} Lobby erstellen \\
@@ -117,7 +118,7 @@
                 \end{itemize}
                 \textbf{Vorbedingungen:} Alle Spieler sind entweder mit einem persönlichen oder Gastkonto angemeldet.\\
                 \textbf{Nachbedingungen:} Mehrere Spieler oder auch einzelne Spieler befinden sich in Lobbys. Das System ist in der Lage in den Lobbys mit mehreren Spielern ein Spielgang zu starten. \\
-               \\  \textbf{Standardablauf:}
+                \\  \textbf{Standardablauf:}
                 \begin{enumerate}
                     \item Spieler/Mitspieler wechselt zur Lobbyansicht der Anwendung.
                     \item Spieler/Mitspieler wählt eine bestehende öffentliche Lobby aus.
@@ -140,32 +141,95 @@
                 \\ \textbf{Erweiterungen (oder alternative Abläufe):}
                 \begin{itemize}
                     \item[2a.] Spieler können eigene Lobby erstellen:
-                        \begin{enumerate}
-                            \item Spieler klickt auf Lobby erstellen.
-                            \item Spieler wählt ob die Lobby öffentlich zugänglich (public) ist oder nur für Freunde (private).
-                            \item System erstellt eine Lobby.
-                            \item System fügt den Spieler als Lobby-Ersteller der Lobby hinzu.
-                        \end{enumerate}
+                    \begin{enumerate}
+                        \item Spieler klickt auf Lobby erstellen.
+                        \item Spieler wählt ob die Lobby öffentlich zugänglich (public) ist oder nur für Freunde (private).
+                        \item System erstellt eine Lobby.
+                        \item System fügt den Spieler als Lobby-Ersteller der Lobby hinzu.
+                    \end{enumerate}
                     \item[2b.] Spieler können privaten Lobbys von Freunden über einen Link beitreten:
-                        \begin{enumerate}
-                            \item Spieler öffnet Einladung.
-                            \item Spieler öffnet den Link im Browser.
-                            \item System fügt Spieler der Lobby des Freundes hinzu.
-                        \end{enumerate}
+                    \begin{enumerate}
+                        \item Spieler öffnet Einladung.
+                        \item Spieler öffnet den Link im Browser.
+                        \item System fügt Spieler der Lobby des Freundes hinzu.
+                    \end{enumerate}
                     \item[4a.] Spieler können Lobby verlassen:
-                        \begin{enumerate}
-                            \item Spieler/Mitspieler verlassen Lobby
-                        \end{enumerate}
+                    \begin{enumerate}
+                        \item Spieler/Mitspieler verlassen Lobby
+                    \end{enumerate}
                     \item[4b.] Spieler/Mitspieler können weiter in der Lobby bleiben und weiterspielen:
+                    \begin{enumerate}
+                        \item Spieler/Mitspieler verlassen die Lobby nicht
+                    \end{enumerate}
+                \end{itemize}
+                \textbf{Spezielle Anforderungen:}
+                \begin{itemize}
+                    \item Sobald ein Mitspieler der Lobby beigetreten ist, läuft ein Timer. Falls der Timer abgelaufen ist und der Mitspieler noch nicht bestätigt hat, wird dieser automatisch abgelehnt.
+                    \item Maximale Spieleranzahl muss eingehalten werden. Es gibt eine obere Grenze von Mitspielern, die durch den Spieler definiert wird.
+                    \item Internationalisierung der Sprache in den Textanzeigen.
+                \end{itemize}
+
+            \end{tcolorbox}
+
+        \subsubsection{UC2: Spiel spielen - \quotes{fully dressed}}
+            \begin{tcolorbox}[enhanced, breakable, sharp corners, width=\dimexpr\textwidth-15mm\relax ,enlarge left by=10mm ,fontupper=\linespread{1.1}\selectfont, boxrule=1pt, title={UC2: Spiel spielen}, colback=white, colframe=gray!22, coltitle=black]
+
+                \textbf{Anwendungsfall:} Spiel spielen \\
+                \textbf{Ebene:} Anwenderziel \\
+                \textbf{Primärakteur:} Spieler \\
+                \textbf{Stakeholder und Interessen:}
+                \begin{itemize}
+                    \item \textit{Spieler}: Möchte als letzter Spieler übrig bleiben
+                    \item \textit{Mitspieler}: Möchte als letzter Spieler übrig bleiben.
+                    \item \textit{Lobby-Ersteller}:  Möchte das Spiel starten, wenn alle Spieler bereit sind.
+                    \item \textit{System}: Möchte alle Spieler - bereit zum spielen - in einer Lobby haben, um ein Spiel starten zu können.
+                \end{itemize}
+                \textbf{Vorbedingungen:} Mindestens 2 Spieler sind im Spiel.\\
+                \textbf{Nachbedingungen:} Der letzte Spieler im Spiel wurde Sieger. Spiel wurde erfolgreich beendet. Lobby wird erneut angezeigt. \\
+               \\  \textbf{Standardablauf:}
+                \begin{enumerate}
+                    \item System lädt Spiel.
+                    \item System platziert Spieler/Mitspieler in einem gewissen Abstand zum Spielfeldrand und zu den Mitspielern, jeweils in möglichst entgegengesetzter Richtung, auf dem Spielfeld.
+                    \item System zeigt Countdown an. Nach Ablauf des Countdowns beginnt das Spiel.
+                    \item System beginnt Startbewegung der Spieler mit konstanter Geschwindigkeit in Richtung Spielfeldmitte.
+                \end{enumerate}
+                \textit{Alle Spieler auf dem Spielfeld behalten die konstante Geschwindigkeit bei bis zum Ausscheiden oder Ende des Spiels.}
+                \begin{enumerate}[resume]
+                    \item System erzeugt Hindernis vom jedem Startpunkt bis zur aktuellen Position des jeweiligen Spielers/Mitspielers.
+                    \item System übergibt Spielern die Kontrolle des jeweiligen Spielcharakters.
+                \end{enumerate}
+                \textit{Schritt 4 - 6 folgen ohne Zeitverzögerung aufeinander.}
+                \begin{enumerate}[resume]
+                    \item Spieler/Mitspieler können, durch drücken einer Pfeiltaste, die Richtung um jeweils exakt 90\textdegree\ ändern.
+                    \item Das durch den Spieler/Mitspieler erzeugte Hindernis, wächst mit der Bewegung und in der jeweiligen Bewegungsrichtung.
+                \end{enumerate}
+                \textit{Das vom Spieler/Mitspieler erzeugte Hindernis, bleibt auf dem Spielfeld bestehen bis zum Ausscheiden oder Sieg des Spielers/Mitspielers, in allen folgenden Schritten.}
+                \begin{enumerate}[resume]
+                    \item System koordiniert in kurzen Intervallen alle Bewegungen der Spieler und überprüft deren Positionen und etwaige Kollisionen.
+                \end{enumerate}
+                \textit{System wiederholt Schritt 7 - 9 bis Kollision erkannt wird.}
+                \begin{enumerate}[resume]
+                    \item System entfernt Spieler mit Kollision vom Spielfeld und zeigt eine entsprechende Meldung an.
+                \end{enumerate}
+                \textit{System wiederholt Schritt 7 - 10 bis ein einziger Spieler auf dem Spielfeld übrig bleibt.}
+                \begin{enumerate}[resume]
+                    \item System zeigt bei letztem Spieler eine Siegesmeldung an.
+                    \item System beendet das Spiel.
+                    \item System zeigt die Statistiken des Spiels bei allen Spielern an.
+                    \item System öffnet - nach Ablauf eines Timers  - erneut die Lobby.
+                \end{enumerate}
+                \textbf{Erweiterungen (oder alternative Abläufe):}
+                \begin{itemize}
+                    \item[?a.] blah
                         \begin{enumerate}
-                            \item Spieler/Mitspieler verlassen die Lobby nicht
+                            \item blah
+                            \item blah
+                            \item blah
                         \end{enumerate}
                 \end{itemize}
                 \textbf{Spezielle Anforderungen:}
                  \begin{itemize}
-                    \item Sobald ein Mitspieler der Lobby beigetreten ist, läuft ein Timer. Falls der Timer abgelaufen ist und der Mitspieler noch nicht bestätigt hat, wird dieser automatisch abgelehnt.
-                    \item Maximale Spieleranzahl muss eingehalten werden. Es gibt eine obere Grenze von Mitspielern, die durch den Spieler definiert wird.
-                    \item Internationalisierung der Sprache in den Textanzeigen.
+                    \item blah
                 \end{itemize}
 
             \end{tcolorbox}
