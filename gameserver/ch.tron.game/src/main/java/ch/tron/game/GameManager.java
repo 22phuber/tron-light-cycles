@@ -10,8 +10,12 @@ import ch.tron.middleman.messagehandler.ToTransportMessageForwarder;
 import ch.tron.middleman.messagedto.InAppMessage;
 import ch.tron.middleman.messagedto.transporttogame.NewPlayerMessage;
 import ch.tron.middleman.messagedto.transporttogame.PlayerUpdateMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class GameManager {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(GameManager.class);
 
     private static final ToTransportMessageForwarder MESSAGE_FORWARDER = new ToTransportMessageForwarder();
 
@@ -22,8 +26,10 @@ public class GameManager {
     private final static GameController DEFAULT_GAME_CONTROLLER;
 
     static {
+
         GAME = new Game("defaultGame");
         DEFAULT_GAME_CONTROLLER = new GameController(GAME);
+
         // This is temporary
         // Add the Default-GameRound to the Default-Game
         // All players will be added to the Default-GameRound
@@ -36,10 +42,7 @@ public class GameManager {
 
         if (msg instanceof NewPlayerMessage) {
 
-            System.out.println("GameManager: NewPlayerMessage arrived");
-
             String groupId = ((NewPlayerMessage) msg).getGroupId();
-
             String playerId = ((NewPlayerMessage) msg).getPlayerId();
 
             MESSAGE_FORWARDER.forwardMessage(new GameConfigMessage(playerId, CanvasConfig.WIDTH.value(), CanvasConfig.HEIGHT.value()));
@@ -48,10 +51,7 @@ public class GameManager {
         }
         else if (msg instanceof PlayerUpdateMessage) {
 
-            System.out.println("GameManager: PlayerUpdateMessage arrived");
-
             String groupId = ((PlayerUpdateMessage) msg).getGroupId();
-
             String playerId = ((PlayerUpdateMessage) msg).getPlayerId();
 
             getGameRoundController(groupId).updatePlayer(playerId, ((PlayerUpdateMessage) msg).getKey());
@@ -61,7 +61,7 @@ public class GameManager {
 
         }
         else {
-            System.out.println("GameManager: Message type not supported.");
+            LOGGER.info("Message type {} not supported", msg.getClass());
         }
     }
 

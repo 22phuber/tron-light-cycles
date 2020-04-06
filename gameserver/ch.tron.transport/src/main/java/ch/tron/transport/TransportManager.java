@@ -11,8 +11,12 @@ import ch.tron.transport.websocketoutboundhandler.JsonOutboundHandler;
 import io.netty.channel.Channel;
 import io.netty.channel.group.ChannelGroup;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TransportManager {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(TransportManager.class);
 
     // Reuse this instance in order to keep memory footprint small
     private static final JsonOutboundHandler out = new JsonOutboundHandler();
@@ -26,20 +30,17 @@ public class TransportManager {
     private static final String DEFAULT_CHANNEL_GROUP_ID = WebSocketController.newChannelGroup();
 
     public TransportManager() {
-        SocketInitializer.init();
 
+        LOGGER.info("Initialize transport");
+
+        SocketInitializer.init();
     }
 
     public static void manageNewChannel(Channel channel) {
 
-        System.out.println("TransportManager: manageNewChannel is called");
-
-        System.out.println("TransportManager: Id of DefaultChannelGroup is: " + DEFAULT_CHANNEL_GROUP_ID);
-
         // This is temporary
         // Automatically add new Channel to 'default'-ChannelGroup instantiated on top
         WebSocketController.addChannelToGroup(channel, DEFAULT_CHANNEL_GROUP_ID);
-
 
         MESSAGE_FORWARDER.forwardMessage(new NewPlayerMessage(channel.id().asLongText(), DEFAULT_CHANNEL_GROUP_ID));
     }
@@ -60,8 +61,6 @@ public class TransportManager {
             out.sendUpdate(channelGroup, update);
         }
         else if (msg instanceof GameConfigMessage) {
-
-            System.out.println("TransportManager: GameConfigMessage arrived");
 
             Channel channel = WebSocketController.getChannel(
                     "defaultId",

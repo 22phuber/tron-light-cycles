@@ -13,8 +13,6 @@ public class JsonOutboundHandler {
 
     public void sendConfig(Channel channel, String config) {
 
-        System.out.println("JsonOutboundHandler: send " + config + " to " + channel);
-
         channel.writeAndFlush(new TextWebSocketFrame(config));
     }
 }

@@ -7,10 +7,14 @@ import ch.tron.game.model.Player;
 import ch.tron.game.model.GameRound;
 import ch.tron.middleman.messagedto.gametotransport.GameConfigMessage;
 import ch.tron.middleman.messagedto.gametotransport.GameStateUpdateMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.Color;
 
 public class GameRoundController {
+
+    private final Logger logger = LoggerFactory.getLogger(GameRoundController.class);
 
     private final GameRound round;
 
@@ -79,7 +83,9 @@ public class GameRoundController {
     }
 
     private void run() {
-        System.out.println("Game Loop running");
+
+        logger.info("Game loop running");
+
         long t_before = System.nanoTime();
         while (true) {
             long t_current = System.nanoTime();

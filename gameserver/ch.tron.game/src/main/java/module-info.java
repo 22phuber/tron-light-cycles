@@ -5,6 +5,9 @@ module ch.tron.game {
     // JSON
     requires json;
 
+    // slf4j
+    requires org.slf4j;
+
     // Tron
     requires ch.tron.middleman;
 

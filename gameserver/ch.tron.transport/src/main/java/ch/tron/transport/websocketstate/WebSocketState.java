@@ -18,8 +18,6 @@ public class WebSocketState {
 
         groups.put(id, group);
 
-        System.out.println("WebSocketState: ChannelGroup with id " + id + " has been added");
-
         return id;
     }
 
@@ -36,11 +34,7 @@ public class WebSocketState {
 
         ChannelGroup group = groups.get(groupId);
 
-        System.out.println(group);
-
         group.add(channel);
-
-        System.out.println(group);
     }
 
     public void removeChannelFromGroup(Channel channel, String groupId) {
@@ -49,6 +43,7 @@ public class WebSocketState {
     }
 
     public Channel getChannel(String groupId, String playerId) {
+
         Channel channel = groups.get(groupId).stream()
                 .filter(ch -> ch.id().asLongText().equals(playerId))
                 .findFirst()

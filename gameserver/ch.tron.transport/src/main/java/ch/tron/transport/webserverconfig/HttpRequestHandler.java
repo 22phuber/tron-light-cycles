@@ -5,11 +5,15 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.DefaultFileRegion;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
+
+    private final Logger logger = LoggerFactory.getLogger(HttpRequestHandler.class);
 
     private final String wsURI;
 
@@ -20,7 +24,7 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
 
         if (request.uri().equalsIgnoreCase(wsURI)) {
 
-            System.out.println("Upgrade requested");
+            logger.info("Upgrade requested");
 
             ctx.fireChannelRead(request.retain());
 
@@ -56,10 +60,8 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
             ctx.writeAndFlush(LastHttpContent.EMPTY_LAST_CONTENT)
                     .addListener(ChannelFutureListener.CLOSE);
 
-            if (tempFile.delete()) {
-                System.out.println("HTTPRequestHandler: tempFile successfully deleted");
-            } else {
-                System.out.println("HTTPRequestHandler: tempFile couldn't be deleted");
+            if (!tempFile.delete()) {
+                logger.info("tempFile NOT deleted");
             }
 
         }
@@ -67,7 +69,7 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        cause.printStackTrace();
+        logger.error("", cause.getMessage());
         ctx.close();
     }
 

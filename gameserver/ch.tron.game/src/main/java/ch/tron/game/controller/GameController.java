@@ -25,8 +25,6 @@ public class GameController {
 
         GameRoundController newRoundController = new GameRoundController(newRound);
         roundControllers.put(groupId, newRoundController);
-
-        System.out.println("GameController: new GameRound with id " + groupId +"added");
     }
 
     public Game getGame() {

@@ -18,8 +18,6 @@ public class JsonInboundHandler {
 
         if (jo.getString("subject").equals("update dir")) {
 
-            System.out.println("JsonInboundHandler: handle update message: " + jo);
-
             String key = jo.getString("key");
 
             // default-groupId here is temporary

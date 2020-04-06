@@ -23,8 +23,6 @@ public class GameRound {
 
     public void addPlayer(Player pl) {
 
-        System.out.println("GameRound (id: " + id + "): player added");
-
         group.add(pl.getId());
         players.put(pl.getId(), pl);
     }

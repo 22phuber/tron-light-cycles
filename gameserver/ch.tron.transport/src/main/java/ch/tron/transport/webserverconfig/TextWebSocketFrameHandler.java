@@ -8,20 +8,23 @@ import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TextWebSocketFrameHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
+
+    private final Logger logger = LoggerFactory.getLogger(TextWebSocketFrameHandler.class);
 
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
 
         if (evt instanceof WebSocketServerProtocolHandler.HandshakeComplete) {
 
-            System.out.println("Handshake");
+            logger.info("Handshake");
 
             ctx.pipeline().remove(HttpRequestHandler.class);
 
             TransportManager.manageNewChannel(ctx.channel());
-
         } else {
             super.userEventTriggered(ctx, evt);
         }
@@ -33,7 +36,7 @@ public class TextWebSocketFrameHandler extends SimpleChannelInboundHandler<TextW
         try {
             jo = new JSONObject(frame.text());
         } catch (JSONException e) {
-            System.out.println("Invalid JSON");
+            logger.info("Invalid JSON");
             return;
         }
         new JsonInboundHandler(ctx.channel().id().asLongText(), jo);
