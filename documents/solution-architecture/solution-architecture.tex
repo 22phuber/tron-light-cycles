@@ -18,6 +18,8 @@
 \usepackage{setspace}
 \usepackage{multicol}
 \usepackage{graphicx}
+\usepackage[most]{tcolorbox}
+\usepackage{enumitem}
 
 \usepackage{lipsum} % generates lorem ipsum => remove again when finished
 
@@ -33,6 +35,9 @@
 
 \pretitle{\begin{center}\linespread{1.5}\huge}
     \posttitle{\par\end{center}\vspace{0.5em}}
+
+% double quotes macro
+\newcommand{\quotes}[1]{``#1''}
 
 \begin{document}
 
@@ -80,7 +85,6 @@
                \item Lobby beitreten
                \item Spiel starten
                \item Statistiken betrachten
-               \item Authentifizierung
            \end{itemize}
         \end{multicols}
 
@@ -90,13 +94,83 @@
             \caption{Anwendungsfalldiagramm - Tron Licht-Motorräder Computerspiel}
         \end{figure}
 
-    \subsection{Use-Case-2}
-    \lipsum[1]
+    \subsection{Hauptanwendungsfälle}
+        Wir haben zwei Hauptanwendungsfälle identifiziert:
+         \begin{itemize}
+            \item Lobby erstellen
+            \item Spiel spielen
+        \end{itemize}
+        Die zwei Hauptanwendungsfälle werden wir im nächsten Abschnitt detailliert ausgeführt.
+
+        \subsubsection{\quotes{fully dressed}}
+            \begin{tcolorbox}[breakable,sharp corners,colback=white,colframe=gray,width=\dimexpr\textwidth-15mm\relax,enlarge left by=10mm,fontupper=\linespread{1.1}\selectfont]
+
+                \textbf{Anwendungsfall:} Lobby erstellen \\
+                \textbf{Ebene:} Anwenderziel \\
+                \textbf{Primärakteur:} Spieler \\
+                \textbf{Sekundärakteur:} Mitspieler \\
+                \textbf{Stakeholder und Interessen:}
+                \begin{itemize}
+                    \item \textit{Spieler}: Möchte mit anderen Spielern zusammen in einer Lobby beitreten oder seine eigene Lobby erstellen. Kann die Rolle des Lobby-Erstellers haben.
+                    \item \textit{Mitspieler}: Möchten mit anderen Spielern zusammen in einer Lobby beitreten. Kann die Rolle des Lobby-Erstellers haben.
+                    \item \textit{Lobby-Ersteller}:  Möchte das Spiel starten, wenn alle Spieler bereit sind.
+                    \item \textit{System}: Möchte mehrere Spieler in einer Lobby haben, um ein Spiel starten zu können.
+                \end{itemize}
+                \textbf{Vorbedingungen:} Alle Spieler sind entweder mit einem persönlichen oder Gastkonto angemeldet.\\
+                \textbf{Nachbedingungen:} Mehrere Spieler oder auch einzelne Spieler befinden sich in Lobbys. Das System ist in der Lage in den Lobbys mit mehreren Spielern ein Spielgang zu starten. \\
+                \textbf{Standardablauf:}
+                \begin{enumerate}
+                    \item Spieler/Mitspieler wechselt zur Lobbyansicht der Anwendung.
+                    \item Spieler/Mitspieler wählt eine bestehende öffentliche Lobby aus.
+                    \item Spieler/Mitspieler tritt diese Lobby bei.
+                    \item Spieler und Mitspieler warten in Lobby auf weitere Mitspieler..
+                    \item Spieler/Mitspieler klicken auf \quotes{Bereit}
+                    \item Lobby-Ersteller startet das Spiel.
+                    \item System überprüft ob alle Spieler in der Lobby bereit sind.
+                \end{enumerate}
+                \textit{Falls nicht alle Spieler bereit sind, muss der Lobby-Ersteller zu einem weiteren Zeitpunkt nochmals Schritt 6 ausführen. Erst wenn alle Spieler bereit sind, wird mit Schritt 8 fortgefahren.}
+                \begin{enumerate}[resume]
+                    \item System startet das Spiel.
+                \end{enumerate}
+                \textit{Es ist nun nicht mehr möglich - als Spieler oder Mitspieler - dieser Lobby beizutreten.} \\
+                \textit{Spiel wird gespielt …, Ende des Spiels.}
+                \begin{enumerate}[resume]
+                    \item System öffnet Lobby wieder
+                \end{enumerate}
+                \textit{Spieler/Mitspieler können Lobby beitreten. Punkt 3 bis 9 wiederholen sich, bis Spieler sich entscheidet, das Spiel oder die Lobby zu verlassen.} \\
+                \textbf{Erweiterungen (oder alternative Abläufe):}
+                \begin{itemize}
+                    \item[2a.] Spieler können eigene Lobby erstellen:
+                        \begin{enumerate}
+                            \item Spieler klickt auf Lobby erstellen.
+                            \item Spieler wählt ob die Lobby öffentlich zugänglich (public) ist oder nur für Freunde (private).
+                            \item System erstellt eine Lobby.
+                            \item System fügt den Spieler als Lobby-Ersteller der Lobby hinzu.
+                        \end{enumerate}
+                    \item[2b.] Spieler können privaten Lobbys von Freunden über einen Link beitreten:
+                        \begin{enumerate}
+                            \item Spieler öffnet Einladung.
+                            \item Spieler öffnet den Link im Browser.
+                            \item System fügt Spieler der Lobby des Freundes hinzu.
+                        \end{enumerate}
+                    \item[4a.] Spieler können Lobby verlassen:
+                        \begin{enumerate}
+                            \item Spieler/Mitspieler verlassen Lobby
+                        \end{enumerate}
+                    \item[4b.] Spieler/Mitspieler können weiter in der Lobby bleiben und weiterspielen:
+                        \begin{enumerate}
+                            \item Spieler/Mitspieler verlassen die Lobby nicht
+                        \end{enumerate}
+                \end{itemize}
+
+            \end{tcolorbox}
+
+         \subsubsection{System-Sequenzdiagramm (SSD)}
 
     \section{Zusätzliche Anforderungen}
 
     \subsection{Funktionalität}
-    \lipsum[1]
+
 
     \subsection{Benutzbarkeit}
 
