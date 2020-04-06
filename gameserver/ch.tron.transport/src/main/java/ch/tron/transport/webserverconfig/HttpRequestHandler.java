@@ -11,6 +11,11 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * Handles HttpRequests. Forwards request to
+ * {@link io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler}
+ * if upgrade to websocket is requested.
+ */
 public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
 
     private final Logger logger = LoggerFactory.getLogger(HttpRequestHandler.class);
@@ -27,9 +32,6 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
             logger.info("Upgrade requested");
 
             ctx.fireChannelRead(request.retain());
-
-            // TODO: index.html is sent twice
-            // Implement check
         } else {
 
             final InputStream in = getClass().getResourceAsStream("/static/index.html");
@@ -63,7 +65,6 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
             if (!tempFile.delete()) {
                 logger.info("tempFile NOT deleted");
             }
-
         }
     }
 

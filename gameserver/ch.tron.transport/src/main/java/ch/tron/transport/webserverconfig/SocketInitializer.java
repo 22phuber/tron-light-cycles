@@ -7,6 +7,9 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 import java.net.InetSocketAddress;
 
+/**
+ * Opens a socket.
+ */
 public class SocketInitializer {
 
     public static void init() {
