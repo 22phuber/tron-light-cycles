@@ -10,10 +10,10 @@
     <version>1.0-SNAPSHOT</version>
 
     <modules>
-        <module>ch.tron.transport</module>
-        <module>ch.tron.game</module>
         <module>ch.tron.appmain</module>
+        <module>ch.tron.game</module>
         <module>ch.tron.middleman</module>
+        <module>ch.tron.transport</module>
     </modules>
 
     <build>
