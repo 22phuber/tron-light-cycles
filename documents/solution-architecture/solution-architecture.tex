@@ -3,11 +3,11 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{babel}
+\usepackage{hyperref}
 \usepackage{lmodern}%get scalable font
 \usepackage{titling}
 \usepackage{relsize}
 \usepackage{biblatex}
-\usepackage{hyperref}
 \usepackage{glossaries}
 \usepackage{paralist}
 \usepackage[table, dvipsnames]{xcolor}
@@ -21,6 +21,14 @@
 \usepackage[most]{tcolorbox}
 \usepackage{enumitem}
 \usepackage{textcomp}
+
+% Link colors
+\hypersetup{
+    colorlinks,
+    linkcolor={blue},
+    citecolor={red},
+    urlcolor={blue}
+}
 
 \usepackage{lipsum} % generates lorem ipsum => remove again when finished
 
@@ -38,6 +46,7 @@
     \posttitle{\par\end{center}\vspace{0.5em}}
 
 % double quotes macro
+% usage: \quotes{arg1}  => in text: "arg1"
 \newcommand{\quotes}[1]{``#1''}
 
 \begin{document}
@@ -81,9 +90,9 @@
                \item Ein-  \& Ausloggen
                \item Registrieren
                \item Passwort zurücksetzen
-               \item Lobby erstellen
+               \item \Gls{Lobby} erstellen
                \item Freunde einladen
-               \item Lobby beitreten
+               \item \Gls{Lobby} beitreten
                \item Spiel starten
                \item Statistiken betrachten
            \end{itemize}
@@ -98,7 +107,7 @@
     \subsection{Hauptanwendungsfälle}
         Wir haben zwei Hauptanwendungsfälle identifiziert:
          \begin{itemize}
-            \item Lobby erstellen
+            \item \Gls{Lobby} erstellen
             \item Spiel spielen
         \end{itemize}
         Die Hauptanwendungsfälle werden in den nächsten zwei Abschnitten detailliert ausgeführt.
@@ -111,60 +120,60 @@
                 \textbf{Primärakteur:} Spieler \\
                 \textbf{Stakeholder und Interessen:}
                 \begin{itemize}
-                    \item \textit{Spieler}: Möchte mit anderen Spielern zusammen in einer Lobby beitreten oder seine eigene Lobby erstellen. Kann die Rolle des Lobby-Erstellers haben.
-                    \item \textit{Mitspieler}: Möchten mit anderen Spielern zusammen in einer Lobby beitreten. Kann die Rolle des Lobby-Erstellers haben.
+                    \item \textit{Spieler}: Möchte mit anderen Spielern zusammen in einer \Gls{Lobby} beitreten oder seine eigene \Gls{Lobby} erstellen. Kann die Rolle des Lobby-Erstellers haben.
+                    \item \textit{Mitspieler}: Möchten mit anderen Spielern zusammen in einer \Gls{Lobby} beitreten. Kann die Rolle des Lobby-Erstellers haben.
                     \item \textit{Lobby-Ersteller}:  Möchte das Spiel starten, wenn alle Spieler bereit sind.
-                    \item \textit{System}: Möchte mehrere Spieler in einer Lobby haben, um ein Spiel starten zu können.
+                    \item \textit{System}: Möchte mehrere Spieler in einer \Gls{Lobby} haben, um ein Spiel starten zu können.
                 \end{itemize}
                 \textbf{Vorbedingungen:} Alle Spieler sind entweder mit einem persönlichen oder Gastkonto angemeldet.\\
-                \textbf{Nachbedingungen:} Mehrere Spieler oder auch einzelne Spieler befinden sich in Lobbys. Das System ist in der Lage in den Lobbys mit mehreren Spielern ein Spielgang zu starten. \\
+                \textbf{Nachbedingungen:} Mehrere Spieler oder auch einzelne Spieler befinden sich in \Glspl{Lobby}. Das System ist in der Lage in den \Glspl{Lobby} mit mehreren Spielern ein Spielgang zu starten. \\
                 \\  \textbf{Standardablauf:}
                 \begin{enumerate}
                     \item Spieler/Mitspieler wechselt zur Lobbyansicht der Anwendung.
-                    \item Spieler/Mitspieler wählt eine bestehende öffentliche Lobby aus.
-                    \item Spieler/Mitspieler tritt diese Lobby bei.
-                    \item Spieler und Mitspieler warten in Lobby auf weitere Mitspieler..
+                    \item Spieler/Mitspieler wählt eine bestehende öffentliche \Gls{Lobby} aus.
+                    \item Spieler/Mitspieler tritt diese \Gls{Lobby} bei.
+                    \item Spieler und Mitspieler warten in \Gls{Lobby} auf weitere Mitspieler..
                     \item Spieler/Mitspieler klicken auf \quotes{Bereit}
                     \item Lobby-Ersteller startet das Spiel.
-                    \item System überprüft ob alle Spieler in der Lobby bereit sind.
+                    \item System überprüft ob alle Spieler in der \Gls{Lobby} bereit sind.
                 \end{enumerate}
                 \textit{Falls nicht alle Spieler bereit sind, muss der Lobby-Ersteller zu einem weiteren Zeitpunkt nochmals Schritt 6 ausführen. Erst wenn alle Spieler bereit sind, wird mit Schritt 8 fortgefahren.}
                 \begin{enumerate}[resume]
                     \item System startet das Spiel.
                 \end{enumerate}
-                \textit{Es ist nun nicht mehr möglich - als Spieler oder Mitspieler - dieser Lobby beizutreten.} \\
+                \textit{Es ist nun nicht mehr möglich - als Spieler oder Mitspieler - dieser \Gls{Lobby} beizutreten.} \\
                 \textit{Spiel wird gespielt …, Ende des Spiels.}
                 \begin{enumerate}[resume]
-                    \item System öffnet Lobby wieder
+                    \item System öffnet \Gls{Lobby} wieder
                 \end{enumerate}
-                \textit{Spieler/Mitspieler können Lobby beitreten. Punkt 3 bis 9 wiederholen sich, bis Spieler sich entscheidet, das Spiel oder die Lobby zu verlassen.} \\
+                \textit{Spieler/Mitspieler können \Gls{Lobby} beitreten. Punkt 3 bis 9 wiederholen sich, bis Spieler sich entscheidet, das Spiel oder die \Gls{Lobby} zu verlassen.} \\
                 \\ \textbf{Erweiterungen (oder alternative Abläufe):}
                 \begin{itemize}
-                    \item[2a.] Spieler können eigene Lobby erstellen:
+                    \item[2a.] Spieler können eigene \Gls{Lobby} erstellen:
                     \begin{enumerate}
-                        \item Spieler klickt auf Lobby erstellen.
-                        \item Spieler wählt ob die Lobby öffentlich zugänglich (public) ist oder nur für Freunde (private).
-                        \item System erstellt eine Lobby.
-                        \item System fügt den Spieler als Lobby-Ersteller der Lobby hinzu.
+                        \item Spieler klickt auf \Gls{Lobby} erstellen.
+                        \item Spieler wählt ob die \Gls{Lobby} öffentlich zugänglich (public) ist oder nur für Freunde (private).
+                        \item System erstellt eine \Gls{Lobby}.
+                        \item System fügt den Spieler als Lobby-Ersteller der \Gls{Lobby} hinzu.
                     \end{enumerate}
-                    \item[2b.] Spieler können privaten Lobbys von Freunden über einen Link beitreten:
+                    \item[2b.] Spieler können privaten \Glspl{Lobby} von Freunden über einen Link beitreten:
                     \begin{enumerate}
                         \item Spieler öffnet Einladung.
                         \item Spieler öffnet den Link im Browser.
-                        \item System fügt Spieler der Lobby des Freundes hinzu.
+                        \item System fügt Spieler der \Gls{Lobby} des Freundes hinzu.
                     \end{enumerate}
-                    \item[4a.] Spieler können Lobby verlassen:
+                    \item[4a.] Spieler können \Gls{Lobby} verlassen:
                     \begin{enumerate}
-                        \item Spieler/Mitspieler verlassen Lobby
+                        \item Spieler/Mitspieler verlassen \Gls{Lobby}
                     \end{enumerate}
-                    \item[4b.] Spieler/Mitspieler können weiter in der Lobby bleiben und weiterspielen:
+                    \item[4b.] Spieler/Mitspieler können weiter in der \Gls{Lobby} bleiben und weiterspielen:
                     \begin{enumerate}
-                        \item Spieler/Mitspieler verlassen die Lobby nicht
+                        \item Spieler/Mitspieler verlassen die \Gls{Lobby} nicht
                     \end{enumerate}
                 \end{itemize}
                 \textbf{Spezielle Anforderungen:}
                 \begin{itemize}
-                    \item Sobald ein Mitspieler der Lobby beigetreten ist, läuft ein Timer. Falls der Timer abgelaufen ist und der Mitspieler noch nicht bestätigt hat, wird dieser automatisch abgelehnt.
+                    \item Sobald ein Mitspieler der \Gls{Lobby} beigetreten ist, läuft ein Timer. Falls der Timer abgelaufen ist und der Mitspieler noch nicht bestätigt hat, wird dieser automatisch abgelehnt.
                     \item Maximale Spieleranzahl muss eingehalten werden. Es gibt eine obere Grenze von Mitspielern, die durch den Spieler definiert wird.
                     \item Internationalisierung der Sprache in den Textanzeigen.
                 \end{itemize}
@@ -182,10 +191,10 @@
                     \item \textit{Spieler}: Möchte als letzter Spieler übrig bleiben
                     \item \textit{Mitspieler}: Möchte als letzter Spieler übrig bleiben.
                     \item \textit{Lobby-Ersteller}:  Möchte das Spiel starten, wenn alle Spieler bereit sind.
-                    \item \textit{System}: Möchte alle Spieler - bereit zum spielen - in einer Lobby haben, um ein Spiel starten zu können.
+                    \item \textit{System}: Möchte alle Spieler - bereit zum spielen - in einer \Gls{Lobby} haben, um ein Spiel starten zu können.
                 \end{itemize}
                 \textbf{Vorbedingungen:} Mindestens 2 Spieler sind im Spiel.\\
-                \textbf{Nachbedingungen:} Der letzte Spieler im Spiel wurde Sieger. Spiel wurde erfolgreich beendet. Lobby wird erneut angezeigt. \\
+                \textbf{Nachbedingungen:} Der letzte Spieler im Spiel wurde Sieger. Spiel wurde erfolgreich beendet. \Gls{Lobby} wird erneut angezeigt. \\
                \\  \textbf{Standardablauf:}
                 \begin{enumerate}
                     \item System lädt Spiel.
@@ -216,7 +225,7 @@
                     \item System zeigt bei letztem Spieler/Mitspieler eine Siegesmeldung an.
                     \item System beendet das Spiel.
                     \item System zeigt die Statistiken des Spiels bei allen Spielern/Mitspielern an.
-                    \item System öffnet - nach Ablauf eines Timers  - erneut die Lobby.
+                    \item System öffnet - nach Ablauf eines Timers  - erneut die \Gls{Lobby}.
                 \end{enumerate}
                 \textbf{Erweiterungen (oder alternative Abläufe):}
                 \begin{itemize}
@@ -234,7 +243,31 @@
 
             \end{tcolorbox}
 
+        \newpage
          \subsubsection{System-Sequenzdiagramm (SSD)}
+         Das System-Sequenzdiagramm für \quotes{Lobby erstellen} und \quotes{Spiel spielen}:
+         \begin{figure}[H]
+             \includegraphics[scale=0.5]{figures/SystemSequenceDiagram.png}
+             \caption{System-Sequenzdiagramm - \quotes{Lobby erstellen} \&  \quotes{Spiel spielen}}
+         \end{figure}
+         \newpage
+        \noindent \textbf{Referenz: \Gls{Websocket} Upgrade Handshake} \\
+        Abbildung~\ref{fig:SSDReferenzWebsocketUpgrade} zeigt den Upgrade Request der HTTP(S) Verbindung  zu \Gls{Websocket}.
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.6]{figures/SSD-Websocket_Upgrade_Handshake.png}
+            \caption{SSD Referenz - \Gls{Websocket} Upgrade Handshake}
+            \label{fig:SSDReferenzWebsocketUpgrade}
+        \end{figure}
+        \noindent \textbf{Referenz: \Gls{Websocket} Close} \\
+        Abbildung~\ref{fig:SSDReferenzWebsocketClose} zeigt das schliessen der Websocketverbindung.
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.6]{figures/SSD-Websocket_Close.png}
+            \caption{SSD Referenz - \Gls{Websocket} Close}
+            \label{fig:SSDReferenzWebsocketClose}
+        \end{figure}
+
 
     \section{Zusätzliche Anforderungen}
 
