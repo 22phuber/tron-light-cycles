@@ -5,6 +5,10 @@ import ch.tron.transport.TransportManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Game server main entry point.
+ * Creates an instance of {@link GameManager} and {@link TransportManager}.
+ */
 public class GameServer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GameServer.class);

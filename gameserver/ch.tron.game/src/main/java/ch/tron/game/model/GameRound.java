@@ -10,6 +10,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Represents a round of a specific {@link ch.tron.game.model.Game}.
+ */
 public class GameRound {
 
     private final String id;

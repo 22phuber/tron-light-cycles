@@ -1,9 +1,13 @@
-package ch.tron.transport.websocketinboundhandler;
+package ch.tron.transport.websocket.inboundhandler;
 
 import ch.tron.middleman.messagedto.transporttogame.PlayerUpdateMessage;
 import ch.tron.transport.TransportManager;
 import org.json.JSONObject;
 
+/**
+ * Manages forwarding of messages of type {@link JSONObject} from
+ * a game player (client) to {@link ch.tron.game}
+ */
 public class JsonInboundHandler {
 
     private final String playerId;

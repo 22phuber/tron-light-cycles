@@ -6,6 +6,9 @@ import ch.tron.game.model.GameRound;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Controls an instance of {@link Game}.
+ */
 public class GameController {
 
     private final Game game;
@@ -17,6 +20,12 @@ public class GameController {
         this.game = game;
     }
 
+    /**
+     * Sets up a new {@link GameRound} of the {@link Game} which
+     * the enclosing {@link GameController} controls.
+     *
+     * @param groupId   The id of the new {@link GameRound}.
+     */
     public void newGameRound(String groupId) {
 
         GameRound newRound = new GameRound(groupId);

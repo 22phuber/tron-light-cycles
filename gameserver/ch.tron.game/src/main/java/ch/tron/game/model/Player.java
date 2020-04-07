@@ -2,6 +2,9 @@ package ch.tron.game.model;
 
 import java.awt.Color;
 
+/**
+ * Represents a game player.
+ */
 public class Player {
 
     private final String id;

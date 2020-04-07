@@ -7,6 +7,9 @@ import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 
+/**
+ * Defines the {@link ChannelPipeline} for connecting clients.
+ */
 public class WebSocketChannelInitializer extends ChannelInitializer<Channel> {
 
     @Override
