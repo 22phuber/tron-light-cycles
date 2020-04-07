@@ -18,6 +18,7 @@
 \usepackage{setspace}
 \usepackage{multicol}
 \usepackage{graphicx}
+\usepackage[space]{grffile}
 \usepackage[most]{tcolorbox}
 \usepackage{enumitem}
 \usepackage{textcomp}
@@ -29,8 +30,6 @@
     citecolor={red},
     urlcolor={blue}
 }
-
-\usepackage{lipsum} % generates lorem ipsum => remove again when finished
 
 \geometry{a4paper, top=25mm, left=25mm, right=25mm, bottom=20mm,
     headsep=10mm, footskip=12mm}
@@ -347,6 +346,22 @@
     \section{Softwarearchitektur}
 
     \section{Design-Artefakte}
+
+        \subsection{UML Klassendiagramme}
+            \newpage
+            \begin{figure}[H]
+                \centering
+                \makebox[\textwidth][c]{\includegraphics[width=1.1\textwidth]{figures/UML class diagrams/Package game dark.png}}
+                \caption{UML class diagrams - Package game}
+                \label{fig:UMLclassdiagram_Packagegame}
+            \end{figure}
+            \newpage
+            \begin{figure}[H]
+                \centering
+                \makebox[\textwidth][c]{\includegraphics[width=1.1\textwidth]{figures/UML class diagrams/Package game light.png}}
+                \caption{UML class diagrams - Package game}
+                \label{fig:UMLclassdiagram_Packagegame}
+            \end{figure}
 
     \section{Implementation}
 
