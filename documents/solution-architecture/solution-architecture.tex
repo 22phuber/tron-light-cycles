@@ -189,14 +189,14 @@
                \\  \textbf{Standardablauf:}
                 \begin{enumerate}
                     \item System lädt Spiel.
-                    \item System platziert Spieler/Mitspieler in einem gewissen Abstand zum Spielfeldrand und zu den Mitspielern, jeweils in möglichst entgegengesetzter Richtung, auf dem Spielfeld.
+                    \item System platziert Spieler/Mitspieler (Spielcharakter) in einem gewissen Abstand zum Spielfeldrand und zu den Mitspielern, jeweils in möglichst entgegengesetzter Richtung, auf dem Spielfeld.
                     \item System zeigt Countdown an. Nach Ablauf des Countdowns beginnt das Spiel.
                     \item System beginnt Startbewegung der Spieler mit konstanter Geschwindigkeit in Richtung Spielfeldmitte.
                 \end{enumerate}
-                \textit{Alle Spieler auf dem Spielfeld behalten die konstante Geschwindigkeit bei bis zum Ausscheiden oder Ende des Spiels.}
+                \textit{Alle Spieler/Mitspieler auf dem Spielfeld behalten die konstante Geschwindigkeit bei bis zum Ausscheiden oder Ende des Spiels.}
                 \begin{enumerate}[resume]
-                    \item System erzeugt Hindernis vom jedem Startpunkt bis zur aktuellen Position des jeweiligen Spielers/Mitspielers.
-                    \item System übergibt Spielern die Kontrolle des jeweiligen Spielcharakters.
+                    \item System erzeugt Hindernis vom Startpunkt des Spielers/Mitspielers bis zu dessen aktueller Position.
+                    \item System übergibt Spieler/Mitspieler die Kontrolle des jeweiligen Spielcharakters.
                 \end{enumerate}
                 \textit{Schritt 4 - 6 folgen ohne Zeitverzögerung aufeinander.}
                 \begin{enumerate}[resume]
@@ -205,17 +205,17 @@
                 \end{enumerate}
                 \textit{Das vom Spieler/Mitspieler erzeugte Hindernis, bleibt auf dem Spielfeld bestehen bis zum Ausscheiden oder Sieg des Spielers/Mitspielers, in allen folgenden Schritten.}
                 \begin{enumerate}[resume]
-                    \item System koordiniert in kurzen Intervallen alle Bewegungen der Spieler und überprüft deren Positionen und etwaige Kollisionen.
+                    \item System koordiniert in kurzen Intervallen alle Bewegungen der Spieler/Mitspieler und überprüft deren Positionen und etwaige Kollisionen.
                 \end{enumerate}
                 \textit{System wiederholt Schritt 7 - 9 bis Kollision erkannt wird.}
                 \begin{enumerate}[resume]
-                    \item System entfernt Spieler mit Kollision vom Spielfeld und zeigt eine entsprechende Meldung an.
+                    \item System entfernt Spieler/Mitspieler mit Kollision vom Spielfeld und zeigt eine entsprechende Meldung an.
                 \end{enumerate}
-                \textit{System wiederholt Schritt 7 - 10 bis ein einziger Spieler auf dem Spielfeld übrig bleibt.}
+                \textit{System wiederholt Schritt 7 - 10 bis ein einziger Spieler/Mitspieler auf dem Spielfeld übrig bleibt.}
                 \begin{enumerate}[resume]
-                    \item System zeigt bei letztem Spieler eine Siegesmeldung an.
+                    \item System zeigt bei letztem Spieler/Mitspieler eine Siegesmeldung an.
                     \item System beendet das Spiel.
-                    \item System zeigt die Statistiken des Spiels bei allen Spielern an.
+                    \item System zeigt die Statistiken des Spiels bei allen Spielern/Mitspielern an.
                     \item System öffnet - nach Ablauf eines Timers  - erneut die Lobby.
                 \end{enumerate}
                 \textbf{Erweiterungen (oder alternative Abläufe):}
