@@ -324,25 +324,26 @@ wird zum Login-Screen weitergeleitet.
                 \end{tcolorbox}
 
     \section{Zusätzliche Anforderungen}
-
+	Es ist wichtig, konkrete Anforderungen für unser Spiel zu definieren, damit die Erwartungen der Spieler erfüllt werden können. Hierbei soll uns das FURPS+ Modell weiter helfen. Im Folgenden werden die einzelnen Punkte genauer definiert.
     \subsection{Funktionalität}
-
-    \subsection{Benutzbarkeit}
-
+	Um das Spiel so einfach wie möglich zu gestalten, haben wir uns dazu entschieden, dass bei dem Erstbetreten des Spiels ein Gastaccount zugewiesen wird. Dadurch müssen Spieler, welche nur für ein kuzres Spielvergnügen vorbei schauen, keine zusätzliche Angaben machen oder sonstige Zeit verlieren. Der normale Registrierungs- oder Loginvorgang kann zu jederzeit benutzt werden. Dies gibt uns danach die Möglichkeit auf userspezifische Erweiterungen wie zum Beispiel In-App Käufe oder mögliche bevorzugte Spielerfarbe im Spiel. Die Spieler die nur mit einem Gastaccount angemeldet sind haben demnach auch nur limitierte Möglichkeiten. Der Gast wird nicht in der Punktestatistik aufgeführt.
+	Damit die Spieler zusammen einer Lobby beitreten können, benutzen wir eine Server Client Architektur, welche ausführlicher in der Software Architektur ersichtlich ist. Sicherheit ist nicht notwendig, da keine sensiblen Daten verwendet werden. Die Standardsicherheitsmassnahmen sind natürlich gewährleistet.
+	\subsection{Benutzbarkeit}
+	Eines der wichtigsten Aspekte für uns ist die Benutzbarkeit. Das Spiel soll übersichtlich und einfach gestaltet sein. Der Spieler muss zu jeder Zeit mit so wenig wie möglichen Klicks alles erreichen. Damit wir dies anbieten können, benutzen wir ein simples Design und eine Single Page Application, welche diesen Aspekt weiter unterstützt. Zusätzlich wird zum Beispiel der Lobby beitreten Button direkt auf der ersten Seite ersichtlich sein, welche der Spieler nach dem Beitreten der Applikation sieht.
     \subsection{Zuverlässigkeit}
-
+	Wir können mit Sicherheit sagen, dass unsere Applikation nicht sonderlich anfällig für Ausfälle ist. Da das Spiel nur eine geringe Leistung beansprucht, verringert das die Fehlerquellen enorm. Die Applikation ist auch Clientabhängig. Das bedeutet, falls ein Spieler Verbindungsprobleme hat oder andere Schwierigkeiten, dann kann er verlieren. Die Lobby liegt auf dem Server, somit ist gewährleistet, dass falls der Spieler, welche die Lobby erstellt hat, Verbindungsprobleme hat, das Spiel weiterhin normal abläuft. Dies ist ebenso ein wichtiger Aspekt für uns, damit das Spiel reibungslos ohne Unterbrüche ablaufen kann.
     \subsection{Effizienz}
-
+	Da wie bereits erwähnt das Spiel nur eine geringe Leistung beansprucht, ist die Effizienz gut und zuverlässig. Hier spielt leider auch wieder der Client eine Rolle. Da der Server und der Client in Verbindung stehen und der Client Verbindungsprobleme oder sonstige Verzögerungen hat, kommt es schnell zu kurzen Unterbrechungen für den Spieler. Dies ist kaum zu vermeiden. 
     \subsection{Änderbarkeit (Wartbarkeit)}
-
+	Die Applikation ist nur über den Browser erreichbar, dies macht die Wartbarkeit um einiges einfacher. Die diversen Browser müssen natürlich getestet werden und kompatibel sein. Die wichtigsten Browser sind Firefox, Google Chrome und Internet Explorer.  Das Testen neuerer Versionen der einzelnen Browser schliesst dies mit ein, um die Zuverlässigkeit weiterhin anbieten zu können.
     \subsection{Internationalisierung}
-
+	Die Sprache wird grundsätzlich versucht in Englisch zu halten um Sprachprobleme so gut wie möglich zu vermeiden.
     \subsection{Einschränkungen}
 
     \subsubsection{Designeinschränkungen}
-
+	Wir benutzen React und Material UI für das Design, da Material UI bereits einige Bibliotheken beziehungsweise vordefinierte  Bausteine zur Verfügung stellt. Da wir mit einer Single Page Application arbeiten wird Routing nicht nötig sein.
     \subsubsection{Implementierungseinschränkungen}
-
+	Um die Applikation so wartbar wie möglich zu behalten, wird alles so gut wie möglich mit Clean Code implementiert. Dies wird auch im späteren Verlauf des Implementierungsvorgangs immer wieder überprüft. Bei Git benutzen wir das Continuous Integration, dies ermöglicht es uns nur kompilierbaren Code hinzuzufügen um einige Fehlerquellen bereits auszuschliessen.
     \subsubsection{Schnittstelleneinschränkungen}
 
     \section{Domänenmodell}
