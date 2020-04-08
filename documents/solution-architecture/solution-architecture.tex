@@ -343,22 +343,24 @@
         \subsection{Änderbarkeit (Wartbarkeit)}
     	Die Applikation ist nur über den Browser erreichbar, dies macht die Wartbarkeit um einiges einfacher. Die diversen Browser müssen natürlich getestet werden und kompatibel sein. Die wichtigsten Browser sind Firefox, Google Chrome und Internet Explorer.  Das Testen neuerer Versionen der einzelnen Browser schliesst dies mit ein, um die Zuverlässigkeit weiterhin anbieten zu können.
         \subsection{Internationalisierung}
-        In der ersten lauffähigen Version wird Englisch verwendet. Später sollen andere Sprachen folgen, um grössere Reichweite zu generieren.
+        In der ersten lauffähigen Version wird Englisch verwendet. Später sollen andere Sprachen folgen um grössere Reichweite zu generieren.
         \subsection{Einschränkungen}
 
         \subsubsection{Designeinschränkungen}
-    	Wir benutzen React und Material UI für das Design, da Material UI bereits einige Bibliotheken beziehungsweise vordefinierte  Bausteine zur Verfügung stellt. Da wir mit einer Single Page Application arbeiten wird Routing nicht nötig sein.
+        Wir benutzen React und Material UI für das Design, da Material UI bereits einige Bibliotheken, beziehungsweise vordefinierte  Bausteine zur Verfügung stellt. Da wir mit einer \Gls{SPA} arbeiten wird Routing vorerst nicht nötig sein.
         \subsubsection{Implementierungseinschränkungen}
-    	Um die Applikation so wartbar wie möglich zu behalten, wird alles so gut wie möglich mit Clean Code implementiert. Dies wird auch im späteren Verlauf des Implementierungsvorgangs immer wieder überprüft. Bei Git benutzen wir das Continuous Integration, dies ermöglicht es uns nur kompilierbaren Code hinzuzufügen um einige Fehlerquellen bereits auszuschliessen.
+    	Um die Applikation so wartbar wie möglich zu behalten, wird alles so gut wie möglich mit Clean Code implementiert. Dies wird auch im späteren Verlauf des Implementierungsvorgangs immer wieder überprüft. Bei Git benutzen wir das \Gls{Continuous Integration} (CI), dies ermöglicht es uns nur kompilierbaren Code hinzuzufügen um einige Fehlerquellen bereits auszuschliessen.
         \subsubsection{Schnittstelleneinschränkungen}
 
     \section{Domänenmodell}
     \begin{figure}[H]
-	    \includegraphics[scale=0.45]{figures/domain_model.png}
-	    \caption{Domänenmodell - Tron Licht-Motorräder Computerspiel}
-	\end{figure}
-	\subsection{Login und Gastaccount}
-		Der Spieler hat die Freiheit sich mit einem anonymen Gastaccount  oder mit einem registrierten Account anzumelden. Der Spieler kann sich in der Applikation nicht mit beiden Kontoarten gleichzeitig identifizieren.
+        \centering
+        \makebox[\textwidth][c]{\includegraphics[width=1.1\textwidth]{figures/domain_model.png}}
+        \caption{Domänenmodell - Tron Licht-Motorräder Computerspiel}
+        \label{fig:DomainModel_TronLightCycles}
+    \end{figure}
+	\subsection{Login und Gast-Account}
+		Der Spieler hat die Freiheit sich mit einem anonymen Gastkonto  oder mit einem registriertem Konto anzumelden. Der Spieler kann sich in der Applikation nicht mit beiden Kontoarten gleichzeitig identifizieren.
 
 	\subsection{Spielemodi}
 		Ein Spielmodus beeinflusst das Spiel, zwei Spielmodi werden schon implementiert sein. Im Spielmodus sind Eigenschaften der Licht-Motorräder und die Grösse der Arena definiert, so auch Spielablauf.
@@ -371,11 +373,11 @@
                 \item \textbf{Frontend}
                 \begin{itemize}
                     \item Website
-                    \item Spielclient
+                    \item Spieleclient
                 \end{itemize}
                 \item \textbf{Backend}
                 \begin{itemize}
-                    \item Spielserver
+                    \item Spieleserver
                     \item Datenbank
                 \end{itemize}
             \end{itemize}
@@ -386,11 +388,11 @@
         \subsection{Website}
         Die Website wird in Javascript mit dem Framework \Gls{React} realisiert. \Gls{React} erlaubt es, die Webseite als moderne \Gls{SPA}-Applikation zu erstellen. Eine \Gls{SPA} trägt durch ihr dynamisches Laden von Inhalten, massgeblich zur freundlichen und intuitiven Benutzung der Webseite bei. Dies wäre beispielsweise mit einer \Gls{JSP}-Implementation nicht möglich. \Gls{React} nutzt wiederverwendbare  \quotes{Bausteine}, sogenannte \quotes{Komponenten}. Die Komponenten erlauben ein modularer Aufbau des gesamten Frontends.
 
-        \subsection{Spielclient}
-        Der Spielclient ist in zwei \Gls{React}-Komponenten aufgeteilt. Die eine Komponente kümmert sich um die Animation und die zweite, einfachere um die Darstellung mithilfe des \Gls{HTML5 Canvas} Elements.
+        \subsection{Spieleclient}
+        Der Spieleclient  kommuniziert direkt mit dem Spieleserver über eine \Gls{Websocket}-Verbindung. Momentan ist der Spieleclient  in zwei \Gls{React}-Komponenten aufgeteilt. Die eine Komponente kümmert sich um die Animation und die zweite, einfachere um die Darstellung mithilfe des \Gls{HTML5 Canvas} Elements.
 
         \label{SoftwarearchitekturGameServer}
-        \subsection{\Gls{Game Server}}
+        \subsection{Spieleserver \Gls{Game Server}}
         Der \Gls{Game Server} setzt sich grundsätzlich aus zwei Teilen zusammen. Zum einen aus der Geschäftslogikschicht, also dem Teil, der jeweils ein Spiel generiert und laufend den aktuellen Spielzustand berechnet. Zum anderen aus der Transportschicht, die die Schnittstelle zum Client implementiert, d.h. kontinuierlich den momentanen Spielzustand dem Client kommuniziert und potentielle vom Client Client ausgelöste Events entgegennimmt.\\
         Der \Gls{Game Server} wird in Java geschrieben. Java ist im Gegensatz zu Javascript eine typsichere und objektorientierte Sprache. Da eine gewisse Komplexität bezüglich der Implementation des \Gls{Game Server}s erwartet wird, hat Java durch diese zwei Eigenschaften klare Vorteile gegenüber Javascript.\\
         Für die Transportschicht wird Netty verwendet. Dabei handelt es sich um ein asynchrones, event-getriebenes Netzwerk-Framework, das für seine sehr gute Performance bekannt ist. In Performancetests liess Netty beispielsweise node.js weit hinter sich.\cite{NettyPerformancetests} Da ein Multiplayer-Online-Spiel auf eine schnelle Übertragung angewiesen ist und der \Gls{Game Server} ohnehin in Java programmiert wird, ist Netty eine ausgezeichnete Wahl.\\
