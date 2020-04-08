@@ -466,20 +466,39 @@
 	Die Datenbank läuft auf MySQL 8.0 und wird in einem Docker-Container realisiert. In der Datenbank befinden sich die registrierten Accounts der Anwender. Zusätzlich werden auch die Freundschaftsbeziehungen zwischen den Spielern gespeichert, damit kann die Anwendung auslesen, wer in welche private \Gls{Lobby} beitreten darf.
 
     \section{Projektmanagement}
+    Der grobe Ablauf der Arbeiten wird durch die in der Projektskizze erstellten Grobplanung bestimmt. Für die bevorstehenden Iterationen wird die Grobplanung jeweils detailliert ausgearbeitet. Nachfolgend der Iterationsplan Stand M2:
 
     \subsection{Iterationsplan}
-
     \begin{table}[H]
         \caption{Iterationsplan}
-        \begin{tabularx}{\textwidth}{l l l l}
+        \begin{tabularx}{\textwidth}{l l l l l l l}
             \toprule
+            # & Start & Ende & Meilenstein & Ziele & Aufwand Ist & Aufwand Soll \\
+
+            Inception &&&&&& \\
+
+            1 & 19-02-20 & 04-03-20 & M1 & Vision definiert. Geschäftsmodel definiert. Anwendungsfälle definiert und Priorisierung vorgenommen. Wichtigste nicht-funktionalen Anforderungen definiert. Recherche zu Technologien angestellt. Projektskizze erstellen. & 80 & 103 \\
+
+            Elaboration &&&&&& \\
+
+            2 & 04-03-20 & 25-03-20 & M2 & Weitere Technologie-Recherchen vornehmen. PoC Spiel spielen. Systemarchitektur definieren. Domänenmodell erstellen. Entwicklungsumgebung aufsetzen. Github Workflow und Continuous Integration einrichten. & 80 & 74
+
+            3 & 25-03-20 & 08-04-20 & M2 & Implementation Systemarchitektur. Frontend Spiel spielen. Frontend Webseite Grundstruktur. Datenbank Setup und Anbindung. Gameserver Spiel spielen modularisiert und stabilisiert. & 120 & 159 \\
+            
+            Construction &&&&&& \\
+
+            4 & 08-04-20 & 22-04-20 & M3 & Implementation Spielregeln, Anwendungsfälle Spiel generieren, Spiel auswählen. & 100 & \\
+
+            5 & 22-04-20 & 06-05-20 & M3 & & & \\
+
+            6 & 06-05-20 & M3 & & & \\
             \toprule
         \end{tabularx}
         \label{tab:Iterationsplan}
     \end{table}
 
     \subsection{Iterations-Assessment}
-    Der grobe Ablauf der Arbeiten wird durch die in der Projektskizze erstellten Grobplanung bestimmt. Nachfolgend die Iterations-Assessments der vergangenen Iterationen.
+    Nachfolgend die Iterations-Assessments der vergangenen Iterationen.
 
     \subsubsection{Iteration 1}
     \begin{table}[H]
@@ -492,7 +511,7 @@
             Vision Definition & 3 & 4 & Huber \\
             Definition Anwendungsfälle, Priosierung & 10 & 15 & Akca \\
             Definition Nichtfunktionale Anforderung & 5 & 5 & Iten \\
-            Projektskizze & 40 & 60 & alle \\
+            Projektskizze & 30 & 35 & alle \\
             Recherche Technologie & 20 & 35 & alle \\
             \bottomrule
         \end{tabularx}
@@ -509,12 +528,12 @@
             Sitzungen, Diskussionen & 5 & 7 & alle \\
             Recherche Technologien & 8 & 12 & alle \\
             Systemarchitektur Artifact & 3 & 4 & Holenstein \\
+            Domänenmodell & 5 & 5 & Akca \\
             PoC Gameserver & 15 & 15 & Holenstein \\
             Systemarchitektur Implementation & 10 & 12 & Huber \\
             Entwicklungsumgebung & 5 & 6 & Iten \\
             Projektmanagement Github & 5 & 5 & Huber \\
             Github Actions Continuous Integration Setup & 6 & 8 & Huber \\
-            Domänenmodell & 5 & 5 & Akca \\
             \bottomrule
         \end{tabularx}
         \label{tab:Iterations-Assessment: Iteration 2}
