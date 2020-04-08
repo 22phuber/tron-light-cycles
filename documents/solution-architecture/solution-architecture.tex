@@ -330,6 +330,12 @@ wird zum Login-Screen weitergeleitet.
 	Damit die Spieler zusammen einer Lobby beitreten können, benutzen wir eine Server Client Architektur, welche ausführlicher in der Software Architektur ersichtlich ist. Sicherheit ist nicht notwendig, da keine sensiblen Daten verwendet werden. Die Standardsicherheitsmassnahmen sind natürlich gewährleistet.
 	\subsection{Benutzbarkeit}
 	Eines der wichtigsten Aspekte für uns ist die Benutzbarkeit. Das Spiel soll übersichtlich und einfach gestaltet sein. Der Spieler muss zu jeder Zeit mit so wenig wie möglichen Klicks alles erreichen. Damit wir dies anbieten können, benutzen wir ein simples Design und eine Single Page Application, welche diesen Aspekt weiter unterstützt. Zusätzlich wird zum Beispiel der Lobby beitreten Button direkt auf der ersten Seite ersichtlich sein, welche der Spieler nach dem Beitreten der Applikation sieht.
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=0.6]{figures/Mockup_Join.png}
+		\caption{Mockup Join}
+		\label{fig:MockupJoin}
+	\end{figure}
     \subsection{Zuverlässigkeit}
 	Wir können mit Sicherheit sagen, dass unsere Applikation nicht sonderlich anfällig für Ausfälle ist. Da das Spiel nur eine geringe Leistung beansprucht, verringert das die Fehlerquellen enorm. Die Applikation ist auch Clientabhängig. Das bedeutet, falls ein Spieler Verbindungsprobleme hat oder andere Schwierigkeiten, dann kann er verlieren. Die Lobby liegt auf dem Server, somit ist gewährleistet, dass falls der Spieler, welche die Lobby erstellt hat, Verbindungsprobleme hat, das Spiel weiterhin normal abläuft. Dies ist ebenso ein wichtiger Aspekt für uns, damit das Spiel reibungslos ohne Unterbrüche ablaufen kann.
     \subsection{Effizienz}
