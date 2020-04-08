@@ -383,6 +383,13 @@
             \end{itemize}
         \end{multicols}
 
+        \begin{figure}[H]
+            \centering
+            \makebox[\textwidth][c]{\includegraphics[width=1\textwidth]{figures/Tron_basic_architecture.png}}
+            \caption{Abstrahierte Softwarearchitektur - Tron Licht-Motorräder Computerspiel}
+            \label{fig:basicArchitecture_TronLightCycles}
+         \end{figure}
+
         \noindent Aufgrund des Vorwissens des Projektteams, standen grundsätzlich zwei Sprachen für die Implementation des Systems zur Auswahl: Java und Javascript. Im folgenden werden die oben beschriebenen Hauptkomponenten genauer beschrieben und die jeweilige Wahl der Sprache und der Frameworks erläutert.
 
         \subsection{Website}
@@ -392,7 +399,7 @@
         Der Spieleclient  kommuniziert direkt mit dem Spieleserver über eine \Gls{Websocket}-Verbindung. Momentan ist der Spieleclient  in zwei \Gls{React}-Komponenten aufgeteilt. Die eine Komponente kümmert sich um die Animation und die zweite, einfachere um die Darstellung mithilfe des \Gls{HTML5 Canvas} Elements.
 
         \label{SoftwarearchitekturGameServer}
-        \subsection{Spieleserver \Gls{Game Server}}
+        \subsection{Spieleserver (\Gls{Game Server})}
         Der \Gls{Game Server} setzt sich grundsätzlich aus zwei Teilen zusammen. Zum einen aus der Geschäftslogikschicht, also dem Teil, der jeweils ein Spiel generiert und laufend den aktuellen Spielzustand berechnet. Zum anderen aus der Transportschicht, die die Schnittstelle zum Client implementiert, d.h. kontinuierlich den momentanen Spielzustand dem Client kommuniziert und potentielle vom Client Client ausgelöste Events entgegennimmt.\\
         Der \Gls{Game Server} wird in Java geschrieben. Java ist im Gegensatz zu Javascript eine typsichere und objektorientierte Sprache. Da eine gewisse Komplexität bezüglich der Implementation des \Gls{Game Server}s erwartet wird, hat Java durch diese zwei Eigenschaften klare Vorteile gegenüber Javascript.\\
         Für die Transportschicht wird Netty verwendet. Dabei handelt es sich um ein asynchrones, event-getriebenes Netzwerk-Framework, das für seine sehr gute Performance bekannt ist. In Performancetests liess Netty beispielsweise node.js weit hinter sich.\cite{NettyPerformancetests} Da ein Multiplayer-Online-Spiel auf eine schnelle Übertragung angewiesen ist und der \Gls{Game Server} ohnehin in Java programmiert wird, ist Netty eine ausgezeichnete Wahl.\\
