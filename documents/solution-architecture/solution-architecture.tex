@@ -427,11 +427,11 @@
     \section{Design-Artefakte}
 
         \subsection{UML Moduldiagramm}
+            \label{fig:GameServerModulDiagramm}
              \begin{figure}[H]
                 \centering
                 \makebox[\textwidth][c]{\includegraphics[width=0.5\textwidth]{figures/project modules/appmain.png}}
                 \caption{UML module dependency diagram - Game Server: Module appmain}
-                \label{fig:GameServerModulDiagramm}
             \end{figure}
 
         \subsection{UML Klassendiagramme}
@@ -474,7 +474,6 @@
     \label{ssec:ImplementationGameServer}
     Wie schon in Abschnitt \ref{SoftwarearchitekturGameServer} erwähnt, wurde der \Gls{Game Server} in zwei Hauptkomponenten, die Geschläfslogik und den Transport aufgeteilt. In der Implementation entsprechen diese Komponenten den Modulen \dq ch.tron.game\dq und \dq ch.tron.transport\dq. Durch die Verwendung von Java 9 Modulen wird eine lose Kopplung gewährleistet. Wie in der Abbildung \ref{fig:GameServerModulDiagramm} zu sehen ist, existieren zwei weitere Module, \dq ch.tron.appmain\dq und \dq ch.tron.middleman\dq. Appmain dient lediglich als Einstiegspunkt für die \Gls{Game Server}-App. Das Modul Middleman wird benötigt, um die Kommunikation zwischen den Modulen Game und Transport zu ermöglichen. Es definiert eine abstrakte Klasse namens InAppMessage und einen Interface namens InAppMessageForwarder. Mit Hilfe von Subklassen von InAppMessage und den Implementationen des InAppMessageForwarders können nun Informationen, wie die Entstehung einer neuen Client-Server-Verbindung oder ein Spielupdate zwischen den Hauptkomponenten ausgetauscht werden.
 
-    % TODO:
     \subsection{Datenbank}
     \begin{figure}[H]
         \centering
