@@ -270,58 +270,56 @@
                 \end{figure}
 
         \subsection{Übrige Anwendungsfälle}
-            \subsubsection{UC3: Ein \& Ausloggen  - \quotes{casual}}
-            \label{sssec:UC3EinAusloggen}
-                \begin{tcolorbox}[enhanced, breakable, sharp corners, width=\dimexpr\textwidth-15mm\relax ,enlarge left by=10mm ,fontupper=\linespread{1.1}\selectfont, boxrule=1pt, title={UC3: Ein \& Ausloggen }, colback=white, colframe=gray!22, coltitle=black]
-                     \textit{Standardszenario:} Der Spieler navigiert sich zum Login-Bereich der Anwendung. Der Spieler gibt die korrekten Eingabedaten seines Kontos ein. Die Anwendung überprüft die Eingabedaten und meldet den Spieler an. Der
-Spieler ist nun in der Anwendung mit seinem persönlichen Konto angemeldet.\newline
-                     \newline
-                     \textit{Alternative Szenarios:} \newline
-                     Der Spieler gibt die falschen Eingabedaten für ein Konto ein. Das System weist den Spieler
-daraufhin, dass die Eingabedaten falsch sind und schlägt dem Spieler vor noch einmal die  Eingabedaten einzugeben. \newline
-                     \newline
-                     Der Spieler möchte sich aus dem System ausloggen. Der Spieler navigiert sich in der Anwendung auf
-sein Profil und wählt die Funktion «Logout» aus. Das System beendet die Session und der Spieler
-wird zum Login-Screen weitergeleitet.
-                \end{tcolorbox}
-
-             \subsubsection{UC4: Lobby beitreten - \quotes{casual}}
-             \label{sssec:UC4Lobbybeitreten}
-                 \begin{tcolorbox}[enhanced, breakable, sharp corners, width=\dimexpr\textwidth-15mm\relax ,enlarge left by=10mm ,fontupper=\linespread{1.1}\selectfont, boxrule=1pt, title={UC4: Lobby beitreten }, colback=white, colframe=gray!22, coltitle=black]
-                     \textit{Standardszenario:} Der Spieler navigiert auf der Startseite zu dem Lobbybereich, dort kann der Spieler einer öffentlichen Lobby beitreten. \newline
-                     Nun befindet sich der Spieler in einer Lobby mit anderen Spielern.\newline
-                     \newline
-                     \textit{Alternative Szenarios:} \newline
-                     Der Spieler erhält einen Link eines Freundes. Mit dem Link kann der Spieler einer privaten Lobby eines Freundes beitreten. \newline
-                     Der Spieler befindet sich nun in derselben Lobby mit einem Freund.
-                 \end{tcolorbox}
-
-             \subsubsection{UC5: Registrieren - \quotes{brief}}
-             \label{sssec:UC5Registrieren}
-                 \begin{tcolorbox}[enhanced, breakable, sharp corners, width=\dimexpr\textwidth-15mm\relax ,enlarge left by=10mm ,fontupper=\linespread{1.1}\selectfont, boxrule=1pt, title={UC5: Registrieren}, colback=white, colframe=gray!22, coltitle=black]
-                     Der Spieler navigiert sich zum Registrier-Bereich der Anwendung. Der Spieler gibt seinen Usernamen, Passwort und E-Mail an.\newline
-                     Die Anwendung überprüft ob der Username bereits belegt ist. Der Spieler besitzt nun ein eigenes Konto
-                 \end{tcolorbox}
-
-             \subsubsection{UC6: Passwort zurücksetzen - \quotes{brief}}
-             \label{sssec:UC6Passwortsetzen}
-                \begin{tcolorbox}[enhanced, breakable, sharp corners, width=\dimexpr\textwidth-15mm\relax ,enlarge left by=10mm ,fontupper=\linespread{1.1}\selectfont, boxrule=1pt, title={UC6: Passwort zurücksetzen}, colback=white, colframe=gray!22, coltitle=black]
-                    Der Spieler navigiert sich zum Login-Bereich der Anwendung. Dort hat der Spieler die Möglichkeit sein Passwort zurück zu setzen.\newline
-                    Nun kann der Spieler ein neues Passwort angeben.
-                \end{tcolorbox}
-
-             \subsubsection{UC7: Freunde einladen - \quotes{brief}}
-             \label{sssec:UC7Freundeeinladen}
-                \begin{tcolorbox}[enhanced, breakable, sharp corners, width=\dimexpr\textwidth-15mm\relax ,enlarge left by=10mm ,fontupper=\linespread{1.1}\selectfont, boxrule=1pt, title={UC7: Freunde einladen}, colback=white, colframe=gray!22, coltitle=black]
-                    Der Spieler erstellt eine private Lobby. Der Spieler erhält ein Link, mit welchem Freunde beitreten können.\newline
-                    Die beigetretenen Freunde befinden sich nun mit dem Spieler in derselben Lobby.
-                \end{tcolorbox}
-
-             \subsubsection{UC8: Statistiken betrachten - \quotes{brief}}
-             \label{sssec:UC8Statistikenbetrachten}
-                \begin{tcolorbox}[enhanced, breakable, sharp corners, width=\dimexpr\textwidth-15mm\relax ,enlarge left by=10mm ,fontupper=\linespread{1.1}\selectfont, boxrule=1pt, title={UC8: Statistiken betrachten}, colback=white, colframe=gray!22, coltitle=black]
-                    Der Spieler navigiert auf der Startseite der Anwendung zu den Statistiken. Dort ist eine Liste einsehbar in welcher alle Spieler mit ihren Punkten einsehbar sind.
-                \end{tcolorbox}
+        \subsubsection{UC3: Ein \& Ausloggen  - \quotes{casual}}
+        \label{sssec:UC3EinAusloggen}
+        \begin{tcolorbox}[enhanced, breakable, sharp corners, width=\dimexpr\textwidth-15mm\relax ,enlarge left by=10mm ,fontupper=\linespread{1.1}\selectfont, boxrule=1pt, title={UC3: Ein \& Ausloggen }, colback=white, colframe=gray!22, coltitle=black]
+        	\textit{Standardszenario:} Der Spieler navigiert sich zum Login-Bereich der Anwendung. Im Login-Bereich gibt er die korrekten Eingabedaten seines Kontos ein. Die Anwendung überprüft die Eingabedaten und meldet den Spieler an. Der
+        	Spieler ist nun in der Anwendung mit seinem persönlichen Konto angemeldet.\newline
+        	\newline
+        	\textit{Alternative Szenarios:} \newline
+        	Der Spieler gibt die falschen Eingabedaten für ein Konto ein. Das System weist den Spieler
+        	daraufhin, dass die Eingabedaten falsch sind und schlägt dem Spieler vor noch einmal die  Eingabedaten einzugeben. \newline
+        	\newline
+        	Der Spieler möchte sich aus dem System ausloggen. Der Spieler navigiert sich in der Anwendung oben rechts und wählt die Funktion «Logout» aus. Das System beendet die Session und der Spieler wird als Gast neu angemeldet.
+        \end{tcolorbox}
+        
+        \subsubsection{UC4: Lobby beitreten - \quotes{casual}}
+        \label{sssec:UC4Lobbybeitreten}
+        \begin{tcolorbox}[enhanced, breakable, sharp corners, width=\dimexpr\textwidth-15mm\relax ,enlarge left by=10mm ,fontupper=\linespread{1.1}\selectfont, boxrule=1pt, title={UC4: Lobby beitreten }, colback=white, colframe=gray!22, coltitle=black]
+        	\textit{Standardszenario:} Der Spieler navigiert auf der Startseite zu dem Lobbybereich, dort kann er einer öffentlichen Lobby beitreten. \newline
+        	Nun befindet sich der Spieler in einer Lobby mit weiteren Mitspielern.\newline
+        	\newline
+        	\textit{Alternative Szenarios:} \newline
+        	Der Spieler erhält einen Link eines Freundes. Mit dem Link kann der Spieler einer privaten Lobby beitreten. \newline
+        	Er befindet sich nun in derselben Lobby mit seinem Freund.
+        \end{tcolorbox}
+        
+        \subsubsection{UC5: Registrieren - \quotes{brief}}
+        \label{sssec:UC5Registrieren}
+        \begin{tcolorbox}[enhanced, breakable, sharp corners, width=\dimexpr\textwidth-15mm\relax ,enlarge left by=10mm ,fontupper=\linespread{1.1}\selectfont, boxrule=1pt, title={UC5: Registrieren}, colback=white, colframe=gray!22, coltitle=black]
+        	Der Spieler navigiert sich zum Registrier-Bereich der Anwendung. Im Registrier-Bereich gibt er seinen Usernamen, Passwort und E-Mail an.\newline
+        	Die Anwendung überprüft ob der Username bereits belegt ist. Der Spieler besitzt nun ein eigenes Konto
+        \end{tcolorbox}
+        
+        \subsubsection{UC6: Passwort zurücksetzen - \quotes{brief}}
+        \label{sssec:UC6Passwortsetzen}
+        \begin{tcolorbox}[enhanced, breakable, sharp corners, width=\dimexpr\textwidth-15mm\relax ,enlarge left by=10mm ,fontupper=\linespread{1.1}\selectfont, boxrule=1pt, title={UC6: Passwort zurücksetzen}, colback=white, colframe=gray!22, coltitle=black]
+        	Der Spieler navigiert sich zum Login-Bereich der Anwendung. Dort hat er die Möglichkeit sein Passwort zurück zu setzen.\newline
+        	Nun kann der Spieler ein neues Passwort angeben.
+        \end{tcolorbox}
+        
+        \subsubsection{UC7: Freunde einladen - \quotes{brief}}
+        \label{sssec:UC7Freundeeinladen}
+        \begin{tcolorbox}[enhanced, breakable, sharp corners, width=\dimexpr\textwidth-15mm\relax ,enlarge left by=10mm ,fontupper=\linespread{1.1}\selectfont, boxrule=1pt, title={UC7: Freunde einladen}, colback=white, colframe=gray!22, coltitle=black]
+        	Der Spieler erstellt eine private Lobby. Er erhält einen Link, mit welchem Freunde beitreten können.\newline
+        	Sobald seine Freunde den Link benutzen, befinden sie sich nun mit dem Spieler in derselben Lobby.
+        \end{tcolorbox}
+        
+        \subsubsection{UC8: Statistiken betrachten - \quotes{brief}}
+        \label{sssec:UC8Statistikenbetrachten}
+        \begin{tcolorbox}[enhanced, breakable, sharp corners, width=\dimexpr\textwidth-15mm\relax ,enlarge left by=10mm ,fontupper=\linespread{1.1}\selectfont, boxrule=1pt, title={UC8: Statistiken betrachten}, colback=white, colframe=gray!22, coltitle=black]
+        	Der Spieler navigiert auf der Startseite der Anwendung zu den Statistiken. Dort ist eine Liste einsehbar, in welcher die besten Spieler mit ihren Punkten aufgelistet sind.
+        \end{tcolorbox}
 
     \section{Zusätzliche Anforderungen}
 	Es ist wichtig, konkrete Anforderungen für unser Spiel zu definieren, damit die Erwartungen der Spieler erfüllt werden können. Hierbei soll uns das FURPS+ Modell weiter helfen. Im Folgenden werden die einzelnen Punkte genauer definiert.
