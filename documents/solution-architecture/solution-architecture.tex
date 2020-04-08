@@ -37,7 +37,7 @@
 % Glossary
 % Das Glossar definiert alle wichtigen Begriffe zur Sicherstellung einer einheitlichen Terminologie.
 % Es sollen keine allgemeinen Begriffe erklärt werden, die den Adressaten bekannt sind (z. B. Java, CPU etc.).
-% Glossareinträge müssen im Text verwendet werden damit diese im Glossar im Appendix \printglossary angezeigt werden
+% Glossareinträge müssen im Text verwendet werden, damit diese im Glossar im Appendix \printglossary angezeigt werden
 \makeglossaries
 \loadglsentries{glossary} % loads glossary definitions from external file
 
@@ -343,7 +343,7 @@ wird zum Login-Screen weitergeleitet.
     \subsection{Änderbarkeit (Wartbarkeit)}
 	Die Applikation ist nur über den Browser erreichbar, dies macht die Wartbarkeit um einiges einfacher. Die diversen Browser müssen natürlich getestet werden und kompatibel sein. Die wichtigsten Browser sind Firefox, Google Chrome und Internet Explorer.  Das Testen neuerer Versionen der einzelnen Browser schliesst dies mit ein, um die Zuverlässigkeit weiterhin anbieten zu können.
     \subsection{Internationalisierung}
-	Die Sprache wird grundsätzlich versucht in Englisch zu halten um Sprachprobleme so gut wie möglich zu vermeiden.
+    In der ersten lauffähigen Version wird Englisch verwendet. Später sollen andere Sprachen folgen, um grössere Reichweite zu generieren.
     \subsection{Einschränkungen}
 
     \subsubsection{Designeinschränkungen}
@@ -366,26 +366,28 @@ wird zum Login-Screen weitergeleitet.
 
     \section{Softwarearchitektur}
         Das System wurde in vier Hauptkomponenten aufgeteilt. Dies erlaubt eine zielgerichtete Auswahl der verwendeten Programmiersprachen und Nutzung von Frameworks. Die Hauptkomponenten - jeweils dem Frontend oder Backend zugeordnet - sind:
-        \begin{itemize}
-            \item Frontend
+        \begin{multicols}{2}
             \begin{itemize}
-                \item Website
-                \item Spiel
+                \item \textbf{Frontend}
+                \begin{itemize}
+                    \item Website
+                    \item Spielclient
+                \end{itemize}
+                \item \textbf{Backend}
+                \begin{itemize}
+                    \item Spielserver
+                    \item Datenbank
+                \end{itemize}
             \end{itemize}
-            \item Backend
-            \begin{itemize}
-                \item Spielserver
-                \item Datenbank
-            \end{itemize}
-        \end{itemize}
+        \end{multicols}
 
-        Aufgrund des Vorwissens des Projektteams standen grundsätzlich zwei Sprachen für die Implementation des Systems zur Auswahl: Java und Javascript. Im folgenden werden die oben beschriebenen Hauptkomponenten genauer beschrieben und die jeweilige Wahl der Sprache und der Frameworks erläutert.
+        \noindent Aufgrund des Vorwissens des Projektteams, standen grundsätzlich zwei Sprachen für die Implementation des Systems zur Auswahl: Java und Javascript. Im folgenden werden die oben beschriebenen Hauptkomponenten genauer beschrieben und die jeweilige Wahl der Sprache und der Frameworks erläutert.
 
         \subsection{Website}
-        Die Website wird in Javascript mit React realisiert. So kann diese als eine moderne \Gls{SPA} erstellt werden. Eine \Gls{SPA} trägt durch ihr dynamisches Laden von Inhalten massgeblich zu einer freundlichen Benutzer-System-Interaktion bei. Dies wäre beispielsweise mit einer Implementation mit \Gls{JSP} nicht möglich. Des weiteren kann mit React das Rendering des Spiels auf relativ einfache Weise in einer React-Komponente vorgenommen werden.
+        Die Website wird in Javascript mit dem Framework \Gls{React} realisiert. \Gls{React} erlaubt es, die Webseite als moderne \Gls{SPA}-Applikation zu erstellen. Eine \Gls{SPA} trägt durch ihr dynamisches Laden von Inhalten, massgeblich zur freundlichen und intuitiven Benutzung der Webseite bei. Dies wäre beispielsweise mit einer \Gls{JSP}-Implementation nicht möglich. \Gls{React} nutzt wiederverwendbare  \quotes{Bausteine}, sogenannte \quotes{Komponenten}. Die Komponenten erlauben ein modularer Aufbau des gesamten Frontends.
 
-        \subsection{Spiel}
-        Das Spiel wird mit Hilfe von \Gls{HTML5 Canvas} auf der Website gerendert.
+        \subsection{Spielclient}
+        Der Spielclient ist in zwei \Gls{React}-Komponenten aufgeteilt. Die eine Komponente kümmert sich um die Animation und die zweite, einfachere um die Darstellung mithilfe des \Gls{HTML5 Canvas} Elements.
 
         \label{SoftwarearchitekturGameServer}
         \subsection{\Gls{Game Server}}
