@@ -417,10 +417,10 @@
         \subsection{Kommunikation zwischen den Hauptkomponenten}
         Die Client-Server-Kommunikation erfolgt über eine REST-Schnittstelle. Wird ein Spiel gespielt, so wird eine TCP-Verbindung mit Hilfe des \Gls{Websocket}-Standarts zwischen Client und Server etabliert. Die Kommunikation erfolgt über einen \Gls{Reverse-Proxy} (Nginx). Dieser leitet eine vom Client eintreffend Nachricht an den passenden internen Server (MySQL-Datenbank, Netty-Webserver) weiter. Er wird ausserdem das SSL-Offloading betreiben. Um die Datenbank und den Proxy effizient betreiben zu können, wird Docker verwendet. Die Benutzer-Authentifikation geht über ein Express-\Gls{Webserver}.\\
 
-        Nachfolgend eine Darstellung der Architektur des Gesamtsystems:
+        Nachfolgend eine detailierte Darstellung der Architektur des Gesamtsystems:
         \begin{figure}[H]
             \includegraphics[scale=0.4]{figures/architecture-draft_v3.png}
-            \caption{Systemarchitektur}
+            \caption{Detailierte Softwarearchitektur}
         \end{figure}
         \newpage
 
@@ -490,27 +490,29 @@
     \subsection{Iterationsplan}
     \begin{table}[H]
         \caption{Iterationsplan}
-        \begin{tabularx}{\textwidth}{l l l l l l l}
+        \begin{tabularx}{\textwidth}{l l l l X}
             \toprule
-            % Nr. & Start & Ende & Meilenstein & Ziele & Aufwand Ist & Aufwand Soll \\
+            Iterations Nr. & Start & Ende & Meilenstein & Ziele \\
+            \toprule
+            Inception &&&& \\
 
-            % Inception &&&&&& \\
+            1 & 19-02-20 & 04-03-20 & M1 & Vision definiert. Geschäftsmodell definiert. Anwendungsfälle definiert und Priorisierung vorgenommen. Wichtigste nicht-funktionalen Anforderungen definiert. Recherche zu Technologien angestellt. Projektskizze erstellen. \\
 
-            % 1 & 19-02-20 & 04-03-20 & M1 & Vision definiert. Geschäftsmodel definiert. Anwendungsfälle definiert und Priorisierung vorgenommen. Wichtigste nicht-funktionalen Anforderungen definiert. Recherche zu Technologien angestellt. Projektskizze erstellen. & 80 & 103 \\
+            \toprule
+            Elaboration &&&& \\
 
-            % Elaboration &&&&&& \\
+            2 & 04-03-20 & 25-03-20 & M2 & Weitere Technologie-Recherchen vornehmen. PoC Spiel spielen. Systemarchitektur definieren. Domänenmodell erstellen. Entwicklungsumgebung aufsetzen. Github Workflow, Continuous Integration einrichten. \\
 
-            % 2 & 04-03-20 & 25-03-20 & M2 & Weitere Technologie-Recherchen vornehmen. PoC Spiel spielen. Systemarchitektur definieren. Domänenmodell erstellen. Entwicklungsumgebung aufsetzen. Github Workflow und Continuous Integration einrichten. & 80 & 74
+            3 & 25-03-20 & 08-04-20 & M2 & Implementation Systemarchitektur. Frontend Spiel spielen. Frontend Webseite Grundstruktur. Datenbank Setup und Anbindung. Gameserver modularisiert und stabilisiert. \\
 
-            % 3 & 25-03-20 & 08-04-20 & M2 & Implementation Systemarchitektur. Frontend Spiel spielen. Frontend Webseite Grundstruktur. Datenbank Setup und Anbindung. Gameserver Spiel spielen modularisiert und stabilisiert. & 120 & 159 \\
+            \toprule
+            Construction &&&&\\
 
-            % Construction &&&&&& \\
+            4 & 08-04-20 & 22-04-20 & M3 & Implementation Spielregeln. Implementation Spiel generieren. Implementation Spiel auswählen. \\
 
-            % 4 & 08-04-20 & 22-04-20 & M3 & Implementation Spielregeln, Anwendungsfälle Spiel generieren, Spiel auswählen. & 100 & \\
+            5 & 22-04-20 & 06-05-20 & M3 & \\
 
-            % 5 & 22-04-20 & 06-05-20 & M3 & & & \\
-
-            % 6 & 06-05-20 & M3 & & & \\
+            6 & 06-05-20 & 20-05-20 & M3 & \\
             \toprule
         \end{tabularx}
         \label{tab:Iterationsplan}
@@ -522,12 +524,13 @@
     \subsubsection{Iteration 1}
     \begin{table}[H]
         \caption{Iterations-Assessment: Iteration 1}
-        \begin{tabularx}{\textwidth}{l l l l}
+        \begin{tabularx}{\textwidth}{X l l l}
             \toprule
             Arbeitspackete & Aufwand Soll [h] & Aufwand Ist [h] & Verantwortlicher \\
             \toprule
             Ideensammlung & 2 & 4 & alle \\
             Vision Definition & 3 & 4 & Huber \\
+            Erarbeitung Geschäftsmodell & 3 & 4 & Iten \\
             Definition Anwendungsfälle, Priosierung & 10 & 15 & Akca \\
             Definition Nichtfunktionale Anforderung & 5 & 5 & Iten \\
             Projektskizze & 30 & 35 & alle \\
@@ -540,7 +543,7 @@
     \subsubsection{Iteration 2}
     \begin{table}[H]
         \caption{Iterations-Assessment: Iteration 2}
-        \begin{tabularx}{\textwidth}{l l l l}
+        \begin{tabularx}{\textwidth}{X l l l}
             \toprule
             Arbeitspackete & Aufwand Soll [h] & Aufwand Ist [h] & Verantwortlicher \\
             \toprule
@@ -561,7 +564,7 @@
     \subsubsection{Iteration 3}
     \begin{table}[H]
         \caption{Iterations-Assessment: Iteration 3}
-        \begin{tabularx}{\textwidth}{l l l l}
+        \begin{tabularx}{\textwidth}{X l l l}
             \toprule
             Arbeitspackete & Aufwand Soll [h] & Aufwand Ist [h] & Verantwortlicher \\
             \toprule
