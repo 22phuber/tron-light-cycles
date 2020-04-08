@@ -282,7 +282,7 @@
         	\newline
         	Der Spieler möchte sich aus dem System ausloggen. Der Spieler navigiert sich in der Anwendung oben rechts und wählt die Funktion «Logout» aus. Das System beendet die Session und der Spieler wird als Gast neu angemeldet.
         \end{tcolorbox}
-        
+
         \subsubsection{UC4: Lobby beitreten - \quotes{casual}}
         \label{sssec:UC4Lobbybeitreten}
         \begin{tcolorbox}[enhanced, breakable, sharp corners, width=\dimexpr\textwidth-15mm\relax ,enlarge left by=10mm ,fontupper=\linespread{1.1}\selectfont, boxrule=1pt, title={UC4: Lobby beitreten }, colback=white, colframe=gray!22, coltitle=black]
@@ -293,28 +293,28 @@
         	Der Spieler erhält einen Link eines Freundes. Mit dem Link kann der Spieler einer privaten Lobby beitreten. \newline
         	Er befindet sich nun in derselben Lobby mit seinem Freund.
         \end{tcolorbox}
-        
+
         \subsubsection{UC5: Registrieren - \quotes{brief}}
         \label{sssec:UC5Registrieren}
         \begin{tcolorbox}[enhanced, breakable, sharp corners, width=\dimexpr\textwidth-15mm\relax ,enlarge left by=10mm ,fontupper=\linespread{1.1}\selectfont, boxrule=1pt, title={UC5: Registrieren}, colback=white, colframe=gray!22, coltitle=black]
         	Der Spieler navigiert sich zum Registrier-Bereich der Anwendung. Im Registrier-Bereich gibt er seinen Usernamen, Passwort und E-Mail an.\newline
         	Die Anwendung überprüft ob der Username bereits belegt ist. Der Spieler besitzt nun ein eigenes Konto
         \end{tcolorbox}
-        
+
         \subsubsection{UC6: Passwort zurücksetzen - \quotes{brief}}
         \label{sssec:UC6Passwortsetzen}
         \begin{tcolorbox}[enhanced, breakable, sharp corners, width=\dimexpr\textwidth-15mm\relax ,enlarge left by=10mm ,fontupper=\linespread{1.1}\selectfont, boxrule=1pt, title={UC6: Passwort zurücksetzen}, colback=white, colframe=gray!22, coltitle=black]
         	Der Spieler navigiert sich zum Login-Bereich der Anwendung. Dort hat er die Möglichkeit sein Passwort zurück zu setzen.\newline
         	Nun kann der Spieler ein neues Passwort angeben.
         \end{tcolorbox}
-        
+
         \subsubsection{UC7: Freunde einladen - \quotes{brief}}
         \label{sssec:UC7Freundeeinladen}
         \begin{tcolorbox}[enhanced, breakable, sharp corners, width=\dimexpr\textwidth-15mm\relax ,enlarge left by=10mm ,fontupper=\linespread{1.1}\selectfont, boxrule=1pt, title={UC7: Freunde einladen}, colback=white, colframe=gray!22, coltitle=black]
         	Der Spieler erstellt eine private Lobby. Er erhält einen Link, mit welchem Freunde beitreten können.\newline
         	Sobald seine Freunde den Link benutzen, befinden sie sich nun mit dem Spieler in derselben Lobby.
         \end{tcolorbox}
-        
+
         \subsubsection{UC8: Statistiken betrachten - \quotes{brief}}
         \label{sssec:UC8Statistikenbetrachten}
         \begin{tcolorbox}[enhanced, breakable, sharp corners, width=\dimexpr\textwidth-15mm\relax ,enlarge left by=10mm ,fontupper=\linespread{1.1}\selectfont, boxrule=1pt, title={UC8: Statistiken betrachten}, colback=white, colframe=gray!22, coltitle=black]
@@ -322,33 +322,35 @@
         \end{tcolorbox}
 
     \section{Zusätzliche Anforderungen}
-	Es ist wichtig, konkrete Anforderungen für unser Spiel zu definieren, damit die Erwartungen der Spieler erfüllt werden können. Hierbei soll uns das FURPS+ Modell weiter helfen. Im Folgenden werden die einzelnen Punkte genauer definiert.
-    \subsection{Funktionalität}
-	Um das Spiel so einfach wie möglich zu gestalten, haben wir uns dazu entschieden, dass bei dem Erstbetreten des Spiels ein Gastaccount zugewiesen wird. Dadurch müssen Spieler, welche nur für ein kuzres Spielvergnügen vorbei schauen, keine zusätzliche Angaben machen oder sonstige Zeit verlieren. Der normale Registrierungs- oder Loginvorgang kann zu jederzeit benutzt werden. Dies gibt uns danach die Möglichkeit auf userspezifische Erweiterungen wie zum Beispiel In-App Käufe oder mögliche bevorzugte Spielerfarbe im Spiel. Die Spieler die nur mit einem Gastaccount angemeldet sind haben demnach auch nur limitierte Möglichkeiten. Der Gast wird nicht in der Punktestatistik aufgeführt.
-	Damit die Spieler zusammen einer Lobby beitreten können, benutzen wir eine Server Client Architektur, welche ausführlicher in der Software Architektur ersichtlich ist. Sicherheit ist nicht notwendig, da keine sensiblen Daten verwendet werden. Die Standardsicherheitsmassnahmen sind natürlich gewährleistet.
-	\subsection{Benutzbarkeit}
-	Eines der wichtigsten Aspekte für uns ist die Benutzbarkeit. Das Spiel soll übersichtlich und einfach gestaltet sein. Der Spieler muss zu jeder Zeit mit so wenig wie möglichen Klicks alles erreichen. Damit wir dies anbieten können, benutzen wir ein simples Design und eine Single Page Application, welche diesen Aspekt weiter unterstützt. Zusätzlich wird zum Beispiel der Lobby beitreten Button direkt auf der ersten Seite ersichtlich sein, welche der Spieler nach dem Beitreten der Applikation sieht.
-	\begin{figure}[H]
-		\centering
-		\includegraphics[scale=0.6]{figures/Mockup_Join.png}
-		\caption{Mockup Join}
-		\label{fig:MockupJoin}
-	\end{figure}
-    \subsection{Zuverlässigkeit}
-	Wir können mit Sicherheit sagen, dass unsere Applikation nicht sonderlich anfällig für Ausfälle ist. Da das Spiel nur eine geringe Leistung beansprucht, verringert das die Fehlerquellen enorm. Die Applikation ist auch Clientabhängig. Das bedeutet, falls ein Spieler Verbindungsprobleme hat oder andere Schwierigkeiten, dann kann er verlieren. Die Lobby liegt auf dem Server, somit ist gewährleistet, dass falls der Spieler, welche die Lobby erstellt hat, Verbindungsprobleme hat, das Spiel weiterhin normal abläuft. Dies ist ebenso ein wichtiger Aspekt für uns, damit das Spiel reibungslos ohne Unterbrüche ablaufen kann.
-    \subsection{Effizienz}
-	Da wie bereits erwähnt das Spiel nur eine geringe Leistung beansprucht, ist die Effizienz gut und zuverlässig. Hier spielt leider auch wieder der Client eine Rolle. Da der Server und der Client in Verbindung stehen und der Client Verbindungsprobleme oder sonstige Verzögerungen hat, kommt es schnell zu kurzen Unterbrechungen für den Spieler. Dies ist kaum zu vermeiden.
-    \subsection{Änderbarkeit (Wartbarkeit)}
-	Die Applikation ist nur über den Browser erreichbar, dies macht die Wartbarkeit um einiges einfacher. Die diversen Browser müssen natürlich getestet werden und kompatibel sein. Die wichtigsten Browser sind Firefox, Google Chrome und Internet Explorer.  Das Testen neuerer Versionen der einzelnen Browser schliesst dies mit ein, um die Zuverlässigkeit weiterhin anbieten zu können.
-    \subsection{Internationalisierung}
-    In der ersten lauffähigen Version wird Englisch verwendet. Später sollen andere Sprachen folgen, um grössere Reichweite zu generieren.
-    \subsection{Einschränkungen}
+    	Es ist wichtig, konkrete Anforderungen für unser Spiel zu definieren, damit die Erwartungen der Spieler erfüllt werden können. Hierbei soll uns das FURPS+ Modell weiter helfen. Im Folgenden werden die einzelnen Punkte genauer definiert.
+        \subsection{Funktionalität}
+        Um das Spiel so einfach wie möglich zu gestalten, haben wir uns dazu entschieden, dass bei dem Erstbetreten des Spiels ein Gastaccount zugewiesen wird. Dadurch müssen Spieler, welche nur für ein kurzes Spielvergnügen vorbei schauen, keine zusätzliche Angaben machen oder sonstige Zeit verlieren. Der normale Registrierungs- oder Loginvorgang kann zu jederzeit benutzt werden. Dies gibt uns danach die Möglichkeit auf benutzerspezifische Erweiterungen wie zum Beispiel In-App Käufe oder mögliche, bevorzugte Farben für das Licht-Motorrad im Spiel. Die Spieler, die nur mit einem Gastaccount angemeldet sind, haben demnach weniger Möglichkeiten. Der Gast wird auch nicht in der Punktestatistik aufgeführt.\newline
+        \newline
+        % TODO \autoref verwenden für Verweiss auf andere Section
+        Damit die Spieler zusammen einer Lobby beitreten können, benutzen wir eine Server-Client-Architektur, welche ausführlicher in der Software Architektur ersichtlich ist. Spezielle Sicherheitsmassnahmen nicht notwendig, da keine sensiblen Daten übertragen werden. Standard-Sicherheitsmassnahmen, wie verschlüsselte Datenübertragung über HTTPS, sind gewährleistet.
+        \subsection{Benutzbarkeit}
+        Eines der wichtigsten Aspekte für uns, ist die Benutzbarkeit. Das Spiel soll übersichtlich, intuitiv und einfach gestaltet sein. Der Spieler muss mit wenigen Klicks alle wichtigen Funktionalitäten erreichen können. Damit wir dies anbieten können, benutzen wir ein rudimentäres Design und eine \Gls{SPA}-Applikation, welche diesen Aspekt unterstützt. Zusätzlich wird - zum Beispiel - der \Gls{Lobby} beitreten Button direkt auf der ersten Seite ersichtlich sein, welche der Spieler nach dem betreten der Applikation sieht.
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.6]{figures/Mockup_Join.png}
+            \caption{Mockup Join}
+            \label{fig:MockupJoin}
+        \end{figure}
+        \subsection{Zuverlässigkeit}
+        Wir können mit Sicherheit sagen, dass unsere Applikation nicht sonderlich anfällig für Ausfälle ist. Da das Spiel nur eine geringe Leistung beansprucht, verringert das die Fehlerquellen enorm. Die Applikation ist auch Clientabhängig. Das bedeutet, falls ein Spieler Verbindungsprobleme hat oder andere Schwierigkeiten, dann kann er verlieren. Die Lobby liegt auf dem Server, somit ist gewährleistet, dass falls der Spieler, welche die Lobby erstellt hat, Verbindungsprobleme hat, das Spiel weiterhin normal abläuft. Dies ist ebenso ein wichtiger Aspekt für uns, damit das Spiel reibungslos ohne Unterbrüche ablaufen kann.
+        \subsection{Effizienz}
+    	Da wie bereits erwähnt das Spiel nur eine geringe Leistung beansprucht, ist die Effizienz gut und zuverlässig. Hier spielt leider auch wieder der Client eine Rolle. Da der Server und der Client in Verbindung stehen und der Client Verbindungsprobleme oder sonstige Verzögerungen hat, kommt es schnell zu kurzen Unterbrechungen für den Spieler. Dies ist kaum zu vermeiden.
+        \subsection{Änderbarkeit (Wartbarkeit)}
+    	Die Applikation ist nur über den Browser erreichbar, dies macht die Wartbarkeit um einiges einfacher. Die diversen Browser müssen natürlich getestet werden und kompatibel sein. Die wichtigsten Browser sind Firefox, Google Chrome und Internet Explorer.  Das Testen neuerer Versionen der einzelnen Browser schliesst dies mit ein, um die Zuverlässigkeit weiterhin anbieten zu können.
+        \subsection{Internationalisierung}
+        In der ersten lauffähigen Version wird Englisch verwendet. Später sollen andere Sprachen folgen, um grössere Reichweite zu generieren.
+        \subsection{Einschränkungen}
 
-    \subsubsection{Designeinschränkungen}
-	Wir benutzen React und Material UI für das Design, da Material UI bereits einige Bibliotheken beziehungsweise vordefinierte  Bausteine zur Verfügung stellt. Da wir mit einer Single Page Application arbeiten wird Routing nicht nötig sein.
-    \subsubsection{Implementierungseinschränkungen}
-	Um die Applikation so wartbar wie möglich zu behalten, wird alles so gut wie möglich mit Clean Code implementiert. Dies wird auch im späteren Verlauf des Implementierungsvorgangs immer wieder überprüft. Bei Git benutzen wir das Continuous Integration, dies ermöglicht es uns nur kompilierbaren Code hinzuzufügen um einige Fehlerquellen bereits auszuschliessen.
-    \subsubsection{Schnittstelleneinschränkungen}
+        \subsubsection{Designeinschränkungen}
+    	Wir benutzen React und Material UI für das Design, da Material UI bereits einige Bibliotheken beziehungsweise vordefinierte  Bausteine zur Verfügung stellt. Da wir mit einer Single Page Application arbeiten wird Routing nicht nötig sein.
+        \subsubsection{Implementierungseinschränkungen}
+    	Um die Applikation so wartbar wie möglich zu behalten, wird alles so gut wie möglich mit Clean Code implementiert. Dies wird auch im späteren Verlauf des Implementierungsvorgangs immer wieder überprüft. Bei Git benutzen wir das Continuous Integration, dies ermöglicht es uns nur kompilierbaren Code hinzuzufügen um einige Fehlerquellen bereits auszuschliessen.
+        \subsubsection{Schnittstelleneinschränkungen}
 
     \section{Domänenmodell}
     \begin{figure}[H]
