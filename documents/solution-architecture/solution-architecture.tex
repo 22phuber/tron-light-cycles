@@ -83,7 +83,7 @@
 
     % First section
     \section{Anwendungsfälle}
-        Anwendungsfälle Übersicht:
+        Die in \autoref{fig:UseCaseDiagram} ersichtlichen Anwendungsfälle sind hier übersichtlich und nach Priorität geordnet aufgelistet:
         \begin{multicols}{2}
             \begin{itemize}
                \item  \hyperref[ssec:UC1Lobbyerstellen]{UC1: Lobby erstellen - \quotes{fully dressed}}
@@ -98,10 +98,12 @@
         \end{multicols}
 
         \subsection{Anwendungsfalldiagramm}
-            \begin{figure}[H]
-                \includegraphics[scale=0.77]{figures/Use-case-modell.png}
-                \caption{Anwendungsfalldiagramm - Tron Licht-Motorräder Computerspiel}
-            \end{figure}
+        \begin{figure}[H]
+            \centering
+            \makebox[\textwidth][c]{\includegraphics[width=0.9\textwidth]{figures/Use-case-modell.png}}
+            \caption{Anwendungsfalldiagramm - Tron Licht-Motorräder Computerspiel}
+            \label{fig:UseCaseDiagram}
+        \end{figure}
 
         \subsection{Hauptanwendungsfälle}
             Wir haben zwei Hauptanwendungsfälle identifiziert:
@@ -228,19 +230,6 @@
                         \item System zeigt die Statistiken des Spiels bei allen Spielern/Mitspielern an.
                         \item System öffnet - nach Ablauf eines Timers  - erneut die \Gls{Lobby}.
                     \end{enumerate}
-                    \textbf{Erweiterungen (oder alternative Abläufe):}
-                    \begin{itemize}
-                        \item[?a.] blah
-                            \begin{enumerate}
-                                \item blah
-                                \item blah
-                                \item blah
-                            \end{enumerate}
-                    \end{itemize}
-                    \textbf{Spezielle Anforderungen:}
-                     \begin{itemize}
-                        \item blah
-                    \end{itemize}
 
                 \end{tcolorbox}
 
@@ -322,12 +311,16 @@
         \end{tcolorbox}
 
     \section{Zusätzliche Anforderungen}
-    	Es ist wichtig, konkrete Anforderungen für unser Spiel zu definieren, damit die Erwartungen der Spieler erfüllt werden können. Hierbei soll uns das FURPS+ Modell weiter helfen. Im Folgenden werden die einzelnen Punkte genauer definiert.
+        Es ist wichtig konkrete Anforderungen für unser Spiel zu definieren, damit die Erwartungen der Spieler erfüllt werden können. Hierbei soll uns das FURPS+ Modell weiter helfen. Im Folgenden werden die einzelnen Punkte genauer erläutert.
         \subsection{Funktionalität}
-        Um das Spiel so einfach wie möglich zu gestalten, haben wir uns dazu entschieden, dass bei dem Erstbetreten des Spiels ein Gastaccount zugewiesen wird. Dadurch müssen Spieler, welche nur für ein kurzes Spielvergnügen vorbei schauen, keine zusätzliche Angaben machen oder sonstige Zeit verlieren. Der normale Registrierungs- oder Loginvorgang kann zu jederzeit benutzt werden. Dies gibt uns danach die Möglichkeit auf benutzerspezifische Erweiterungen wie zum Beispiel In-App Käufe oder mögliche, bevorzugte Farben für das Licht-Motorrad im Spiel. Die Spieler, die nur mit einem Gastaccount angemeldet sind, haben demnach weniger Möglichkeiten. Der Gast wird auch nicht in der Punktestatistik aufgeführt.\newline
-        \newline
-        % TODO \autoref verwenden für Verweiss auf andere Section
-        Damit die Spieler zusammen einer Lobby beitreten können, benutzen wir eine Server-Client-Architektur, welche ausführlicher in der Software Architektur ersichtlich ist. Spezielle Sicherheitsmassnahmen nicht notwendig, da keine sensiblen Daten übertragen werden. Standard-Sicherheitsmassnahmen, wie verschlüsselte Datenübertragung über HTTPS, sind gewährleistet.
+            \subsubsection{Gastkonto}
+                Um das Spiel möglichst einfach zu gestalten, haben wir uns dazu entschieden, dass beim öffnen der Webseite der Besucher automatisch mit einem Gastkonto \quotes{angemeldet} wird. Dadurch müssen Spieler, welche nur für ein kurzes Spielvergnügen vorbei schauen, keine zusätzliche Angaben machen und verlieren nicht unnötig Zeit. Spieler, die nur mit einem Gastkonto angemeldet sind, haben weniger Möglichkeiten als solche mit Benutzeraccount. Zum Beispiel werden die Punkte eines Gasts nicht in der Punktestatistik aufgeführt und es gibt keine Punktehistorie.
+            \subsubsection{Registrierung \& Benutzerkonto}
+                Ein Spieler kann sich jederzeit registrieren oder - falls dieser  schon über ein Benutzerkonto verfügt - anmelden. Ein Benutzerkonto gibt uns mehr Möglichkeiten. Es können zum Beispiel benutzerspezifische Erweiterungen wie In-App Käufe realisiert oder Einstellungen, wie die Motorradfarbe, gespeichert werden. Momentan ist das speichern der Punktezahl und Motorradfarbe vorgesehen.
+             \subsubsection{Server-Client-Architektur}
+                Damit die  mehrere Spieler einer Lobby beitreten und gemeinsam über das Internet bzw. Netzwerk spielen können, benutzen wir eine Server-Client-Architektur, auf die wir ausführlicher im \hyperref[sec:Softwarearchitektur]{Abschnitt Softwarearchitektur} eingehen.
+             \subsubsection{Sicherheit}
+                Standard-Sicherheitsmassnahmen, wie verschlüsselte Datenübertragung über \Gls{HTTPS} zwischen den \Gls{Webbrowser} und dem \Gls{Webserver}, sind vorgesehen und gewährleistet.
         \subsection{Benutzbarkeit}
         Eines der wichtigsten Aspekte für uns, ist die Benutzbarkeit. Das Spiel soll übersichtlich, intuitiv und einfach gestaltet sein. Der Spieler muss mit wenigen Klicks alle wichtigen Funktionalitäten erreichen können. Damit wir dies anbieten können, benutzen wir ein rudimentäres Design und eine \Gls{SPA}-Applikation, welche diesen Aspekt unterstützt. Zusätzlich wird - zum Beispiel - der \Gls{Lobby} beitreten Button direkt auf der ersten Seite ersichtlich sein, welche der Spieler nach dem betreten der Applikation sieht.
         \begin{figure}[H]
@@ -367,6 +360,7 @@
 
 
     \section{Softwarearchitektur}
+    \label{sec:Softwarearchitektur}
         Das System wurde in vier Hauptkomponenten aufgeteilt. Dies erlaubt eine zielgerichtete Auswahl der verwendeten Programmiersprachen und Nutzung von Frameworks. Die Hauptkomponenten - jeweils dem Frontend oder Backend zugeordnet - sind:
         \begin{multicols}{2}
             \begin{itemize}
