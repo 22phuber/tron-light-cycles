@@ -273,12 +273,16 @@
             \subsubsection{UC3: Ein \& Ausloggen  - \quotes{casual}}
             \label{sssec:UC3EinAusloggen}
                 \begin{tcolorbox}[enhanced, breakable, sharp corners, width=\dimexpr\textwidth-15mm\relax ,enlarge left by=10mm ,fontupper=\linespread{1.1}\selectfont, boxrule=1pt, title={UC3: Ein \& Ausloggen }, colback=white, colframe=gray!22, coltitle=black]
-                     \textit{Standardszenario:} Der Spieler navigiert sich zum Login-Bereich der Anwendung. Der Spieler gibt die korrekten Eingabedaten seines Kontos ein. Die Anwendung überprüft die Eingabedaten und meldet den Spieler an. DerSpieler ist nun in der Anwendung mit seinem persönlichen Konto angemeldet.\newline
+                     \textit{Standardszenario:} Der Spieler navigiert sich zum Login-Bereich der Anwendung. Der Spieler gibt die korrekten Eingabedaten seines Kontos ein. Die Anwendung überprüft die Eingabedaten und meldet den Spieler an. Der
+Spieler ist nun in der Anwendung mit seinem persönlichen Konto angemeldet.\newline
                      \newline
                      \textit{Alternative Szenarios:} \newline
-                     Der Spieler gibt die falschen Eingabedaten für ein Konto ein. Das System weist den Spielerdaraufhin, dass die Eingabedaten falsch sind und schlägt dem Spieler vor noch einmal die  Eingabedaten einzugeben. \newline
+                     Der Spieler gibt die falschen Eingabedaten für ein Konto ein. Das System weist den Spieler
+daraufhin, dass die Eingabedaten falsch sind und schlägt dem Spieler vor noch einmal die  Eingabedaten einzugeben. \newline
                      \newline
-                     Der Spieler möchte sich aus dem System ausloggen. Der Spieler navigiert sich in der Anwendung aufsein Profil und wählt die Funktion «Logout» aus. Das System beendet die Session und der Spielerwird zum Login-Screen weitergeleitet.
+                     Der Spieler möchte sich aus dem System ausloggen. Der Spieler navigiert sich in der Anwendung auf
+sein Profil und wählt die Funktion «Logout» aus. Das System beendet die Session und der Spieler
+wird zum Login-Screen weitergeleitet.
                 \end{tcolorbox}
 
              \subsubsection{UC4: Lobby beitreten - \quotes{casual}}
@@ -344,24 +348,78 @@
     \section{Domänenmodell}
 
     \section{Softwarearchitektur}
+        Das System wurde in vier Hauptkomponenten aufgeteilt. Dies erlaubt eine zielgerichtete Auswahl der verwendeten Programmiersprachen und Nutzung von Frameworks. Die Hauptkomponenten - jeweils dem Frontend oder Backend zugeordnet - sind:
+        \begin{itemize}
+            \item Frontend
+            \begin{itemize}
+                \item Website
+                \item Spiel
+            \end{itemize}
+            \item Backend
+            \begin{itemize}
+                \item Spielserver
+                \item Datenbank
+            \end{itemize}
+        \end{itemize}
+
+        Aufgrund des Vorwissens des Projektteams standen grundsätzlich zwei Sprachen für die Implementation des Systems zur Auswahl: Java und Javascript. Im folgenden werden die oben beschriebenen Hauptkomponenten genauer beschrieben und die jeweilige Wahl der Sprache und der Frameworks erläutert.
+
+        \subsection{Website}
+        Die Website wird in Javascript mit React realisiert. So kann diese als eine moderne \Gls{SPA} erstellt werden. Eine \Gls{SPA} trägt durch ihr dynamisches Laden von Inhalten massgeblich zu einer freundlichen Benutzer-System-Interaktion bei. Dies wäre beispielsweise mit einer Implementation mit \Gls{JSP} nicht möglich. Des weiteren kann mit React das Rendering des Spiels auf relativ einfache Weise in einer React-Komponente vorgenommen werden.
+        
+        \subsection{Spiel}
+        Das Spiel wird mit Hilfe von \Gls{HTML5 Canvas} auf der Website gerendert.
+
+        \subsection{\Gls{Game Server}}
+        Der \Gls{Game Server} setzt sich grundsätzlich aus zwei Teilen zusammen. Zum einen aus der Geschäftslogikschicht, also dem Teil, der jeweils ein Spiel generiert und laufend den aktuellen Spielzustand berechnet. Zum anderen aus der Transportschicht, die die Schnittstelle zum Client implementiert, d.h. kontinuierlich den momentanen Spielzustand dem Client kommuniziert und potentielle vom Client Client ausgelöste Events entgegennimmt.\\
+        Der \Gls{Game Server} wird in Java geschrieben. Java ist im Gegensatz zu Javascript eine typsichere und objektorientierte Sprache. Da eine gewisse Komplexität bezüglich der Implementation des \Gls{Game Server}s erwartet wird, hat Java durch diese zwei Eigenschaften klare Vorteile gegenüber Javascript.\\
+        Für die Transportschicht wird Netty verwendet. Dabei handelt es sich um ein asynchrones, event-getriebenes Netzwerk-Framework, das für seine sehr gute Performance bekannt ist. In Performancetests liess Netty beispielsweise node.js weit hinter sich.\cite{NettyPerformancetests} Da ein Multiplayer-Online-Spiel auf eine schnelle Übertragung angewiesen ist und der \Gls{Game Server} ohnehin in Java programmiert wird, ist Netty eine ausgezeichnete Wahl.\\
+        \\
+        Im nächsten Abschnitt wird das Zusammenspiel der oben beschriebenen Komponenten erläutert.
+
+        \subsection{Kommunikation zwischen den Hauptkomponenten}
+        Die Client-Server-Kommunikation erfolgt über eine REST-Schnittstelle. Wird ein Spiel gespielt, so wird eine TCP-Verbindung mit Hilfe des \Gls{Websocket}-Standarts zwischen Client und Server etabliert. Die Kommunikation erfolgt über einen \Gls{Reverse-Proxi} (Nginx). Dieser leitet eine vom Client eintreffend Nachricht an den passenden internen Server (MySQL-Datenbank, Netty-Webserver) weiter. Er wird ausserdem das SSL-Offloading betreiben. Um die Datenbank und den Proxi effizient betreiben zu können, wird Docker verwendet. Die Benutzer-Authentifikation geht über ein Express-\Gls{Webserver}.\\
+
+        Nachfolgend eine Darstellung der Architektur des Gesamtsystems:
+        \begin{figure}[H]
+            \includegraphics[scale=0.4]{figures/architecture-draft_v3.png}
+            \caption{Systemarchitektur}
+        \end{figure}
+        \newpage
 
     \section{Design-Artefakte}
 
         \subsection{UML Klassendiagramme}
-            \newpage
+
+            % TODO: Game Server Modul-Diagramm hier!
+
             \begin{figure}[H]
                 \centering
-                \makebox[\textwidth][c]{\includegraphics[width=1.1\textwidth]{figures/UML class diagrams/Package game dark.png}}
-                \caption{UML class diagrams - Package game}
-                \label{fig:UMLclassdiagram_Packagegame}
+                \makebox[\textwidth][c]{\includegraphics[width=1.1\textwidth]{figures/UML class diagrams/Package appmain light.png}}
+                \caption{UML class diagrams - Game Server: Module appmain}
+                \label{fig:UMLclassdiagram_Moduleappmain}
+            \end{figure}
+            \begin{figure}[H]
+                \centering
+                \makebox[\textwidth][c]{\includegraphics[width=1.1\textwidth]{figures/UML class diagrams/Package middleman light.png}}
+                \caption{UML class diagrams - Game Server: Module middleman}
+                \label{fig:UMLclassdiagram_Modulemiddleman}
             \end{figure}
             \newpage
             \begin{figure}[H]
                 \centering
                 \makebox[\textwidth][c]{\includegraphics[width=1.1\textwidth]{figures/UML class diagrams/Package game light.png}}
-                \caption{UML class diagrams - Package game}
-                \label{fig:UMLclassdiagram_Packagegame}
+                \caption{UML class diagrams - Game Server: Module game}
+                \label{fig:UMLclassdiagram_Modulegame}
             \end{figure}
+            \newpage
+            \begin{figure}[H]
+                \centering
+                \makebox[\textwidth][c]{\includegraphics[width=1.1\textwidth]{figures/UML class diagrams/Package transport light.png}}
+                \caption{UML class diagrams - Game Server: Module transport}
+                \label{fig:UMLclassdiagram_Moduletransport}
+            \end{figure}
+            \newpage
 
     \section{Implementation}
 
