@@ -370,6 +370,7 @@ wird zum Login-Screen weitergeleitet.
         \subsection{Spiel}
         Das Spiel wird mit Hilfe von \Gls{HTML5 Canvas} auf der Website gerendert.
 
+        \label{SoftwarearchitekturGameServer}
         \subsection{\Gls{Game Server}}
         Der \Gls{Game Server} setzt sich grundsätzlich aus zwei Teilen zusammen. Zum einen aus der Geschäftslogikschicht, also dem Teil, der jeweils ein Spiel generiert und laufend den aktuellen Spielzustand berechnet. Zum anderen aus der Transportschicht, die die Schnittstelle zum Client implementiert, d.h. kontinuierlich den momentanen Spielzustand dem Client kommuniziert und potentielle vom Client Client ausgelöste Events entgegennimmt.\\
         Der \Gls{Game Server} wird in Java geschrieben. Java ist im Gegensatz zu Javascript eine typsichere und objektorientierte Sprache. Da eine gewisse Komplexität bezüglich der Implementation des \Gls{Game Server}s erwartet wird, hat Java durch diese zwei Eigenschaften klare Vorteile gegenüber Javascript.\\
@@ -392,6 +393,7 @@ wird zum Login-Screen weitergeleitet.
         \subsection{UML Klassendiagramme}
 
             % TODO: Game Server Modul-Diagramm hier!
+            \label{fig:GameServerModulDiagramm}
 
             \begin{figure}[H]
                 \centering
@@ -422,6 +424,15 @@ wird zum Login-Screen weitergeleitet.
             \newpage
 
     \section{Implementation}
+
+    % TODO:
+    \subsection{Game Client}
+    % TODO:
+    \subsection{\Gls{Game Server}}
+    Wie schon in Abschnitt \ref{SoftwarearchitekturGameServer} erwähnt, wurde der \Gls{Game Server} in zwei Hauptkomponenten, die Geschläfslogik und den Transport aufgeteilt. In der Implementation entsprechen diese Komponenten den Modulen \dq ch.tron.game\dq und \dq ch.tron.transport\dq. Durch die Verwendung von Java 9 Modulen wird eine lose Kopplung gewährleistet. Wie in der Abbildung \ref{fig:GameServerModulDiagramm} zu sehen ist, existieren zwei weitere Module, \dq ch.tron.appmain\dq und \dq ch.tron.middleman\dq. Appmain dient lediglich als Einstiegspunkt für die \Gls{Game Server}-App. Das Modul Middleman wird benötigt, um die Kommunikation zwischen den Modulen Game und Transport zu ermöglichen. Es definiert eine abstrakte Klasse namens \dq InAppMessage\dq und einen Interface namens \dq InAppMessageForwarder\dq. Mit Hilfe von Subklassen von InAppMessage und den Implementationen des InAppMessageForwarders können nun Informationen, wie die Entstehung einer neuen Client-Server-Verbindung oder ein Spielupdate zwischen den Hauptkomponenten ausgetauscht werden.
+
+    % TODO:
+    \subsection{Datenbank}
 
     \section{Projektmanagement}
 
