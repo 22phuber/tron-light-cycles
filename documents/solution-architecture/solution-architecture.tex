@@ -22,6 +22,8 @@
 \usepackage[most]{tcolorbox}
 \usepackage{enumitem}
 \usepackage{textcomp}
+\usepackage{listings}
+
 
 % Link colors
 \hypersetup{
@@ -33,6 +35,17 @@
 
 \geometry{a4paper, top=25mm, left=25mm, right=25mm, bottom=20mm,
     headsep=10mm, footskip=12mm}
+
+% inline code macro
+\definecolor{lightgray}{gray}{0.9}
+\lstset{
+    showstringspaces=false,
+    basicstyle=\ttfamily,
+    keywordstyle=\color{blue},
+    commentstyle=\color[grey]{0.6},
+    stringstyle=\color[RGB]{255,150,75}
+}
+\newcommand{\inlinecode}[2]{\colorbox{lightgray}{\lstinline[language=#1]$#2$}}
 
 % Glossary
 % Das Glossar definiert alle wichtigen Begriffe zur Sicherstellung einer einheitlichen Terminologie.
@@ -330,7 +343,7 @@
             \label{fig:MockupJoin}
         \end{figure}
         \subsection{Zuverlässigkeit}
-        Wir können mit Sicherheit sagen, dass unsere Applikation nicht sonderlich anfällig für Ausfälle ist. Da das Spiel nur eine geringe Leistung beansprucht, verringert das die Fehlerquellen enorm. Die Applikation ist auch Clientabhängig. Das bedeutet, falls ein Spieler Verbindungsprobleme hat oder andere Schwierigkeiten, dann kann er verlieren. Die Lobby liegt auf dem Server, somit ist gewährleistet, dass falls der Spieler, welche die Lobby erstellt hat, Verbindungsprobleme hat, das Spiel weiterhin normal abläuft. Dies ist ebenso ein wichtiger Aspekt für uns, damit das Spiel reibungslos ohne Unterbrüche ablaufen kann.
+        Wir können mit Sicherheit sagen, dass unsere Applikation nicht sonderlich anfällig für Ausfälle ist. Da das Spiel nur eine geringe Leistung beansprucht, verringert das die Fehlerquellen enorm. Die Applikation ist auch Client abhängig. Das bedeutet, falls ein Spieler Verbindungsprobleme hat oder andere Schwierigkeiten, dann kann er verlieren. Die Lobby liegt auf dem Server, somit ist gewährleistet, dass falls der Spieler, welche die Lobby erstellt hat, Verbindungsprobleme hat, das Spiel weiterhin normal abläuft. Dies ist ebenso ein wichtiger Aspekt für uns, damit das Spiel reibungslos ohne Unterbrüche ablaufen kann.
         \subsection{Effizienz}
     	Da wie bereits erwähnt das Spiel nur eine geringe Leistung beansprucht, ist die Effizienz gut und zuverlässig. Hier spielt leider auch wieder der Client eine Rolle. Da der Server und der Client in Verbindung stehen und der Client Verbindungsprobleme oder sonstige Verzögerungen hat, kommt es schnell zu kurzen Unterbrechungen für den Spieler. Dies ist kaum zu vermeiden.
         \subsection{Änderbarkeit (Wartbarkeit)}
@@ -390,6 +403,7 @@
         Die Website wird in Javascript mit dem Framework \Gls{React} realisiert. \Gls{React} erlaubt es, die Webseite als moderne \Gls{SPA}-Applikation zu erstellen. Eine \Gls{SPA} trägt durch ihr dynamisches Laden von Inhalten, massgeblich zur freundlichen und intuitiven Benutzung der Webseite bei. Dies wäre beispielsweise mit einer \Gls{JSP}-Implementation nicht möglich. \Gls{React} nutzt wiederverwendbare  \quotes{Bausteine}, sogenannte \quotes{Komponenten}. Die Komponenten erlauben ein modularer Aufbau des gesamten Frontends.
 
         \subsection{Spieleclient}
+        \label{ssec:SoftwarearchitekturGameClient}
         Der Spieleclient  kommuniziert direkt mit dem Spieleserver über eine \Gls{Websocket}-Verbindung. Momentan ist der Spieleclient  in zwei \Gls{React}-Komponenten aufgeteilt. Die eine Komponente kümmert sich um die Animation und die zweite, einfachere um die Darstellung mithilfe des \Gls{HTML5 Canvas} Elements.
 
         \label{SoftwarearchitekturGameServer}
@@ -451,19 +465,24 @@
 
     \section{Implementation}
 
-    % TODO:
-    \subsection{Game Client}
+    \subsection{Spieleclient (Game Client)}
+    Wie schon in \hyperref[ssec:SoftwarearchitekturGameClient]{Abschnitt Softwarearchitektur, Unterabschnitt Spieleclient} erläutert, ist der Spieleclient momentan in zwei \Gls{React}-Komponenten aufgeteilt. Eine Komponte kümmert sich um die \textbf{Animation} und kommuniziert direkt mit dem \hyperref[ssec:ImplementationGameServer]{Game Server} über eine \Gls{Websocket}-Verbindung. Die Animation braucht die gesendeten Daten des Servers, liest und interpretiert den Inhalt und schickt eine Teil der Daten an die zweite Komponente.\newline
+    Die zweite Komponente ist - einfach ausgedrückt - für das Zeichen der Spielerdaten, Hindernisse und des Spielfeldes im \Gls{Webbrowser} verantwortlich. Dazu wird das \Gls{HTML5 Canvas} Element verwendet und mit einer speziellen \Gls{React}-Referenz \href{https://reactjs.org/docs/refs-and-the-dom.html}{\inlinecode{Java}{React.createRef();}} versehen . Diese Referenz, erlaubt eine schnelle Manipulation des Elementes ohne, alle involvierten  Komponenten, neu rendern zu müssen, es ist eine Art Abkürzung und den normalen \Gls{React}-Ablauf  zu umgehen.\newline
+    Die zwei Komponenten müssen in der nächsten Iteration in mind. Drei aufgeteilt werden. Nach Codierungsrichtlinien und \quotes{Best Practices}, sollte auch die  \Gls{Websocket}-Kommunikation in eine eigene Komponente verschoben werden.
     % TODO:
     \subsection{\Gls{Game Server}}
+    \label{ssec:ImplementationGameServer}
     Wie schon in Abschnitt \ref{SoftwarearchitekturGameServer} erwähnt, wurde der \Gls{Game Server} in zwei Hauptkomponenten, die Geschläfslogik und den Transport aufgeteilt. In der Implementation entsprechen diese Komponenten den Modulen \dq ch.tron.game\dq und \dq ch.tron.transport\dq. Durch die Verwendung von Java 9 Modulen wird eine lose Kopplung gewährleistet. Wie in der Abbildung \ref{fig:GameServerModulDiagramm} zu sehen ist, existieren zwei weitere Module, \dq ch.tron.appmain\dq und \dq ch.tron.middleman\dq. Appmain dient lediglich als Einstiegspunkt für die \Gls{Game Server}-App. Das Modul Middleman wird benötigt, um die Kommunikation zwischen den Modulen Game und Transport zu ermöglichen. Es definiert eine abstrakte Klasse namens InAppMessage und einen Interface namens InAppMessageForwarder. Mit Hilfe von Subklassen von InAppMessage und den Implementationen des InAppMessageForwarders können nun Informationen, wie die Entstehung einer neuen Client-Server-Verbindung oder ein Spielupdate zwischen den Hauptkomponenten ausgetauscht werden.
 
     % TODO:
     \subsection{Datenbank}
     \begin{figure}[H]
-    	\includegraphics[scale=0.7]{figures/erm.png}
-    	\caption{Datenbank - Tron Licht-Motorräder Computerspiel}
+        \centering
+        \makebox[\textwidth][c]{\includegraphics[width=0.8\textwidth]{figures/erm.png}}
+        \caption{Datenbank  ERM - Tron Licht-Motorräder Computerspiel}
+        \label{fig:DatabaseERM}
     \end{figure}
-	Die Datenbank läuft auf MySQL 8.0 und wird in einem Docker-Container realisiert. In der Datenbank befinden sich die registrierten Accounts der Anwender. Zusätzlich werden auch die Freundschaftsbeziehungen zwischen den Spielern gespeichert, damit kann die Anwendung auslesen, wer in welche private \Gls{Lobby} beitreten darf.
+    Die Datenbank läuft auf MySQL 8.0 und wird in einem Docker-Container realisiert. In der Datenbank befinden sich die registrierten Accounts der Anwender. Zusätzlich werden auch die Freundschaftsbeziehungen zwischen den Spielern gespeichert, damit kann die Anwendung auslesen, wer in welche private \Gls{Lobby} beitreten darf.
 
     \section{Projektmanagement}
     Der grobe Ablauf der Arbeiten wird durch die in der Projektskizze erstellten Grobplanung bestimmt. Für die bevorstehenden Iterationen wird die Grobplanung jeweils detailliert ausgearbeitet. Nachfolgend der Iterationsplan Stand M2:
@@ -484,7 +503,7 @@
             % 2 & 04-03-20 & 25-03-20 & M2 & Weitere Technologie-Recherchen vornehmen. PoC Spiel spielen. Systemarchitektur definieren. Domänenmodell erstellen. Entwicklungsumgebung aufsetzen. Github Workflow und Continuous Integration einrichten. & 80 & 74
 
             % 3 & 25-03-20 & 08-04-20 & M2 & Implementation Systemarchitektur. Frontend Spiel spielen. Frontend Webseite Grundstruktur. Datenbank Setup und Anbindung. Gameserver Spiel spielen modularisiert und stabilisiert. & 120 & 159 \\
-            
+
             % Construction &&&&&& \\
 
             % 4 & 08-04-20 & 22-04-20 & M3 & Implementation Spielregeln, Anwendungsfälle Spiel generieren, Spiel auswählen. & 100 & \\
