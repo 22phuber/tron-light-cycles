@@ -339,7 +339,7 @@ wird zum Login-Screen weitergeleitet.
     \subsection{Zuverlässigkeit}
 	Wir können mit Sicherheit sagen, dass unsere Applikation nicht sonderlich anfällig für Ausfälle ist. Da das Spiel nur eine geringe Leistung beansprucht, verringert das die Fehlerquellen enorm. Die Applikation ist auch Clientabhängig. Das bedeutet, falls ein Spieler Verbindungsprobleme hat oder andere Schwierigkeiten, dann kann er verlieren. Die Lobby liegt auf dem Server, somit ist gewährleistet, dass falls der Spieler, welche die Lobby erstellt hat, Verbindungsprobleme hat, das Spiel weiterhin normal abläuft. Dies ist ebenso ein wichtiger Aspekt für uns, damit das Spiel reibungslos ohne Unterbrüche ablaufen kann.
     \subsection{Effizienz}
-	Da wie bereits erwähnt das Spiel nur eine geringe Leistung beansprucht, ist die Effizienz gut und zuverlässig. Hier spielt leider auch wieder der Client eine Rolle. Da der Server und der Client in Verbindung stehen und der Client Verbindungsprobleme oder sonstige Verzögerungen hat, kommt es schnell zu kurzen Unterbrechungen für den Spieler. Dies ist kaum zu vermeiden. 
+	Da wie bereits erwähnt das Spiel nur eine geringe Leistung beansprucht, ist die Effizienz gut und zuverlässig. Hier spielt leider auch wieder der Client eine Rolle. Da der Server und der Client in Verbindung stehen und der Client Verbindungsprobleme oder sonstige Verzögerungen hat, kommt es schnell zu kurzen Unterbrechungen für den Spieler. Dies ist kaum zu vermeiden.
     \subsection{Änderbarkeit (Wartbarkeit)}
 	Die Applikation ist nur über den Browser erreichbar, dies macht die Wartbarkeit um einiges einfacher. Die diversen Browser müssen natürlich getestet werden und kompatibel sein. Die wichtigsten Browser sind Firefox, Google Chrome und Internet Explorer.  Das Testen neuerer Versionen der einzelnen Browser schliesst dies mit ein, um die Zuverlässigkeit weiterhin anbieten zu können.
     \subsection{Internationalisierung}
@@ -359,10 +359,10 @@ wird zum Login-Screen weitergeleitet.
 	\end{figure}
 	\subsection{Login und Gast-Account}
 		Der Spieler hat die Freiheit sich mit einem anonymen Gastkonto  oder mit einem registriertem Konto anzumelden. Der Spieler kann sich in der Applikation nicht mit beiden Kontoarten gleichzeitig identifizieren.
-		
+
 	\subsection{Spielemodi}
 		Ein Spielmodus beeinflusst das Spiel, zwei Spielmodi werden schon implementiert sein. Im Spielmodus sind Eigenschaften der Licht-Motorräder und die Grösse der Arena definiert, so auch Spielablauf.
-    
+
 
     \section{Softwarearchitektur}
         Das System wurde in vier Hauptkomponenten aufgeteilt. Dies erlaubt eine zielgerichtete Auswahl der verwendeten Programmiersprachen und Nutzung von Frameworks. Die Hauptkomponenten - jeweils dem Frontend oder Backend zugeordnet - sind:
@@ -383,7 +383,7 @@ wird zum Login-Screen weitergeleitet.
 
         \subsection{Website}
         Die Website wird in Javascript mit React realisiert. So kann diese als eine moderne \Gls{SPA} erstellt werden. Eine \Gls{SPA} trägt durch ihr dynamisches Laden von Inhalten massgeblich zu einer freundlichen Benutzer-System-Interaktion bei. Dies wäre beispielsweise mit einer Implementation mit \Gls{JSP} nicht möglich. Des weiteren kann mit React das Rendering des Spiels auf relativ einfache Weise in einer React-Komponente vorgenommen werden.
-        
+
         \subsection{Spiel}
         Das Spiel wird mit Hilfe von \Gls{HTML5 Canvas} auf der Website gerendert.
 
@@ -396,7 +396,7 @@ wird zum Login-Screen weitergeleitet.
         Im nächsten Abschnitt wird das Zusammenspiel der oben beschriebenen Komponenten erläutert.
 
         \subsection{Kommunikation zwischen den Hauptkomponenten}
-        Die Client-Server-Kommunikation erfolgt über eine REST-Schnittstelle. Wird ein Spiel gespielt, so wird eine TCP-Verbindung mit Hilfe des \Gls{Websocket}-Standarts zwischen Client und Server etabliert. Die Kommunikation erfolgt über einen \Gls{Reverse-Proxi} (Nginx). Dieser leitet eine vom Client eintreffend Nachricht an den passenden internen Server (MySQL-Datenbank, Netty-Webserver) weiter. Er wird ausserdem das SSL-Offloading betreiben. Um die Datenbank und den Proxi effizient betreiben zu können, wird Docker verwendet. Die Benutzer-Authentifikation geht über ein Express-\Gls{Webserver}.\\
+        Die Client-Server-Kommunikation erfolgt über eine REST-Schnittstelle. Wird ein Spiel gespielt, so wird eine TCP-Verbindung mit Hilfe des \Gls{Websocket}-Standarts zwischen Client und Server etabliert. Die Kommunikation erfolgt über einen \Gls{Reverse-Proxy} (Nginx). Dieser leitet eine vom Client eintreffend Nachricht an den passenden internen Server (MySQL-Datenbank, Netty-Webserver) weiter. Er wird ausserdem das SSL-Offloading betreiben. Um die Datenbank und den Proxi effizient betreiben zu können, wird Docker verwendet. Die Benutzer-Authentifikation geht über ein Express-\Gls{Webserver}.\\
 
         Nachfolgend eine Darstellung der Architektur des Gesamtsystems:
         \begin{figure}[H]
@@ -459,7 +459,7 @@ wird zum Login-Screen weitergeleitet.
         \caption{Iterationsplan}
         \begin{tabularx}{\textwidth}{X}
             \toprule
-            
+
             \bottomrule
         \end{tabularx}
         \label{tab:Iterationsplan}
@@ -472,7 +472,7 @@ wird zum Login-Screen weitergeleitet.
         \caption{Iterations-Assessment}
         \begin{tabularx}{\textwidth}{X}
             \toprule
-            
+
             \bottomrule
         \end{tabularx}
         \label{tab:Iterations-Assessment: Iteration 1}
