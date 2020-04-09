@@ -12,7 +12,7 @@
 
 ## Java Gameserver
 
-* Use Intellij for java development. Open project folder: `app`
+* Use Intellij for java development. Open project folder: `gameserver`
 
 1. Start `GameServer.main()` in Intellij
 2. Goto `http://localhost:9000` to connect to the Gameserver
@@ -36,3 +36,5 @@ Start the react frontend prior to these steps.
 3. run `docker-compose build`
 4. run `docker-compose up`
 5. Open `http://localhost/` in your browser
+
+

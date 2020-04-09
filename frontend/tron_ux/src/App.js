@@ -14,6 +14,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import Login from "./components/login/login";
 import Register from "./components/register/register";
 
+
 const styles = theme => ({
   "@global": {
     body: {
@@ -30,7 +31,7 @@ const styles = theme => ({
     input: {
       color: "white"
     }
-  
+
   }
   });
 
@@ -52,12 +53,12 @@ const App = () => {
 export default withStyles(styles)(App);
  /*function App() {
   return (
-    
+
     <div className="App">
       <initial />
       <header className="App-header">
         <p>
-          
+
           Edit <code>src/App.js</code> and save to reload.
         </p>
         <a
@@ -70,6 +71,9 @@ export default withStyles(styles)(App);
           Learn Frodo hallo
         </a>
       </header>
+      <div>
+        <GameAnimation />
+      </div>
     </div>
   );
 }*/
