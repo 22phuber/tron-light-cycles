@@ -5,7 +5,6 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import AccountCircle from "@material-ui/icons/AccountCircle";
@@ -36,25 +35,25 @@ function TronAppBar(props) {
     setAnchorEl(null);
   };
 
+  const handleLogin = () => {
+    setAuth(true);
+  };
+
+  const handleLogout = () => {
+    setAuth(false);
+  };
+
   return (
     <div className={classes.root}>
       <AppBar color="inherit" position="static">
         <Toolbar>
-          {/* <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="menu"
-          >
-            <MenuIcon />
-          </IconButton> */}
           <Typography variant="h5" className={classes.title}>
             Tron light cycle game
           </Typography>
           {!auth ? (
             <div>
               <Button color="inherit">Register</Button>
-              <Button color="inherit">Login</Button>
+              <Button color="inherit" onClick={handleLogin}>Login</Button>
             </div>
           ) : (
             <div>
@@ -83,7 +82,7 @@ function TronAppBar(props) {
                 onClose={handleClose}
               >
                 <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>Logout</MenuItem>
+                <MenuItem onClick={handleLogout}>Logout</MenuItem>
               </Menu>
             </div>
           )}
