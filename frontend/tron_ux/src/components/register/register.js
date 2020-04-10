@@ -10,8 +10,8 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 class Register extends Component {
   render() {
     return (
-      <Dialog 
-        open 
+      <Dialog
+        open
         onRequestClose={this.props.toggleRegister}
         fullScreen={this.props.fullScreen}>
         <DialogTitle>Registration</DialogTitle>

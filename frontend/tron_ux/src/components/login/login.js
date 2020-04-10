@@ -10,8 +10,8 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 class Login extends Component {
   render() {
     return (
-      <Dialog 
-        open 
+      <Dialog
+        open
         onRequestClose={this.props.toggleLogin}
         fullScreen={this.props.fullScreen}>
         <DialogTitle>Login</DialogTitle>
