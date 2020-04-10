@@ -5,6 +5,12 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-image: url('https://cdn.prod.www.spiegel.de/images/a4960e7b-0001-0004-0000-000000172729_w1528_r1.7794253938832252_fpx29.17_fpy49.96.jpg');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  background-attachment: fixed;
+  height: 100%;
 }
 
 code {

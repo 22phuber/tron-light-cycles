@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 //import logo from './logo.svg';
-import './App.css';
+import "./App.css";
 import { Grid } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import Initial from "./components/initial/initial";
@@ -14,43 +14,34 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import Login from "./components/login/login";
 import Register from "./components/register/register";
 
+import { ThemeProvider } from "@material-ui/styles";
+import { CssBaseline, Typography, createMuiTheme } from "@material-ui/core";
+import Container from "@material-ui/core/Container";
+import Box from "@material-ui/core/Box";
+import TronAppBar from "./components/appBar/appBar.component";
+import GameTable from "./components/table/table.component";
 
-const styles = theme => ({
-  "@global": {
-    body: {
-      backgroundImage: "url('https://cdn.prod.www.spiegel.de/images/a4960e7b-0001-0004-0000-000000172729_w1528_r1.7794253938832252_fpx29.17_fpy49.96.jpg')",
-      backgroundRepeat: "no-repeat",
-      backgroundPosition: "center center",
-      backgroundSize: "cover",
-      backgroundAttachment: "fixed",
-      height: "100%"
-    },
-    root: {
-      background: "black"
-    },
-    input: {
-      color: "white"
-    }
-
-  }
-  });
+const theme = createMuiTheme({
+  palette: {
+    type: "dark",
+  },
+});
 
 const App = () => {
   return (
-   //<div style={styles.paperContainer}>
-    <Grid container direction="column">
-      <Grid item>
-        <Initial/>
-      </Grid>
-      <Grid item container>
-        <Grid item>
-        </Grid>
-      </Grid>
-    </Grid>
-    //</div>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <TronAppBar />
+      <Container maxWidth="lg">
+        <Box my={4}>
+          <Typography variant="h2" component="h1" gutterBottom>
+            Public games
+          </Typography>
+          <GameTable />
+        </Box>
+      </Container>
+    </ThemeProvider>
   );
 };
 
-export default withStyles(styles)(App);
-
-
+export default App;
