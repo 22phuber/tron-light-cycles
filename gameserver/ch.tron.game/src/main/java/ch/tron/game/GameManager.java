@@ -47,7 +47,7 @@ public class GameManager {
      * @param msg   Message of type {@link InAppMessage}.
      */
     public static void handleInAppIncomingMessage(InAppMessage msg) {
-
+        
         if (msg instanceof NewPlayerMessage) {
 
             String groupId = ((NewPlayerMessage) msg).getGroupId();
