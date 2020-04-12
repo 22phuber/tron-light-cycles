@@ -1,5 +1,7 @@
 package ch.tron.middleman.messagehandler;
 
+import ch.tron.middleman.ToGameMessageService;
+import ch.tron.middleman.ToTransportMessageService;
 import ch.tron.middleman.messagedto.InAppMessage;
 
 import java.lang.reflect.InvocationTargetException;
@@ -14,12 +16,10 @@ public class ToTransportMessageForwarder implements InAppMessageForwarder {
 
     @Override
     public void forwardMessage(InAppMessage msg) {
-        try {
-            Class<?> TransportManager = Class.forName("ch.tron.transport.TransportManager");
-            Method handleMessage = TransportManager.getDeclaredMethod("handleInAppIncomingMessage", InAppMessage.class);
-            handleMessage.invoke(null, msg);
-        } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            e.getCause();
+        for (ToTransportMessageService ms : java.util.ServiceLoader.load(ToTransportMessageService.class)) {
+            ms.handle(msg);
+            break;
         }
     }
+
 }

@@ -18,5 +18,5 @@ module ch.tron.transport {
 
     exports ch.tron.transport;
 
-    opens ch.tron.transport to ch.tron.middleman;
+    provides ch.tron.middleman.ToTransportMessageService with ch.tron.transport.ToTransportMessageServiceImpl;
 }
