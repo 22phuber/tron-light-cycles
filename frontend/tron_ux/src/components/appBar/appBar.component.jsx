@@ -7,7 +7,6 @@ import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import MenuItem from "@material-ui/core/MenuItem";
 import MenuList from "@material-ui/core/MenuList";
-import Menu from "@material-ui/core/Menu";
 import Paper from "@material-ui/core/Paper";
 import Popper from "@material-ui/core/Popper";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
@@ -34,10 +33,6 @@ function TronAppBar() {
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);
   const [openLoginDialog, setOpenLoginDialog] = React.useState(false);
-
-  //   const handleMenu = (event) => {
-  //     setAnchorEl(event.currentTarget);
-  //   };
 
   const handleClose = (event) => {
     if (anchorRef.current && anchorRef.current.contains(event.target)) {
@@ -110,7 +105,6 @@ function TronAppBar() {
             <div>
               <IconButton
                 aria-label="account of current user"
-                aria-controls="menu-appbar"
                 ref={anchorRef}
                 aria-haspopup="true"
                 aria-controls={open ? "menu-list-grow" : undefined}
@@ -149,24 +143,6 @@ function TronAppBar() {
                   </Grow>
                 )}
               </Popper>
-              {/* <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                open={open}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={handleProfile}>Profile</MenuItem>
-                <MenuItem onClick={handleLogout}>Logout</MenuItem>
-              </Menu> */}
             </div>
           )}
         </Toolbar>
