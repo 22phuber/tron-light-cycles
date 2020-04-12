@@ -21,7 +21,7 @@ const StyledTableCell = withStyles((theme) => ({
   },
 }))(TableCell);
 
-const StyledTableRow = withStyles((theme) => ({
+const StyledTableRow = withStyles(() => ({
   root: {
     "&:nth-of-type(odd)": {
       backgroundColor: "rgba(0,0,0,0.1)",
@@ -53,45 +53,45 @@ const rows = [
     "c-47Bs_zTEOZ7-U7TigC7g"
   ),
   createData(
-    "ZHAW Curvaceous Hips",
-    "Tron classic",
-    "6/10",
-    "ywHt7nTLXUWZd4qD-CNkrg"
+    "BoldBrainsOMG",
+    "Battle Royale",
+    "99/100",
+    "T6FVRKkSH0e-lDdL7FtH_w"
   ),
+  // createData(
+  //   "ZHAW Curvaceous Hips",
+  //   "Tron classic",
+  //   "6/10",
+  //   "ywHt7nTLXUWZd4qD-CNkrg"
+  // ),
   createData("ZHAW Irish", "Tron classic", "6/8", "tlyoDxNV1EucmSlcfM-9yA"),
-  createData(
-    "Uber Bold Maggot",
-    "Tron classic",
-    "2/4",
-    "ngxTuENWsECwEwRNWuUruw"
-  ),
+  // createData(
+  //   "Uber Bold Maggot",
+  //   "Tron classic",
+  //   "2/4",
+  //   "ngxTuENWsECwEwRNWuUruw"
+  // ),
   createData(
     "Disguised Maggot",
     "Battle Royal",
     "66/75",
     "h5diOYzwdESSmWE6yubojQ"
   ),
-  createData(
-    "BoldBrainsOMG",
-    "Battle Royale",
-    "99/150",
-    "T6FVRKkSH0e-lDdL7FtH_w"
-  ),
-  createData(
-    "CurvaceousBrainsLOL",
-    "Tron classic",
-    "3/12",
-    "XIARcUYdCkaorW8LJFR1xQ"
-  ),
-  createData("FatBrainsOMG", "Tron classic", "4/9", "wMUkfAvp2EG5kStnhP5WzQ"),
-  createData(
-    "BoldHipsLOL",
-    "Battle Royale",
-    "143/200",
-    "yA0_e1togUqqKMZb6TxYZQ"
-  ),
-  createData("FatLipsLMAO", "Battle Royale", "29/30", "4Hl8BgwukUmzyy85Mo97NA"),
-  createData("Iamcurvaceous", "Tron classic", "5/5", "_Eyv9vxwG0uIVK-Nc-HuiQ"),
+  //   createData(
+  //     "CurvaceousBrainsLOL",
+  //     "Tron classic",
+  //     "3/12",
+  //     "XIARcUYdCkaorW8LJFR1xQ"
+  //   ),
+  //   createData("FatBrainsOMG", "Tron classic", "4/9", "wMUkfAvp2EG5kStnhP5WzQ"),
+  //   createData(
+  //     "BoldHipsLOL",
+  //     "Battle Royale",
+  //     "143/200",
+  //     "yA0_e1togUqqKMZb6TxYZQ"
+  //   ),
+  //   createData("FatLipsLMAO", "Battle Royale", "29/30", "4Hl8BgwukUmzyy85Mo97NA"),
+  //   createData("Iamcurvaceous", "Tron classic", "5/5", "_Eyv9vxwG0uIVK-Nc-HuiQ"),
 ];
 
 export default function SimpleTable() {
@@ -107,7 +107,7 @@ export default function SimpleTable() {
   );
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} className={classes.tableContainer}>
       <Table
         className={classes.table}
         size="small"
