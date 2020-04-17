@@ -12,7 +12,7 @@ import Box from "@material-ui/core/Box";
 import TronAppBar from "./components/appBar/appBar.component";
 import GameTable from "./components/table/table.component";
 import CreateGame from "./components/createGame/createGame.component";
-
+import Footer from "./components/footer/footer.component";
 
 const theme = createMuiTheme({
   palette: {
@@ -35,7 +35,9 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <TronAppBar />
+      <header>
+        <TronAppBar />
+      </header>
       <section>
         <Container maxWidth="lg">
           <Box my={4} className={classes.box}>
@@ -68,6 +70,7 @@ const App = () => {
           </Box>
         </Container>
       </section>
+      <Footer />
     </ThemeProvider>
   );
 };

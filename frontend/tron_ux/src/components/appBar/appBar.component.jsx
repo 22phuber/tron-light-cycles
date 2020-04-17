@@ -6,11 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import MenuItem from "@material-ui/core/MenuItem";
-import MenuList from "@material-ui/core/MenuList";
-import Paper from "@material-ui/core/Paper";
-import Popper from "@material-ui/core/Popper";
-import ClickAwayListener from "@material-ui/core/ClickAwayListener";
-import Grow from "@material-ui/core/Grow";
+import Menu from "@material-ui/core/Menu";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 
 import LoginDialog from "../loginDialog/loginDialog";
@@ -30,16 +26,12 @@ const useStyles = makeStyles((theme) => ({
 function TronAppBar() {
   const classes = useStyles();
   const [auth, setAuth] = React.useState(false);
-  const [open, setOpen] = React.useState(false);
-  const anchorRef = React.useRef(null);
   const [openLoginDialog, setOpenLoginDialog] = React.useState(false);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const menuOpen = Boolean(anchorEl);
 
-  const handleClose = (event) => {
-    if (anchorRef.current && anchorRef.current.contains(event.target)) {
-      return;
-    }
-
-    setOpen(false);
+  const handleClose = () => {
+    setAnchorEl(null);
   };
 
   const showLoginDialog = () => {
@@ -56,31 +48,16 @@ function TronAppBar() {
 
   const handleLogout = () => {
     setAuth(false);
+    setAnchorEl(null);
   };
 
   const handleMyAccount = () => {
     alert("'My Account' clicked");
   };
 
-  const handleToggle = () => {
-    setOpen((prevOpen) => !prevOpen);
+  const handleToggle = (event) => {
+    setAnchorEl(event.currentTarget);
   };
-
-  function handleListKeyDown(event) {
-    if (event.key === "Tab") {
-      event.preventDefault();
-      setOpen(false);
-    }
-  }
-
-  // return focus to the button when we transitioned from !open -> open
-  const prevOpen = React.useRef(open);
-  React.useEffect(() => {
-    if (prevOpen.current === true && open === false) {
-      anchorRef.current.focus();
-    }
-    prevOpen.current = open;
-  }, [open]);
 
   return (
     <div className={classes.root}>
@@ -91,7 +68,7 @@ function TronAppBar() {
       />
       <AppBar color="inherit" position="static">
         <Toolbar>
-          <Typography variant="h5" className={classes.title}>
+          <Typography variant="h6" className={classes.title}>
             Tron light cycle game
           </Typography>
           {!auth ? (
@@ -105,44 +82,31 @@ function TronAppBar() {
             <div>
               <IconButton
                 aria-label="account of current user"
-                ref={anchorRef}
+                aria-controls="menu-appbar"
                 aria-haspopup="true"
-                aria-controls={open ? "menu-list-grow" : undefined}
                 onClick={handleToggle}
                 color="inherit"
               >
                 <AccountCircle />
               </IconButton>
-              <Popper
-                open={open}
-                anchorEl={anchorRef.current}
-                role={undefined}
-                transition
-                disablePortal
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={menuOpen}
+                onClose={handleClose}
               >
-                {({ TransitionProps, placement }) => (
-                  <Grow
-                    {...TransitionProps}
-                    style={{
-                      transformOrigin:
-                        placement === "bottom" ? "center top" : "center bottom",
-                    }}
-                  >
-                    <Paper>
-                      <ClickAwayListener onClickAway={handleClose}>
-                        <MenuList
-                          autoFocusItem={open}
-                          id="menu-list-grow"
-                          onKeyDown={handleListKeyDown}
-                        >
-                          <MenuItem onClick={handleMyAccount}>My account</MenuItem>
-                          <MenuItem onClick={handleLogout}>Logout</MenuItem>
-                        </MenuList>
-                      </ClickAwayListener>
-                    </Paper>
-                  </Grow>
-                )}
-              </Popper>
+                <MenuItem onClick={handleMyAccount}>My Account</MenuItem>
+                <MenuItem onClick={handleLogout}>Logout</MenuItem>
+              </Menu>
             </div>
           )}
         </Toolbar>
