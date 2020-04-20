@@ -19,6 +19,9 @@ const useStyles = makeStyles((theme) => ({
       margin: theme.spacing(0),
     },
   },
+  form: {
+    width: '100%'
+  }
 }));
 
 const CreateGame = () => {
@@ -26,7 +29,7 @@ const CreateGame = () => {
   const [values, setValues] = React.useState({
     visibility: "public",
     mode: "classic",
-    maxPlayers: "10",
+    maxPlayerLimit: "10",
   });
 
   const handleChange = (prop) => (event) => {
@@ -34,10 +37,10 @@ const CreateGame = () => {
     if (prop === "mode") {
       switch (targetValue) {
         case "battleroyal":
-          setValues({ ...values, maxPlayers: 100, [prop]: targetValue });
+          setValues({ ...values, maxPlayerLimit: 100, [prop]: targetValue });
           break;
         case "classic":
-          setValues({ ...values, maxPlayers: 10, [prop]: targetValue });
+          setValues({ ...values, maxPlayerLimit: 10, [prop]: targetValue });
           break;
         default:
           setValues({ ...values, [prop]: targetValue });
@@ -48,90 +51,100 @@ const CreateGame = () => {
     }
   };
 
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    // form data
+    for (const [key, value] of new FormData(event.target).entries()) {
+      console.log("[" + key + "]" + value);
+    }
+  };
+
   return (
     <div className={classes.root}>
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <TextField
-            required
-            id="gameName"
-            name="gameName"
-            label="Game name"
-            fullWidth
-            autoComplete="gname"
-            variant="outlined"
-          />
+      <form onSubmit={handleSubmit} className={classes.form}>
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <TextField
+              required
+              id="gamename"
+              name="gamename"
+              label="Game name"
+              fullWidth
+              autoComplete="gamename"
+              variant="outlined"
+            />
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <FormControl component="fieldset">
+              <FormLabel component="legend">Visibility</FormLabel>
+              <RadioGroup
+                aria-label="visibility"
+                name="visibility"
+                value={values.visibility}
+                onChange={handleChange("visibility")}
+              >
+                <FormControlLabel
+                  value="public"
+                  control={<Radio />}
+                  label="public"
+                />
+                <FormControlLabel
+                  value="private"
+                  control={<Radio />}
+                  label="private"
+                />
+              </RadioGroup>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <FormControl component="fieldset">
+              <FormLabel component="legend">Game mode</FormLabel>
+              <RadioGroup
+                aria-label="mode"
+                name="mode"
+                value={values.mode}
+                onChange={handleChange("mode")}
+              >
+                <FormControlLabel
+                  value="classic"
+                  control={<Radio />}
+                  label="Tron classic"
+                />
+                <FormControlLabel
+                  value="battleroyal"
+                  control={<Radio />}
+                  label="Battle Royal"
+                />
+              </RadioGroup>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <TextField
+              required
+              id="maxplayers"
+              name="maxplayers"
+              label="Max. Players"
+              fullWidth
+              autoComplete="maxplayers"
+              variant="outlined"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    /{values.maxPlayerLimit}
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Grid>
         </Grid>
-        <Grid item xs={12} sm={4}>
-          <FormControl component="fieldset">
-            <FormLabel component="legend">Visibility</FormLabel>
-            <RadioGroup
-              aria-label="visibility"
-              name="visibility"
-              value={values.visibility}
-              onChange={handleChange("visibility")}
-            >
-              <FormControlLabel
-                value="public"
-                control={<Radio />}
-                label="public"
-              />
-              <FormControlLabel
-                value="private"
-                control={<Radio />}
-                label="private"
-              />
-            </RadioGroup>
-          </FormControl>
+        <Grid container spacing={3} justify="center">
+          <Grid item xs={6}>
+            <Button variant="contained" color="primary" type="submit" fullWidth>
+              Create
+            </Button>
+          </Grid>
         </Grid>
-        <Grid item xs={12} sm={4}>
-          <FormControl component="fieldset">
-            <FormLabel component="legend">Game mode</FormLabel>
-            <RadioGroup
-              aria-label="mode"
-              name="mode"
-              value={values.mode}
-              onChange={handleChange("mode")}
-            >
-              <FormControlLabel
-                value="classic"
-                control={<Radio />}
-                label="Tron classic"
-              />
-              <FormControlLabel
-                value="battleroyal"
-                control={<Radio />}
-                label="Battle Royal"
-              />
-            </RadioGroup>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <TextField
-            required
-            id="maxPlayers"
-            name="Max. Players"
-            label="Max. Players"
-            fullWidth
-            autoComplete="maxPlayers"
-            variant="outlined"
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  /{values.maxPlayers}
-                </InputAdornment>
-              ),
-            }}
-          />
-        </Grid>
-      </Grid>
-      <Grid container spacing={3} justify="center">
-        <Grid item xs={6}>
-          <Button variant="contained" color="primary" fullWidth>
-            Create
-          </Button>
-        </Grid>
-      </Grid>
+      </form>
     </div>
   );
 };

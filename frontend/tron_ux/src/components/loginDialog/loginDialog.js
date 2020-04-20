@@ -11,10 +11,13 @@ const LoginDialog = (props) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(event.target);
+    // form data
+    for (const [key, value] of new FormData(event.target).entries()) {
+      console.log("[" + key + "]" + value);
+    }
     props.handleAuth();
     props.handleClose();
-  }
+  };
 
   return (
     <div>
@@ -24,7 +27,7 @@ const LoginDialog = (props) => {
         aria-labelledby="form-dialog-title"
       >
         <DialogTitle id="form-dialog-title">Login</DialogTitle>
-        <form onSubmit={handleSubmit} method="POST">
+        <form onSubmit={handleSubmit}>
           <DialogContent>
             <DialogContentText>
               Please enter your username and password here to login.
@@ -33,18 +36,22 @@ const LoginDialog = (props) => {
               autoFocus
               margin="dense"
               id="username"
+              name="username"
               label="Username"
               type="text"
               autoComplete="username"
               fullWidth
+              required
             />
             <TextField
               margin="dense"
               id="password"
+              name="password"
               label="Password"
               type="password"
               autoComplete="current-password"
               fullWidth
+              required
             />
           </DialogContent>
           <DialogActions>

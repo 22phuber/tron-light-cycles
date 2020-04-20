@@ -92,16 +92,18 @@ const GameTable = (props) => {
                 </StyledTableCell>
               </StyledTableRow>
             ))) || (
-            <StyledTableCell colSpan={4} align="center">
-              <div>
-                Loading current public games ...
-                <br />
-                <CircularProgress
-                  color="inherit"
-                  className={classes.circularProgress}
-                />
-              </div>
-            </StyledTableCell>
+            <StyledTableRow hover>
+              <StyledTableCell colSpan={4} align="center">
+                <div>
+                  Loading current public games ...
+                  <br />
+                  <CircularProgress
+                    color="inherit"
+                    className={classes.circularProgress}
+                  />
+                </div>
+              </StyledTableCell>
+            </StyledTableRow>
           )}
         </TableBody>
       </Table>
