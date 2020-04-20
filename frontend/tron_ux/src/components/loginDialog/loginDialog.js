@@ -11,6 +11,7 @@ const LoginDialog = (props) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    console.log(event.target);
     props.handleAuth();
     props.handleClose();
   }
