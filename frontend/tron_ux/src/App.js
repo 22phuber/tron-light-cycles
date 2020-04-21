@@ -10,6 +10,7 @@ import {
   Container,
   CircularProgress,
   Button,
+  Grid,
 } from "@material-ui/core";
 
 import TronAppBar from "./components/appBar/appBar.component";
@@ -236,6 +237,7 @@ const App = () => {
           </section>
         </React.Fragment>
       ) : (
+        
         <section>
           {wsplayerdata && !wserror ? (
             <GameCanvas
@@ -256,28 +258,28 @@ const App = () => {
         </section>
       )}
       {!lobbyMode? (
-        <React.Fragment>
-        <section>
-          <Container maxWidth="lg">
-            <Box my={4} className={classes.box}>
-              <Typography
-                variant="h2"
-                component="h2"
-                gutterBottom
-                className={classes.typography}
-              >
-                Lobby
-              </Typography>
-              <LobbyTable lobbyPlayers={lobbyPlayers} />
+          <React.Fragment>
+          <section>
+            <Container maxWidth="lg">
+              <Box my={4} className={classes.box}>
+                <Typography
+                  variant="h2"
+                  component="h2"
+                  gutterBottom
+                  className={classes.typography}
+                >
+                  Lobby
+                </Typography>
+                <Paper>
+                 
+                <LobbyTable lobbyPlayers={lobbyPlayers} />
               
-              <Button variant="contained" color="primary" type="submit" >
-              Start
-            </Button>
-            </Box>
-          </Container>
-        </section>
-        </React.Fragment>
-      ) :({})}
+              </Paper>
+              </Box>
+            </Container>
+          </section>
+          </React.Fragment>
+        ) :({})}
       <Footer />
     </ThemeProvider>
   );

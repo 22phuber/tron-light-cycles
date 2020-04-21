@@ -11,6 +11,16 @@ import IconButton from "@material-ui/core/IconButton";
 import DirectionsBikeRoundedIcon from "@material-ui/icons/DirectionsBikeRounded";
 import Tooltip from "@material-ui/core/Tooltip";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Grid from "@material-ui/core/Grid";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormControl from "@material-ui/core/FormControl";
+import FormLabel from "@material-ui/core/FormLabel";
+import Button from "@material-ui/core/Button";
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import Switch from '@material-ui/core/Switch';
+import Select from '@material-ui/core/Select';
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -43,6 +53,14 @@ const useStyles = makeStyles({
   circularProgress: {
     margin: "25px",
   },
+  root: {
+    display: "flex",
+    flexWrap: "wrap",
+    padding: "16px",
+  },
+  form: {
+    width: '100%'
+  }
 });
 
 const LobbyTable = (props) => {
@@ -57,45 +75,107 @@ const LobbyTable = (props) => {
       <StyledTableCell align="right">READY</StyledTableCell>
     </TableRow>
   );
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    // form data
+    for (const [key, value] of new FormData(event.target).entries()) {
+      console.log("[" + key + "]" + value);
+    }
+  };
+  const [color, setColor] = React.useState('');
+
+  const handleChangeColor = (event) => {
+    setColor(event.target.value);
+  };
+
+
+    const [state, setState] = React.useState({
+      checkedA: true,
+      checkedB: true,
+    });
+  
+    const handleChangeReady = (event) => {
+      setState({ ...state, [event.target.name]: event.target.checked });
+    };
+
+
 
   return (
-    <TableContainer component={Paper} className={classes.tableContainer}>
-      <Table
-        className={classes.table}
-        size="small"
-        aria-label="lobby player list table"
-      >
-        <TableHead>{headerCells}</TableHead>
-        <TableBody>
-          {(lobbyPlayers &&
-            lobbyPlayers.map((players) => (
-              <StyledTableRow key={players.name + "_" + players.id} hover>
-                <StyledTableCell component="th" scope="row">
-                  {players.name}
-                </StyledTableCell>
-                <StyledTableCell align="right">{players.color}</StyledTableCell>
-                <StyledTableCell align="right">{players.name}</StyledTableCell>
-                <StyledTableCell align="right">
-
-                </StyledTableCell>
-              </StyledTableRow>
-            ))) || (
-            <StyledTableRow hover>
-              <StyledTableCell colSpan={4} align="center">
-                <div>
-                  Loading players ...
-                  <br />
-                  <CircularProgress
-                    color="inherit"
-                    className={classes.circularProgress}
-                  />
-                </div>
-              </StyledTableCell>
-            </StyledTableRow>
-          )}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <div className={classes.root}>
+      <form onSubmit={handleSubmit} className={classes.form}>
+        <Grid container spacing={1} direction={"column"}>
+          <Grid item >Lobbyname: Test</Grid>
+          <Grid item >Visibility: private</Grid>
+          <Grid item >Game mode: Tron classic</Grid>
+          <Grid item >Max. Players: 10</Grid>
+          <Grid item>
+            <TableContainer component={Paper} className={classes.tableContainer}>
+              <Table
+                className={classes.table}
+                size="small"
+                aria-label="lobby player list table"
+              >
+                <TableHead>{headerCells}</TableHead>
+                <TableBody>
+                {(lobbyPlayers &&
+                    lobbyPlayers.map((players) => (
+                      <StyledTableRow key={players.name + "_" + players.id} hover>
+                        <StyledTableCell component="th" scope="row">
+                          {players.name}
+                        </StyledTableCell>
+                        <StyledTableCell align="right">
+                          <FormControl className={classes.formControl}>
+                            <Select
+                              value={color}
+                              onChange={handleChangeColor}
+                              displayEmpty
+                              className={classes.selectEmpty}
+                            >
+                              <MenuItem value="">
+                                <em>None</em>
+                              </MenuItem>
+                              <MenuItem value={10}>Red</MenuItem>
+                              <MenuItem value={20}>Green </MenuItem>
+                              <MenuItem value={30}>Blue</MenuItem>
+                            </Select>
+                          </FormControl>
+                        </StyledTableCell>
+                        <StyledTableCell align="right">
+                          <Switch
+                            checked={state.checkedB}
+                            onChange={handleChangeReady}
+                            color="primary"
+                            name="checkedB"
+                            inputProps={{ 'aria-label': 'ready' }}
+                          />
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    ))) || (
+                      <StyledTableRow hover>
+                        <StyledTableCell colSpan={4} align="center">
+                          <div>
+                            Loading players ...
+                            <br />
+                            <CircularProgress
+                              color="inherit"
+                              className={classes.circularProgress}
+                            />
+                          </div>
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Grid>
+          <Grid item>
+            <Button variant="contained" color="primary" type="submit" spacing={1} >
+              Start
+            </Button>
+          </Grid>
+        </Grid>
+      </form>
+    </div>
   );
 };
 
