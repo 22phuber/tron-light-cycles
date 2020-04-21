@@ -68,11 +68,8 @@ const LobbyTable = (props) => {
 
   const { lobbyPlayers, myPlayerId } = props;
 
-  const [myPlayerColor, setMyPlayerColor] = React.useState(null);
-  const [readyState, setReadyStateState] = React.useState({
-    checkedA: true,
-    checkedB: true,
-  });
+  const [myPlayerColor, setMyPlayerColor] = React.useState("Black");
+  let [readyStates, setReadyStateStates] = React.useState({});
 
   const headerCells = (
     <TableRow>
@@ -95,18 +92,21 @@ const LobbyTable = (props) => {
         if (myPlayerId == player.id) {
           setMyPlayerColor(player.color);
         }
+        console.log("name" + player.name + " state" + player.readyState);
+        readyStates = { ...readyStates, [player.name]: player.readyState }
       });
     }
+    setReadyStateStates(readyStates);
+    console.log(readyStates);
   }, []);
-
 
   const handleChangeColor = (event) => {
     setMyPlayerColor(event.target.value);
   };
 
   const handleChangeReady = (event) => {
-    setReadyStateState({
-      ...readyState,
+    setReadyStateStates({
+      ...readyStates,
       [event.target.name]: event.target.checked,
     });
   };
@@ -114,7 +114,7 @@ const LobbyTable = (props) => {
   return (
     <div className={classes.root}>
       <form onSubmit={handleSubmit} className={classes.form}>
-        <Grid container spacing={1} direction={"column"}>
+        <Grid container spacing={1}>
           <Grid item>Lobbyname: Test</Grid>
           <Grid item>Visibility: private</Grid>
           <Grid item>Game mode: Tron classic</Grid>
@@ -144,7 +144,9 @@ const LobbyTable = (props) => {
                           >
                             <Select
                               value={
-                                myPlayerId != player.id ? player.color : myPlayerColor
+                                myPlayerId != player.id
+                                  ? player.color
+                                  : myPlayerColor
                               }
                               onChange={handleChangeColor}
                               displayEmpty
@@ -165,7 +167,7 @@ const LobbyTable = (props) => {
                         <StyledTableCell align="right">
                           <Switch
                             disabled={myPlayerId != player.id}
-                            checked={readyState.checkedB}
+                            checked={readyStates[player.name]}
                             onChange={handleChangeReady}
                             color="primary"
                             name="checkedB"
