@@ -25,12 +25,15 @@ public class Lobby implements Runnable{
     private int id;
     private String name;
     private int numberOfRounds = 5;
+    private Player host;
 
-    public Lobby(int id, Player host, String name) {
+    public Lobby(int id, String host, String name) {
         this.id = id;
         this.game = new Game("classic");
-        this.players.put(host.getId(),host);
+        addPlayer(host);
+        this.players.put(players.get(host).getId(),players.get(host));
         this.name = name;
+        this.host = players.get(host);
     }
 
     @Override
@@ -56,6 +59,7 @@ public class Lobby implements Runnable{
                 gameRound = new GameRound(id, (HashMap) players);
                 gameRound.start();
                 numberOfRounds--;
+                roundsPlayed++;
 
             }
 

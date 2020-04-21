@@ -2,6 +2,7 @@ package ch.tron.game;
 
 import ch.tron.game.config.CanvasConfig;
 import ch.tron.game.controller.Lobby;
+import ch.tron.game.model.Player;
 import ch.tron.middleman.messagedto.InAppMessage;
 import ch.tron.middleman.messagedto.gametotransport.GameConfigMessage;
 import ch.tron.middleman.messagedto.transporttogame.NewLobby;
@@ -12,7 +13,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Connects {@link ch.tron.game} to {@code ch.tron.middleman}.
@@ -24,13 +27,15 @@ public class GameManager {
 
     private static final ToTransportMessageForwarder MESSAGE_FORWARDER = new ToTransportMessageForwarder();
 
+    private Map<String, Player> players = new HashMap<>();
+
     // This is temporary
     // Instantiate a Default-Game
     // Instantiate a Default-GameController
     //private final static Game GAME;
     //private final static GameController DEFAULT_GAME_CONTROLLER;
 
-    private List<Lobby> lobbies = new ArrayList<>();
+    private static List<Lobby> lobbies = new ArrayList<>();
 
     public static ToTransportMessageForwarder getMessageForwarder() { return MESSAGE_FORWARDER; }
 
@@ -39,7 +44,7 @@ public class GameManager {
      *
      * @param msg   Message of type {@link InAppMessage}.
      */
-    public void handleInAppIncomingMessage(InAppMessage msg) {
+    public static void handleInAppIncomingMessage(InAppMessage msg) {
         
         if (msg instanceof NewPlayerMessage) {
 
@@ -59,6 +64,11 @@ public class GameManager {
         }
         // TODO: M3: Implement
         else if (msg instanceof NewLobby) {
+
+            String playerId = ((PlayerUpdateMessage) msg).getPlayerId();
+
+            lobbies.add(new Lobby(lobbies.size(), playerId, "TEST"));
+            new Thread(lobbies.get(lobbies.size()-1)).start();
 
         }
         else {
