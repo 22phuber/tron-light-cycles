@@ -34,11 +34,6 @@ public class GameRound {
 
     }
 
-    public void addPlayer(Player pl) {
-
-        players.put(pl.getId(), pl);
-    }
-
     public Map<String, Player> playersMap() {
         return players;
     }
