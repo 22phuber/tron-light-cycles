@@ -43,9 +43,47 @@ const useStyles = makeStyles({
 const directionKeys = ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"];
 let wsReconnectTimeout = 250;
 
+// fake it
+const lobbyPlayersArray = [
+  {
+    clientid: "c-47Bs2323d2xdcxwd23qdex23qd_zTEOZ7-U7TigC7g",
+    name: "Ready Player 1",
+    readyState: "true",
+    color: "blue",
+  },
+  {
+    clientid: "T6FVRKq32ed23d2dxwekSH0e-lDdL7FtH_w",
+    name: "IAMGROOT",
+    readyState: "false",
+    color: "gray",
+  },
+  {
+    clientid: "tlyoDxNs3232cxdaV1EucmSlcfM-9yA",
+    name: "Irish shizzle",
+    readyState: "true",
+    color: "green",
+  },
+  {
+    id: "h5diOYzwdEd23d23d23d23SSmWE6yubojQ",
+    name: "mike van dike",
+    readyState: "false",
+    color: "pink",
+  },
+  {
+    id: "1234567890",
+    name: "this is me!",
+    readyState: "ready",
+    color: "black",
+  },
+];
+
+const playerIdInitial = "1234567890";
+
 /* APP */
 const App = () => {
   const classes = useStyles();
+  //
+  const [playerId, setPlayerId] = useState(playerIdInitial);
 
   const [playMode, setPlayMode] = useState(false);
   const [lobbyMode, setLobbyMode] = useState(false);
@@ -60,14 +98,15 @@ const App = () => {
   // load games
   const [publicGames, setPublicGames] = useState(null);
   // load players
-  const [lobbyPlayers, setLobbyPlayers] = useState(null);
+  const [lobbyPlayers, setLobbyPlayers] = useState(lobbyPlayersArray);
 
   useEffect(() => {
     handleWebsocket();
     document.addEventListener("keydown", handleKeyPress, false);
     return () => {
       console.log("useEffect ws.close() called");
-      if (ws.current && ws.current.readyState === WebSocket.OPEN) ws.current.close();
+      if (ws.current && ws.current.readyState === WebSocket.OPEN)
+        ws.current.close();
       console.log("useEffect remove eventistener called");
       document.removeEventListener("keydown", handleKeyPress, false);
     };
@@ -237,7 +276,6 @@ const App = () => {
           </section>
         </React.Fragment>
       ) : (
-        
         <section>
           {wsplayerdata && !wserror ? (
             <GameCanvas
@@ -257,8 +295,8 @@ const App = () => {
           )}
         </section>
       )}
-      {!lobbyMode? (
-          <React.Fragment>
+      {!lobbyMode ? (
+        <React.Fragment>
           <section>
             <Container maxWidth="lg">
               <Box my={4} className={classes.box}>
@@ -271,15 +309,15 @@ const App = () => {
                   Lobby
                 </Typography>
                 <Paper>
-                 
-                <LobbyTable lobbyPlayers={lobbyPlayers} />
-              
-              </Paper>
+                  <LobbyTable lobbyPlayers={lobbyPlayers} myPlayerId={playerId} />
+                </Paper>
               </Box>
             </Container>
           </section>
-          </React.Fragment>
-        ) :({})}
+        </React.Fragment>
+      ) : (
+        {}
+      )}
       <Footer />
     </ThemeProvider>
   );

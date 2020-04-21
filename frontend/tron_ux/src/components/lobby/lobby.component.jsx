@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -16,11 +16,11 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
 import Button from "@material-ui/core/Button";
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import Switch from '@material-ui/core/Switch';
-import Select from '@material-ui/core/Select';
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import Switch from "@material-ui/core/Switch";
+import Select from "@material-ui/core/Select";
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -59,14 +59,20 @@ const useStyles = makeStyles({
     padding: "16px",
   },
   form: {
-    width: '100%'
-  }
+    width: "100%",
+  },
 });
 
 const LobbyTable = (props) => {
   const classes = useStyles();
 
-  const { lobbyPlayers } = props;
+  const { lobbyPlayers, myPlayerId } = props;
+
+  const [myPlayerColor, setMyPlayerColor] = React.useState(null);
+  const [readyState, setReadyStateState] = React.useState({
+    checkedA: true,
+    checkedB: true,
+  });
 
   const headerCells = (
     <TableRow>
@@ -82,34 +88,42 @@ const LobbyTable = (props) => {
       console.log("[" + key + "]" + value);
     }
   };
-  const [color, setColor] = React.useState('');
+
+  useEffect(() => {
+    if (lobbyPlayers) {
+      lobbyPlayers.map((player) => {
+        if (myPlayerId == player.id) {
+          setMyPlayerColor(player.color);
+        }
+      });
+    }
+  }, []);
+
 
   const handleChangeColor = (event) => {
-    setColor(event.target.value);
+    setMyPlayerColor(event.target.value);
   };
 
-
-    const [state, setState] = React.useState({
-      checkedA: true,
-      checkedB: true,
+  const handleChangeReady = (event) => {
+    setReadyStateState({
+      ...readyState,
+      [event.target.name]: event.target.checked,
     });
-  
-    const handleChangeReady = (event) => {
-      setState({ ...state, [event.target.name]: event.target.checked });
-    };
-
-
+  };
 
   return (
     <div className={classes.root}>
       <form onSubmit={handleSubmit} className={classes.form}>
         <Grid container spacing={1} direction={"column"}>
-          <Grid item >Lobbyname: Test</Grid>
-          <Grid item >Visibility: private</Grid>
-          <Grid item >Game mode: Tron classic</Grid>
-          <Grid item >Max. Players: 10</Grid>
+          <Grid item>Lobbyname: Test</Grid>
+          <Grid item>Visibility: private</Grid>
+          <Grid item>Game mode: Tron classic</Grid>
+          <Grid item>Max. Players: 10</Grid>
           <Grid item>
-            <TableContainer component={Paper} className={classes.tableContainer}>
+            <TableContainer
+              component={Paper}
+              className={classes.tableContainer}
+            >
               <Table
                 className={classes.table}
                 size="small"
@@ -117,16 +131,21 @@ const LobbyTable = (props) => {
               >
                 <TableHead>{headerCells}</TableHead>
                 <TableBody>
-                {(lobbyPlayers &&
-                    lobbyPlayers.map((players) => (
-                      <StyledTableRow key={players.name + "_" + players.id} hover>
+                  {(lobbyPlayers &&
+                    lobbyPlayers.map((player) => (
+                      <StyledTableRow key={player.name + "_" + player.id} hover>
                         <StyledTableCell component="th" scope="row">
-                          {players.name}
+                          {player.name}
                         </StyledTableCell>
                         <StyledTableCell align="right">
-                          <FormControl className={classes.formControl}>
+                          <FormControl
+                            className={classes.formControl}
+                            disabled={myPlayerId != player.id}
+                          >
                             <Select
-                              value={color}
+                              value={
+                                myPlayerId != player.id ? player.color : myPlayerColor
+                              }
                               onChange={handleChangeColor}
                               displayEmpty
                               className={classes.selectEmpty}
@@ -134,42 +153,51 @@ const LobbyTable = (props) => {
                               <MenuItem value="">
                                 <em>None</em>
                               </MenuItem>
-                              <MenuItem value={10}>Red</MenuItem>
-                              <MenuItem value={20}>Green </MenuItem>
-                              <MenuItem value={30}>Blue</MenuItem>
+                              <MenuItem value={"red"}>Red</MenuItem>
+                              <MenuItem value={"green"}>Green </MenuItem>
+                              <MenuItem value={"black"}>Black </MenuItem>
+                              <MenuItem value={"blue"}>Blue</MenuItem>
+                              <MenuItem value={"pink"}>Pink</MenuItem>
+                              <MenuItem value={"gray"}>Gray</MenuItem>
                             </Select>
                           </FormControl>
                         </StyledTableCell>
                         <StyledTableCell align="right">
                           <Switch
-                            checked={state.checkedB}
+                            disabled={myPlayerId != player.id}
+                            checked={readyState.checkedB}
                             onChange={handleChangeReady}
                             color="primary"
                             name="checkedB"
-                            inputProps={{ 'aria-label': 'ready' }}
+                            inputProps={{ "aria-label": "ready" }}
                           />
                         </StyledTableCell>
                       </StyledTableRow>
                     ))) || (
-                      <StyledTableRow hover>
-                        <StyledTableCell colSpan={4} align="center">
-                          <div>
-                            Loading players ...
-                            <br />
-                            <CircularProgress
-                              color="inherit"
-                              className={classes.circularProgress}
-                            />
-                          </div>
-                        </StyledTableCell>
-                      </StyledTableRow>
-                    )}
+                    <StyledTableRow hover>
+                      <StyledTableCell colSpan={4} align="center">
+                        <div>
+                          Loading players ...
+                          <br />
+                          <CircularProgress
+                            color="inherit"
+                            className={classes.circularProgress}
+                          />
+                        </div>
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  )}
                 </TableBody>
               </Table>
             </TableContainer>
           </Grid>
           <Grid item>
-            <Button variant="contained" color="primary" type="submit" spacing={1} >
+            <Button
+              variant="contained"
+              color="primary"
+              type="submit"
+              spacing={1}
+            >
               Start
             </Button>
           </Grid>
