@@ -9,6 +9,7 @@ import {
   Box,
   Container,
   CircularProgress,
+  Button,
 } from "@material-ui/core";
 
 import TronAppBar from "./components/appBar/appBar.component";
@@ -18,6 +19,7 @@ import Footer from "./components/footer/footer.component";
 //import GameAnimation from "./components/gameAnimation/gameAnimation.component";
 import GameCanvas from "./components/gameCanvas/gameCanvas.component";
 import * as WebsocketHelpers from "./websocket/websocket.helpers";
+import LobbyTable from "./components/lobby/lobby.component";
 
 const theme = createMuiTheme({
   palette: {
@@ -45,6 +47,7 @@ const App = () => {
   const classes = useStyles();
 
   const [playMode, setPlayMode] = useState(false);
+  const [lobbyMode, setLobbyMode] = useState(false);
   // websocket
   const ws = useRef(null);
   const [wserror, setWsError] = useState(false);
@@ -55,6 +58,8 @@ const App = () => {
   let rAF;
   // load games
   const [publicGames, setPublicGames] = useState(null);
+  // load players
+  const [lobbyPlayers, setLobbyPlayers] = useState(null);
 
   useEffect(() => {
     handleWebsocket();
@@ -250,6 +255,29 @@ const App = () => {
           )}
         </section>
       )}
+      {!lobbyMode? (
+        <React.Fragment>
+        <section>
+          <Container maxWidth="lg">
+            <Box my={4} className={classes.box}>
+              <Typography
+                variant="h2"
+                component="h2"
+                gutterBottom
+                className={classes.typography}
+              >
+                Lobby
+              </Typography>
+              <LobbyTable lobbyPlayers={lobbyPlayers} />
+              
+              <Button variant="contained" color="primary" type="submit" >
+              Start
+            </Button>
+            </Box>
+          </Container>
+        </section>
+        </React.Fragment>
+      ) :({})}
       <Footer />
     </ThemeProvider>
   );
