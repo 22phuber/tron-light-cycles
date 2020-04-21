@@ -6,15 +6,19 @@ import java.util.Map;
 /**
  * Represents a game lobby that holds all available types of tron {@link Game}.
  */
-public class Lobby {
+public class Lobby implements Runnable{
 
-    private final Map<String, Game> games;
+    private Game game;
+    private GameRound gameRound;
+    private Map<String, Player> players = new HashMap<>();
 
-    public Lobby() {
-        games = new HashMap<>();
+    public Lobby(Player host) {
+        this.game = new Game("classic");
+        this.players.put(host.getId(),host);
     }
 
-    public Map<String, Game> getGames() {
-        return games;
+    public void run(){
+        
     }
+
 }
