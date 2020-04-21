@@ -1,6 +1,7 @@
 package ch.tron.game.model;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -42,6 +43,18 @@ public class Lobby implements Runnable{
 
         }
     }
-    
+
+    private boolean arePlayersReady(){
+
+        Iterator iterator = players.entrySet().iterator();
+        while(iterator.hasNext()){
+            Map.Entry player = (Map.Entry)iterator.next();
+            if(!player.getStatus()){
+                return false;
+            }
+        }
+
+        return true;
+    }
 
 }
