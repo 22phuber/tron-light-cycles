@@ -29,12 +29,6 @@ public class GameManager {
 
     private Map<String, Player> players = new HashMap<>();
 
-    // This is temporary
-    // Instantiate a Default-Game
-    // Instantiate a Default-GameController
-    //private final static Game GAME;
-    //private final static GameController DEFAULT_GAME_CONTROLLER;
-
     private static List<Lobby> lobbies = new ArrayList<>();
 
     public static ToTransportMessageForwarder getMessageForwarder() { return MESSAGE_FORWARDER; }
