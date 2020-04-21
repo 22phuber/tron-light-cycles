@@ -12,6 +12,7 @@ public class Player {
     private int posy;
     private int dir;
     private Color color;
+    private boolean ready = false;
 
     public Player(String  id, int posx, int posy, int dir, Color color) {
         this.id = id;
@@ -56,4 +57,8 @@ public class Player {
     public void setColor(Color color) {
         this.color = color;
     }
+
+    public boolean isReady(){return this.ready;}
+
+    public void setReady(boolean status){this.ready = status;}
 }

@@ -30,6 +30,7 @@ public class Lobby implements Runnable{
 
                 //Host can change numberOfRounds
                 //Players can set Readystatus
+                //Players can leave....
 
             }
 
@@ -46,10 +47,11 @@ public class Lobby implements Runnable{
 
     private boolean arePlayersReady(){
 
-        Iterator iterator = players.entrySet().iterator();
+        Iterator iterator = this.players.entrySet().iterator();
         while(iterator.hasNext()){
-            Map.Entry player = (Map.Entry)iterator.next();
-            if(!player.getStatus()){
+            Map.Entry pair = (Map.Entry)iterator.next();
+            Player player = (Player)pair.getValue();
+            if(!player.isReady()){
                 return false;
             }
         }
