@@ -1,4 +1,8 @@
-package ch.tron.game.model;
+package ch.tron.game.controller;
+
+import ch.tron.game.model.Game;
+import ch.tron.game.model.GameRound;
+import ch.tron.game.model.Player;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -21,19 +25,20 @@ public class Lobby implements Runnable{
 
     public void run(){
 
-        int numberOfRounds = 5;
-
         //No Players in Lobby -> terminate Lobby
         while(players.size() > 0){
+
+            int numberOfRounds = 5;
 
             while(!arePlayersReady()){
 
                 //Host can change numberOfRounds
-                //Players can set Readystatus
+                //Players can set readyStatus
                 //Players can leave....
 
             }
 
+            //run set numbers of rounds. Default 5**
             while(numberOfRounds > 0) {
 
                 gameRound = new GameRound("");

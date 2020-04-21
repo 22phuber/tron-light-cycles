@@ -75,4 +75,8 @@ public class GameRound {
         return sb.toString();
     }
 
+    public void start(){
+
+    }
+
 }
