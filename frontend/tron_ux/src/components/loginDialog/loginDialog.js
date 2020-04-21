@@ -24,9 +24,9 @@ const LoginDialog = (props) => {
       <Dialog
         open={props.open}
         onClose={props.handleClose}
-        aria-labelledby="form-dialog-title"
+        aria-labelledby="login-dialog"
       >
-        <DialogTitle id="form-dialog-title">Login</DialogTitle>
+        <DialogTitle id="login-dialog">Login</DialogTitle>
         <form onSubmit={handleSubmit}>
           <DialogContent>
             <DialogContentText>

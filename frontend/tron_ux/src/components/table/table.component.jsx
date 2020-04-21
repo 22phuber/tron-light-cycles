@@ -45,10 +45,6 @@ const useStyles = makeStyles({
   },
 });
 
-function createData(name, mode, players, gameid) {
-  return { name, mode, players, gameid };
-}
-
 const GameTable = (props) => {
   const classes = useStyles();
 
@@ -95,7 +91,7 @@ const GameTable = (props) => {
             <StyledTableRow hover>
               <StyledTableCell colSpan={4} align="center">
                 <div>
-                  Loading current public games ...
+                  Loading public games ...
                   <br />
                   <CircularProgress
                     color="inherit"
