@@ -2,20 +2,17 @@ package ch.tron.game;
 
 import ch.tron.game.config.CanvasConfig;
 import ch.tron.game.controller.Lobby;
-import ch.tron.game.model.Player;
 import ch.tron.middleman.messagedto.InAppMessage;
 import ch.tron.middleman.messagedto.gametotransport.GameConfigMessage;
-import ch.tron.middleman.messagedto.transporttogame.NewLobby;
-import ch.tron.middleman.messagedto.transporttogame.NewPlayerMessage;
+import ch.tron.middleman.messagedto.transporttogame.NewLobbyMessage;
+import ch.tron.middleman.messagedto.transporttogame.JoinLobbyMessage;
 import ch.tron.middleman.messagedto.transporttogame.PlayerUpdateMessage;
 import ch.tron.middleman.messagehandler.ToTransportMessageForwarder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Connects {@link ch.tron.game} to {@code ch.tron.middleman}.
@@ -26,8 +23,6 @@ public class GameManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(GameManager.class);
 
     private static final ToTransportMessageForwarder MESSAGE_FORWARDER = new ToTransportMessageForwarder();
-
-    private Map<String, Player> players = new HashMap<>();
 
     private static List<Lobby> lobbies = new ArrayList<>();
 
@@ -40,10 +35,10 @@ public class GameManager {
      */
     public static void handleInAppIncomingMessage(InAppMessage msg) {
         
-        if (msg instanceof NewPlayerMessage) {
+        if (msg instanceof JoinLobbyMessage) {
 
-            String groupId = ((NewPlayerMessage) msg).getGroupId();
-            String playerId = ((NewPlayerMessage) msg).getPlayerId();
+            String groupId = ((JoinLobbyMessage) msg).getGroupId();
+            String playerId = ((JoinLobbyMessage) msg).getPlayerId();
 
             MESSAGE_FORWARDER.forwardMessage(new GameConfigMessage(playerId, CanvasConfig.WIDTH.value(), CanvasConfig.HEIGHT.value()));
 
@@ -57,7 +52,7 @@ public class GameManager {
             lobbies.get(Integer.parseInt(groupId)).updatePlayer(playerId, ((PlayerUpdateMessage) msg).getKey());
         }
         // TODO: M3: Implement
-        else if (msg instanceof NewLobby) {
+        else if (msg instanceof NewLobbyMessage) {
 
             String playerId = ((PlayerUpdateMessage) msg).getPlayerId();
 

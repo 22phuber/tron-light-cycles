@@ -7,11 +7,11 @@ import ch.tron.middleman.messagedto.InAppMessage;
  * using {@link ch.tron.middleman.messagehandler.ToGameMessageForwarder}
  * in order to create a new game round of a specific game.
  */
-public class NewLobby extends InAppMessage {
+public class NewLobbyMessage extends InAppMessage {
 
     private String groupId;
 
-    public NewLobby(String groupId) {
+    public NewLobbyMessage(String groupId) {
         this.groupId = groupId;
     }
 }
