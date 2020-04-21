@@ -5,7 +5,7 @@ import ch.tron.game.controller.GameController;
 import ch.tron.game.model.Game;
 import ch.tron.middleman.messagedto.InAppMessage;
 import ch.tron.middleman.messagedto.gametotransport.GameConfigMessage;
-import ch.tron.middleman.messagedto.transporttogame.NewGameRound;
+import ch.tron.middleman.messagedto.transporttogame.NewLobby;
 import ch.tron.middleman.messagedto.transporttogame.NewPlayerMessage;
 import ch.tron.middleman.messagedto.transporttogame.PlayerUpdateMessage;
 import ch.tron.middleman.messagehandler.ToTransportMessageForwarder;
@@ -66,7 +66,7 @@ public class GameManager {
                     .updatePlayer(playerId, ((PlayerUpdateMessage) msg).getKey());
         }
         // TODO: M3: Implement
-        else if (msg instanceof NewGameRound) {
+        else if (msg instanceof NewLobby) {
 
         }
         else {
