@@ -80,6 +80,7 @@ public class Lobby implements Runnable{
         return true;
     }
 
+    //New Players are added to PlayerList in Lobby, they will join in the next GameRound
     public void addPlayer(String playerId) {
 
         int player_count = players.size();

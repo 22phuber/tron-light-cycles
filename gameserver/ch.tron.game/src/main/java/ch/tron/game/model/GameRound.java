@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 public class GameRound {
 
     private GameStateUpdateMessage gameStateUpdateMessage;
-    private Map<String, Player> players = new HashMap<>();
+    private Map<String, Player> players;
     private final Logger logger = LoggerFactory.getLogger(GameRound.class);
 
     private Thread gameLoop;
