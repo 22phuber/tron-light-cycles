@@ -89,8 +89,8 @@ public class Lobby implements Runnable{
             JSONObject one = new JSONObject();
             try {
                 one.put("clientId", player.getId());
-                one.put("name", player.getName);
-                one.put("ready", player.getState);
+                one.put("name", player.getName());
+                one.put("ready", player.getReady());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -123,6 +123,7 @@ public class Lobby implements Runnable{
 
         Player pl = new Player(
                 playerId,
+                "username",
                 50*player_count,
                 50*player_count,
                 1,
