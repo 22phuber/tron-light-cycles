@@ -277,47 +277,51 @@ const App = () => {
         </React.Fragment>
       ) : (
         <section>
-          {wsplayerdata && !wserror ? (
-            <GameCanvas
-              width={gameCanvas.width}
-              height={gameCanvas.height}
-              playersData={wsplayerdata}
-            />
+           {lobbyMode ? (
+            <React.Fragment>
+              <section>
+                <Container maxWidth="lg">
+                  <Box my={4} className={classes.box}>
+                    <Typography
+                      variant="h2"
+                      component="h2"
+                      gutterBottom
+                      className={classes.typography}
+                    >
+                      Lobby
+                    </Typography>
+                    <Paper>
+                      <LobbyTable lobbyPlayers={lobbyPlayers} myPlayerId={playerId} />
+                    </Paper>
+                  </Box>
+                </Container>
+              </section>
+            </React.Fragment>
           ) : (
-            <div>
-              Connecting to Game server...
-              <br />
-              <CircularProgress
-                color="inherit"
-                className={classes.circularProgress}
+            <section>
+            {wsplayerdata && !wserror ? (
+              <GameCanvas
+                width={gameCanvas.width}
+                height={gameCanvas.height}
+                playersData={wsplayerdata}
               />
-            </div>
+            ) : (
+              <div>
+                Connecting to Game server...
+                <br />
+                <CircularProgress
+                  color="inherit"
+                  className={classes.circularProgress}
+                />
+              </div>
+            )}
+            </section>
           )}
+          
         </section>
       )}
-      {!lobbyMode ? (
-        <React.Fragment>
-          <section>
-            <Container maxWidth="lg">
-              <Box my={4} className={classes.box}>
-                <Typography
-                  variant="h2"
-                  component="h2"
-                  gutterBottom
-                  className={classes.typography}
-                >
-                  Lobby
-                </Typography>
-                <Paper>
-                  <LobbyTable lobbyPlayers={lobbyPlayers} myPlayerId={playerId} />
-                </Paper>
-              </Box>
-            </Container>
-          </section>
-        </React.Fragment>
-      ) : (
-        {}
-      )}
+
+
       <Footer />
     </ThemeProvider>
   );
