@@ -34,6 +34,7 @@ public class Lobby implements Runnable{
     private String name;
     private int numberOfRounds = 5;
     private Player host;
+    private boolean playing;
 
     public Lobby(String id, String host, String name) {
         this.id = id;
@@ -53,7 +54,7 @@ public class Lobby implements Runnable{
 
             numberOfRounds = 5;
 
-            while(!arePlayersReady()){
+            while(!isPlaying()){
 
                 lobbyStateUpdateMessage.setUpdate(getLobbyState());
                 GameManager.getMessageForwarder().forwardMessage(lobbyStateUpdateMessage);
@@ -77,6 +78,9 @@ public class Lobby implements Runnable{
 
             }
 
+            synchronized (this) {
+                playing = false;
+            }
         }
     }
 
@@ -170,4 +174,13 @@ public class Lobby implements Runnable{
         pl.setDir(pl_dir);
     }
 
+    public synchronized boolean isPlaying() {
+        return playing;
+    }
+
+    public synchronized void setPlaying(String playerId) {
+        if(playerId == host.getId()){
+            this.playing = true;
+        }
+    }
 }

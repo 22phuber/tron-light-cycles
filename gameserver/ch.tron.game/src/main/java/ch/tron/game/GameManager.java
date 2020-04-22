@@ -4,6 +4,8 @@ import ch.tron.game.config.CanvasConfig;
 import ch.tron.game.controller.Lobby;
 import ch.tron.middleman.messagedto.InAppMessage;
 import ch.tron.middleman.messagedto.gametotransport.GameConfigMessage;
+import ch.tron.middleman.messagedto.gametotransport.GameStateUpdateMessage;
+import ch.tron.middleman.messagedto.transporttogame.GameStartMessage;
 import ch.tron.middleman.messagedto.transporttogame.NewLobbyMessage;
 import ch.tron.middleman.messagedto.transporttogame.JoinLobbyMessage;
 import ch.tron.middleman.messagedto.transporttogame.PlayerUpdateMessage;
@@ -59,6 +61,13 @@ public class GameManager {
 
             lobbies.put(groupId, new Lobby(groupId, playerId, "TEST"));
             new Thread(lobbies.get(groupId)).start();
+
+        }else if(msg instanceof GameStartMessage){
+
+            String groupId = ((NewLobbyMessage) msg).getGroupId();
+            String playerId = ((NewLobbyMessage) msg).getPlayerId();
+
+            lobbies.get(groupId).setPlaying(playerId);
 
         }
         else {
