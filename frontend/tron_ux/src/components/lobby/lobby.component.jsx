@@ -153,7 +153,7 @@ const LobbyTable = (props) => {
                               className={classes.selectEmpty}
                             >
                               <MenuItem value="">
-                                <em>None</em>
+                                <em>Red</em>
                               </MenuItem>
                               <MenuItem value={"red"}>Red</MenuItem>
                               <MenuItem value={"green"}>Green </MenuItem>
