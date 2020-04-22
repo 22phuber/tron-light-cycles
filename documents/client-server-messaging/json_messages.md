@@ -20,7 +20,7 @@
 ### Before game start
 |Description|JSON|further information|
 |---|---|---|
-|Game server continously updates all joined clients by broadcasting lobby-state.|`{ "subject": "lobbyState", players: [ { "clientId": "theClientId", "name": "thePlayersName" }, {...}, ...] }`|**continous broadcast**|
+|Game server continously updates all joined clients by broadcasting lobby-state.|`{ "subject": "lobbyState", players: [ { "clientId": "theClientId", "name": "thePlayersName" , "ready": "false"}, {...}, ...] }`|**continous broadcast**|
 |Client requests to join a specific game.|`{ "subject": "joinGame", "clientId": "theClientId", "gameId": "theGameId" }`|
 |Client that is host of game to be started orders game server to start the game.| `{ "subject": "startGame" }`|
 
