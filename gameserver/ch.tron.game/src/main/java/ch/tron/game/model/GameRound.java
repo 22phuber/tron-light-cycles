@@ -1,41 +1,37 @@
 package ch.tron.game.model;
 
+import ch.tron.game.GameManager;
+import ch.tron.game.config.CanvasConfig;
+import ch.tron.middleman.messagedto.gametotransport.GameStateUpdateMessage;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.awt.*;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Represents a round of a specific {@link ch.tron.game.model.Game}.
  */
 public class GameRound {
 
-    private final String id;
+    private GameStateUpdateMessage gameStateUpdateMessage;
+    private Map<String, Player> players;
+    private final Logger logger = LoggerFactory.getLogger(GameRound.class);
 
-    private final Set<String> group = new HashSet<>();
-    private final Map<String, Player> players = new HashMap<>();
+    private Thread gameLoop;
+    private final double FPS = 60;
+    private final double LOOP_INTERVAL = 1000000000 / FPS;
 
-    public GameRound(String gameRoundId) {
-        this.id = gameRoundId;
-    }
+    public GameRound(int lobbyId, HashMap players) {
 
-    public void addPlayer(Player pl) {
+        this.players = players;
+        this.gameStateUpdateMessage = new GameStateUpdateMessage(Integer.toString(lobbyId));
 
-        group.add(pl.getId());
-        players.put(pl.getId(), pl);
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public Set<String> getGroup() {
-        return group;
     }
 
     public Map<String, Player> playersMap() {
@@ -73,6 +69,47 @@ public class GameRound {
                 .append(c.getBlue())
                 .append(")");
         return sb.toString();
+    }
+
+    public void start(){
+        logger.info("Game loop running");
+
+        long t_before = System.nanoTime();
+        while (true) {
+            long t_current = System.nanoTime();
+            long t_delta = t_current - t_before;
+            if (t_delta >= LOOP_INTERVAL) {
+                t_before = t_current;
+                players.values().forEach(player -> {
+                    switch (player.getDir()) {
+                        case 0:
+                            player.setPosx((player.getPosx() + 1) % CanvasConfig.WIDTH.value());
+                            break;
+                        case 1:
+                            player.setPosy((player.getPosy() + 1) % CanvasConfig.HEIGHT.value());
+                            break;
+                        case 2:
+                            int x = player.getPosx();
+                            if (x == 0) {
+                                player.setPosx(CanvasConfig.WIDTH.value());
+                            } else {
+                                player.setPosx(x - 1);
+                            }
+                            break;
+                        case 3:
+                            int y = player.getPosy();
+                            if (y == 0) {
+                                player.setPosy(CanvasConfig.HEIGHT.value());
+                            } else {
+                                player.setPosy(y - 1);
+                            }
+                            break;
+                    }
+                });
+                gameStateUpdateMessage.setUpdate(playersJSON());
+                GameManager.getMessageForwarder().forwardMessage(gameStateUpdateMessage);
+            }
+        }
     }
 
 }

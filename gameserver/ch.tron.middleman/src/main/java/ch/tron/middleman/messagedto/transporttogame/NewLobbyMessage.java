@@ -15,4 +15,3 @@ public class NewLobbyMessage extends InAppMessage {
         this.groupId = groupId;
     }
 }
-
