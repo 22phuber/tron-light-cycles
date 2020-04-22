@@ -11,6 +11,8 @@ import ch.tron.middleman.messagedto.gametotransport.LobbyStateUpdateMessage;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -33,28 +35,34 @@ public class Lobby implements Runnable{
     private Player host;
     private boolean playing;
     private boolean visibility;
+    private static final Logger LOGGER = LoggerFactory.getLogger(Lobby.class);
 
     public Lobby(String id, String host, JSONObject config) {
         this.id = id;
-        this.game = new Game(config.getJSONObject("lobbyConfig").getString("mode"));
+        this.maxPlayers = 10;
+        //this.game = new Game(config.getJSONObject("lobbyConfig").getString("mode"));
+        this.game = new Game("classic");
         addPlayer(host);
-        this.players.put(players.get(host).getId(),players.get(host));
-        this.name = config.getJSONObject("lobbyConfig").getString("name");
-        if(config.getJSONObject("lobbyConfig").getBoolean("visibility")){
+        //this.players.put(players.get(host).getId(),players.get(host));
+        //this.name = config.getJSONObject("lobbyConfig").getString("name");
+        this.name = "test";
+        /*if(config.getJSONObject("lobbyConfig").getBoolean("visibility")){
             visibility = true;
         }else{
             visibility = false;
-        }
-        this.maxPlayers = config.getJSONObject("lobbyConfig").getInt("playersAllowed");
+        }*/
+        visibility = true;
+        //this.maxPlayers = config.getJSONObject("lobbyConfig").getInt("playersAllowed");
         this.host = players.get(host);
         this.lobbyStateUpdateMessage = new LobbyStateUpdateMessage(id);
     }
 
-    @Override
     public void run(){
 
         //No Players in Lobby -> terminate Lobby
         while(players.size() > 0){
+
+            LOGGER.info("Entered Lobby");
 
             numberOfRounds = 5;
             /*
@@ -67,12 +75,13 @@ public class Lobby implements Runnable{
             */
 
             //send GameConfig to all Players in Lobby
-            GameManager.getMessageForwarder().forwardMessage(new GameConfigMessage(id, CanvasConfig.WIDTH.value(), CanvasConfig.HEIGHT.value()));
+            GameManager.getMessageForwarder().forwardMessage(new GameConfigMessage(id, 400, 400));
 
 
             //run set numbers of rounds. Default 5
             while(numberOfRounds > 0) {
 
+                LOGGER.info("Entered GameRound");
                 gameRound = new GameRound(id, getReadyPlayer());
                 gameRound.start();
                 numberOfRounds--;
