@@ -9,9 +9,19 @@ import ch.tron.middleman.messagedto.InAppMessage;
  */
 public class NewLobbyMessage extends InAppMessage {
 
-    private String groupId;
+    private final String playerId;
+    private final String  groupId;
 
-    public NewLobbyMessage(String groupId) {
+    public NewLobbyMessage(String playerId, String groupId) {
+        this.playerId = playerId;
         this.groupId = groupId;
+    }
+
+    public String getPlayerId() {
+        return playerId;
+    }
+
+    public String getGroupId() {
+        return groupId;
     }
 }
