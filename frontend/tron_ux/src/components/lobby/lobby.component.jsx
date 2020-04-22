@@ -73,6 +73,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// TODO: Show Generated Game Link
+
 const LobbyTable = (props) => {
   const classes = useStyles();
 
@@ -84,17 +86,23 @@ const LobbyTable = (props) => {
 
   useEffect(() => {
     if (lobbyPlayers) {
+      lobbyPlayers.forEach(function(player,index){
+        if(player.id === myPlayerId){
+          lobbyPlayers.splice(index, 1);
+          lobbyPlayers.unshift(player);
+        }
+      });
       lobbyPlayers.map((player) => {
         if (myPlayerId === player.id) {
           setMyPlayerColor(player.color);
           setMyReadyState(true); // set current player to ready
         }
-        console.log(player.color);
         setUsedPlayerColors(usedPlayerColors.concat(player.color));
         return true;
       });
     }
-  }, [lobbyPlayers, myPlayerId, usedPlayerColors]);
+    console.log(lobbyPlayers);
+  }, [lobbyPlayers, myPlayerId]);
 
   const handleChangeColor = (event) => {
     setMyPlayerColor(event.target.value);

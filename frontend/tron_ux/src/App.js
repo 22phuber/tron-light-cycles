@@ -10,7 +10,6 @@ import {
   Container,
   CircularProgress,
 } from "@material-ui/core";
-
 import TronAppBar from "./components/appBar/appBar.component";
 import GameTable from "./components/table/table.component";
 import CreateGame from "./components/createGame/createGame.component";
@@ -123,7 +122,7 @@ const App = () => {
   function handleWebsocket() {
     var connectInterval;
     ws.current = WebsocketHelpers.connectToWSGameServer();
-    //ws.current = WebsocketClient.connectToWSNettyGameServer();
+    //ws.current = WebsocketHelpers.connectToWSNettyGameServer();
     // open
     ws.current.onopen = () => {
       setWsError(false);
@@ -315,10 +314,10 @@ const App = () => {
                     </Typography>
                     <Paper>
                       <LobbyTable
+                        exitLobby={cancelLobby}
                         lobbyPlayers={lobbyPlayers}
                         lobbyData={lobbyData}
                         myPlayerId={playerId}
-                        exitLobby={cancelLobby}
                       />
                     </Paper>
                   </Box>
