@@ -57,13 +57,14 @@ public class Lobby implements Runnable{
         while(players.size() > 0){
 
             numberOfRounds = 5;
-
+            /*
             while(!isPlaying()){
 
                 lobbyStateUpdateMessage.setUpdate(getLobbyState());
                 GameManager.getMessageForwarder().forwardMessage(lobbyStateUpdateMessage);
 
             }
+            */
 
             //send GameConfig to all Players in Lobby
             GameManager.getMessageForwarder().forwardMessage(new GameConfigMessage(id, CanvasConfig.WIDTH.value(), CanvasConfig.HEIGHT.value()));
