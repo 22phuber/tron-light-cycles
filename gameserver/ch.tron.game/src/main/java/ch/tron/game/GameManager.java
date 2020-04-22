@@ -1,11 +1,8 @@
 package ch.tron.game;
 
-import ch.tron.game.config.CanvasConfig;
 import ch.tron.game.controller.Lobby;
 import ch.tron.middleman.messagedto.InAppMessage;
-import ch.tron.middleman.messagedto.gametotransport.GameConfigMessage;
-import ch.tron.middleman.messagedto.gametotransport.GameStateUpdateMessage;
-import ch.tron.middleman.messagedto.transporttogame.GameStartMessage;
+import ch.tron.middleman.messagedto.transporttogame.LobbyConfigMessage;
 import ch.tron.middleman.messagedto.transporttogame.NewLobbyMessage;
 import ch.tron.middleman.messagedto.transporttogame.JoinLobbyMessage;
 import ch.tron.middleman.messagedto.transporttogame.PlayerUpdateMessage;
@@ -13,9 +10,7 @@ import ch.tron.middleman.messagehandler.ToTransportMessageForwarder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -62,12 +57,12 @@ public class GameManager {
             lobbies.put(groupId, new Lobby(groupId, playerId, "TEST"));
             new Thread(lobbies.get(groupId)).start();
 
-        }else if(msg instanceof GameStartMessage){
+        }else if(msg instanceof LobbyConfigMessage){
 
-            String groupId = ((NewLobbyMessage) msg).getGroupId();
-            String playerId = ((NewLobbyMessage) msg).getPlayerId();
+            String groupId = ((LobbyConfigMessage) msg).getGroupId();
+            String playerId = ((LobbyConfigMessage) msg).getPlayerId();
 
-            lobbies.get(groupId).setPlaying(playerId);
+            lobbies.get(groupId).setConfig(playerId);
 
         }
         else {

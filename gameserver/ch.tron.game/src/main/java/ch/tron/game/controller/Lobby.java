@@ -35,6 +35,7 @@ public class Lobby implements Runnable{
     private int numberOfRounds = 5;
     private Player host;
     private boolean playing;
+    private boolean publicServer;
 
     public Lobby(String id, String host, String name) {
         this.id = id;
@@ -179,13 +180,6 @@ public class Lobby implements Runnable{
         return playing;
     }
 
-    public synchronized void setPlaying(String playerId) {
-        if(playerId == host.getId()){
-            host.setReady(true);
-            this.playing = true;
-        }
-    }
-
     public Game getGame() {
         return game;
     }
@@ -196,5 +190,24 @@ public class Lobby implements Runnable{
 
     public void setNumberOfRounds(int numberOfRounds) {
         this.numberOfRounds = numberOfRounds;
+    }
+
+    public synchronized void setConfig(String playerId, JSONObject config) {
+        if(playerId == host.getId()){
+
+            if(config.getJSONObject("lobbyConfig").getBoolean("play")){
+                host.setReady(true);
+                this.playing = true;
+            }
+
+            /*
+            if(!this.game.getName().equals(config.getJSONObject("lobbyConfig").getString("game"))){
+                this.game = new Game(config.getJSONObject("lobbyConfig").getString("game"));
+            }
+             */
+
+            this.publicServer = config.getJSONObject("lobbyConfig").getBoolean("public");
+
+        }
     }
 }
