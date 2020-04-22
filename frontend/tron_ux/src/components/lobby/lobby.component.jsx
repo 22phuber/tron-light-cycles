@@ -94,7 +94,7 @@ const LobbyTable = (props) => {
         return true;
       });
     }
-  }, [lobbyPlayers, myPlayerId]);
+  }, [lobbyPlayers, myPlayerId, usedPlayerColors]);
 
   const handleChangeColor = (event) => {
     setMyPlayerColor(event.target.value);

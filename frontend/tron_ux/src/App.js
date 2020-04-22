@@ -9,8 +9,6 @@ import {
   Box,
   Container,
   CircularProgress,
-  Button,
-  Grid,
 } from "@material-ui/core";
 
 import TronAppBar from "./components/appBar/appBar.component";
@@ -88,17 +86,20 @@ const App = () => {
   const ws = useRef(null);
   const [wserror, setWsError] = useState(false);
   // game
-  const [playerId, setPlayerId] = useState(playerIdInitial);
+  const [playerId, setPlayerId] = useState(null);
   const [wsplayerdata, setWsPlayerData] = useState(null);
   const [gameCanvas, setGameCanvas] = useState({ height: 400, width: 400 });
   let rAF;
   // load games
   const [publicGames, setPublicGames] = useState(null);
   // lobby players
-  const [lobbyPlayers, setLobbyPlayers] = useState(lobbyPlayersArray);
+  const [lobbyPlayers, setLobbyPlayers] = useState(null);
   const [lobbyData, setLobbyData] = useState({});
 
   useEffect(() => {
+    setLobbyPlayers(lobbyPlayersArray);
+    setPlayerId(playerIdInitial);
+
     handleWebsocket();
     document.addEventListener("keydown", handleKeyPress, false);
     return () => {
@@ -108,6 +109,7 @@ const App = () => {
       console.log("useEffect remove eventistener called");
       document.removeEventListener("keydown", handleKeyPress, false);
     };
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
