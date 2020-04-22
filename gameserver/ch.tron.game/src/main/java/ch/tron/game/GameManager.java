@@ -58,7 +58,7 @@ public class GameManager {
             String playerId = ((NewLobbyMessage) msg).getPlayerId();
 
             lobbies.put(groupId, new Lobby(groupId, playerId, "TEST"));
-            new Thread(lobbies.get(lobbies.size()-1)).start();
+            new Thread(lobbies.get(groupId)).start();
 
         }
         else {
