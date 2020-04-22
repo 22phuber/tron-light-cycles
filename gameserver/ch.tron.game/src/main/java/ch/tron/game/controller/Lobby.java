@@ -145,9 +145,6 @@ public class Lobby implements Runnable{
                     1,
                     colors[player_count % colors.length]);
 
-            GameManager.getMessageForwarder()
-                    .forwardMessage(new GameConfigMessage(playerId, CanvasConfig.WIDTH.value(), CanvasConfig.HEIGHT.value()));
-
             players.put(pl.getId(), pl);
         }
     }
