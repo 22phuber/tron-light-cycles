@@ -63,11 +63,6 @@ public class Lobby implements Runnable{
                 lobbyStateUpdateMessage.setUpdate(getLobbyState());
                 GameManager.getMessageForwarder().forwardMessage(lobbyStateUpdateMessage);
 
-                //Host can change numberOfRounds
-                //Host can set Game
-                //Players can set readyStatus
-                //Players can leave....
-
             }
 
             //send GameConfig to all Players in Lobby
@@ -212,5 +207,9 @@ public class Lobby implements Runnable{
             this.visibility = config.getJSONObject("lobbyConfig").getBoolean("public");
 
         }
+    }
+
+    public boolean getVisibility() {
+        return visibility;
     }
 }
