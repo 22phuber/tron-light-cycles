@@ -67,10 +67,8 @@ public class TransportManager {
     public static void handleInAppIncomingMessage(InAppMessage msg) {
 
         if (msg instanceof GameStateUpdateMessage) {
-            // String groupId = ((GameStateUpdateMessage) msg).getGroupId();
 
-            // This is temporary
-            ChannelGroup channelGroup = WebSocketController.getGroups().get(DEFAULT_CHANNEL_GROUP_ID);
+            ChannelGroup channelGroup = WebSocketController.getChannelGroup(msg.getGroupId());
 
             JSONObject update = ((GameStateUpdateMessage) msg).getUpdate();
 
@@ -78,9 +76,7 @@ public class TransportManager {
         }
         else if (msg instanceof GameConfigMessage) {
 
-            Channel channel = WebSocketController.getChannel(
-                    "defaultId",
-                    ((GameConfigMessage) msg).getGroupId());
+            ChannelGroup group = WebSocketController.getChannelGroup(msg.getGroupId());
             int canvasWidth = ((GameConfigMessage) msg).getCanvas_width();
             int canvasHeight = ((GameConfigMessage) msg).getCanvas_height();
 
@@ -89,7 +85,7 @@ public class TransportManager {
             jo.put("width", canvasWidth);
             jo.put("height", canvasHeight);
 
-            out.sendConfig(channel, jo);
+            out.sendConfig(group, jo);
         }
     }
 
