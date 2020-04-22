@@ -7,6 +7,7 @@ import ch.tron.middleman.messagedto.transporttogame.NewLobbyMessage;
 import ch.tron.middleman.messagedto.transporttogame.JoinLobbyMessage;
 import ch.tron.middleman.messagedto.transporttogame.PlayerUpdateMessage;
 import ch.tron.middleman.messagehandler.ToTransportMessageForwarder;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,8 +62,9 @@ public class GameManager {
 
             String groupId = ((LobbyConfigMessage) msg).getGroupId();
             String playerId = ((LobbyConfigMessage) msg).getPlayerId();
+            JSONObject config = ((LobbyConfigMessage) msg).getConfig();
 
-            lobbies.get(groupId).setConfig(playerId);
+            lobbies.get(groupId).setConfig(playerId, config);
 
         }
         else {
