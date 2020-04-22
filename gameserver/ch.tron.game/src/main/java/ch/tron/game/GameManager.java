@@ -54,8 +54,9 @@ public class GameManager {
 
             String groupId = msg.getGroupId();
             String playerId = ((NewLobbyMessage) msg).getPlayerId();
+            JSONObject config = ((NewLobbyMessage) msg).getConfig();
 
-            lobbies.put(groupId, new Lobby(groupId, playerId, "TEST"));
+            lobbies.put(groupId, new Lobby(groupId, playerId, config));
             new Thread(lobbies.get(groupId)).start();
 
         }else if(msg instanceof LobbyConfigMessage){

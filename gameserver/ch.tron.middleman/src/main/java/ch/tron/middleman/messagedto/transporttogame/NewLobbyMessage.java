@@ -1,6 +1,7 @@
 package ch.tron.middleman.messagedto.transporttogame;
 
 import ch.tron.middleman.messagedto.InAppMessage;
+import org.json.JSONObject;
 
 /**
  * Is being sent from {@link ch.tron.transport} to {@link ch.tron.game}
@@ -11,10 +12,12 @@ public class NewLobbyMessage extends InAppMessage {
 
     private final String playerId;
     private final String  groupId;
+    private final JSONObject config;
 
-    public NewLobbyMessage(String playerId, String groupId) {
+    public NewLobbyMessage(String playerId, String groupId, JSONObject config) {
         this.playerId = playerId;
         this.groupId = groupId;
+        this.config = config;
     }
 
     public String getPlayerId() {
@@ -24,4 +27,6 @@ public class NewLobbyMessage extends InAppMessage {
     public String getGroupId() {
         return groupId;
     }
+
+    public JSONObject getConfig() { return config; }
 }

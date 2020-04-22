@@ -7,17 +7,13 @@ import ch.tron.game.model.Game;
 import ch.tron.game.model.GameRound;
 import ch.tron.game.model.Player;
 import ch.tron.middleman.messagedto.gametotransport.GameConfigMessage;
-import ch.tron.middleman.messagedto.gametotransport.GameStateUpdateMessage;
 import ch.tron.middleman.messagedto.gametotransport.LobbyStateUpdateMessage;
-import ch.tron.middleman.messagehandler.InAppMessageForwarder;
-import ch.tron.middleman.messagehandler.ToTransportMessageForwarder;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.awt.*;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -25,6 +21,7 @@ import java.util.Map;
  */
 public class Lobby implements Runnable{
 
+    private final int maxPlayers;
     private LobbyStateUpdateMessage lobbyStateUpdateMessage;
     private Game game;
     private GameRound gameRound;
@@ -35,14 +32,20 @@ public class Lobby implements Runnable{
     private int numberOfRounds = 5;
     private Player host;
     private boolean playing;
-    private boolean publicServer;
+    private boolean visibility;
 
-    public Lobby(String id, String host, String name) {
+    public Lobby(String id, String host, JSONObject config) {
         this.id = id;
-        this.game = new Game("classic");
+        this.game = new Game(config.getJSONObject("lobbyConfig").getString("mode"));
         addPlayer(host);
         this.players.put(players.get(host).getId(),players.get(host));
-        this.name = name;
+        this.name = config.getJSONObject("lobbyConfig").getString("name");
+        if(config.getJSONObject("lobbyConfig").getBoolean("visibility")){
+            visibility = true;
+        }else{
+            visibility = false;
+        }
+        this.maxPlayers = config.getJSONObject("lobbyConfig").getInt("playersAllowed");
         this.host = players.get(host);
         this.lobbyStateUpdateMessage = new LobbyStateUpdateMessage(id);
     }
@@ -206,7 +209,7 @@ public class Lobby implements Runnable{
             }
              */
 
-            this.publicServer = config.getJSONObject("lobbyConfig").getBoolean("public");
+            this.visibility = config.getJSONObject("lobbyConfig").getBoolean("public");
 
         }
     }
