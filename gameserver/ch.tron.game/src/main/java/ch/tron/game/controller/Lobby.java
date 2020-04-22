@@ -73,7 +73,7 @@ public class Lobby implements Runnable{
             //run set numbers of rounds. Default 5
             while(numberOfRounds > 0) {
 
-                gameRound = new GameRound(id, (HashMap) players);
+                gameRound = new GameRound(id, getReadyPlayer());
                 gameRound.start();
                 numberOfRounds--;
                 roundsPlayed++;
@@ -84,6 +84,19 @@ public class Lobby implements Runnable{
                 playing = false;
             }
         }
+    }
+
+    private HashMap getReadyPlayer() {
+
+        Map<String, Player> readyPlayers = new HashMap<>();
+
+        for(Map.Entry<String, Player>player : this.players.entrySet()){
+            if(player.getValue().isReady()){
+                readyPlayers.put(player.getKey(), player.getValue());
+            }
+        }
+
+        return (HashMap) readyPlayers;
     }
 
     private JSONObject getLobbyState() {
@@ -168,6 +181,7 @@ public class Lobby implements Runnable{
 
     public synchronized void setPlaying(String playerId) {
         if(playerId == host.getId()){
+            host.setReady(true);
             this.playing = true;
         }
     }
