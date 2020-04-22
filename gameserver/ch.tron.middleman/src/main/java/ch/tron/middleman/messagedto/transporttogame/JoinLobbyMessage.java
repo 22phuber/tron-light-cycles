@@ -7,12 +7,12 @@ import ch.tron.middleman.messagedto.InAppMessage;
  * using {@link ch.tron.middleman.messagehandler.ToGameMessageForwarder}
  * in order to add a new game player to a specific game round.
  */
-public class NewPlayerMessage extends InAppMessage {
+public class JoinLobbyMessage extends InAppMessage {
 
     private final String playerId;
     private final String  groupId;
 
-    public NewPlayerMessage(String playerId, String groupId) {
+    public JoinLobbyMessage(String playerId, String groupId) {
         this.playerId = playerId;
         this.groupId = groupId;
     }

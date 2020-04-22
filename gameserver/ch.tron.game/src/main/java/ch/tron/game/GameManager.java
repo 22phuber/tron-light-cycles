@@ -1,16 +1,18 @@
 package ch.tron.game;
 
-import ch.tron.game.config.CanvasConfig;
-import ch.tron.game.controller.GameController;
-import ch.tron.game.model.Game;
+import ch.tron.game.controller.Lobby;
 import ch.tron.middleman.messagedto.InAppMessage;
-import ch.tron.middleman.messagedto.gametotransport.GameConfigMessage;
-import ch.tron.middleman.messagedto.transporttogame.NewGameRound;
-import ch.tron.middleman.messagedto.transporttogame.NewPlayerMessage;
+import ch.tron.middleman.messagedto.transporttogame.LobbyConfigMessage;
+import ch.tron.middleman.messagedto.transporttogame.NewLobbyMessage;
+import ch.tron.middleman.messagedto.transporttogame.JoinLobbyMessage;
 import ch.tron.middleman.messagedto.transporttogame.PlayerUpdateMessage;
 import ch.tron.middleman.messagehandler.ToTransportMessageForwarder;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Connects {@link ch.tron.game} to {@code ch.tron.middleman}.
@@ -22,22 +24,7 @@ public class GameManager {
 
     private static final ToTransportMessageForwarder MESSAGE_FORWARDER = new ToTransportMessageForwarder();
 
-    // This is temporary
-    // Instantiate a Default-Game
-    // Instantiate a Default-GameController
-    private final static Game GAME;
-    private final static GameController DEFAULT_GAME_CONTROLLER;
-
-    static {
-
-        GAME = new Game("defaultGame");
-        DEFAULT_GAME_CONTROLLER = new GameController(GAME);
-
-        // This is temporary
-        // Add the Default-GameRound to the Default-Game
-        // All players will be added to the Default-GameRound
-        DEFAULT_GAME_CONTROLLER.newGameRound("defaultId");
-    }
+    private static Map<String,Lobby> lobbies = new HashMap<>();
 
     public static ToTransportMessageForwarder getMessageForwarder() { return MESSAGE_FORWARDER; }
 
@@ -48,25 +35,37 @@ public class GameManager {
      */
     public static void handleInAppIncomingMessage(InAppMessage msg) {
         
-        if (msg instanceof NewPlayerMessage) {
+        if (msg instanceof JoinLobbyMessage) {
 
-            String groupId = ((NewPlayerMessage) msg).getGroupId();
-            String playerId = ((NewPlayerMessage) msg).getPlayerId();
+            String groupId = msg.getGroupId();
+            String playerId = ((JoinLobbyMessage) msg).getPlayerId();
 
-            MESSAGE_FORWARDER.forwardMessage(new GameConfigMessage(playerId, CanvasConfig.WIDTH.value(), CanvasConfig.HEIGHT.value()));
-
-            DEFAULT_GAME_CONTROLLER.getGameRoundControllerById(groupId).addPlayer(playerId);
+            lobbies.get(groupId).addPlayer(playerId);
         }
         else if (msg instanceof PlayerUpdateMessage) {
 
-            String groupId = ((PlayerUpdateMessage) msg).getGroupId();
+            String groupId = msg.getGroupId();
             String playerId = ((PlayerUpdateMessage) msg).getPlayerId();
 
-            DEFAULT_GAME_CONTROLLER.getGameRoundControllerById(groupId)
-                    .updatePlayer(playerId, ((PlayerUpdateMessage) msg).getKey());
+            lobbies.get(groupId).updatePlayer(playerId, ((PlayerUpdateMessage) msg).getKey());
         }
         // TODO: M3: Implement
-        else if (msg instanceof NewGameRound) {
+        else if (msg instanceof NewLobbyMessage) {
+
+            String groupId = msg.getGroupId();
+            String playerId = ((NewLobbyMessage) msg).getPlayerId();
+            JSONObject config = ((NewLobbyMessage) msg).getConfig();
+
+            lobbies.put(groupId, new Lobby(groupId, playerId, config));
+            new Thread(lobbies.get(groupId)).start();
+
+        }else if(msg instanceof LobbyConfigMessage){
+
+            String groupId = msg.getGroupId();
+            String playerId = ((LobbyConfigMessage) msg).getPlayerId();
+            JSONObject config = ((LobbyConfigMessage) msg).getConfig();
+
+            lobbies.get(groupId).setConfig(playerId, config);
 
         }
         else {

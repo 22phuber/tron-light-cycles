@@ -2,9 +2,9 @@ package ch.tron.transport;
 
 import ch.tron.middleman.messagedto.gametotransport.GameConfigMessage;
 import ch.tron.middleman.messagedto.gametotransport.GameStateUpdateMessage;
+import ch.tron.middleman.messagedto.transporttogame.NewLobbyMessage;
 import ch.tron.middleman.messagehandler.ToGameMessageForwarder;
 import ch.tron.middleman.messagedto.InAppMessage;
-import ch.tron.middleman.messagedto.transporttogame.NewPlayerMessage;
 import ch.tron.transport.webserverconfig.SocketInitializer;
 import ch.tron.transport.websocket.controller.WebSocketController;
 import ch.tron.transport.websocket.outboundhandler.JsonOutboundHandler;
@@ -55,7 +55,7 @@ public class TransportManager {
         // Automatically add new Channel to 'default'-ChannelGroup instantiated on top
         WebSocketController.addChannelToGroup(channel, DEFAULT_CHANNEL_GROUP_ID);
 
-        MESSAGE_FORWARDER.forwardMessage(new NewPlayerMessage(channel.id().asLongText(), DEFAULT_CHANNEL_GROUP_ID));
+        MESSAGE_FORWARDER.forwardMessage(new NewLobbyMessage(channel.id().asLongText(), DEFAULT_CHANNEL_GROUP_ID, new JSONObject()));
     }
 
     /**
@@ -67,10 +67,8 @@ public class TransportManager {
     public static void handleInAppIncomingMessage(InAppMessage msg) {
 
         if (msg instanceof GameStateUpdateMessage) {
-            // String groupId = ((GameStateUpdateMessage) msg).getGroupId();
 
-            // This is temporary
-            ChannelGroup channelGroup = WebSocketController.getGroups().get(DEFAULT_CHANNEL_GROUP_ID);
+            ChannelGroup channelGroup = WebSocketController.getChannelGroup(msg.getGroupId());
 
             JSONObject update = ((GameStateUpdateMessage) msg).getUpdate();
 
@@ -78,9 +76,7 @@ public class TransportManager {
         }
         else if (msg instanceof GameConfigMessage) {
 
-            Channel channel = WebSocketController.getChannel(
-                    "defaultId",
-                    ((GameConfigMessage) msg).getPlayerId());
+            ChannelGroup group = WebSocketController.getChannelGroup(msg.getGroupId());
             int canvasWidth = ((GameConfigMessage) msg).getCanvas_width();
             int canvasHeight = ((GameConfigMessage) msg).getCanvas_height();
 
@@ -89,7 +85,7 @@ public class TransportManager {
             jo.put("width", canvasWidth);
             jo.put("height", canvasHeight);
 
-            out.sendConfig(channel, jo);
+            out.sendConfig(group, jo);
         }
     }
 
