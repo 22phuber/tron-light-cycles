@@ -37,14 +37,14 @@ public class GameManager {
         
         if (msg instanceof JoinLobbyMessage) {
 
-            String groupId = ((JoinLobbyMessage) msg).getGroupId();
+            String groupId = msg.getGroupId();
             String playerId = ((JoinLobbyMessage) msg).getPlayerId();
 
             lobbies.get(groupId).addPlayer(playerId);
         }
         else if (msg instanceof PlayerUpdateMessage) {
 
-            String groupId = ((PlayerUpdateMessage) msg).getGroupId();
+            String groupId = msg.getGroupId();
             String playerId = ((PlayerUpdateMessage) msg).getPlayerId();
 
             lobbies.get(groupId).updatePlayer(playerId, ((PlayerUpdateMessage) msg).getKey());
@@ -52,7 +52,7 @@ public class GameManager {
         // TODO: M3: Implement
         else if (msg instanceof NewLobbyMessage) {
 
-            String groupId = ((NewLobbyMessage) msg).getGroupId();
+            String groupId = msg.getGroupId();
             String playerId = ((NewLobbyMessage) msg).getPlayerId();
 
             lobbies.put(groupId, new Lobby(groupId, playerId, "TEST"));
@@ -60,7 +60,7 @@ public class GameManager {
 
         }else if(msg instanceof LobbyConfigMessage){
 
-            String groupId = ((LobbyConfigMessage) msg).getGroupId();
+            String groupId = msg.getGroupId();
             String playerId = ((LobbyConfigMessage) msg).getPlayerId();
             JSONObject config = ((LobbyConfigMessage) msg).getConfig();
 
