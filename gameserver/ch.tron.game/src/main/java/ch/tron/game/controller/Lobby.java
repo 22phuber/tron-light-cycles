@@ -122,21 +122,24 @@ public class Lobby implements Runnable{
     //New Players are added to PlayerList in Lobby, they will join in the next GameRound
     public void addPlayer(String playerId) {
 
-        int player_count = players.size();
-        Color[] colors = GameColors.getColors10();
+        if(players.size() < maxPlayers) {
 
-        Player pl = new Player(
-                playerId,
-                "username",
-                50*player_count,
-                50*player_count,
-                1,
-                colors[player_count % colors.length]);
+            int player_count = players.size();
+            Color[] colors = GameColors.getColors10();
 
-        GameManager.getMessageForwarder()
-                .forwardMessage(new GameConfigMessage(playerId, CanvasConfig.WIDTH.value(), CanvasConfig.HEIGHT.value()));
+            Player pl = new Player(
+                    playerId,
+                    "username",
+                    50 * player_count,
+                    50 * player_count,
+                    1,
+                    colors[player_count % colors.length]);
 
-        players.put(pl.getId(), pl);
+            GameManager.getMessageForwarder()
+                    .forwardMessage(new GameConfigMessage(playerId, CanvasConfig.WIDTH.value(), CanvasConfig.HEIGHT.value()));
+
+            players.put(pl.getId(), pl);
+        }
     }
 
     public void setGame(Game game){
