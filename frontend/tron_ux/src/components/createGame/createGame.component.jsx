@@ -24,9 +24,9 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const CreateGame = () => {
+const CreateGame = (props) => {
   const classes = useStyles();
-  const [values, setValues] = React.useState({
+  const [defaultValues, setDefaultValues] = React.useState({
     visibility: "public",
     mode: "classic",
     maxPlayerLimit: "10",
@@ -37,31 +37,23 @@ const CreateGame = () => {
     if (prop === "mode") {
       switch (targetValue) {
         case "battleroyal":
-          setValues({ ...values, maxPlayerLimit: 100, [prop]: targetValue });
+          setDefaultValues({ ...defaultValues, maxPlayerLimit: 100, [prop]: targetValue });
           break;
         case "classic":
-          setValues({ ...values, maxPlayerLimit: 10, [prop]: targetValue });
+          setDefaultValues({ ...defaultValues, maxPlayerLimit: 10, [prop]: targetValue });
           break;
         default:
-          setValues({ ...values, [prop]: targetValue });
+          setDefaultValues({ ...defaultValues, [prop]: targetValue });
           break;
       }
     } else {
-      setValues({ ...values, [prop]: targetValue });
-    }
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // form data
-    for (const [key, value] of new FormData(event.target).entries()) {
-      console.log("[" + key + "]" + value);
+      setDefaultValues({ ...defaultValues, [prop]: targetValue });
     }
   };
 
   return (
     <div className={classes.root}>
-      <form onSubmit={handleSubmit} className={classes.form}>
+      <form onSubmit={props.handleSubmit} className={classes.form}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <TextField
@@ -80,7 +72,7 @@ const CreateGame = () => {
               <RadioGroup
                 aria-label="visibility"
                 name="visibility"
-                value={values.visibility}
+                value={defaultValues.visibility}
                 onChange={handleChange("visibility")}
               >
                 <FormControlLabel
@@ -102,7 +94,7 @@ const CreateGame = () => {
               <RadioGroup
                 aria-label="mode"
                 name="mode"
-                value={values.mode}
+                value={defaultValues.mode}
                 onChange={handleChange("mode")}
               >
                 <FormControlLabel
@@ -130,7 +122,7 @@ const CreateGame = () => {
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    /{values.maxPlayerLimit}
+                    /{defaultValues.maxPlayerLimit}
                   </InputAdornment>
                 ),
               }}

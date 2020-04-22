@@ -17,7 +17,6 @@ import TronAppBar from "./components/appBar/appBar.component";
 import GameTable from "./components/table/table.component";
 import CreateGame from "./components/createGame/createGame.component";
 import Footer from "./components/footer/footer.component";
-//import GameAnimation from "./components/gameAnimation/gameAnimation.component";
 import GameCanvas from "./components/gameCanvas/gameCanvas.component";
 import * as WebsocketHelpers from "./websocket/websocket.helpers";
 import LobbyTable from "./components/lobby/lobby.component";
@@ -58,6 +57,12 @@ const lobbyPlayersArray = [
     color: "gray",
   },
   {
+    id: "1234567890",
+    name: "this is me!",
+    readyState: "false",
+    color: "black",
+  },
+  {
     clientid: "tlyoDxNs3232cxdaV1EucmSlcfM-9yA",
     name: "Irish shizzle",
     readyState: "true",
@@ -69,12 +74,6 @@ const lobbyPlayersArray = [
     readyState: "false",
     color: "pink",
   },
-  {
-    id: "1234567890",
-    name: "this is me!",
-    readyState: "ready",
-    color: "black",
-  },
 ];
 
 const playerIdInitial = "1234567890";
@@ -82,23 +81,22 @@ const playerIdInitial = "1234567890";
 /* APP */
 const App = () => {
   const classes = useStyles();
-  //
-  const [playerId, setPlayerId] = useState(playerIdInitial);
-
+  // application modes
   const [playMode, setPlayMode] = useState(false);
   const [lobbyMode, setLobbyMode] = useState(false);
   // websocket
   const ws = useRef(null);
   const [wserror, setWsError] = useState(false);
-
   // game
+  const [playerId, setPlayerId] = useState(playerIdInitial);
   const [wsplayerdata, setWsPlayerData] = useState(null);
   const [gameCanvas, setGameCanvas] = useState({ height: 400, width: 400 });
   let rAF;
   // load games
   const [publicGames, setPublicGames] = useState(null);
-  // load players
+  // lobby players
   const [lobbyPlayers, setLobbyPlayers] = useState(lobbyPlayersArray);
+  const [lobbyData, setLobbyData] = useState({});
 
   useEffect(() => {
     handleWebsocket();
@@ -119,6 +117,7 @@ const App = () => {
     };
   }, [rAF]);
 
+  // handles websocket connection
   function handleWebsocket() {
     var connectInterval;
     ws.current = WebsocketHelpers.connectToWSGameServer();
@@ -200,6 +199,12 @@ const App = () => {
     };
   }
 
+  // load game for public game list
+  function loadGames() {
+    console.log("loadGames");
+    sendWsData(WebsocketHelpers.query.loadGames);
+  }
+
   // Check if connection ist lost and try to reconnect
   function checkWsState() {
     if (!ws.current || ws.current.readyState === WebSocket.CLOSED) {
@@ -207,10 +212,12 @@ const App = () => {
     }
   }
 
+  // playerData for game rendering
   function handlePlayerData(data) {
     setWsPlayerData(data);
   }
 
+  // sends data to websocket server
   function sendWsData(data) {
     if (ws.current && ws.current.readyState === WebSocket.OPEN) {
       ws.current.send(JSON.stringify(data));
@@ -219,6 +226,7 @@ const App = () => {
     }
   }
 
+  // key press for game directions
   function handleKeyPress(event) {
     const pressedKey = event.key;
     if (directionKeys.includes(pressedKey)) {
@@ -229,9 +237,22 @@ const App = () => {
     }
   }
 
-  function loadGames() {
-    console.log("loadGames");
-    sendWsData(WebsocketHelpers.query.loadGames);
+  // handle create new game/lobby data
+  function handleCreateGame(event) {
+    event.preventDefault();
+    let createGameTempData = {};
+    for (const [key, value] of new FormData(event.target).entries()) {
+      createGameTempData[key] = value;
+    }
+    setLobbyData(createGameTempData);
+    setLobbyMode(true);
+    setPlayMode(true);
+  }
+
+  // cancel Lobby & gameMode
+  function cancelLobby() {
+    setLobbyMode(false);
+    setPlayMode(false);
   }
 
   return (
@@ -269,7 +290,7 @@ const App = () => {
                   Create Game
                 </Typography>
                 <Paper>
-                  <CreateGame />
+                  <CreateGame handleSubmit={handleCreateGame} />
                 </Paper>
               </Box>
             </Container>
@@ -277,7 +298,7 @@ const App = () => {
         </React.Fragment>
       ) : (
         <section>
-           {lobbyMode ? (
+          {lobbyMode ? (
             <React.Fragment>
               <section>
                 <Container maxWidth="lg">
@@ -291,7 +312,12 @@ const App = () => {
                       Lobby
                     </Typography>
                     <Paper>
-                      <LobbyTable lobbyPlayers={lobbyPlayers} myPlayerId={playerId} />
+                      <LobbyTable
+                        lobbyPlayers={lobbyPlayers}
+                        lobbyData={lobbyData}
+                        myPlayerId={playerId}
+                        exitLobby={cancelLobby}
+                      />
                     </Paper>
                   </Box>
                 </Container>
@@ -299,28 +325,26 @@ const App = () => {
             </React.Fragment>
           ) : (
             <section>
-            {wsplayerdata && !wserror ? (
-              <GameCanvas
-                width={gameCanvas.width}
-                height={gameCanvas.height}
-                playersData={wsplayerdata}
-              />
-            ) : (
-              <div>
-                Connecting to Game server...
-                <br />
-                <CircularProgress
-                  color="inherit"
-                  className={classes.circularProgress}
+              {wsplayerdata && !wserror ? (
+                <GameCanvas
+                  width={gameCanvas.width}
+                  height={gameCanvas.height}
+                  playersData={wsplayerdata}
                 />
-              </div>
-            )}
+              ) : (
+                <div>
+                  Connecting to Game server...
+                  <br />
+                  <CircularProgress
+                    color="inherit"
+                    className={classes.circularProgress}
+                  />
+                </div>
+              )}
             </section>
           )}
-          
         </section>
       )}
-
 
       <Footer />
     </ThemeProvider>

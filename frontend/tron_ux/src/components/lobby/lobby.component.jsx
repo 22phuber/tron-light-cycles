@@ -7,18 +7,11 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
-import IconButton from "@material-ui/core/IconButton";
-import DirectionsBikeRoundedIcon from "@material-ui/icons/DirectionsBikeRounded";
-import Tooltip from "@material-ui/core/Tooltip";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Grid from "@material-ui/core/Grid";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
-import FormLabel from "@material-ui/core/FormLabel";
 import Button from "@material-ui/core/Button";
-import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
-import FormHelperText from "@material-ui/core/FormHelperText";
 import Switch from "@material-ui/core/Switch";
 import Select from "@material-ui/core/Select";
 
@@ -66,18 +59,33 @@ const useStyles = makeStyles({
 const LobbyTable = (props) => {
   const classes = useStyles();
 
-  const { lobbyPlayers, myPlayerId } = props;
+  const { lobbyData, lobbyPlayers, myPlayerId } = props;
+  const [myPlayerColor, setMyPlayerColor] = React.useState("black");
+  const [usedPlayerColors, setUsedPlayerColors] = React.useState([]);
+  const [myReadyState, setMyReadyState] = React.useState(false);
 
-  const [myPlayerColor, setMyPlayerColor] = React.useState("Black");
-  let [readyStates, setReadyStateStates] = React.useState({});
+  useEffect(() => {
+    if (lobbyPlayers) {
+      lobbyPlayers.map((player) => {
+        if (myPlayerId === player.id) {
+          setMyPlayerColor(player.color);
+          setMyReadyState(true); // set current player to ready
+        }
+        console.log(player.color);
+        setUsedPlayerColors(usedPlayerColors.concat(player.color));
+        return true;
+      });
+    }
+  }, [lobbyPlayers,myPlayerId]);
 
-  const headerCells = (
-    <TableRow>
-      <StyledTableCell>PLAYERNAME</StyledTableCell>
-      <StyledTableCell align="right">COLOR</StyledTableCell>
-      <StyledTableCell align="right">READY</StyledTableCell>
-    </TableRow>
-  );
+  const handleChangeColor = (event) => {
+    setMyPlayerColor(event.target.value);
+  };
+
+  const handleMyReadyState = (event) => {
+    setMyReadyState(event.target.checked);
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     // form data
@@ -86,39 +94,22 @@ const LobbyTable = (props) => {
     }
   };
 
-  useEffect(() => {
-    if (lobbyPlayers) {
-      lobbyPlayers.map((player) => {
-        if (myPlayerId == player.id) {
-          setMyPlayerColor(player.color);
-        }
-        console.log("name" + player.name + " state" + player.readyState);
-        readyStates = { ...readyStates, [player.name]: player.readyState }
-      });
-    }
-    setReadyStateStates(readyStates);
-    console.log(readyStates);
-  }, []);
-
-  const handleChangeColor = (event) => {
-    setMyPlayerColor(event.target.value);
-  };
-
-  const handleChangeReady = (event) => {
-    setReadyStateStates({
-      ...readyStates,
-      [event.target.name]: event.target.checked,
-    });
-  };
+  const headerCells = (
+    <TableRow>
+      <StyledTableCell>PLAYERNAME</StyledTableCell>
+      <StyledTableCell align="right">COLOR</StyledTableCell>
+      <StyledTableCell align="right">READY</StyledTableCell>
+    </TableRow>
+  );
 
   return (
     <div className={classes.root}>
       <form onSubmit={handleSubmit} className={classes.form}>
         <Grid container spacing={1}>
-          <Grid item>Lobbyname: Test</Grid>
-          <Grid item>Visibility: private</Grid>
-          <Grid item>Game mode: Tron classic</Grid>
-          <Grid item>Max. Players: 10</Grid>
+          <Grid item>Lobbyname: {lobbyData.gamename}</Grid>
+          <Grid item>Visibility: {lobbyData.visibility}</Grid>
+          <Grid item>Game mode: {lobbyData.mode}</Grid>
+          <Grid item>Max. Players: {lobbyData.maxplayers}</Grid>
           <Grid item xs={12}>
             <TableContainer
               component={Paper}
@@ -133,28 +124,33 @@ const LobbyTable = (props) => {
                 <TableBody>
                   {(lobbyPlayers &&
                     lobbyPlayers.map((player) => (
-                      <StyledTableRow key={player.name + "_" + player.id} hover>
+                      <StyledTableRow
+                        key={
+                          player.name.replace(/\s+/g, "-").toLowerCase() +
+                          "_" +
+                          player.id
+                        }
+                        hover
+                      >
                         <StyledTableCell component="th" scope="row">
                           {player.name}
                         </StyledTableCell>
                         <StyledTableCell align="right">
                           <FormControl
                             className={classes.formControl}
-                            disabled={myPlayerId != player.id}
+                            disabled={myPlayerId !== player.id}
                           >
                             <Select
                               value={
-                                myPlayerId != player.id
+                                myPlayerId !== player.id
                                   ? player.color
                                   : myPlayerColor
                               }
                               onChange={handleChangeColor}
+                              name={player.name + "_color"}
                               displayEmpty
                               className={classes.selectEmpty}
                             >
-                              <MenuItem value="">
-                                <em>Red</em>
-                              </MenuItem>
                               <MenuItem value={"red"}>Red</MenuItem>
                               <MenuItem value={"green"}>Green </MenuItem>
                               <MenuItem value={"black"}>Black </MenuItem>
@@ -166,11 +162,14 @@ const LobbyTable = (props) => {
                         </StyledTableCell>
                         <StyledTableCell align="right">
                           <Switch
-                            disabled={myPlayerId != player.id}
-                            checked={readyStates[player.name]}
-                            onChange={handleChangeReady}
+                            disabled={myPlayerId !== player.id}
+                            checked={
+                              myPlayerId !== player.id
+                                ? /true/i.test(player.readyState)
+                                : myReadyState
+                            }
+                            onChange={handleMyReadyState}
                             color="primary"
-                            name="checkedB"
                             inputProps={{ "aria-label": "ready" }}
                           />
                         </StyledTableCell>
@@ -193,15 +192,20 @@ const LobbyTable = (props) => {
               </Table>
             </TableContainer>
           </Grid>
-          </Grid>
-          <Grid container spacing={3} justify="center">
-          <Grid item xs={6}>
+        </Grid>
+        <Grid container spacing={3} justify="center">
+          <Grid item xs={3}>
             <Button
               variant="contained"
-              color="primary"
-              type="submit"
+              color="secondary"
               fullWidth
+              onClick={props.exitLobby}
             >
+              Cancel
+            </Button>
+          </Grid>
+          <Grid item xs={6}>
+            <Button variant="contained" color="primary" type="submit" fullWidth>
               Start
             </Button>
           </Grid>
