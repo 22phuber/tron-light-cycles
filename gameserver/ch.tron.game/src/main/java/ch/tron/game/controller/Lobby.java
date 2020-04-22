@@ -82,7 +82,7 @@ public class Lobby implements Runnable{
             while(numberOfRounds > 0) {
 
                 LOGGER.info("Entered GameRound");
-                gameRound = new GameRound(id, getReadyPlayer());
+                gameRound = new GameRound(id, (HashMap)players); //change back to getReadyPlayers()
                 gameRound.start();
                 numberOfRounds--;
                 roundsPlayed++;
