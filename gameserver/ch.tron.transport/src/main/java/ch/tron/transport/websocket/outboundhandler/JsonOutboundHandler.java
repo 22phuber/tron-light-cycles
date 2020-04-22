@@ -23,13 +23,13 @@ public class JsonOutboundHandler {
     }
 
     /**
-     * Sends the game configuration of the game round a game player (client) is
-     * connected to to the corresponding {@link Channel}.
-     * @param channel   The specific connection to the client.
+     * Sends the game configuration of the game to all players (clients)
+     * attending a given {@link ChannelGroup}.
+     * @param group     The {@link ChannelGroup} to send the config to.
      * @param config    The game configuration information.
      */
-    public void sendConfig(Channel channel, JSONObject config) {
+    public void sendConfig(ChannelGroup group, JSONObject config) {
 
-        channel.writeAndFlush(new TextWebSocketFrame(config.toString()));
+        group.writeAndFlush(new TextWebSocketFrame(config.toString()));
     }
 }
