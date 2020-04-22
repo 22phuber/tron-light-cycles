@@ -27,10 +27,10 @@ public class GameRound {
     private final double FPS = 60;
     private final double LOOP_INTERVAL = 1000000000 / FPS;
 
-    public GameRound(int lobbyId, HashMap players) {
+    public GameRound(String lobbyId, HashMap players) {
 
         this.players = players;
-        this.gameStateUpdateMessage = new GameStateUpdateMessage(Integer.toString(lobbyId));
+        this.gameStateUpdateMessage = new GameStateUpdateMessage(lobbyId);
 
     }
 

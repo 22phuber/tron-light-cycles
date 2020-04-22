@@ -22,12 +22,12 @@ public class Lobby implements Runnable{
     private GameRound gameRound;
     private Map<String, Player> players = new HashMap<>();
     private int roundsPlayed = 0;
-    private int id;
+    private String id;
     private String name;
     private int numberOfRounds = 5;
     private Player host;
 
-    public Lobby(int id, String host, String name) {
+    public Lobby(String id, String host, String name) {
         this.id = id;
         this.game = new Game("classic");
         addPlayer(host);

@@ -54,9 +54,10 @@ public class GameManager {
         // TODO: M3: Implement
         else if (msg instanceof NewLobbyMessage) {
 
-            String playerId = ((PlayerUpdateMessage) msg).getPlayerId();
+            String groupId = ((NewLobbyMessage) msg).getGroupId();
+            String playerId = ((NewLobbyMessage) msg).getPlayerId();
 
-            lobbies.add(new Lobby(lobbies.size(), playerId, "TEST"));
+            lobbies.add(new Lobby(groupId, playerId, "TEST"));
             new Thread(lobbies.get(lobbies.size()-1)).start();
 
         }
