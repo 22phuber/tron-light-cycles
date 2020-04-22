@@ -8,16 +8,21 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Grid from "@material-ui/core/Grid";
-import InputLabel from '@material-ui/core/InputLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import NativeSelect from '@material-ui/core/NativeSelect';
+import InputLabel from "@material-ui/core/InputLabel";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
+import NativeSelect from "@material-ui/core/NativeSelect";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
-    margin: theme.spacing(1),
+    margin: theme.spacing(0),
+    marginTop: theme.spacing(2),
     minWidth: 120,
+    width: '100%',
+  },
+  colorSelect: {
+    width: '100%',
   },
 }));
 
@@ -27,8 +32,7 @@ const RegisterDialog = (props) => {
   const classes = useStyles();
 
   const [state, setState] = React.useState({
-    age: "",
-    name: "hai",
+    color: "black",
   });
 
   const handleSubmit = (event) => {
@@ -117,23 +121,26 @@ const RegisterDialog = (props) => {
               required
             />
             <Grid container spacing={3}>
-              <Grid item xs={6}>
+              <Grid item xs={12}>
                 <FormControl className={classes.formControl}>
-                  <InputLabel htmlFor="age-native-helper">Age</InputLabel>
+                  <InputLabel htmlFor="color-native-helper">Color</InputLabel>
                   <NativeSelect
-                    value={state.age}
+                    value={state.color}
                     onChange={handleChange}
+                    className={classes.colorSelect}
                     inputProps={{
-                      name: "age",
-                      id: "age-native-helper",
+                      name: "color",
+                      id: "color-native-helper",
                     }}
                   >
-                    <option aria-label="None" value="" />
-                    <option value={10}>Ten</option>
-                    <option value={20}>Twenty</option>
-                    <option value={30}>Thirty</option>
+                    <option value={"red"}>Red</option>
+                    <option value={"green"}>Green</option>
+                    <option value={"black"}>Black</option>
+                    <option value={"blue"}>Blue</option>
+                    <option value={"pink"}>Pink</option>
+                    <option value={"gray"}>Gray</option>
                   </NativeSelect>
-                  <FormHelperText>Some important helper text</FormHelperText>
+                  <FormHelperText>Choose your players color</FormHelperText>
                 </FormControl>
               </Grid>
             </Grid>
@@ -153,52 +160,3 @@ const RegisterDialog = (props) => {
 };
 
 export default RegisterDialog;
-
-// class Register extends Component {
-//   render() {
-//     return (
-//       <Dialog
-//         open
-//         onRequestClose={this.props.toggleRegister}
-//         fullScreen={this.props.fullScreen}>
-//         <DialogTitle>Registration</DialogTitle>
-//         <DialogContent>
-//           <TextField
-//             autoFocus
-//             margin="dense"
-//             id="name"
-//             label="Username"
-//             type="text"
-//             fullWidth
-//           />
-//           <TextField
-//             autoFocus
-//             margin="dense"
-//             id="name"
-//             label="Password"
-//             type="password"
-//             fullWidth
-//           />
-//           <TextField
-//             autoFocus
-//             margin="dense"
-//             id="name"
-//             label="Email"
-//             type="email"
-//             fullWidth
-//           />
-//         </DialogContent>
-//         <DialogActions>
-//           <Button onClick={this.props.toggleRegister} color="primary">
-//             Cancel
-//           </Button>
-//           <Button onClick={this.props.toggleRegister} color="primary">
-//             OK
-//           </Button>
-//         </DialogActions>
-//       </Dialog>
-//     );
-//   }
-// }
-
-// export default Register;
