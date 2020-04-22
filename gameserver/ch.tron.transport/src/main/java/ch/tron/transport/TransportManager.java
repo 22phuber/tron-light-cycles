@@ -2,7 +2,7 @@ package ch.tron.transport;
 
 import ch.tron.middleman.messagedto.gametotransport.GameConfigMessage;
 import ch.tron.middleman.messagedto.gametotransport.GameStateUpdateMessage;
-import ch.tron.middleman.messagedto.transporttogame.JoinLobbyMessage;
+import ch.tron.middleman.messagedto.transporttogame.NewLobbyMessage;
 import ch.tron.middleman.messagehandler.ToGameMessageForwarder;
 import ch.tron.middleman.messagedto.InAppMessage;
 import ch.tron.transport.webserverconfig.SocketInitializer;
@@ -55,7 +55,7 @@ public class TransportManager {
         // Automatically add new Channel to 'default'-ChannelGroup instantiated on top
         WebSocketController.addChannelToGroup(channel, DEFAULT_CHANNEL_GROUP_ID);
 
-        MESSAGE_FORWARDER.forwardMessage(new JoinLobbyMessage(channel.id().asLongText(), DEFAULT_CHANNEL_GROUP_ID));
+        MESSAGE_FORWARDER.forwardMessage(new NewLobbyMessage(channel.id().asLongText(), DEFAULT_CHANNEL_GROUP_ID, new JSONObject()));
     }
 
     /**

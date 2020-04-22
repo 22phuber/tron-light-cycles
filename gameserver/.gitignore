@@ -1,5 +1,8 @@
 *.idea
 **/*.iml
+**/*.settings
+**/*.project
+**/*.classpath
 **/target/**
 /**/META-INF/**
 *.tmp
