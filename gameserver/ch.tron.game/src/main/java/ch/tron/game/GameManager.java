@@ -12,7 +12,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Connects {@link ch.tron.game} to {@code ch.tron.middleman}.
@@ -24,7 +26,7 @@ public class GameManager {
 
     private static final ToTransportMessageForwarder MESSAGE_FORWARDER = new ToTransportMessageForwarder();
 
-    private static List<Lobby> lobbies = new ArrayList<>();
+    private static Map<String,Lobby> lobbies = new HashMap<>();
 
     public static ToTransportMessageForwarder getMessageForwarder() { return MESSAGE_FORWARDER; }
 
@@ -42,14 +44,14 @@ public class GameManager {
 
             MESSAGE_FORWARDER.forwardMessage(new GameConfigMessage(playerId, CanvasConfig.WIDTH.value(), CanvasConfig.HEIGHT.value()));
 
-            lobbies.get(Integer.parseInt(groupId)).addPlayer(playerId);
+            lobbies.get(groupId).addPlayer(playerId);
         }
         else if (msg instanceof PlayerUpdateMessage) {
 
             String groupId = ((PlayerUpdateMessage) msg).getGroupId();
             String playerId = ((PlayerUpdateMessage) msg).getPlayerId();
 
-            lobbies.get(Integer.parseInt(groupId)).updatePlayer(playerId, ((PlayerUpdateMessage) msg).getKey());
+            lobbies.get(groupId).updatePlayer(playerId, ((PlayerUpdateMessage) msg).getKey());
         }
         // TODO: M3: Implement
         else if (msg instanceof NewLobbyMessage) {
@@ -57,7 +59,7 @@ public class GameManager {
             String groupId = ((NewLobbyMessage) msg).getGroupId();
             String playerId = ((NewLobbyMessage) msg).getPlayerId();
 
-            lobbies.add(new Lobby(groupId, playerId, "TEST"));
+            lobbies.put(groupId, new Lobby(groupId, playerId, "TEST"));
             new Thread(lobbies.get(lobbies.size()-1)).start();
 
         }
