@@ -185,4 +185,16 @@ public class Lobby implements Runnable{
             this.playing = true;
         }
     }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public int getNumberOfRounds() {
+        return numberOfRounds;
+    }
+
+    public void setNumberOfRounds(int numberOfRounds) {
+        this.numberOfRounds = numberOfRounds;
+    }
 }
