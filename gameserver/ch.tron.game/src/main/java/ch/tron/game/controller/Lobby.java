@@ -66,9 +66,11 @@ public class Lobby implements Runnable{
 
             }
 
-            //MESSAGE_FORWARDER.forwardMessage(new GameConfigMessage(id, CanvasConfig.WIDTH.value(), CanvasConfig.HEIGHT.value()));
+            //send GameConfig to all Players in Lobby
+            GameManager.getMessageForwarder().forwardMessage(new GameConfigMessage(id, CanvasConfig.WIDTH.value(), CanvasConfig.HEIGHT.value()));
 
-            //run set numbers of rounds. Default 5**
+
+            //run set numbers of rounds. Default 5
             while(numberOfRounds > 0) {
 
                 gameRound = new GameRound(id, (HashMap) players);
@@ -103,20 +105,6 @@ public class Lobby implements Runnable{
         players.put("players", all);
         return players;
 
-    }
-
-    private boolean arePlayersReady(){
-
-        Iterator iterator = this.players.entrySet().iterator();
-        while(iterator.hasNext()){
-            Map.Entry pair = (Map.Entry)iterator.next();
-            Player player = (Player)pair.getValue();
-            if(!player.isReady()){
-                return false;
-            }
-        }
-
-        return true;
     }
 
     //New Players are added to PlayerList in Lobby, they will join in the next GameRound
