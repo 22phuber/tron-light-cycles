@@ -119,7 +119,7 @@ const LobbyTable = (props) => {
           <Grid item>Visibility: private</Grid>
           <Grid item>Game mode: Tron classic</Grid>
           <Grid item>Max. Players: 10</Grid>
-          <Grid item>
+          <Grid item xs={12}>
             <TableContainer
               component={Paper}
               className={classes.tableContainer}
@@ -193,12 +193,14 @@ const LobbyTable = (props) => {
               </Table>
             </TableContainer>
           </Grid>
-          <Grid item>
+          </Grid>
+          <Grid container spacing={3} justify="center">
+          <Grid item xs={6}>
             <Button
               variant="contained"
               color="primary"
               type="submit"
-              spacing={1}
+              fullWidth
             >
               Start
             </Button>
