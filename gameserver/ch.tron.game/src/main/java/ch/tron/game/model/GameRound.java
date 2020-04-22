@@ -23,7 +23,6 @@ public class GameRound {
     private Map<String, Player> players;
     private final Logger logger = LoggerFactory.getLogger(GameRound.class);
 
-    private Thread gameLoop;
     private final double FPS = 60;
     private final double LOOP_INTERVAL = 1000000000 / FPS;
 
@@ -32,10 +31,6 @@ public class GameRound {
         this.players = players;
         this.gameStateUpdateMessage = new GameStateUpdateMessage(lobbyId);
 
-    }
-
-    public Map<String, Player> playersMap() {
-        return players;
     }
 
     public JSONObject playersJSON() throws JSONException {
