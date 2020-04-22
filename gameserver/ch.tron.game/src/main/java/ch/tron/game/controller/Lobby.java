@@ -7,6 +7,8 @@ import ch.tron.game.model.Game;
 import ch.tron.game.model.GameRound;
 import ch.tron.game.model.Player;
 import ch.tron.middleman.messagedto.gametotransport.GameConfigMessage;
+import ch.tron.middleman.messagehandler.InAppMessageForwarder;
+import ch.tron.middleman.messagehandler.ToTransportMessageForwarder;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -18,6 +20,7 @@ import java.util.Map;
  */
 public class Lobby implements Runnable{
 
+    private static final ToTransportMessageForwarder MESSAGE_FORWARDER = new ToTransportMessageForwarder();
     private Game game;
     private GameRound gameRound;
     private Map<String, Player> players = new HashMap<>();
@@ -52,6 +55,8 @@ public class Lobby implements Runnable{
                 //Players can leave....
 
             }
+
+            MESSAGE_FORWARDER.forwardMessage(new GameConfigMessage(id, CanvasConfig.WIDTH.value(), CanvasConfig.HEIGHT.value()));
 
             //run set numbers of rounds. Default 5**
             while(numberOfRounds > 0) {

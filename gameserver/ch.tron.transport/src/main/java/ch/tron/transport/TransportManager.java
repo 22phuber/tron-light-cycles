@@ -80,7 +80,7 @@ public class TransportManager {
 
             Channel channel = WebSocketController.getChannel(
                     "defaultId",
-                    ((GameConfigMessage) msg).getPlayerId());
+                    ((GameConfigMessage) msg).getGroupId());
             int canvasWidth = ((GameConfigMessage) msg).getCanvas_width();
             int canvasHeight = ((GameConfigMessage) msg).getCanvas_height();
 

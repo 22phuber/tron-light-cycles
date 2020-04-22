@@ -42,8 +42,6 @@ public class GameManager {
             String groupId = ((JoinLobbyMessage) msg).getGroupId();
             String playerId = ((JoinLobbyMessage) msg).getPlayerId();
 
-            MESSAGE_FORWARDER.forwardMessage(new GameConfigMessage(playerId, CanvasConfig.WIDTH.value(), CanvasConfig.HEIGHT.value()));
-
             lobbies.get(groupId).addPlayer(playerId);
         }
         else if (msg instanceof PlayerUpdateMessage) {
