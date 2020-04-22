@@ -8,7 +8,6 @@ const GameCanvas = props => {
 
   useEffect(() => {
     const { playersData, width, height } = props;
-    //console.log(playersData + " width:" + width + " height:" + height);
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
     if (playersData) {

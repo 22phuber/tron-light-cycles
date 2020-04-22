@@ -9,13 +9,13 @@ let wsReconnectTimeout = 250;
 // Allowed direction keys
 const directionKeys = ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"];
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   circularProgress: {
-    margin: "25px"
-  }
+    margin: "25px",
+  },
 }));
 
-const GameAnimation = props => {
+const GameAnimation = (props) => {
   const [ws, setWs] = useState(null);
   const [wsdata, setWsData] = useState(null);
   const [wserror, setWsError] = useState(false);
@@ -25,7 +25,7 @@ const GameAnimation = props => {
   useEffect(() => {
     return () => {
       cancelAnimationFrame(rAF);
-      if(ws && ws.readyState === WebSocket.OPEN) ws.close();
+      if (ws && ws.readyState === WebSocket.OPEN) ws.close();
     };
   }, [ws, rAF]);
 
@@ -51,7 +51,7 @@ const GameAnimation = props => {
   }
 
   function sendWsData(data) {
-    if(ws && ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify(data));
+    if (ws && ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify(data));
   }
 
   function handleWebsocket() {
@@ -67,7 +67,7 @@ const GameAnimation = props => {
     };
 
     // Websocket: onclose event listener
-    websocket.onclose = e => {
+    websocket.onclose = (e) => {
       setWsData(null); // reset data (removes artifacts)
       console.log(
         `Websocket is closed. Reconnect will be attempted in ${Math.min(
@@ -84,7 +84,7 @@ const GameAnimation = props => {
     };
 
     // Websocket: when a message has been received
-    websocket.onmessage = msg => {
+    websocket.onmessage = (msg) => {
       const data = JSON.parse(msg.data);
       if (data.width && data.height) {
         setGameCanvas({ height: data.height, width: data.width });
@@ -96,7 +96,7 @@ const GameAnimation = props => {
     };
 
     // Websocket: onerror event listener
-    websocket.onerror = err => {
+    websocket.onerror = (err) => {
       console.error(
         "Websocket couldn't connect ",
         err.message,
@@ -132,7 +132,10 @@ const GameAnimation = props => {
         <br />
         Trying to reconnect...
         <br />
-        <CircularProgress className={classes.circularProgress} />
+        <CircularProgress
+          color="inherit"
+          className={classes.circularProgress}
+        />
       </div>
     );
   } else {
@@ -140,7 +143,10 @@ const GameAnimation = props => {
       <div>
         Connecting to Game server...
         <br />
-        <CircularProgress className={classes.circularProgress} />
+        <CircularProgress
+          color="inherit"
+          className={classes.circularProgress}
+        />
       </div>
     );
   }
