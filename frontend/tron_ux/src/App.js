@@ -84,8 +84,12 @@ const App = () => {
     lobbyMode: false,
   });
   // State: websocket & reference
-  const ws = useRef(null);
-  const [wserror, setWsError] = useState(false);
+  const websocketClient = useRef(null);
+  const [websocketState, setWebsocketState] = useState({
+    websocketClient: null,
+    reconnectTimeout: 250,
+    wsError: false,
+  });
   // State: Game data
   const [gameData, setGameData] = useState({
     player: { playerName: "thePlayerName", clientId: "theClientIds" },
@@ -142,13 +146,13 @@ const App = () => {
   // Request Animation Frame variable
   let rAF;
 
-  // const [playerId, setPlayerId] = useState(null); // => player: { name: "", id: "" }
-  // const [gameCanvas, setGameCanvas] = useState({ height: 400, width: 400 }); // => gameConfig
-  // // load games
-  // const [publicGames, setPublicGames] = useState(null); // => publicGames
-  // // lobby players
-  // const [lobbyPlayers, setLobbyPlayers] = useState(null); // inside lobbyState
-  // const [lobbyData, setLobbyData] = useState({}); // lobbyState
+  const [playerId, setPlayerId] = useState(null); // => player: { name: "", id: "" }
+  const [gameCanvas, setGameCanvas] = useState({ height: 400, width: 400 }); // => gameConfig
+  // load games
+  const [publicGames, setPublicGames] = useState(null); // => publicGames
+  // lobby players
+  const [lobbyPlayers, setLobbyPlayers] = useState(null); // inside lobbyState
+  const [lobbyData, setLobbyData] = useState({}); // lobbyState
 
   useEffect(() => {
     setLobbyPlayers(lobbyPlayersArray);
@@ -158,8 +162,11 @@ const App = () => {
     document.addEventListener("keydown", handleKeyPress, false);
     return () => {
       console.log("useEffect ws.close() called");
-      if (ws.current && ws.current.readyState === WebSocket.OPEN)
-        ws.current.close();
+      if (
+        websocketClient.current &&
+        websocketClient.current.readyState === WebSocket.OPEN
+      )
+        websocketClient.current.close();
       console.log("useEffect remove eventistener called");
       document.removeEventListener("keydown", handleKeyPress, false);
     };
@@ -180,18 +187,19 @@ const App = () => {
   // handles websocket connection
   function handleWebsocket() {
     var connectInterval;
-    ws.current = WSHelpers.connectToWSGameServer();
+    websocketClient.current = WSHelpers.connectToWSGameServer();
     //ws.current = WebsocketHelpers.connectToWSNettyGameServer();
     // OPEN
-    ws.current.onopen = () => {
-      setWsError(false);
+    websocketClient.current.onopen = () => {
+      websocketState.wsError &&
+        setWebsocketState({ ...websocketState, wsError: false });
       console.log("Websocket connected");
       clearTimeout(connectInterval);
       loadGames();
     };
 
     // ONMESSAGE
-    ws.current.onmessage = (message) => {
+    websocketClient.current.onmessage = (message) => {
       let dataFromServer = null;
       try {
         dataFromServer = JSON.parse(message.data);
@@ -226,18 +234,18 @@ const App = () => {
     };
 
     // error
-    ws.current.onerror = (error) => {
+    websocketClient.current.onerror = (error) => {
       console.error(
         "Websocket couldn't connect ",
         error.message,
         "Closing websocket"
       );
-      setWsError(true);
-      ws.current.close();
+      setWebsocketState({ ...websocketState, wsError: true });
+      websocketClient.current.close();
     };
 
     // close
-    ws.current.onclose = (e) => {
+    websocketClient.current.onclose = (e) => {
       setWsPlayerData(null); // reset data (removes artifacts)
       console.log(
         `Websocket is closed. Reconnect will be attempted in ${Math.min(
@@ -260,7 +268,7 @@ const App = () => {
     if (
       !appState.playMode &&
       !appState.lobbyMode &&
-      ws.current.readyState === WebSocket.OPEN
+      websocketClient.current.readyState === WebSocket.OPEN
     ) {
       console.log("loadGames");
       sendWsData(WSHelpers.QUERY.UPDATEPUBLICGAMES);
@@ -269,8 +277,11 @@ const App = () => {
 
   // Check if connection ist lost and try to reconnect
   function checkWsState() {
-    if (!ws.current || ws.current.readyState === WebSocket.CLOSED) {
-      handleWebsocket(ws);
+    if (
+      !websocketClient.current ||
+      websocketClient.current.readyState === WebSocket.CLOSED
+    ) {
+      handleWebsocket(websocketClient);
     }
   }
 
@@ -281,8 +292,11 @@ const App = () => {
 
   // sends data to websocket server
   function sendWsData(data) {
-    if (ws.current && ws.current.readyState === WebSocket.OPEN) {
-      ws.current.send(JSON.stringify(data));
+    if (
+      websocketClient.current &&
+      websocketClient.current.readyState === WebSocket.OPEN
+    ) {
+      websocketClient.current.send(JSON.stringify(data));
     } else {
       console.log("Websocket not ready");
     }
