@@ -55,6 +55,11 @@ public class TransportManager {
         // Automatically add new Channel to 'default'-ChannelGroup instantiated on top
         WebSocketController.addChannelToGroup(channel, DEFAULT_CHANNEL_GROUP_ID);
 
+        JSONObject clientId = new JSONObject();
+        clientId.put("subject", "clientId");
+        clientId.put("id", channel.id().asLongText());
+        out.sendClientId(channel, clientId);
+
         MESSAGE_FORWARDER.forwardMessage(new NewLobbyMessage(channel.id().asLongText(), DEFAULT_CHANNEL_GROUP_ID, new JSONObject()));
     }
 

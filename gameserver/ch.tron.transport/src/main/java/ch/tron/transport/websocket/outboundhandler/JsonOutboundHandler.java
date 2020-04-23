@@ -12,6 +12,18 @@ import org.json.JSONObject;
 public class JsonOutboundHandler {
 
     /**
+     * Sends the id of a player (client) to the specific player
+     * once client server connection has been established.
+     *
+     * @param channel   The {@link Channel} representing the connection.
+     * @param id        The id of the newly connected client.
+     */
+    public void sendClientId(Channel channel, JSONObject id) {
+
+        channel.writeAndFlush(new TextWebSocketFrame(id.toString()));
+    }
+
+    /**
      * Sends updated game state to game players (clients)
      * attending a given {@link ChannelGroup}.
      * @param group     The {@link ChannelGroup} to send the updates to.

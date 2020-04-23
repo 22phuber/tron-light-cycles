@@ -29,6 +29,8 @@
     ws.onmessage = (msg) => {
         msg = JSON.parse(msg.data);
         switch (msg.subject) {
+            case "clientId":
+                console.log("ClientId: " + msg.id);
             case "canvas config":
                 if (canvas === undefined) {
                     canvas_width = msg.width;

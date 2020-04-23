@@ -3,7 +3,6 @@ package ch.tron.transport.websocket.state;
 import io.netty.channel.Channel;
 import io.netty.channel.group.ChannelGroup;
 
-import java.util.AbstractQueue;
 import java.util.HashMap;
 import java.util.Map;
 
