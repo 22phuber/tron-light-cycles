@@ -3,6 +3,7 @@ package ch.tron.transport;
 import ch.tron.middleman.messagedto.backAndForth.CurrentPublicGamesRequest;
 import ch.tron.middleman.messagedto.gametotransport.GameConfigMessage;
 import ch.tron.middleman.messagedto.gametotransport.GameStateUpdateMessage;
+import ch.tron.middleman.messagedto.gametotransport.LobbyStateUpdateMessage;
 import ch.tron.middleman.messagedto.transporttogame.NewLobbyMessage;
 import ch.tron.middleman.messagehandler.ToGameMessageForwarder;
 import ch.tron.middleman.messagedto.InAppMessage;
@@ -78,6 +79,13 @@ public class TransportManager {
             out.sendJsonToChannel(
                     WebSocketController.getLonelyChannel(((CurrentPublicGamesRequest) msg).getPlayerId()),
                     ((CurrentPublicGamesRequest) msg).getPublicGames());
+        }
+        else if (msg instanceof LobbyStateUpdateMessage) {
+
+            out.sendJsonToChannelGroup(
+                    WebSocketController.getChannelGroup(((LobbyStateUpdateMessage) msg).getGroupId()),
+                    ((LobbyStateUpdateMessage) msg).getUpdate()
+            );
         }
         else if (msg instanceof GameStateUpdateMessage) {
 
