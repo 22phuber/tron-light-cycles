@@ -13,6 +13,7 @@ import java.util.Map;
 public class WebSocketState {
 
     private final Map<String, ChannelGroup> groups = new HashMap<>();
+    private final Map<String, Channel> lonelyPlayers = new HashMap<>();
 
     /**
      * Creates a new {@link ChannelGroup} (group of client-server-connections)
@@ -38,6 +39,24 @@ public class WebSocketState {
     }
 
     /**
+     * Puts a given players connection to a default connection pool.
+     * @param channel   The {@link Channel} that represents a players
+     *                  connection to the server.
+     */
+    public void setPlayerAsLonely(Channel channel) {
+        lonelyPlayers.put(channel.id().asLongText(), channel);
+    }
+
+    /**
+     * Removes a given player from the default connection pool. To be
+     * called when a player attends a group of players.
+     * @param playerId  The id of the given player.
+     */
+    public void setPlayerAsGrouped(String playerId) {
+        lonelyPlayers.remove(playerId);
+    }
+
+    /**
      * Adds a given {@link Channel} to the {@link ChannelGroup} with the given id
      * @param channel   The {@link Channel} to add.
      * @param groupId   The id of the {@link ChannelGroup} the {@link Channel} is to be added to
@@ -59,13 +78,17 @@ public class WebSocketState {
         groups.get(groupId).remove(channel);
     }
 
+    public Channel getLonelyChannel(String playerId) {
+
+        return lonelyPlayers.get(playerId);
+    }
+
     public Channel getChannel(String groupId, String playerId) {
 
-        Channel channel = groups.get(groupId).stream()
+        return groups.get(groupId).stream()
                 .filter(ch -> ch.id().asLongText().equals(playerId))
                 .findFirst()
                 .orElse(null);
-        return channel;
     }
 
     public Map<String, ChannelGroup> getGroups() {

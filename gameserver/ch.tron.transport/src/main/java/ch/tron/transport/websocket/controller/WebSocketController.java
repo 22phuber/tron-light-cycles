@@ -57,7 +57,9 @@ public class WebSocketController {
         return state.getChannelGroup(id);
     }
 
-    public static Channel getChannel(String groupId, String playerId) {
+    public static Channel getChannelFromGroup(String groupId, String playerId) {
         return state.getChannel(groupId, playerId);
     }
+
+    public static Channel getLonelyChannel(String playerId) { return state.getLonelyChannel(playerId); }
 }

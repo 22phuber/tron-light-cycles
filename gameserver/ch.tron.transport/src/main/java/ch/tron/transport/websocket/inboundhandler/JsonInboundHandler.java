@@ -1,5 +1,6 @@
 package ch.tron.transport.websocket.inboundhandler;
 
+import ch.tron.middleman.messagedto.backAndForth.CurrentPublicGamesRequest;
 import ch.tron.middleman.messagedto.transporttogame.PlayerUpdateMessage;
 import ch.tron.transport.TransportManager;
 import org.json.JSONObject;
@@ -19,6 +20,14 @@ public class JsonInboundHandler {
     }
 
     private void handleMsg(JSONObject jo) {
+
+        String subject = jo.getString("subject");
+
+        switch (subject) {
+            case "currentPublicGames":
+                TransportManager.getMessageForwarder().forwardMessage(new CurrentPublicGamesRequest(playerId));
+                break;
+        }
 
         if (jo.getString("subject").equals("update dir")) {
 

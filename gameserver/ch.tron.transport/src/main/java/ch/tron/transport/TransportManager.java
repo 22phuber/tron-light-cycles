@@ -1,5 +1,6 @@
 package ch.tron.transport;
 
+import ch.tron.middleman.messagedto.backAndForth.CurrentPublicGamesRequest;
 import ch.tron.middleman.messagedto.gametotransport.GameConfigMessage;
 import ch.tron.middleman.messagedto.gametotransport.GameStateUpdateMessage;
 import ch.tron.middleman.messagedto.transporttogame.NewLobbyMessage;
@@ -13,6 +14,7 @@ import io.netty.channel.group.ChannelGroup;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 /**
  * Connects {@link ch.tron.transport} to {@code ch.tron.middleman} by
@@ -58,7 +60,7 @@ public class TransportManager {
         JSONObject clientId = new JSONObject();
         clientId.put("subject", "clientId");
         clientId.put("id", channel.id().asLongText());
-        out.sendClientId(channel, clientId);
+        out.sendJsonToChannel(channel, clientId);
 
         MESSAGE_FORWARDER.forwardMessage(new NewLobbyMessage(channel.id().asLongText(), DEFAULT_CHANNEL_GROUP_ID, new JSONObject()));
     }
@@ -71,17 +73,21 @@ public class TransportManager {
      */
     public static void handleInAppIncomingMessage(InAppMessage msg) {
 
-        if (msg instanceof GameStateUpdateMessage) {
+        if (msg instanceof CurrentPublicGamesRequest) {
 
-            ChannelGroup channelGroup = WebSocketController.getChannelGroup(msg.getGroupId());
+            out.sendJsonToChannel(
+                    WebSocketController.getLonelyChannel(((CurrentPublicGamesRequest) msg).getPlayerId()),
+                    ((CurrentPublicGamesRequest) msg).getPublicGames());
+        }
+        else if (msg instanceof GameStateUpdateMessage) {
 
+            ChannelGroup channelGroup = WebSocketController.getChannelGroup(((GameStateUpdateMessage) msg).getGroupId());
             JSONObject update = ((GameStateUpdateMessage) msg).getUpdate();
-
-            out.sendUpdate(channelGroup, update);
+            out.sendJsonToChannelGroup(channelGroup, update);
         }
         else if (msg instanceof GameConfigMessage) {
 
-            ChannelGroup group = WebSocketController.getChannelGroup(msg.getGroupId());
+            ChannelGroup group = WebSocketController.getChannelGroup(((GameConfigMessage) msg).getGroupId());
             int canvasWidth = ((GameConfigMessage) msg).getCanvas_width();
             int canvasHeight = ((GameConfigMessage) msg).getCanvas_height();
 
@@ -90,7 +96,7 @@ public class TransportManager {
             jo.put("width", canvasWidth);
             jo.put("height", canvasHeight);
 
-            out.sendConfig(group, jo);
+            out.sendJsonToChannelGroup(group, jo);
         }
     }
 
