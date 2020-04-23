@@ -1,8 +1,10 @@
 package ch.tron.transport.websocket.inboundhandler;
 
 import ch.tron.middleman.messagedto.backAndForth.CurrentPublicGamesRequest;
+import ch.tron.middleman.messagedto.transporttogame.NewLobbyMessage;
 import ch.tron.middleman.messagedto.transporttogame.PlayerUpdateMessage;
 import ch.tron.transport.TransportManager;
+import ch.tron.transport.websocket.controller.WebSocketController;
 import org.json.JSONObject;
 
 /**
@@ -26,6 +28,18 @@ public class JsonInboundHandler {
         switch (subject) {
             case "currentPublicGames":
                 TransportManager.getMessageForwarder().forwardMessage(new CurrentPublicGamesRequest(playerId));
+                break;
+            case "createGame":
+                String gameId = WebSocketController.newChannelGroup();
+                TransportManager.getMessageForwarder().forwardMessage(new NewLobbyMessage(
+                        playerId,
+                        gameId,
+                        jo.getJSONObject("gameConfig")
+                ));
+                TransportManager.getJsonOutboundHandler().sendJsonToChannel(
+                        WebSocketController.getLonelyChannel(playerId),
+                        new JSONObject().put("subject", "createGame").put("gameId", gameId)
+                );
                 break;
         }
 

@@ -88,7 +88,7 @@ public class TransportManager {
         else if (msg instanceof GameConfigMessage) {
 
             JSONObject jo = new JSONObject();
-            jo.put("subject", "canvas config");
+            jo.put("subject", "gameConfig");
             jo.put("width", ((GameConfigMessage) msg).getCanvas_width());
             jo.put("height", ((GameConfigMessage) msg).getCanvas_height());
             jo.put("lineThickness", ((GameConfigMessage) msg).getLineThickness());
@@ -100,5 +100,7 @@ public class TransportManager {
     public static ToGameMessageForwarder getMessageForwarder() {
         return MESSAGE_FORWARDER;
     }
+
+    public static JsonOutboundHandler getJsonOutboundHandler() { return out; }
 }
 

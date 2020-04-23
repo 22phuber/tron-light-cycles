@@ -14,6 +14,21 @@ public class NewLobbyMessage extends InAppMessage {
     private final String  groupId;
     private final JSONObject config;
 
+    /**
+     *
+     * @param playerId  The hosts id.
+     * @param groupId   The id of the game to be created.
+     * @param config    The configuration the host has chosen for this new
+     *                  game as a {@link JSONObject} with the following
+     *                  pattern:
+     *                  {
+     *                      "name": "theChosenGameName",
+     *                      "visibility": "theChosenVisibility",
+     *                      "mode": "theChosenGameMode",
+     *                      "playersAllowed": int },
+     *                      "hostName": "theClientsName"
+     *                  }
+     */
     public NewLobbyMessage(String playerId, String groupId, JSONObject config) {
         this.playerId = playerId;
         this.groupId = groupId;
