@@ -75,7 +75,7 @@ public class Lobby implements Runnable{
             */
 
             //send GameConfig to all Players in Lobby
-            GameManager.getMessageForwarder().forwardMessage(new GameConfigMessage(id, 400, 400));
+            GameManager.getMessageForwarder().forwardMessage(new GameConfigMessage(id, 400, 400, 5));
 
 
             //run set numbers of rounds. Default 5

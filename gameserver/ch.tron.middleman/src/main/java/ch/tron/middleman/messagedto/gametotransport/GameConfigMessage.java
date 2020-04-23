@@ -13,11 +13,13 @@ public class GameConfigMessage extends InAppMessage {
     private final String groupId;
     private final int canvas_width;
     private final int canvas_height;
+    private final int lineThickness;
 
-    public GameConfigMessage(String groupId, int canvas_width, int canvas_height) {
+    public GameConfigMessage(String groupId, int canvas_width, int canvas_height, int lineThickness) {
         this.groupId = groupId;
         this.canvas_width = canvas_width;
         this.canvas_height = canvas_height;
+        this.lineThickness = lineThickness;
     }
 
     public String getGroupId() {
@@ -30,5 +32,9 @@ public class GameConfigMessage extends InAppMessage {
 
     public int getCanvas_height() {
         return canvas_height;
+    }
+
+    public int getLineThickness() {
+        return lineThickness;
     }
 }

@@ -87,16 +87,13 @@ public class TransportManager {
         }
         else if (msg instanceof GameConfigMessage) {
 
-            ChannelGroup group = WebSocketController.getChannelGroup(((GameConfigMessage) msg).getGroupId());
-            int canvasWidth = ((GameConfigMessage) msg).getCanvas_width();
-            int canvasHeight = ((GameConfigMessage) msg).getCanvas_height();
-
             JSONObject jo = new JSONObject();
             jo.put("subject", "canvas config");
-            jo.put("width", canvasWidth);
-            jo.put("height", canvasHeight);
+            jo.put("width", ((GameConfigMessage) msg).getCanvas_width());
+            jo.put("height", ((GameConfigMessage) msg).getCanvas_height());
+            jo.put("lineThickness", ((GameConfigMessage) msg).getLineThickness());
 
-            out.sendJsonToChannelGroup(group, jo);
+            out.sendJsonToChannelGroup(WebSocketController.getChannelGroup(((GameConfigMessage) msg).getGroupId()), jo);
         }
     }
 
