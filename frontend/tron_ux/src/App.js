@@ -1,5 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./App.css";
+import { WebsocketSubjectMissing } from "./helpers/exceptions";
+import * as WSHelpers from "./helpers/websocket";
+import { DIRECTIONKEYS } from "./helpers/helpers";
+import { useInterval } from "./helpers/custom.hooks";
 import { ThemeProvider, makeStyles } from "@material-ui/styles";
 import {
   CssBaseline,
@@ -15,7 +19,6 @@ import GameTable from "./components/table/table.component";
 import CreateGame from "./components/createGame/createGame.component";
 import Footer from "./components/footer/footer.component";
 import GameCanvas from "./components/gameCanvas/gameCanvas.component";
-import * as WebsocketHelpers from "./websocket/websocket.helpers";
 import LobbyTable from "./components/lobby/lobby.component";
 
 const theme = createMuiTheme({
@@ -35,9 +38,6 @@ const useStyles = makeStyles({
     margin: "25px",
   },
 });
-
-const directionKeys = ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"];
-let wsReconnectTimeout = 250;
 
 // fake it
 const lobbyPlayersArray = [
@@ -78,22 +78,77 @@ const playerIdInitial = "1234567890";
 /* APP */
 const App = () => {
   const classes = useStyles();
-  // application modes
-  const [playMode, setPlayMode] = useState(false);
-  const [lobbyMode, setLobbyMode] = useState(false);
-  // websocket
+  // State: Application modes
+  const [appState, setAppState] = useState({
+    playMode: false,
+    lobbyMode: false,
+  });
+  // State: websocket & reference
   const ws = useRef(null);
   const [wserror, setWsError] = useState(false);
-  // game
-  const [playerId, setPlayerId] = useState(null);
-  const [wsplayerdata, setWsPlayerData] = useState(null);
-  const [gameCanvas, setGameCanvas] = useState({ height: 400, width: 400 });
+  // State: Game data
+  const [gameData, setGameData] = useState({
+    player: { playerName: "thePlayerName", clientId: "theClientIds" },
+    gameConfig: { height: 400, width: 400, lineThickness: 5 },
+    publicGames: [
+      {
+        gameId: "theGameId",
+        gameName: "theGameName",
+        playersJoined: null,
+        playersAllowed: 10,
+        mode: "gameMode",
+      },
+    ],
+    lobbyState: {
+      players: [
+        { clientId: "theClientId", name: "thePlayerName", ready: false },
+      ],
+    },
+    initialGameState: {
+      gameId: "theGameId",
+      players: [
+        {
+          clientId: "theClientId",
+          posx: 3,
+          posy: 3,
+          dir: 3,
+          color: "rgb(22,22,22)",
+        },
+      ],
+    },
+    countdown: { count: 5 },
+  });
+  const [playData, setPlayData] = useState({
+    gameState: {
+      gameId: "theGameId",
+      players: [
+        {
+          clientId: "theClientId",
+          posx: 3,
+          posy: 3,
+          dir: 3,
+          color: "rgb(22,22,22)",
+        },
+      ],
+    },
+    playerDeath: {
+      gameId: "theGameId",
+      clientId: "theDeadPlayerId",
+      posx: 66,
+      posy: 66,
+    },
+  });
+  const [wsplayerdata, setWsPlayerData] = useState(null); // -> playData
+  // Request Animation Frame variable
   let rAF;
-  // load games
-  const [publicGames, setPublicGames] = useState(null);
-  // lobby players
-  const [lobbyPlayers, setLobbyPlayers] = useState(null);
-  const [lobbyData, setLobbyData] = useState({});
+
+  // const [playerId, setPlayerId] = useState(null); // => player: { name: "", id: "" }
+  // const [gameCanvas, setGameCanvas] = useState({ height: 400, width: 400 }); // => gameConfig
+  // // load games
+  // const [publicGames, setPublicGames] = useState(null); // => publicGames
+  // // lobby players
+  // const [lobbyPlayers, setLobbyPlayers] = useState(null); // inside lobbyState
+  // const [lobbyData, setLobbyData] = useState({}); // lobbyState
 
   useEffect(() => {
     setLobbyPlayers(lobbyPlayersArray);
@@ -118,37 +173,34 @@ const App = () => {
     };
   }, [rAF]);
 
+  useInterval(() => {
+    loadGames();
+  }, 1000 * 10);
+
   // handles websocket connection
   function handleWebsocket() {
     var connectInterval;
-    ws.current = WebsocketHelpers.connectToWSGameServer();
+    ws.current = WSHelpers.connectToWSGameServer();
     //ws.current = WebsocketHelpers.connectToWSNettyGameServer();
-    // open
+    // OPEN
     ws.current.onopen = () => {
       setWsError(false);
       console.log("Websocket connected");
-      // clear Interval on onopen of websocket connection
       clearTimeout(connectInterval);
-      if (!playMode) {
-        loadGames();
-      }
+      loadGames();
     };
 
-    // message
+    // ONMESSAGE
     ws.current.onmessage = (message) => {
       let dataFromServer = null;
-      let dataSubject = null;
-      // parse
       try {
         dataFromServer = JSON.parse(message.data);
-      } catch (e) {
-        console.log("JSON parse error: " + e);
+      } catch (error) {
+        console.error("JSON parse error: " + error);
       }
-
       if (dataFromServer && dataFromServer.subject) {
-        dataSubject = dataFromServer.subject;
-        switch (dataSubject) {
-          case "player update":
+        switch (dataFromServer.subject) {
+          case "gameState":
             rAF = window.requestAnimationFrame(() => {
               handlePlayerData(dataFromServer.players);
             });
@@ -168,14 +220,16 @@ const App = () => {
             console.log("default subject");
             break;
         }
+      } else {
+        throw new WebsocketSubjectMissing();
       }
     };
 
     // error
-    ws.current.onerror = (err) => {
+    ws.current.onerror = (error) => {
       console.error(
         "Websocket couldn't connect ",
-        err.message,
+        error.message,
         "Closing websocket"
       );
       setWsError(true);
@@ -188,22 +242,29 @@ const App = () => {
       console.log(
         `Websocket is closed. Reconnect will be attempted in ${Math.min(
           10000 / 1000,
-          (wsReconnectTimeout + wsReconnectTimeout) / 1000
+          (WSHelpers.RECONNECTTIMEOUT + WSHelpers.RECONNECTTIMEOUT) / 1000
         )} second.`,
         e.reason
       );
-      wsReconnectTimeout = wsReconnectTimeout + wsReconnectTimeout;
+      WSHelpers.RECONNECTTIMEOUT =
+        WSHelpers.RECONNECTTIMEOUT + WSHelpers.RECONNECTTIMEOUT;
       connectInterval = setTimeout(
         checkWsState,
-        Math.min(10000, wsReconnectTimeout)
+        Math.min(10000, WSHelpers.RECONNECTTIMEOUT)
       ); //call check function after timeout
     };
   }
 
   // load game for public game list
   function loadGames() {
-    console.log("loadGames");
-    sendWsData(WebsocketHelpers.query.loadGames);
+    if (
+      !appState.playMode &&
+      !appState.lobbyMode &&
+      ws.current.readyState === WebSocket.OPEN
+    ) {
+      console.log("loadGames");
+      sendWsData(WSHelpers.QUERY.UPDATEPUBLICGAMES);
+    }
   }
 
   // Check if connection ist lost and try to reconnect
@@ -230,9 +291,9 @@ const App = () => {
   // key press for game directions
   function handleKeyPress(event) {
     const pressedKey = event.key;
-    if (directionKeys.includes(pressedKey)) {
+    if (DIRECTIONKEYS.includes(pressedKey)) {
       sendWsData({
-        ...WebsocketHelpers.query.updateDirection,
+        ...WSHelpers.QUERY.UPDATEDIRECTION,
         key: pressedKey,
       });
     }
@@ -246,14 +307,12 @@ const App = () => {
       createGameTempData[key] = value;
     }
     setLobbyData(createGameTempData);
-    setLobbyMode(true);
-    setPlayMode(true);
+    setAppState({ gameMode: true, lobbyMode: true });
   }
 
   // cancel Lobby & gameMode
   function cancelLobby() {
-    setLobbyMode(false);
-    setPlayMode(false);
+    setAppState({ gameMode: false, lobbyMode: false });
   }
 
   return (
@@ -262,7 +321,7 @@ const App = () => {
       <header>
         <TronAppBar />
       </header>
-      {!playMode ? (
+      {!appState.playMode ? (
         <React.Fragment>
           <section>
             <Container maxWidth="lg">
@@ -299,7 +358,7 @@ const App = () => {
         </React.Fragment>
       ) : (
         <section>
-          {lobbyMode ? (
+          {appState.lobbyMode ? (
             <React.Fragment>
               <section>
                 <Container maxWidth="lg">
