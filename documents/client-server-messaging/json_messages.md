@@ -9,7 +9,7 @@
 |Game server sends all currently publicly open games and their associated properties to client who requested them.|`{ "subject": "currentPublicGames", "games": [ { "id": "theGameId", "name": "theGameName", "playersJoined": int, "playersAllowed": int, "mode": "gameMode", }, {...}, ...] }`|gameMode = "classic" or "battleRoyale"|
 
 
-### On creating game
+### On game creation
 |Description|JSON|further information|
 |---|---|---|
 |Client requests to create a new game.|`{ "subject": "createGame", "gameConfig": { "name": "theChosenGameName", "visibility": "theChosenVisibility", "mode": "theChosenGameMode", "playersAllowed": int }, "hostName": "theClientsName" }`|gameMode = "classic" or "battleRoyale", visibility = "public" or "private"|
@@ -19,7 +19,7 @@
 ### Before game start
 |Description|JSON|further information|
 |---|---|---|
-|Host Client can send Lobby-Configs to the Game server.|`{ "subject": "lobbyConfig", "lobbyConfig": [ { "play": false, "public": false , "game": "classic"}] }`|
+|Host Client can send Lobby-Configs to the Game server.|`{ "subject": "lobbyConfig", "lobbyConfig": [ { "play": false, "public": false , "game": "classic"}] }`|*@deniz: duplicate? see on game creation*|
 |Game server continously updates all joined clients by broadcasting lobby-state.|`{ "subject": "lobbyState", players: [ { "clientId": "theClientId", "name": "thePlayersName" , "ready": "false"}, {...}, ...] }`|**continous broadcast**|
 |Client requests to join a specific game.|`{ "subject": "joinGame", "clientId": "theClientId", "gameId": "theGameId" }`|
 |Game server sends the client the game configurations the client needs to know about in order to display the game correctly.|`{ "subject": "gameConfig", "width": int, "height": int, "lineThickness": int }`||
