@@ -49,7 +49,6 @@ public class GameManager {
 
             lobbies.get(groupId).updatePlayer(playerId, ((PlayerUpdateMessage) msg).getKey());
         }
-        // TODO: M3: Implement
         else if (msg instanceof NewLobbyMessage) {
 
             String groupId = ((NewLobbyMessage) msg).getGroupId();
