@@ -1,10 +1,7 @@
 package ch.tron.transport;
 
 import ch.tron.middleman.messagedto.backAndForth.CurrentPublicGamesRequest;
-import ch.tron.middleman.messagedto.gametotransport.CountdownMessage;
-import ch.tron.middleman.messagedto.gametotransport.GameConfigMessage;
-import ch.tron.middleman.messagedto.gametotransport.GameStateUpdateMessage;
-import ch.tron.middleman.messagedto.gametotransport.LobbyStateUpdateMessage;
+import ch.tron.middleman.messagedto.gametotransport.*;
 import ch.tron.middleman.messagedto.transporttogame.NewLobbyMessage;
 import ch.tron.middleman.messagehandler.ToGameMessageForwarder;
 import ch.tron.middleman.messagedto.InAppMessage;
@@ -86,6 +83,13 @@ public class TransportManager {
                     ((LobbyStateUpdateMessage) msg).getUpdate()
             );
         }
+        else if (msg instanceof GameConfigMessage) {
+            JSONObject jo = new JSONObject()
+                    .put("subject", "gameConfig")
+                    .put("height", ((GameConfigMessage) msg).getCanvas_height())
+                    .put("lineThickness", ((GameConfigMessage) msg).getLineThickness());
+            out.sendJsonToChannelGroup(WebSocketController.getChannelGroup(((GameConfigMessage) msg).getGroupId()), jo);
+        }
         else if (msg instanceof CountdownMessage) {
             JSONObject jo = new JSONObject()
                     .put("subject", "countdown")
@@ -96,20 +100,27 @@ public class TransportManager {
             );
         }
         else if (msg instanceof GameStateUpdateMessage) {
-            ChannelGroup channelGroup = WebSocketController.getChannelGroup(((GameStateUpdateMessage) msg).getGroupId());
             JSONObject update = ((GameStateUpdateMessage) msg).getUpdate();
             if (((GameStateUpdateMessage) msg).isInitial()) {
                 update.put("subject", "initialGameState");
             }
-            out.sendJsonToChannelGroup(channelGroup, update);
+            out.sendJsonToChannelGroup(
+                    WebSocketController.getChannelGroup(((GameStateUpdateMessage) msg).getGroupId()),
+                    update
+            );
         }
-        else if (msg instanceof GameConfigMessage) {
-            JSONObject jo = new JSONObject();
-            jo.put("subject", "gameConfig");
-            jo.put("width", ((GameConfigMessage) msg).getCanvas_width());
-            jo.put("height", ((GameConfigMessage) msg).getCanvas_height());
-            jo.put("lineThickness", ((GameConfigMessage) msg).getLineThickness());
-            out.sendJsonToChannelGroup(WebSocketController.getChannelGroup(((GameConfigMessage) msg).getGroupId()), jo);
+        else if (msg instanceof DeathMessage) {
+            String groupId = ((DeathMessage) msg).getGroupId();
+            JSONObject jo = new JSONObject()
+                    .put("subject", "playerDeath")
+                    .put("gameId", groupId)
+                    .put("playerId", ((DeathMessage) msg).getPlayerId())
+                    .put("posx", ((DeathMessage) msg).getPosx())
+                    .put("posy", ((DeathMessage) msg).getPosy());
+            out.sendJsonToChannelGroup(
+                    WebSocketController.getChannelGroup(groupId),
+                    jo
+            );
         }
     }
 
