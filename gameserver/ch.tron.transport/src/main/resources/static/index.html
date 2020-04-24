@@ -133,7 +133,7 @@
     }
 
     function sendPlayerUpdate (key) {
-        let msg = { "subject": "updateDirection", "key": key };
+        let msg = { "subject": "updateDirection", "gameId": gameId, "key": key};
         let jsonstring = JSON.stringify(msg);
         ws.send(jsonstring);
     }
