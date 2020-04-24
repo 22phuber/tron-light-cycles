@@ -31,7 +31,7 @@
         switch (msg.subject) {
             case "clientId":
                 console.log("ClientId: " + msg.id);
-            case "canvas config":
+            case "canvasConfig":
                 if (canvas === undefined) {
                     canvas_width = msg.width;
                     canvas_height = msg.height;
@@ -47,7 +47,7 @@
     };
 
     sendPlayerUpdate = (key) => {
-        let msg = { "subject": "update dir", "key": key };
+        let msg = { "subject": "updateDirection", "key": key };
         let jsonstring = JSON.stringify(msg);
         ws.send(jsonstring);
     };

@@ -51,15 +51,16 @@ public class JsonInboundHandler {
                 break;
             case "startGame":
                 TransportManager.getMessageForwarder().forwardMessage(new StartGameMessage(playerId));
-        }
-
-        if (jo.getString("subject").equals("update dir")) {
-
-            String key = jo.getString("key");
-
-            // default-groupId here is temporary
-            // will come with the message from client in the future
-            TransportManager.getMessageForwarder().forwardMessage(new PlayerUpdateMessage("defaultId", playerId, key));
+                break;
+            case "updateDirection":
+                // default-groupId here is temporary
+                // will come with the message from client in the future
+                TransportManager.getMessageForwarder().forwardMessage(new PlayerUpdateMessage(
+                        "defaultId",
+                        playerId,
+                        jo.getString("key")
+                ));
+                break;
         }
     }
 }
