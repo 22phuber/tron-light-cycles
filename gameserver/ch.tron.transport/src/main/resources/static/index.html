@@ -8,64 +8,130 @@
 <script>
 
     const ws_uri = "ws://localhost:9000/ws";
+
     let ws = new WebSocket(ws_uri);
 
-    let canvas;
-    let ctx;
-    let canvas_width;
-    let canvas_height;
+    ws.onopen = () => test();
 
-    document.body.addEventListener('keydown', (event) => {
-        let key = event.key;
-        if (key === "ArrowLeft" ||
-            key === "ArrowRight" ||
-            key === "ArrowUp" ||
-            key === "ArrowDown") {
-            sendPlayerUpdate(key);
-        }
-    });
+    ws.onclose = () => console.log("Websocket closed");
+
+    ws.onerror = (err) => console.log("Error: " + err);
 
     ws.onmessage = (msg) => {
         msg = JSON.parse(msg.data);
         switch (msg.subject) {
+
             case "clientId":
                 console.log("New connection; clientId: " + msg.id);
+                break;
+
+            case "currentPublicGames":
+                console.log("CurrentPublicGames: " + msg.games);
+                break;
+
+            case "createGame":
+                console.log("CreateGame; new gameId: " + msg.gameId);
+                break;
+
+            case "lobbyState":
+                console.log("Current lobbyState: " + msg.players);
+                break;
+
+            case "countdown":
+                console.log("Countdown; count: " + msg.count);
+                break;
+
+            case "initialGameState":
+                console.log("InitialGameState; gameId: " + msg.gameId + ", players: " + msg.players);
+                break;
+
             case "canvasConfig":
+                console.log("CanvasConfig: " + msg.width + " x " + msg.height);
+                console.log("LineThickness: " + msg.lineThickness);
                 if (canvas === undefined) {
                     canvas_width = msg.width;
                     canvas_height = msg.height;
+                    lineThickness = msg.lineThickness;
                     setUpCanvas(canvas_width, canvas_height);
                 }
                 break;
+
             case "gameState":
                 if (ctx !== undefined) {
                     updateCanvas(msg.players);
                 }
                 break;
+
+            case "playerDeath":
+                console.log("PlayerDeath; gameId: " + msg.gameId + ", playerId: " + msg.playerId);
+                break;
         }
     };
 
-    sendPlayerUpdate = (key) => {
-        let msg = { "subject": "updateDirection", "key": key };
-        let jsonstring = JSON.stringify(msg);
-        ws.send(jsonstring);
-    };
+    let canvas;
+    let ctx;
+    let canvas_width;
+    let canvas_height;
+    let lineThickness;
 
-    setUpCanvas = (width, height) => {
+    function test() {
+
+        let json;
+
+        // Fetch all open public games
+        json = {"subject": "currentPublicGames"};
+        ws.send(JSON.stringify(json));
+
+        // Create a new game
+        json = {
+            "subject": "createGame",
+            "gameConfig": {
+                "name": "test game",
+                "public": true,
+                "mode": "classic",
+                "playersAllowed": 5
+            },
+            "hostName": "test host"
+        };
+        ws.send(JSON.stringify(json));
+
+        // Start game
+        json = { "subject": "startGame" };
+        ws.send(JSON.stringify(json));
+    }
+
+    function setUpCanvas (width, height) {
         canvas = document.createElement('canvas');
         canvas.id = "canvas";
         canvas.width = width;
         canvas.height = height;
         document.body.appendChild(canvas);
         ctx = canvas.getContext("2d");
-    };
 
-    updateCanvas = (players) => {
+        document.body.addEventListener('keydown', (event) => {
+            console.log("Event @body: " + event.key);
+            let key = event.key;
+            if (key === "ArrowLeft" ||
+                key === "ArrowRight" ||
+                key === "ArrowUp" ||
+                key === "ArrowDown") {
+                sendPlayerUpdate(key);
+            }
+        });
+    }
+
+    function updateCanvas (players) {
         players.forEach(player => {
             ctx.fillStyle = player.color;
-            ctx.fillRect(player.posx % canvas_width, player.posy % canvas_height, 10, 10);
+            ctx.fillRect(player.posx % canvas_width, player.posy % canvas_height, lineThickness, lineThickness);
         });
-    };
+    }
+
+    function sendPlayerUpdate (key) {
+        let msg = { "subject": "updateDirection", "key": key };
+        let jsonstring = JSON.stringify(msg);
+        ws.send(jsonstring);
+    }
 
 </script>
 </body>
