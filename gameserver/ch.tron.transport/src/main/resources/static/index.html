@@ -7,6 +7,9 @@
 <body>
 <script>
 
+    let clientId;
+    let gameId;
+
     const ws_uri = "ws://localhost:9000/ws";
 
     let ws = new WebSocket(ws_uri);
@@ -22,7 +25,8 @@
         switch (msg.subject) {
 
             case "clientId":
-                console.log("New connection; clientId: " + msg.id);
+                clientId = msg.id;
+                console.log("New connection; clientId: " + clientId);
                 break;
 
             case "currentPublicGames":
@@ -30,7 +34,8 @@
                 break;
 
             case "createGame":
-                console.log("CreateGame; new gameId: " + msg.gameId);
+                gameId = msg.gameId;
+                console.log("CreateGame; new gameId: " + gameId);
                 break;
 
             case "lobbyState":

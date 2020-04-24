@@ -7,6 +7,7 @@ import ch.tron.middleman.messagedto.transporttogame.PlayerUpdateMessage;
 import ch.tron.middleman.messagedto.transporttogame.StartGameMessage;
 import ch.tron.transport.TransportManager;
 import ch.tron.transport.websocket.controller.WebSocketController;
+import io.netty.channel.Channel;
 import org.json.JSONObject;
 
 /**
@@ -33,30 +34,39 @@ public class JsonInboundHandler {
                 break;
             case "createGame":
                 String gameId = WebSocketController.newChannelGroup();
+
+                Channel channel = WebSocketController.getLonelyChannel(playerId);
+                WebSocketController.addChannelToGroup(channel, gameId);
+                WebSocketController.removeChannelFromLonelyGroup(playerId);
+
                 TransportManager.getMessageForwarder().forwardMessage(new NewLobbyMessage(
                         playerId,
                         gameId,
                         jo.getJSONObject("gameConfig")
                 ));
                 TransportManager.getJsonOutboundHandler().sendJsonToChannel(
-                        WebSocketController.getLonelyChannel(playerId),
+                        channel,
                         new JSONObject().put("subject", "createGame").put("gameId", gameId)
                 );
                 break;
             case "joinGame":
+                gameId = jo.getString("gameId");
+
+                channel = WebSocketController.getLonelyChannel(playerId);
+                WebSocketController.addChannelToGroup(channel, gameId);
+                WebSocketController.removeChannelFromLonelyGroup(playerId);
+
                 TransportManager.getMessageForwarder().forwardMessage(new JoinLobbyMessage(
-                        jo.getString("clientId"),
-                        jo.getString("gameId")
+                        playerId,
+                        gameId
                 ));
                 break;
             case "startGame":
                 TransportManager.getMessageForwarder().forwardMessage(new StartGameMessage(playerId));
                 break;
             case "updateDirection":
-                // default-groupId here is temporary
-                // will come with the message from client in the future
                 TransportManager.getMessageForwarder().forwardMessage(new PlayerUpdateMessage(
-                        "defaultId",
+                        jo.getString("gameId"),
                         playerId,
                         jo.getString("key")
                 ));

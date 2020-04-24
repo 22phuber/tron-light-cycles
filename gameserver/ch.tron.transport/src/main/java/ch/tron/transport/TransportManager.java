@@ -9,7 +9,6 @@ import ch.tron.transport.webserverconfig.SocketInitializer;
 import ch.tron.transport.websocket.controller.WebSocketController;
 import ch.tron.transport.websocket.outboundhandler.JsonOutboundHandler;
 import io.netty.channel.Channel;
-import io.netty.channel.group.ChannelGroup;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,12 +29,6 @@ public class TransportManager {
 
     private static final ToGameMessageForwarder MESSAGE_FORWARDER = new ToGameMessageForwarder();
 
-    // This is temporary
-    // Adding a 'default'-ChannelGroup
-    // Connecting clients (new Channels) will be added to this group
-    // Saving the UUID instantiated 'default'-ChannelGroup
-    private static final String DEFAULT_CHANNEL_GROUP_ID = WebSocketController.newChannelGroup();
-
     public TransportManager() {
 
         LOGGER.info("Initialize transport");
@@ -52,16 +45,12 @@ public class TransportManager {
      */
     public static void manageNewChannel(Channel channel) {
 
-        // This is temporary
-        // Automatically add new Channel to 'default'-ChannelGroup instantiated on top
-        WebSocketController.addChannelToGroup(channel, DEFAULT_CHANNEL_GROUP_ID);
+        WebSocketController.addChannelToLonelyGroup(channel);
 
         JSONObject clientId = new JSONObject();
         clientId.put("subject", "clientId");
         clientId.put("id", channel.id().asLongText());
         out.sendJsonToChannel(channel, clientId);
-
-        MESSAGE_FORWARDER.forwardMessage(new NewLobbyMessage(channel.id().asLongText(), DEFAULT_CHANNEL_GROUP_ID, new JSONObject()));
     }
 
     /**

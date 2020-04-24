@@ -5,6 +5,7 @@ import io.netty.channel.group.ChannelGroup;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Holds all client-server-connections in groups where
@@ -20,10 +21,7 @@ public class WebSocketState {
      * @return  The id of the newly created {@link ChannelGroup} as a string
      */
     public String addChannelGroup(ChannelGroup group) {
-        //final String id = UUID.randomUUID().toString();
-
-        // This is temporary
-        final String id = "defaultId";
+        final String id = UUID.randomUUID().toString();
 
         groups.put(id, group);
 

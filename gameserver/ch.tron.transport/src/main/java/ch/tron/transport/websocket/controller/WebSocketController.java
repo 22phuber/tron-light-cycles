@@ -31,6 +31,14 @@ public class WebSocketController {
         state.removeChannelGroup(groupId);
     }
 
+    public static void addChannelToLonelyGroup(Channel channel) {
+        state.setPlayerAsLonely(channel);
+    }
+
+    public static void removeChannelFromLonelyGroup(String playerId) {
+        state.setPlayerAsGrouped(playerId);
+    }
+
     /**
      * Adds a given {@link Channel} to the {@link ChannelGroup} with the given id
      * @param channel   The {@link Channel} to add.
