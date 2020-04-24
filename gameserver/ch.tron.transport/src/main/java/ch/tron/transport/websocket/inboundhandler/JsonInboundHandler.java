@@ -4,6 +4,7 @@ import ch.tron.middleman.messagedto.backAndForth.CurrentPublicGamesRequest;
 import ch.tron.middleman.messagedto.transporttogame.JoinLobbyMessage;
 import ch.tron.middleman.messagedto.transporttogame.NewLobbyMessage;
 import ch.tron.middleman.messagedto.transporttogame.PlayerUpdateMessage;
+import ch.tron.middleman.messagedto.transporttogame.StartGameMessage;
 import ch.tron.transport.TransportManager;
 import ch.tron.transport.websocket.controller.WebSocketController;
 import org.json.JSONObject;
@@ -48,6 +49,8 @@ public class JsonInboundHandler {
                         jo.getString("gameId")
                 ));
                 break;
+            case "startGame":
+                TransportManager.getMessageForwarder().forwardMessage(new StartGameMessage(playerId));
         }
 
         if (jo.getString("subject").equals("update dir")) {
