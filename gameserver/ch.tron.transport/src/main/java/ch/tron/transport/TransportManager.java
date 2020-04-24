@@ -98,6 +98,9 @@ public class TransportManager {
         else if (msg instanceof GameStateUpdateMessage) {
             ChannelGroup channelGroup = WebSocketController.getChannelGroup(((GameStateUpdateMessage) msg).getGroupId());
             JSONObject update = ((GameStateUpdateMessage) msg).getUpdate();
+            if (((GameStateUpdateMessage) msg).isInitial()) {
+                update.put("subject", "initialGameState");
+            }
             out.sendJsonToChannelGroup(channelGroup, update);
         }
         else if (msg instanceof GameConfigMessage) {
