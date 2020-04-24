@@ -9,12 +9,16 @@ import ch.tron.transport.TransportManager;
 import ch.tron.transport.websocket.controller.WebSocketController;
 import io.netty.channel.Channel;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Manages forwarding of messages of type {@link JSONObject} from
  * a game player (client) to {@link ch.tron.game}
  */
 public class JsonInboundHandler {
+
+    private final Logger logger = LoggerFactory.getLogger(TransportManager.class);
 
     private final String playerId;
 
@@ -71,6 +75,7 @@ public class JsonInboundHandler {
                         jo.getString("key")
                 ));
                 break;
+            default: logger.info("Subject type {} not supported", subject);
         }
     }
 }

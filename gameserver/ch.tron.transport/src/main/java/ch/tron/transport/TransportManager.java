@@ -2,7 +2,6 @@ package ch.tron.transport;
 
 import ch.tron.middleman.messagedto.backAndForth.CurrentPublicGamesRequest;
 import ch.tron.middleman.messagedto.gametotransport.*;
-import ch.tron.middleman.messagedto.transporttogame.NewLobbyMessage;
 import ch.tron.middleman.messagehandler.ToGameMessageForwarder;
 import ch.tron.middleman.messagedto.InAppMessage;
 import ch.tron.transport.webserverconfig.SocketInitializer;
@@ -110,6 +109,9 @@ public class TransportManager {
                     WebSocketController.getChannelGroup(groupId),
                     jo
             );
+        }
+        else {
+            LOGGER.info("Message type {} not supported", msg.getClass());
         }
     }
 
