@@ -12,14 +12,13 @@
 ### On game creation
 |Description|JSON|further information|
 |---|---|---|
-|Client requests to create a new game.|`{ "subject": "createGame", "gameConfig": { "name": "theChosenGameName", "public": boolean, "mode": "theChosenGameMode", "playersAllowed": int }, "hostName": "theClientsName" }`|gameMode = "classic" or "battleRoyale"|
+|Client requests to create a new game.|`{ "subject": "createGame", "gameConfig": { "name": "theChosenGameName", "public": boolean, "mode": "theChosenGameMode", "playersAllowed": int }, "hostName": "theClientsName" , "playing": false}`|gameMode = "classic" or "battleRoyale"|
 |GameServer sends id of the just created game to client who requested the creation.|`{ "subject": "createGame", "gameId": "theGameId" }`|
 
 
 ### Before game start
 |Description|JSON|further information|
 |---|---|---|
-|Host Client can send Lobby-Configs to the Game server.|`{ "subject": "lobbyConfig", "lobbyConfig": [ { "play": false, "public": false , "game": "classic"}] }`|*@deniz: duplicate? see on game creation*|
 |Game server continously updates all joined clients by broadcasting lobby-state.|`{ "subject": "lobbyState", players: [ { "clientId": "theClientId", "name": "thePlayersName" , "ready": boolean }, ...] }`|**continous broadcast**|
 |Client requests to join a specific game.|`{ "subject": "joinGame", "clientId": "theClientId", "gameId": "theGameId" }`|
 |Game server sends the client the game configurations the client needs to know about in order to display the game correctly.|`{ "subject": "canvasConfig", "width": int, "height": int, "lineThickness": int }`||
