@@ -86,7 +86,7 @@ const App = () => {
   // State: websocket & reference
   const websocketClient = useRef(null);
   const [websocketState, setWebsocketState] = useState({
-    websocketClient: null,
+    websocketClient: websocketClient,
     reconnectTimeout: 250,
     wsError: false,
   });
@@ -94,15 +94,7 @@ const App = () => {
   const [gameData, setGameData] = useState({
     player: { playerName: "thePlayerName", clientId: "theClientIds" },
     gameConfig: { height: 400, width: 400, lineThickness: 5 },
-    publicGames: [
-      {
-        gameId: "theGameId",
-        gameName: "theGameName",
-        playersJoined: null,
-        playersAllowed: 10,
-        mode: "gameMode",
-      },
-    ],
+    publicGames: null,
     lobbyState: {
       players: [
         { clientId: "theClientId", name: "thePlayerName", ready: false },
@@ -148,8 +140,6 @@ const App = () => {
 
   const [playerId, setPlayerId] = useState(null); // => player: { name: "", id: "" }
   const [gameCanvas, setGameCanvas] = useState({ height: 400, width: 400 }); // => gameConfig
-  // load games
-  const [publicGames, setPublicGames] = useState(null); // => publicGames
   // lobby players
   const [lobbyPlayers, setLobbyPlayers] = useState(null); // inside lobbyState
   const [lobbyData, setLobbyData] = useState({}); // lobbyState
@@ -182,7 +172,7 @@ const App = () => {
 
   useInterval(() => {
     loadGames();
-  }, 1000 * 10);
+  }, 1000 * 20);
 
   // handles websocket connection
   function handleWebsocket() {
@@ -214,7 +204,10 @@ const App = () => {
             });
             break;
           case "currentPublicGames":
-            setPublicGames(dataFromServer.Games);
+            console.log(dataFromServer.Games);
+            console.log(gameData.publicGames);
+            // if(gameData.publicGames !== dataFromServer.Games )
+            setGameData({ ...gameData, publicGames: dataFromServer.games });
             break;
           case "canvas config":
             if (dataFromServer.width && dataFromServer.height) {
@@ -250,15 +243,16 @@ const App = () => {
       console.log(
         `Websocket is closed. Reconnect will be attempted in ${Math.min(
           10000 / 1000,
-          (WSHelpers.RECONNECTTIMEOUT + WSHelpers.RECONNECTTIMEOUT) / 1000
+          (websocketState.reconnectTimeout + websocketState.reconnectTimeout) /
+            1000
         )} second.`,
         e.reason
       );
-      WSHelpers.RECONNECTTIMEOUT =
-        WSHelpers.RECONNECTTIMEOUT + WSHelpers.RECONNECTTIMEOUT;
+      websocketState.reconnectTimeout =
+        websocketState.reconnectTimeout + websocketState.reconnectTimeout;
       connectInterval = setTimeout(
         checkWsState,
-        Math.min(10000, WSHelpers.RECONNECTTIMEOUT)
+        Math.min(10000, websocketState.reconnectTimeout)
       ); //call check function after timeout
     };
   }
@@ -348,7 +342,7 @@ const App = () => {
                 >
                   Public games
                 </Typography>
-                <GameTable publicGames={publicGames} />
+                <GameTable publicGames={gameData.publicGames} />
               </Box>
             </Container>
           </section>
@@ -399,7 +393,7 @@ const App = () => {
             </React.Fragment>
           ) : (
             <section>
-              {wsplayerdata && !wserror ? (
+              {wsplayerdata && !websocketState.wsError ? (
                 <GameCanvas
                   width={gameCanvas.width}
                   height={gameCanvas.height}

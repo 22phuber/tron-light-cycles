@@ -22,8 +22,6 @@ export function connectToWSUXServer() {
 }
 
 // Settings
-// reconnect timeout
-export let RECONNECTTIMEOUT = 250;
 
 
 // JSON query objects
