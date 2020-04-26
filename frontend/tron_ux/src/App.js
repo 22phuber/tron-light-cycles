@@ -57,7 +57,7 @@ const App = () => {
   // State: My Player
   const [myPlayerData, setMyPlayerData] = useState({
     name: "myPlayerName",
-    clientId: "1234567890",
+    clientId: null,
     color: "black",
     ready: true,
   });
@@ -67,40 +67,14 @@ const App = () => {
       name: "theGameName",
       public: true,
       mode: "classic",
-      playersAllowed: 5,
+      playersAllowed: 0,
       playing: false,
       host: "1234567890",
+      gameId: null,
     },
     canvasConfig: { height: 400, width: 400, lineThickness: 5 },
     publicGames: null,
-    lobbyState: {
-      players: [
-        {
-          clientId: "c-47Bs2323d2xdcxwd23qdex23qd_zTEOZ7-U7TigC7g",
-          name: "Ready Player 1",
-          ready: true,
-          color: "blue",
-        },
-        {
-          clientId: "T6FVRKq32ed23d2dxwekSH0e-lDdL7FtH_w",
-          name: "IAMGROOT",
-          ready: false,
-          color: "gray",
-        },
-        {
-          clientId: "tlyoDxNs3232cxdaV1EucmSlcfM-9yA",
-          name: "Irish shizzle",
-          ready: false,
-          color: "green",
-        },
-        {
-          clientId: "h5diOYzwdEd23d23d23d23SSmWE6yubojQ",
-          name: "mike van dike",
-          ready: true,
-          color: "pink",
-        },
-      ],
-    },
+    lobbyState: { players: [] },
     initialGameState: {
       gameId: "theGameId",
       players: [
@@ -139,12 +113,6 @@ const App = () => {
   // Request Animation Frame variable
   let rAF;
 
-  const [playerId, setPlayerId] = useState(null); // => player: { name: "", id: "" }
-  const [gameCanvas, setGameCanvas] = useState({ height: 400, width: 400 }); // => gameConfig
-  // lobby players
-  const [lobbyPlayers, setLobbyPlayers] = useState(null); // inside lobbyState
-  const [lobbyData, setLobbyData] = useState({}); // lobbyState
-
   useEffect(() => {
     handleWebsocket();
     document.addEventListener("keydown", handleKeyPress, false);
@@ -169,7 +137,7 @@ const App = () => {
   }, [rAF]);
 
   useInterval(() => {
-    loadGames();
+    fetchStateFromGameServer();
   }, 1000 * 10);
 
   // handles websocket connection
@@ -179,11 +147,11 @@ const App = () => {
     //ws.current = WebsocketHelpers.connectToWSNettyGameServer();
     // OPEN
     websocketClient.current.onopen = () => {
+      console.log("Websocket connected");
       websocketState.wsError &&
         setWebsocketState({ ...websocketState, wsError: false });
-      console.log("Websocket connected");
       clearTimeout(connectInterval);
-      loadGames();
+      fetchStateFromGameServer();
     };
 
     // ONMESSAGE
@@ -201,19 +169,60 @@ const App = () => {
               handlePlayerData(dataFromServer.players);
             });
             break;
-          case "currentPublicGames":
-            setGameData({ ...gameData, publicGames: dataFromServer.games });
+          case "clientId":
+            setMyPlayerData((prevMyPlayerData) => {
+              return { ...prevMyPlayerData, clientId: dataFromServer.id };
+            });
+            console.log("WS[clientId]: " + dataFromServer.id);
             break;
-          case "canvas config":
-            if (dataFromServer.width && dataFromServer.height) {
-              setGameCanvas({
-                height: dataFromServer.height,
-                width: dataFromServer.width,
-              });
-            }
+          case "currentPublicGames":
+            setGameData((prevGameData) => {
+              return { ...prevGameData, publicGames: dataFromServer.games };
+            });
+            //console.log("WS[currentPublicGames]: " + JSON.stringify(dataFromServer.games));
+            break;
+          case "canvasConfig":
+            setGameData((prevGameData) => {
+              return {
+                ...prevGameData,
+                canvasConfig: {
+                  height: dataFromServer.height,
+                  width: dataFromServer.width,
+                  lineThickness: dataFromServer.lineThickness,
+                },
+              };
+            });
+            console.log("WS[canvasConfig]: " + JSON.stringify(dataFromServer));
+            break;
+          case "createGame":
+            setGameData((prevGameData) => {
+              return {
+                ...prevGameData,
+                gameConfig: {
+                  ...gameData.gameConfig,
+                  gameId: dataFromServer.gameId,
+                },
+              };
+            });
+            // TODO: send back joinGame
+            console.log("WS[createGame]: " + dataFromServer.gameId);
+            break;
+          case "lobbyState":
+            setGameData((prevGameData) => {
+              return {
+                ...prevGameData,
+                lobbyState: {
+                  ...gameData.lobbyState,
+                  players: [dataFromServer.players],
+                },
+              };
+            });
+            console.log(
+              "WS[lobbyState]: " + JSON.stringify(dataFromServer.players)
+            );
             break;
           default:
-            console.log("default subject");
+            console.error("WARN: Unknown subject");
             break;
         }
       } else {
@@ -228,7 +237,9 @@ const App = () => {
         error.message,
         "Closing websocket"
       );
-      setWebsocketState({ ...websocketState, wsError: true });
+      setWebsocketState((prevWebsocketState) => {
+        return { ...prevWebsocketState, wsError: true };
+      });
       websocketClient.current.close();
     };
 
@@ -252,13 +263,10 @@ const App = () => {
     };
   }
 
-  // load game for public game list
-  function loadGames() {
-    if (
-      !appState.playMode &&
-      !appState.lobbyMode &&
-      websocketClient.current.readyState === WebSocket.OPEN
-    ) {
+  // load public games and send client connected
+  function fetchStateFromGameServer() {
+    if (!myPlayerData.clientId) sendWsData(WSHelpers.QUERY.CLIENTCONNECTED);
+    if (!appState.playMode && !appState.lobbyMode) {
       console.log("loadGames");
       sendWsData(WSHelpers.QUERY.UPDATEPUBLICGAMES);
     }
@@ -275,7 +283,9 @@ const App = () => {
   }
 
   function handleMyPlayer(key, val) {
-    setMyPlayerData({ ...myPlayerData, [key]: val });
+    setMyPlayerData((prevMyPlayerData) => {
+      return { ...prevMyPlayerData, [key]: val };
+    });
   }
 
   // playerData for game rendering
@@ -289,9 +299,13 @@ const App = () => {
       websocketClient.current &&
       websocketClient.current.readyState === WebSocket.OPEN
     ) {
-      websocketClient.current.send(JSON.stringify(data));
+      try {
+        websocketClient.current.send(JSON.stringify(data));
+      } catch (e) {
+        console.error("ERROR: WebSocket couldn't send data: " + e);
+      }
     } else {
-      console.log("Websocket not ready");
+      console.error("WARN: WebSocket not connected");
     }
   }
 
@@ -309,26 +323,27 @@ const App = () => {
   // handle create new game/lobby data
   function handleCreateGame(event) {
     event.preventDefault();
-    let createGameTempData = {};
+    let tempGameConfig = gameData.gameConfig;
     for (const [key, value] of new FormData(event.target).entries()) {
-      createGameTempData[key] = value;
+      if (key === "visibility") {
+        tempGameConfig["public"] = value === "public" ? true : false;
+      } else {
+        tempGameConfig[key] = value;
+      }
     }
-    setGameData({
-      ...gameData,
-      gameConfig: {
-        name: createGameTempData.gamename,
-        public: createGameTempData.visibility === "public",
-        mode: createGameTempData.mode,
-        playersAllowed: createGameTempData.maxplayers,
-        playing: false,
-        host: myPlayerData.clientId,
-      },
+    sendWsData({ ...WSHelpers.QUERY.CREATEGAME, gameConfig: tempGameConfig });
+    setGameData((prevGameData) => {
+      return {
+        ...prevGameData,
+        gameConfig: tempGameConfig,
+      };
     });
     setAppState({ playMode: true, lobbyMode: true });
   }
 
-  // cancel Lobby & gameMode
+  // cancel Lobby- & play Mode
   function cancelLobby() {
+    // TODO: send delete game with gameId to Gameserver
     setAppState({ playMode: false, lobbyMode: false });
   }
 
@@ -405,8 +420,8 @@ const App = () => {
             <section>
               {wsplayerdata && !websocketState.wsError ? (
                 <GameCanvas
-                  width={gameCanvas.width}
-                  height={gameCanvas.height}
+                  width={gameData.canvasConfig.width}
+                  height={gameData.canvasConfig.height}
                   playersData={wsplayerdata}
                 />
               ) : (

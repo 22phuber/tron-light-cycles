@@ -69,6 +69,8 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     flexWrap: "wrap",
+    alignItems: "center",
+    justifyContent: "center",
     padding: theme.spacing(4),
     "& > *": {
       margin: theme.spacing(0),
@@ -111,6 +113,7 @@ const LobbyTable = (props) => {
 
   // TODO: disable used colors from other users in select dropdown!
   const [playerState, setPlayerState] = useState(null);
+  const [gameId, setGameId] = useState(null);
   const [usedPlayerColors, setUsedPlayerColors] = useState([]);
 
   useEffect(() => {
@@ -120,11 +123,15 @@ const LobbyTable = (props) => {
         return true;
       });
     }
-    // add myPlayer as first player in array
+    // TODO: Where does myPlayer data come from? Gamerserver or state?
     setPlayerState([myPlayer, ...players]);
-    console.log(gameConfig);
-    console.log(players);
-  }, [players, myPlayer, gameConfig]);
+  }, [players, myPlayer, gameConfig, usedPlayerColors]);
+
+  useEffect(() => {
+    if (gameConfig.gameId) {
+      setGameId(gameConfig.gameId);
+    }
+  }, [gameId, gameConfig.gameId]);
 
   const handleMyPlayerChanges = (event, setting) => {
     switch (setting) {
@@ -165,243 +172,296 @@ const LobbyTable = (props) => {
 
   return (
     <div className={classes.root}>
-      <form onSubmit={handleSubmit} className={classes.form}>
-        <Grid
-          container
-          spacing={5}
-          direction="row"
-          justify="center"
-          alignItems="center"
-        >
-          <Grid item className={classes.gridItem} xs={4}>
-            <Card className={classes.card}>
-              <CardContent>
-                <Typography
-                  className={classes.cardTitle}
-                  color="textSecondary"
-                  gutterBottom
-                >
-                  Lobbyname
-                </Typography>
-                <Typography variant="h5" component="h2">
-                  {gameConfig.name}
-                </Typography>
-              </CardContent>
-            </Card>
+      {gameId ? (
+        <form onSubmit={handleSubmit} className={classes.form}>
+          <Grid
+            container
+            spacing={5}
+            direction="row"
+            justify="center"
+            alignItems="center"
+          >
+            <Grid item className={classes.gridItem} xs={4}>
+              <Card className={classes.card}>
+                <CardContent>
+                  <Typography
+                    className={classes.cardTitle}
+                    color="textSecondary"
+                    gutterBottom
+                  >
+                    Lobbyname
+                  </Typography>
+                  <Typography variant="h5" component="h2">
+                    {gameConfig.name}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item className={classes.gridItem} xs>
+              <Card className={classes.card}>
+                <CardContent>
+                  <Typography
+                    className={classes.cardTitle}
+                    color="textSecondary"
+                    gutterBottom
+                  >
+                    Visibility
+                  </Typography>
+                  <Typography variant="h5" component="h2">
+                    {gameConfig.public ? "public" : "private"}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item className={classes.gridItem} xs>
+              <Card className={classes.card}>
+                <CardContent>
+                  <Typography
+                    className={classes.cardTitle}
+                    color="textSecondary"
+                    gutterBottom
+                  >
+                    Game mode
+                  </Typography>
+                  <Typography variant="h5" component="h2">
+                    {gameConfig.mode}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item className={classes.gridItem} xs>
+              <Card className={classes.card}>
+                <CardContent>
+                  <Typography
+                    className={classes.cardTitle}
+                    color="textSecondary"
+                    gutterBottom
+                  >
+                    Max. Players
+                  </Typography>
+                  <Typography variant="h5" component="h2">
+                    {gameConfig.playersAllowed}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
           </Grid>
-          <Grid item className={classes.gridItem} xs>
-            <Card className={classes.card}>
-              <CardContent>
-                <Typography
-                  className={classes.cardTitle}
-                  color="textSecondary"
-                  gutterBottom
-                >
-                  Visibility
-                </Typography>
-                <Typography variant="h5" component="h2">
-                  {gameConfig.public ? "public" : "private"}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item className={classes.gridItem} xs>
-            <Card className={classes.card}>
-              <CardContent>
-                <Typography
-                  className={classes.cardTitle}
-                  color="textSecondary"
-                  gutterBottom
-                >
-                  Game mode
-                </Typography>
-                <Typography variant="h5" component="h2">
-                  {gameConfig.mode}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item className={classes.gridItem} xs>
-            <Card className={classes.card}>
-              <CardContent>
-                <Typography
-                  className={classes.cardTitle}
-                  color="textSecondary"
-                  gutterBottom
-                >
-                  Max. Players
-                </Typography>
-                <Typography variant="h5" component="h2">
-                  {gameConfig.playersAllowed}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
-        <Grid container spacing={5} justify="center">
-          <Grid item xs={3}>
-            <Button
-              variant="contained"
-              color="secondary"
-              fullWidth
-              onClick={props.exitLobby}
-            >
-              Cancel
-            </Button>
-          </Grid>
-          <Grid item xs={6}>
-            <Button variant="contained" color="primary" type="submit" fullWidth>
-              Start
-            </Button>
-          </Grid>
-          <Grid container spacing={1}>
-            <Grid item xs={12}>
-              <TableContainer
-                component={Paper}
-                className={classes.tableContainer}
+          <Grid container spacing={5} justify="center">
+            <Grid item xs={3}>
+              <Button
+                variant="contained"
+                color="secondary"
+                fullWidth
+                onClick={props.exitLobby}
               >
-                <Table
-                  className={classes.table}
-                  size="small"
-                  aria-label="lobby player list table"
+                Cancel
+              </Button>
+            </Grid>
+            <Grid item xs={6}>
+              <Button
+                variant="contained"
+                color="primary"
+                type="submit"
+                fullWidth
+              >
+                Start
+              </Button>
+            </Grid>
+            <Grid container spacing={1}>
+              <Grid item xs={12}>
+                <TableContainer
+                  component={Paper}
+                  className={classes.tableContainer}
                 >
-                  <TableHead>{headerCells}</TableHead>
-                  <TableBody>
-                    {(playerState &&
-                      playerState.map((player) => (
-                        <StyledTableRow
-                          key={
-                            normalizeName(player.name) + "_" + player.clientId
-                          }
-                          hover
-                        >
-                          <StyledTableCell component="th" scope="row">
-                            {player.name}{" "}
-                            {player.clientId === gameConfig.host ? (
-                              <Tooltip title="Game Host" aria-label="game host">
-                                <HomeIcon
-                                  fontSize="small"
-                                  className={classes.hostHomeIcon}
-                                />
-                              </Tooltip>
-                            ) : (
-                              "\u00A0"
-                            )}
-                          </StyledTableCell>
-                          <StyledTableCell align="right">
-                            {myPlayer.clientId === player.clientId ? (
-                              // Select: Myplayers color?
-                              <div className={classes.colorSelectWrapper}>
+                  <Table
+                    className={classes.table}
+                    size="small"
+                    aria-label="lobby player list table"
+                  >
+                    <TableHead>{headerCells}</TableHead>
+                    <TableBody>
+                      {(playerState &&
+                        playerState.map((player) => (
+                          <StyledTableRow
+                            key={
+                              normalizeName(player.name) + "_" + player.clientId
+                            }
+                            hover
+                          >
+                            <StyledTableCell component="th" scope="row">
+                              {player.name}{" "}
+                              {player.clientId === gameConfig.host ? (
                                 <Tooltip
-                                  title={myPlayer.color}
-                                  aria-label={myPlayer.color}
+                                  title="Game Host"
+                                  aria-label="game host"
+                                >
+                                  <HomeIcon
+                                    fontSize="small"
+                                    className={classes.hostHomeIcon}
+                                  />
+                                </Tooltip>
+                              ) : (
+                                "\u00A0"
+                              )}
+                            </StyledTableCell>
+                            <StyledTableCell align="right">
+                              {myPlayer.clientId === player.clientId ? (
+                                // Select: Myplayers color?
+                                <div className={classes.colorSelectWrapper}>
+                                  <Tooltip
+                                    title={myPlayer.color}
+                                    aria-label={myPlayer.color}
+                                  >
+                                    <Paper
+                                      elevation={3}
+                                      className={classes.colorPaper}
+                                      style={{
+                                        backgroundColor: myPlayer.color,
+                                      }}
+                                    >
+                                      {"\u00A0"}
+                                    </Paper>
+                                  </Tooltip>
+                                  <FormControl
+                                    className={classes.formControl}
+                                    disabled={
+                                      myPlayer.clientId !== player.clientId
+                                    }
+                                  >
+                                    <Select
+                                      value={myPlayer.color}
+                                      onChange={(e) => {
+                                        handleMyPlayerChanges(e, "color");
+                                      }}
+                                      name={
+                                        normalizeName(player.name) + "_color"
+                                      }
+                                      displayEmpty
+                                      className={classes.selectColor}
+                                    >
+                                      <MenuItem value={"red"}>Red</MenuItem>
+                                      <MenuItem value={"green"}>Green</MenuItem>
+                                      <MenuItem value={"lightGreen"}>
+                                        Light Green
+                                      </MenuItem>
+                                      <MenuItem value={"lime"}>Lime</MenuItem>
+                                      <MenuItem value={"black"}>Black</MenuItem>
+                                      <MenuItem value={"blue"}>Blue</MenuItem>
+                                      <MenuItem value={"yellow"}>
+                                        Yellow
+                                      </MenuItem>
+                                      <MenuItem value={"lightBlue"}>
+                                        Light Blue
+                                      </MenuItem>
+                                      <MenuItem value={"indigo"}>
+                                        Indigo
+                                      </MenuItem>
+                                      <MenuItem value={"cyan"}>Cyan</MenuItem>
+                                      <MenuItem value={"purple"}>
+                                        Purple
+                                      </MenuItem>
+                                      <MenuItem value={"deepPurple"}>
+                                        Deep Purple
+                                      </MenuItem>
+                                      <MenuItem value={"amber"}>Amber</MenuItem>
+                                      <MenuItem value={"orange"}>
+                                        Orange
+                                      </MenuItem>
+                                      <MenuItem value={"deepOrange"}>
+                                        Deep Orange
+                                      </MenuItem>
+                                      <MenuItem value={"teal"}>Teal</MenuItem>
+                                      <MenuItem value={"pink"}>Pink</MenuItem>
+                                      <MenuItem value={"gray"}>Gray</MenuItem>
+                                    </Select>
+                                  </FormControl>
+                                </div>
+                              ) : (
+                                // player color as paper
+                                <Tooltip
+                                  title={player.color}
+                                  aria-label={player.color}
                                 >
                                   <Paper
                                     elevation={3}
-                                    className={classes.colorPaper}
                                     style={{
-                                      backgroundColor: myPlayer.color,
+                                      backgroundColor: player.color,
                                     }}
                                   >
                                     {"\u00A0"}
                                   </Paper>
                                 </Tooltip>
-                                <FormControl
-                                  className={classes.formControl}
+                              )}
+                            </StyledTableCell>
+                            <StyledTableCell align="right">
+                              {myPlayer.clientId === player.clientId ? ( // Switch: Myplayers ready?
+                                <Switch
                                   disabled={
                                     myPlayer.clientId !== player.clientId
                                   }
-                                >
-                                  <Select
-                                    value={myPlayer.color}
-                                    onChange={(e) => {
-                                      handleMyPlayerChanges(e, "color");
-                                    }}
-                                    name={normalizeName(player.name) + "_color"}
-                                    displayEmpty
-                                    className={classes.selectColor}
-                                  >
-                                    <MenuItem value={"red"}>Red</MenuItem>
-                                    <MenuItem value={"green"}>Green </MenuItem>
-                                    <MenuItem value={"black"}>Black </MenuItem>
-                                    <MenuItem value={"blue"}>Blue</MenuItem>
-                                    <MenuItem value={"pink"}>Pink</MenuItem>
-                                    <MenuItem value={"gray"}>Gray</MenuItem>
-                                  </Select>
-                                </FormControl>
-                              </div>
-                            ) : (
-                              // player color as paper
-                              <Tooltip
-                                title={player.color}
-                                aria-label={player.color}
-                              >
-                                <Paper
-                                  elevation={3}
-                                  style={{
-                                    backgroundColor: player.color,
+                                  checked={myPlayer.ready}
+                                  onChange={(e) => {
+                                    handleMyPlayerChanges(e, "ready");
                                   }}
+                                  color="primary"
+                                  inputProps={{ "aria-label": "ready" }}
+                                />
+                              ) : // ICON: players ready?
+                              /true/i.test(player.ready) ? (
+                                <Tooltip title="ready" aria-label="ready">
+                                  <HowToRegIcon
+                                    className={classes.readyHowToRegIcon}
+                                  />
+                                </Tooltip>
+                              ) : (
+                                <Tooltip
+                                  title="Waiting for player ..."
+                                  aria-label="Waiting for player ..."
                                 >
-                                  {"\u00A0"}
-                                </Paper>
-                              </Tooltip>
-                            )}
-                          </StyledTableCell>
-                          <StyledTableCell align="right">
-                            {myPlayer.clientId === player.clientId ? ( // Switch: Myplayers ready?
-                              <Switch
-                                disabled={myPlayer.clientId !== player.clientId}
-                                checked={myPlayer.ready}
-                                onChange={(e) => {
-                                  handleMyPlayerChanges(e, "ready");
-                                }}
-                                color="primary"
-                                inputProps={{ "aria-label": "ready" }}
+                                  <CircularProgress
+                                    variant="indeterminate"
+                                    disableShrink
+                                    size={22}
+                                    thickness={4}
+                                    className={classes.readyCircularProgress}
+                                  />
+                                </Tooltip>
+                              )}
+                            </StyledTableCell>
+                          </StyledTableRow>
+                        ))) || (
+                        <StyledTableRow hover>
+                          <StyledTableCell colSpan={4} align="center">
+                            <div>
+                              Loading players ...
+                              <br />
+                              <CircularProgress
+                                color="inherit"
+                                className={classes.circularProgress}
                               />
-                            ) : // ICON: players ready?
-                            /true/i.test(player.ready) ? (
-                              <Tooltip title="ready" aria-label="ready">
-                                <HowToRegIcon
-                                  className={classes.readyHowToRegIcon}
-                                />
-                              </Tooltip>
-                            ) : (
-                              <Tooltip
-                                title="Waiting for player ..."
-                                aria-label="Waiting for player ..."
-                              >
-                                <CircularProgress
-                                  variant="indeterminate"
-                                  disableShrink
-                                  size={22}
-                                  thickness={4}
-                                  className={classes.readyCircularProgress}
-                                />
-                              </Tooltip>
-                            )}
+                            </div>
                           </StyledTableCell>
                         </StyledTableRow>
-                      ))) || (
-                      <StyledTableRow hover>
-                        <StyledTableCell colSpan={4} align="center">
-                          <div>
-                            Loading players ...
-                            <br />
-                            <CircularProgress
-                              color="inherit"
-                              className={classes.circularProgress}
-                            />
-                          </div>
-                        </StyledTableCell>
-                      </StyledTableRow>
-                    )}
-                  </TableBody>
-                </Table>
-              </TableContainer>
+                      )}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Grid>
             </Grid>
           </Grid>
-        </Grid>
-      </form>
+        </form>
+      ) : (
+        <div>
+          <div>
+            Requesting new game ...
+            <br />
+            <CircularProgress
+              color="inherit"
+              className={classes.circularProgress}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

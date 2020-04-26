@@ -59,8 +59,8 @@ const CreateGame = (props) => {
           <Grid item xs={12}>
             <TextField
               required
-              id="gamename"
-              name="gamename"
+              id="name"
+              name="name"
               label="Game name"
               fullWidth
               autoComplete="gamename"
@@ -114,8 +114,8 @@ const CreateGame = (props) => {
           <Grid item xs={12} sm={4}>
             <TextField
               required
-              id="maxplayers"
-              name="maxplayers"
+              id="playersAllowed"
+              name="playersAllowed"
               label="Max. Players"
               fullWidth
               autoComplete="maxplayers"

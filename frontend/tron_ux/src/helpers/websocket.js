@@ -23,21 +23,22 @@ export function connectToWSUXServer() {
 
 // Settings
 
-
 // JSON query objects
 // see: https://github.com/22phuber/tron-light-cycles/blob/develop/documents/client-server-messaging/json_messages.md
 export const QUERY = Object.freeze({
-  UPDATEPUBLICGAMES: { subject: "updatePublicGames" },
+  CLIENTCONNECTED: { subject: "clientConnected" },
+  UPDATEPUBLICGAMES: { subject: "currentPublicGames" },
   UPDATEDIRECTION: { subject: "updateDirection", key: "" },
   CREATEGAME: {
     subject: "createGame",
     gameConfig: {
       name: "theChosenGameName",
-      visibility: "theChosenVisibility",
-      mode: "theChosenGameMode",
-      playersAllowed: "int",
-    },
-    hostName: "theClientsName",
+      public: true,
+      mode: "classic",
+      playersAllowed: 5,
+      playing: false,
+      host: "0123456789"
+    }
   },
   JOINGAME: {
     subject: "joinGame",
