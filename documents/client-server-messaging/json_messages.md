@@ -6,7 +6,7 @@
 |---|---|---|---|---|---|
 |Game server sends client the id of the just created connection.|`{ "subject": "clientId", "id": "theClientId" }`||✅|✅|🆓|
 |Client requests all currently publicly open games.|`{ "subject": "currentPublicGames" }`||✅|✅|❌|
-|Game server sends all currently publicly open games and their associated properties to client who requested them.|`{ "subject": "currentPublicGames", "games": [ { "id": "theGameId", "name": "theGameName", "playersJoined": int, "playersAllowed": int, "mode": "gameMode", }, ...] }`|gameMode = "classic" or "battleRoyale"|❌|✅|❌|
+|Game server sends all currently publicly open games and their associated properties to client who requested them.|`{ "subject": "currentPublicGames", "games": [ { "id": "theGameId", "name": "theGameName", "playersJoined": int, "playersAllowed": int, "mode": "gameMode", }, ...] }`|gameMode = "classic" or "battleRoyale"|✅|✅|❌|
 
 
 ### On game creation
