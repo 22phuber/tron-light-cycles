@@ -44,8 +44,8 @@ const App = () => {
   const classes = useStyles();
   // State: Application modes
   const [appState, setAppState] = useState({
-    playMode: true,
-    lobbyMode: true,
+    playMode: false,
+    lobbyMode: false,
   });
   // State: websocket & reference
   const websocketClient = useRef(null);
@@ -313,13 +313,23 @@ const App = () => {
     for (const [key, value] of new FormData(event.target).entries()) {
       createGameTempData[key] = value;
     }
-    setLobbyData(createGameTempData);
-    setAppState({ gameMode: true, lobbyMode: true });
+    setGameData({
+      ...gameData,
+      gameConfig: {
+        name: createGameTempData.gamename,
+        public: createGameTempData.visibility === "public",
+        mode: createGameTempData.mode,
+        playersAllowed: createGameTempData.maxplayers,
+        playing: false,
+        host: myPlayerData.clientId,
+      },
+    });
+    setAppState({ playMode: true, lobbyMode: true });
   }
 
   // cancel Lobby & gameMode
   function cancelLobby() {
-    setAppState({ gameMode: false, lobbyMode: false });
+    setAppState({ playMode: false, lobbyMode: false });
   }
 
   return (
