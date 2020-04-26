@@ -39,49 +39,13 @@ const useStyles = makeStyles({
   },
 });
 
-// fake it
-const lobbyPlayersArray = [
-  {
-    clientid: "c-47Bs2323d2xdcxwd23qdex23qd_zTEOZ7-U7TigC7g",
-    name: "Ready Player 1",
-    readyState: "true",
-    color: "blue",
-  },
-  {
-    clientid: "T6FVRKq32ed23d2dxwekSH0e-lDdL7FtH_w",
-    name: "IAMGROOT",
-    readyState: "false",
-    color: "gray",
-  },
-  {
-    id: "1234567890",
-    name: "this is me!",
-    readyState: "false",
-    color: "black",
-  },
-  {
-    clientid: "tlyoDxNs3232cxdaV1EucmSlcfM-9yA",
-    name: "Irish shizzle",
-    readyState: "true",
-    color: "green",
-  },
-  {
-    id: "h5diOYzwdEd23d23d23d23SSmWE6yubojQ",
-    name: "mike van dike",
-    readyState: "false",
-    color: "pink",
-  },
-];
-
-const playerIdInitial = "1234567890";
-
 /* APP */
 const App = () => {
   const classes = useStyles();
   // State: Application modes
   const [appState, setAppState] = useState({
-    playMode: false,
-    lobbyMode: false,
+    playMode: true,
+    lobbyMode: true,
   });
   // State: websocket & reference
   const websocketClient = useRef(null);
@@ -90,14 +54,51 @@ const App = () => {
     reconnectTimeout: 250,
     wsError: false,
   });
+  // State: My Player
+  const [myPlayerData, setMyPlayerData] = useState({
+    name: "myPlayerName",
+    clientId: "1234567890",
+    color: "black",
+    ready: true,
+  });
   // State: Game data
   const [gameData, setGameData] = useState({
-    player: { playerName: "thePlayerName", clientId: "theClientIds" },
-    gameConfig: { height: 400, width: 400, lineThickness: 5 },
+    gameConfig: {
+      name: "theGameName",
+      public: true,
+      mode: "classic",
+      playersAllowed: 5,
+      playing: false,
+      host: "1234567890",
+    },
+    canvasConfig: { height: 400, width: 400, lineThickness: 5 },
     publicGames: null,
     lobbyState: {
       players: [
-        { clientId: "theClientId", name: "thePlayerName", ready: false },
+        {
+          clientId: "c-47Bs2323d2xdcxwd23qdex23qd_zTEOZ7-U7TigC7g",
+          name: "Ready Player 1",
+          ready: true,
+          color: "blue",
+        },
+        {
+          clientId: "T6FVRKq32ed23d2dxwekSH0e-lDdL7FtH_w",
+          name: "IAMGROOT",
+          ready: false,
+          color: "gray",
+        },
+        {
+          clientId: "tlyoDxNs3232cxdaV1EucmSlcfM-9yA",
+          name: "Irish shizzle",
+          ready: false,
+          color: "green",
+        },
+        {
+          clientId: "h5diOYzwdEd23d23d23d23SSmWE6yubojQ",
+          name: "mike van dike",
+          ready: true,
+          color: "pink",
+        },
       ],
     },
     initialGameState: {
@@ -145,9 +146,6 @@ const App = () => {
   const [lobbyData, setLobbyData] = useState({}); // lobbyState
 
   useEffect(() => {
-    setLobbyPlayers(lobbyPlayersArray);
-    setPlayerId(playerIdInitial);
-
     handleWebsocket();
     document.addEventListener("keydown", handleKeyPress, false);
     return () => {
@@ -172,7 +170,7 @@ const App = () => {
 
   useInterval(() => {
     loadGames();
-  }, 1000 * 20);
+  }, 1000 * 10);
 
   // handles websocket connection
   function handleWebsocket() {
@@ -204,9 +202,6 @@ const App = () => {
             });
             break;
           case "currentPublicGames":
-            console.log(dataFromServer.Games);
-            console.log(gameData.publicGames);
-            // if(gameData.publicGames !== dataFromServer.Games )
             setGameData({ ...gameData, publicGames: dataFromServer.games });
             break;
           case "canvas config":
@@ -275,8 +270,12 @@ const App = () => {
       !websocketClient.current ||
       websocketClient.current.readyState === WebSocket.CLOSED
     ) {
-      handleWebsocket(websocketClient);
+      handleWebsocket();
     }
+  }
+
+  function handleMyPlayer(key, val) {
+    setMyPlayerData({ ...myPlayerData, [key]: val });
   }
 
   // playerData for game rendering
@@ -382,9 +381,10 @@ const App = () => {
                     <Paper>
                       <LobbyTable
                         exitLobby={cancelLobby}
-                        lobbyPlayers={lobbyPlayers}
-                        lobbyData={lobbyData}
-                        myPlayerId={playerId}
+                        players={gameData.lobbyState.players}
+                        gameConfig={gameData.gameConfig}
+                        myPlayer={myPlayerData}
+                        handleMyPlayer={handleMyPlayer}
                       />
                     </Paper>
                   </Box>

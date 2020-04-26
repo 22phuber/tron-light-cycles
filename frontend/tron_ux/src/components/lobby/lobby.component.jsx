@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -14,9 +14,12 @@ import Button from "@material-ui/core/Button";
 import MenuItem from "@material-ui/core/MenuItem";
 import Switch from "@material-ui/core/Switch";
 import Select from "@material-ui/core/Select";
+import Tooltip from "@material-ui/core/Tooltip";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
+import HomeIcon from "@material-ui/icons/Home";
+import HowToRegIcon from "@material-ui/icons/HowToReg";
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -49,6 +52,20 @@ const useStyles = makeStyles((theme) => ({
   circularProgress: {
     margin: "25px",
   },
+  readyHowToRegIcon: {
+    color: "green",
+    marginRight: "15px",
+  },
+  hostHomeIcon: {
+    color: "green",
+    marginLeft: "5px",
+    verticalAlign: "middle",
+  },
+  readyCircularProgress: {
+    marginRight: "15px",
+    color: "orange",
+    animationDuration: "2000ms",
+  },
   root: {
     display: "flex",
     flexWrap: "wrap",
@@ -71,45 +88,55 @@ const useStyles = makeStyles((theme) => ({
   card: {
     backgroundColor: "#636363",
   },
+  selectColor: {
+    width: "100%",
+  },
+  formControl: {
+    width: "50%",
+  },
+  colorPaper: {
+    width: "50%",
+  },
+  colorSelectWrapper: {
+    display: "flex",
+  },
 }));
 
 // TODO: Show Generated Game Link
 
 const LobbyTable = (props) => {
   const classes = useStyles();
+  // dispatch vars from props
+  const { players, myPlayer, gameConfig } = props;
 
-  const { lobbyData, lobbyPlayers, myPlayerId } = props;
-  const [myPlayerColor, setMyPlayerColor] = React.useState("black");
   // TODO: disable used colors from other users in select dropdown!
-  const [usedPlayerColors, setUsedPlayerColors] = React.useState([]);
-  const [myReadyState, setMyReadyState] = React.useState(false);
+  const [playerState, setPlayerState] = useState(null);
+  const [usedPlayerColors, setUsedPlayerColors] = useState([]);
 
   useEffect(() => {
-    if (lobbyPlayers) {
-      lobbyPlayers.forEach(function(player,index){
-        if(player.id === myPlayerId){
-          lobbyPlayers.splice(index, 1);
-          lobbyPlayers.unshift(player);
-        }
-      });
-      lobbyPlayers.map((player) => {
-        if (myPlayerId === player.id) {
-          setMyPlayerColor(player.color);
-          setMyReadyState(true); // set current player to ready
-        }
+    if (players) {
+      players.map((player) => {
         setUsedPlayerColors(usedPlayerColors.concat(player.color));
         return true;
       });
     }
-    console.log(lobbyPlayers);
-  }, [lobbyPlayers, myPlayerId]);
+    // add myPlayer as first player in array
+    setPlayerState([myPlayer, ...players]);
+    console.log(gameConfig);
+    console.log(players);
+  }, [players, myPlayer, gameConfig]);
 
-  const handleChangeColor = (event) => {
-    setMyPlayerColor(event.target.value);
-  };
-
-  const handleMyReadyState = (event) => {
-    setMyReadyState(event.target.checked);
+  const handleMyPlayerChanges = (event, setting) => {
+    switch (setting) {
+      case "ready":
+        props.handleMyPlayer("ready", event.target.checked);
+        break;
+      case "color":
+        props.handleMyPlayer("color", event.target.value);
+        break;
+      default:
+        break;
+    }
   };
 
   const handleSubmit = (event) => {
@@ -118,6 +145,14 @@ const LobbyTable = (props) => {
     for (const [key, value] of new FormData(event.target).entries()) {
       console.log("[" + key + "]" + value);
     }
+  };
+
+  /**
+   * Replaces ' ' (space or multiple spaces) with '_' (underline)
+   * @param {*} name
+   */
+  const normalizeName = (name) => {
+    return name.replace(/\s+/g, "_").toLowerCase();
   };
 
   const headerCells = (
@@ -149,7 +184,7 @@ const LobbyTable = (props) => {
                   Lobbyname
                 </Typography>
                 <Typography variant="h5" component="h2">
-                  {lobbyData.gamename || "GameName"}
+                  {gameConfig.name}
                 </Typography>
               </CardContent>
             </Card>
@@ -165,7 +200,7 @@ const LobbyTable = (props) => {
                   Visibility
                 </Typography>
                 <Typography variant="h5" component="h2">
-                  {lobbyData.visibility || "public"}
+                  {gameConfig.public ? "public" : "private"}
                 </Typography>
               </CardContent>
             </Card>
@@ -181,7 +216,7 @@ const LobbyTable = (props) => {
                   Game mode
                 </Typography>
                 <Typography variant="h5" component="h2">
-                  {lobbyData.mode || "classic"}
+                  {gameConfig.mode}
                 </Typography>
               </CardContent>
             </Card>
@@ -197,7 +232,7 @@ const LobbyTable = (props) => {
                   Max. Players
                 </Typography>
                 <Typography variant="h5" component="h2">
-                  {lobbyData.maxplayers || "5"}
+                  {gameConfig.playersAllowed}
                 </Typography>
               </CardContent>
             </Card>
@@ -232,56 +267,118 @@ const LobbyTable = (props) => {
                 >
                   <TableHead>{headerCells}</TableHead>
                   <TableBody>
-                    {(lobbyPlayers &&
-                      lobbyPlayers.map((player) => (
+                    {(playerState &&
+                      playerState.map((player) => (
                         <StyledTableRow
                           key={
-                            player.name.replace(/\s+/g, "-").toLowerCase() +
-                            "_" +
-                            player.id
+                            normalizeName(player.name) + "_" + player.clientId
                           }
                           hover
                         >
                           <StyledTableCell component="th" scope="row">
-                            {player.name}
+                            {player.name}{" "}
+                            {player.clientId === gameConfig.host ? (
+                              <Tooltip title="Game Host" aria-label="game host">
+                                <HomeIcon
+                                  fontSize="small"
+                                  className={classes.hostHomeIcon}
+                                />
+                              </Tooltip>
+                            ) : (
+                              "\u00A0"
+                            )}
                           </StyledTableCell>
                           <StyledTableCell align="right">
-                            <FormControl
-                              className={classes.formControl}
-                              disabled={myPlayerId !== player.id}
-                            >
-                              <Select
-                                value={
-                                  myPlayerId !== player.id
-                                    ? player.color
-                                    : myPlayerColor
-                                }
-                                onChange={handleChangeColor}
-                                name={player.name + "_color"}
-                                displayEmpty
-                                className={classes.selectEmpty}
+                            {myPlayer.clientId === player.clientId ? (
+                              // Select: Myplayers color?
+                              <div className={classes.colorSelectWrapper}>
+                                <Tooltip
+                                  title={myPlayer.color}
+                                  aria-label={myPlayer.color}
+                                >
+                                  <Paper
+                                    elevation={3}
+                                    className={classes.colorPaper}
+                                    style={{
+                                      backgroundColor: myPlayer.color,
+                                    }}
+                                  >
+                                    {"\u00A0"}
+                                  </Paper>
+                                </Tooltip>
+                                <FormControl
+                                  className={classes.formControl}
+                                  disabled={
+                                    myPlayer.clientId !== player.clientId
+                                  }
+                                >
+                                  <Select
+                                    value={myPlayer.color}
+                                    onChange={(e) => {
+                                      handleMyPlayerChanges(e, "color");
+                                    }}
+                                    name={normalizeName(player.name) + "_color"}
+                                    displayEmpty
+                                    className={classes.selectColor}
+                                  >
+                                    <MenuItem value={"red"}>Red</MenuItem>
+                                    <MenuItem value={"green"}>Green </MenuItem>
+                                    <MenuItem value={"black"}>Black </MenuItem>
+                                    <MenuItem value={"blue"}>Blue</MenuItem>
+                                    <MenuItem value={"pink"}>Pink</MenuItem>
+                                    <MenuItem value={"gray"}>Gray</MenuItem>
+                                  </Select>
+                                </FormControl>
+                              </div>
+                            ) : (
+                              // player color as paper
+                              <Tooltip
+                                title={player.color}
+                                aria-label={player.color}
                               >
-                                <MenuItem value={"red"}>Red</MenuItem>
-                                <MenuItem value={"green"}>Green </MenuItem>
-                                <MenuItem value={"black"}>Black </MenuItem>
-                                <MenuItem value={"blue"}>Blue</MenuItem>
-                                <MenuItem value={"pink"}>Pink</MenuItem>
-                                <MenuItem value={"gray"}>Gray</MenuItem>
-                              </Select>
-                            </FormControl>
+                                <Paper
+                                  elevation={3}
+                                  style={{
+                                    backgroundColor: player.color,
+                                  }}
+                                >
+                                  {"\u00A0"}
+                                </Paper>
+                              </Tooltip>
+                            )}
                           </StyledTableCell>
                           <StyledTableCell align="right">
-                            <Switch
-                              disabled={myPlayerId !== player.id}
-                              checked={
-                                myPlayerId !== player.id
-                                  ? /true/i.test(player.readyState)
-                                  : myReadyState
-                              }
-                              onChange={handleMyReadyState}
-                              color="primary"
-                              inputProps={{ "aria-label": "ready" }}
-                            />
+                            {myPlayer.clientId === player.clientId ? ( // Switch: Myplayers ready?
+                              <Switch
+                                disabled={myPlayer.clientId !== player.clientId}
+                                checked={myPlayer.ready}
+                                onChange={(e) => {
+                                  handleMyPlayerChanges(e, "ready");
+                                }}
+                                color="primary"
+                                inputProps={{ "aria-label": "ready" }}
+                              />
+                            ) : // ICON: players ready?
+                            /true/i.test(player.ready) ? (
+                              <Tooltip title="ready" aria-label="ready">
+                                <HowToRegIcon
+                                  className={classes.readyHowToRegIcon}
+                                />
+                              </Tooltip>
+                            ) : (
+                              <Tooltip
+                                title="Waiting for player ..."
+                                aria-label="Waiting for player ..."
+                              >
+                                <CircularProgress
+                                  variant="indeterminate"
+                                  disableShrink
+                                  size={22}
+                                  thickness={4}
+                                  className={classes.readyCircularProgress}
+                                />
+                              </Tooltip>
+                            )}
                           </StyledTableCell>
                         </StyledTableRow>
                       ))) || (
