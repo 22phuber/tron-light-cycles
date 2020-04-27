@@ -22,14 +22,15 @@ public class GameRound {
     private GameStateUpdateMessage gameStateUpdateMessage;
     private Map<String, Player> players;
     private final Logger logger = LoggerFactory.getLogger(GameRound.class);
-
+    private boolean[][] map;
     private final double FPS = 60;
     private final double LOOP_INTERVAL = 1000000000 / FPS;
 
-    public GameRound(String lobbyId, HashMap players) {
+    public GameRound(String lobbyId, HashMap players, int x, int y) {
 
         this.players = players;
         this.gameStateUpdateMessage = new GameStateUpdateMessage(lobbyId);
+        this.map = new boolean[x][y];
 
     }
 
@@ -100,6 +101,7 @@ public class GameRound {
                             }
                             break;
                     }
+                    map[player.getPosx()][player.getPosy()] = true;
                 });
                 gameStateUpdateMessage.setUpdate(playersJSON());
                 GameManager.getMessageForwarder().forwardMessage(gameStateUpdateMessage);
