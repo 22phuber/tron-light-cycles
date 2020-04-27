@@ -15,7 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Represents a round of a specific {@link ch.tron.game.model.Game}.
+ * Represents a round of a specific
  */
 public class GameRound {
 

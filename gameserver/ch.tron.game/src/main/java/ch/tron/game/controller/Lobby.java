@@ -3,7 +3,6 @@ package ch.tron.game.controller;
 import ch.tron.game.GameManager;
 import ch.tron.game.config.CanvasConfig;
 import ch.tron.game.config.GameColors;
-import ch.tron.game.model.Game;
 import ch.tron.game.model.GameRound;
 import ch.tron.game.model.Player;
 import ch.tron.middleman.messagedto.gametotransport.GameConfigMessage;
@@ -19,13 +18,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Represents a game lobby that holds all available types of tron {@link Game}.
+ * Represents a game lobby that holds all available types of tron
  */
 public class Lobby implements Runnable{
 
     private final int maxPlayers;
     private LobbyStateUpdateMessage lobbyStateUpdateMessage;
-    private Game game;
     private GameRound gameRound;
     private Map<String, Player> players = new HashMap<>();
     private int roundsPlayed = 0;
@@ -40,8 +38,6 @@ public class Lobby implements Runnable{
     public Lobby(String id, String host, JSONObject config) {
         this.id = id;
         this.maxPlayers = 10;
-        //this.game = new Game(config.getJSONObject("lobbyConfig").getString("mode"));
-        this.game = new Game("classic");
         addPlayer(host);
         //this.players.put(players.get(host).getId(),players.get(host));
         //this.name = config.getJSONObject("lobbyConfig").getString("name");
@@ -149,10 +145,6 @@ public class Lobby implements Runnable{
         }
     }
 
-    public void setGame(Game game){
-        this.game = game;
-    }
-
     public void updatePlayer(String playerId, String key) {
         Player pl = players.get(playerId);
         int pl_dir = pl.getDir();
@@ -188,9 +180,6 @@ public class Lobby implements Runnable{
         return playing;
     }
 
-    public Game getGame() {
-        return game;
-    }
 
     public int getNumberOfRounds() {
         return numberOfRounds;
