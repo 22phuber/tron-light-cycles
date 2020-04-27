@@ -3,6 +3,7 @@ package ch.tron.game.controller;
 import ch.tron.game.GameManager;
 import ch.tron.game.config.CanvasConfig;
 import ch.tron.game.config.GameColors;
+import ch.tron.game.model.GameMode;
 import ch.tron.game.model.GameRound;
 import ch.tron.game.model.Player;
 import ch.tron.middleman.messagedto.gametotransport.GameConfigMessage;
@@ -22,6 +23,7 @@ import java.util.Map;
  */
 public class Lobby implements Runnable{
 
+    private GameMode game = GameMode.CLASSIC;
     private final int maxPlayers;
     private LobbyStateUpdateMessage lobbyStateUpdateMessage;
     private GameRound gameRound;
@@ -78,7 +80,7 @@ public class Lobby implements Runnable{
             while(numberOfRounds > 0) {
 
                 LOGGER.info("Entered GameRound");
-                gameRound = new GameRound(id, (HashMap)players); //change back to getReadyPlayers()
+                gameRound = new GameRound(id, (HashMap)players, game.getX(), game.getY()); //change back to getReadyPlayers()
                 gameRound.start();
                 numberOfRounds--;
                 roundsPlayed++;
