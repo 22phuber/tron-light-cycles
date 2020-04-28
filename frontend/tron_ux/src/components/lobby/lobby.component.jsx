@@ -7,7 +7,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import { CircularProgress, LinearProgress } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import FormControl from "@material-ui/core/FormControl";
 import Button from "@material-ui/core/Button";
@@ -51,6 +51,16 @@ const useStyles = makeStyles((theme) => ({
   },
   circularProgress: {
     margin: "25px",
+  },
+  LinearProgress: {
+    margin: "25px",
+    wdith: "100%",
+  },
+  progress: {
+    margin: "25px",
+    wdith: "50%",
+    flexGrow: "0.66",
+    textAlign: "center",
   },
   readyHowToRegIcon: {
     color: "green",
@@ -117,21 +127,24 @@ const LobbyTable = (props) => {
   const [usedPlayerColors, setUsedPlayerColors] = useState([]);
 
   useEffect(() => {
-    if (players) {
+    setPlayerState(players);
+    if (Array.isArray(players) && players.length) {
       players.map((player) => {
         setUsedPlayerColors(usedPlayerColors.concat(player.color));
         return true;
       });
     }
-    // TODO: Where does myPlayer data come from? Gamerserver or state?
-    setPlayerState([myPlayer, ...players]);
-  }, [players, myPlayer, gameConfig, usedPlayerColors]);
+    return () => {
+      setUsedPlayerColors([]);
+    };
+  }, [players]);
 
   useEffect(() => {
     if (gameConfig.gameId) {
       setGameId(gameConfig.gameId);
+      console.log("setGameId called");
     }
-  }, [gameId, gameConfig.gameId]);
+  }, [gameConfig.gameId]);
 
   const handleMyPlayerChanges = (event, setting) => {
     switch (setting) {
@@ -280,7 +293,8 @@ const LobbyTable = (props) => {
                   >
                     <TableHead>{headerCells}</TableHead>
                     <TableBody>
-                      {(playerState &&
+                      {(Array.isArray(playerState) &&
+                        playerState.length &&
                         playerState.map((player) => (
                           <StyledTableRow
                             key={
@@ -415,8 +429,8 @@ const LobbyTable = (props) => {
                                 </Tooltip>
                               ) : (
                                 <Tooltip
-                                  title="Waiting for player ..."
-                                  aria-label="Waiting for player ..."
+                                  title="Player is not yet ready ..."
+                                  aria-label="Player is not yet ready ..."
                                 >
                                   <CircularProgress
                                     variant="indeterminate"
@@ -433,7 +447,7 @@ const LobbyTable = (props) => {
                         <StyledTableRow hover>
                           <StyledTableCell colSpan={4} align="center">
                             <div>
-                              Loading players ...
+                              Wait for players to join ...
                               <br />
                               <CircularProgress
                                 color="inherit"
@@ -451,14 +465,20 @@ const LobbyTable = (props) => {
           </Grid>
         </form>
       ) : (
-        <div>
+        <div className={classes.progress}>
+          <div>Requesting new game ...</div>
           <div>
-            Requesting new game ...
-            <br />
-            <CircularProgress
-              color="inherit"
-              className={classes.circularProgress}
-            />
+            <LinearProgress className={classes.LinearProgress} />
+          </div>
+          <div>
+            <Button
+              variant="outlined"
+              color="secondary"
+              size="small"
+              onClick={props.exitLobby}
+            >
+              Cancel
+            </Button>
           </div>
         </div>
       )}

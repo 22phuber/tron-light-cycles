@@ -37,17 +37,18 @@ export const QUERY = Object.freeze({
       mode: "classic",
       playersAllowed: 5,
       playing: false,
-      host: "0123456789"
-    }
+      host: "0123456789",
+    },
+  },
+  DELETEGAME: {
+    subject: "deleteGame",
+    gameId: "theGameId",
   },
   JOINGAME: {
     subject: "joinGame",
     clientId: "theClientId",
     gameId: "theGameId",
+    color: "playerColor",
   },
   STARTGAME: { subject: "startGame" },
-  LOBBYCONFIG: {
-    subject: "lobbyConfig",
-    lobbyConfig: [{ play: false, public: false, game: "classic" }],
-  },
 });

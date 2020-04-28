@@ -204,6 +204,7 @@ const App = () => {
                 },
               };
             });
+            setAppState({ playMode: true, lobbyMode: true });
             // TODO: send back joinGame
             console.log("WS[createGame]: " + dataFromServer.gameId);
             break;
@@ -212,8 +213,7 @@ const App = () => {
               return {
                 ...prevGameData,
                 lobbyState: {
-                  ...gameData.lobbyState,
-                  players: [dataFromServer.players],
+                  players: dataFromServer.players,
                 },
               };
             });
@@ -345,6 +345,21 @@ const App = () => {
   function cancelLobby() {
     // TODO: send delete game with gameId to Gameserver
     setAppState({ playMode: false, lobbyMode: false });
+    if (gameData.gameId) {
+      sendWsData({
+        ...WSHelpers.QUERY.DELETEGAME,
+        gameId: gameData.gameConfig.gameId,
+      });
+    }
+    setGameData((prevGameData) => {
+      return {
+        ...prevGameData,
+        gameConfig: { ...prevGameData.gameConfig, gameId: null },
+        lobbyState: {
+          players: [],
+        },
+      };
+    });
   }
 
   return (

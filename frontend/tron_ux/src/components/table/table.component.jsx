@@ -10,7 +10,7 @@ import Paper from "@material-ui/core/Paper";
 import IconButton from "@material-ui/core/IconButton";
 import DirectionsBikeRoundedIcon from "@material-ui/icons/DirectionsBikeRounded";
 import Tooltip from "@material-ui/core/Tooltip";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import { CircularProgress, LinearProgress } from "@material-ui/core";
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -40,7 +40,7 @@ const useStyles = makeStyles({
     minWidth: 700,
     height: 200,
   },
-  circularProgress: {
+  progress: {
     margin: "25px",
   },
 });
@@ -95,7 +95,7 @@ const GameTable = (props) => {
                   <br />
                   <CircularProgress
                     color="inherit"
-                    className={classes.circularProgress}
+                    className={classes.progress}
                   />
                 </div>
               </StyledTableCell>
