@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -20,6 +20,7 @@ import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import HomeIcon from "@material-ui/icons/Home";
 import HowToRegIcon from "@material-ui/icons/HowToReg";
+import FileCopyIcon from "@material-ui/icons/FileCopyOutlined";
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -51,6 +52,12 @@ const useStyles = makeStyles((theme) => ({
   },
   circularProgress: {
     margin: "25px",
+  },
+  copyToClipboard: {
+    marginLeft: "10px",
+    "&:hover": {
+      cursor: "pointer",
+    },
   },
   LinearProgress: {
     margin: "25px",
@@ -97,6 +104,9 @@ const useStyles = makeStyles((theme) => ({
   cardTitle: {
     fontSize: 14,
   },
+  cardShareLink: {
+    backgroundColor: "#505050",
+  },
   card: {
     backgroundColor: "#636363",
   },
@@ -118,6 +128,7 @@ const useStyles = makeStyles((theme) => ({
 
 const LobbyTable = (props) => {
   const classes = useStyles();
+  const gameLinkRef = useRef(null);
   // dispatch vars from props
   const { players, myPlayer, gameConfig } = props;
 
@@ -167,6 +178,32 @@ const LobbyTable = (props) => {
     }
   };
 
+  const copyToClipboard = (event) => {
+    var textArea = document.createElement("textarea");
+    textArea.style.position = "fixed";
+    textArea.style.top = 0;
+    textArea.style.left = 0;
+    textArea.style.width = "2em";
+    textArea.style.height = "2em";
+    textArea.style.padding = 0;
+    textArea.style.border = "none";
+    textArea.style.outline = "none";
+    textArea.style.boxShadow = "none";
+    textArea.style.background = "transparent";
+    textArea.value = gameLinkRef.current.innerText;
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    try {
+      var msg = document.execCommand("copy") ? "successful" : "unsuccessful";
+      console.log("Copying text command was " + msg);
+    } catch (error) {
+      console.log("ERROR: Unable to copy: " + error);
+    }
+    document.body.removeChild(textArea);
+    event.target.focus();
+  };
+
   /**
    * Replaces ' ' (space or multiple spaces) with '_' (underline)
    * @param {*} name
@@ -194,6 +231,41 @@ const LobbyTable = (props) => {
             justify="center"
             alignItems="center"
           >
+            <Grid item className={classes.gridItem} xs={12}>
+              <Card className={classes.cardShareLink}>
+                <CardContent>
+                  <Typography
+                    className={classes.cardTitle}
+                    color="textSecondary"
+                    gutterBottom
+                  >
+                    Share game URL
+                  </Typography>
+                  <Typography variant="h5" component="h2">
+                    <span ref={gameLinkRef}>
+                      {window.location.href + "?id=" + gameConfig.gameId}
+                    </span>
+                    {
+                      /* Logical shortcut for only displaying the
+                       * Icon if the copy command exists */
+                      document.queryCommandSupported("copy") && (
+                        <Tooltip
+                          title="Copy to clipboard"
+                          aria-label="Copy to clipboard"
+                        >
+                          <FileCopyIcon
+                            onClick={copyToClipboard}
+                            className={classes.copyToClipboard}
+                            fontSize="small"
+                            color="action"
+                          />
+                        </Tooltip>
+                      )
+                    }
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
             <Grid item className={classes.gridItem} xs={4}>
               <Card className={classes.card}>
                 <CardContent>
