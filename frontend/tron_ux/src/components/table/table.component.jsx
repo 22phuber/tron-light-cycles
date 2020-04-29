@@ -10,7 +10,7 @@ import Paper from "@material-ui/core/Paper";
 import IconButton from "@material-ui/core/IconButton";
 import DirectionsBikeRoundedIcon from "@material-ui/icons/DirectionsBikeRounded";
 import Tooltip from "@material-ui/core/Tooltip";
-import { CircularProgress, LinearProgress } from "@material-ui/core";
+import { CircularProgress } from "@material-ui/core";
 
 const StyledTableCell = withStyles((theme) => ({
   head: {

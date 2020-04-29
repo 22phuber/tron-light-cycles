@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import "./App.css";
 import { WebsocketSubjectMissing } from "./helpers/exceptions";
 import * as WSHelpers from "./helpers/websocket";
-import { DIRECTIONKEYS } from "./helpers/helpers";
+import { DIRECTIONKEYS, locationURL } from "./helpers/helpers";
 import { useInterval } from "./helpers/custom.hooks";
 import { ThemeProvider, makeStyles } from "@material-ui/styles";
 import {
@@ -20,6 +20,7 @@ import CreateGame from "./components/createGame/createGame.component";
 import Footer from "./components/footer/footer.component";
 import GameCanvas from "./components/gameCanvas/gameCanvas.component";
 import LobbyTable from "./components/lobby/lobby.component";
+import JoinGameDialog from "./components/joinGameDialog/joinGameDialog.component";
 
 const theme = createMuiTheme({
   palette: {
@@ -42,6 +43,8 @@ const useStyles = makeStyles({
 /* APP */
 const App = () => {
   const classes = useStyles();
+  // get and parse queryString
+  const queryString = new URLSearchParams(window.location.search);
   // State: Application modes
   const [appState, setAppState] = useState({
     playMode: false,
@@ -109,9 +112,23 @@ const App = () => {
       posy: 66,
     },
   });
+  const [joinGameState, setJoinGameState] = useState({
+    gameId: null,
+    openJoinGameDialog: false,
+  });
   const [wsplayerdata, setWsPlayerData] = useState(null); // -> playData
   // Request Animation Frame variable
   let rAF;
+
+  useEffect(() => {
+    if (queryString.has("id")) {
+      console.log("Found gameid: " + queryString.get("id"));
+      setJoinGameState({
+        gameId: queryString.get("id"),
+        openJoinGameDialog: true,
+      });
+    }
+  }, []);
 
   useEffect(() => {
     handleWebsocket();
@@ -344,7 +361,6 @@ const App = () => {
 
   // cancel Lobby- & play Mode
   function cancelLobby() {
-    // TODO: send delete game with gameId to Gameserver
     setAppState({ playMode: false, lobbyMode: false });
     if (gameData.gameId) {
       sendWsData({
@@ -363,12 +379,26 @@ const App = () => {
     });
   }
 
+  const hideJoinGameDialog = () => {
+    setJoinGameState({
+      gameId: null,
+      openJoinGameDialog: false,
+    });
+    // Remove all querystring params from location
+    window.history.pushState({}, document.title, "/");
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <header>
         <TronAppBar />
       </header>
+      <JoinGameDialog
+        open={joinGameState.openJoinGameDialog}
+        gameId={joinGameState.gameId}
+        handleClose={hideJoinGameDialog}
+      />
       {!appState.playMode ? (
         <React.Fragment>
           <section>
@@ -408,32 +438,30 @@ const App = () => {
         <section>
           {appState.lobbyMode ? (
             <React.Fragment>
-              <section>
-                <Container maxWidth="lg">
-                  <Box my={4} className={classes.box}>
-                    <Typography
-                      variant="h2"
-                      component="h2"
-                      gutterBottom
-                      className={classes.typography}
-                    >
-                      Lobby
-                    </Typography>
-                    <Paper>
-                      <LobbyTable
-                        exitLobby={cancelLobby}
-                        players={gameData.lobbyState.players}
-                        gameConfig={gameData.gameConfig}
-                        myPlayer={myPlayerData}
-                        handleMyPlayer={handleMyPlayer}
-                      />
-                    </Paper>
-                  </Box>
-                </Container>
-              </section>
+              <Container maxWidth="lg">
+                <Box my={4} className={classes.box}>
+                  <Typography
+                    variant="h2"
+                    component="h2"
+                    gutterBottom
+                    className={classes.typography}
+                  >
+                    Lobby
+                  </Typography>
+                  <Paper>
+                    <LobbyTable
+                      exitLobby={cancelLobby}
+                      players={gameData.lobbyState.players}
+                      gameConfig={gameData.gameConfig}
+                      myPlayer={myPlayerData}
+                      handleMyPlayer={handleMyPlayer}
+                    />
+                  </Paper>
+                </Box>
+              </Container>
             </React.Fragment>
           ) : (
-            <section>
+            <React.Fragment>
               {wsplayerdata && !websocketState.wsError ? (
                 <GameCanvas
                   width={gameData.canvasConfig.width}
@@ -450,11 +478,10 @@ const App = () => {
                   />
                 </div>
               )}
-            </section>
+            </React.Fragment>
           )}
         </section>
       )}
-
       <Footer />
     </ThemeProvider>
   );
