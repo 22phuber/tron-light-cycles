@@ -81,6 +81,7 @@ const App = () => {
   // application modes
   const [playMode, setPlayMode] = useState(false);
   const [lobbyMode, setLobbyMode] = useState(false);
+  const [profileMode, setProfileMode] = useState(false);
   // websocket
   const ws = useRef(null);
   const [wserror, setWsError] = useState(false);
@@ -263,40 +264,51 @@ const App = () => {
         <TronAppBar />
       </header>
       {!playMode ? (
-        <React.Fragment>
-          <section>
-            <Container maxWidth="lg">
-              <Box my={4} className={classes.box}>
-                <Typography
-                  variant="h2"
-                  component="h2"
-                  gutterBottom
-                  className={classes.typography}
-                >
-                  Public games
-                </Typography>
-                <GameTable publicGames={publicGames} />
-              </Box>
-            </Container>
-          </section>
-          <section>
-            <Container maxWidth="lg">
-              <Box my={4} className={classes.box}>
-                <Typography
-                  variant="h2"
-                  component="h2"
-                  gutterBottom
-                  className={classes.typography}
-                >
-                  Create Game
-                </Typography>
-                <Paper>
-                  <CreateGame handleSubmit={handleCreateGame} />
-                </Paper>
-              </Box>
-            </Container>
-          </section>
-        </React.Fragment>
+        <section>
+          {profileMode ? (
+            <React.Fragment>
+              <section>
+                
+              </section>
+            </React.Fragment>
+          ) : (
+          <React.Fragment>
+            <section>
+              <Container maxWidth="lg">
+                <Box my={4} className={classes.box}>
+                  <Typography
+                    variant="h2"
+                    component="h2"
+                    gutterBottom
+                    className={classes.typography}
+                  >
+                    Public games
+                  </Typography>
+                  <GameTable publicGames={publicGames} />
+                </Box>
+              </Container>
+            </section>
+            <section>
+              <Container maxWidth="lg">
+                <Box my={4} className={classes.box}>
+                  <Typography
+                    variant="h2"
+                    component="h2"
+                    gutterBottom
+                    className={classes.typography}
+                  >
+                    Create Game
+                  </Typography>
+                  <Paper>
+                    <CreateGame handleSubmit={handleCreateGame} />
+                  </Paper>
+                </Box>
+              </Container>
+            </section>
+          </React.Fragment>
+          )}  
+        </section>
+        
       ) : (
         <section>
           {lobbyMode ? (
