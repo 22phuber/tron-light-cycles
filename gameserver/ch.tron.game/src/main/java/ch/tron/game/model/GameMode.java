@@ -8,17 +8,18 @@ import java.util.Map;
  */
 public enum GameMode {
 
-    CLASSIC("Classic", 400, 400);
-
+    CLASSIC("classic", 400, 400, 5);
 
     private final String name;
     private final int x;
     private final int y;
+    private final int lineThickness;
 
-    private GameMode(String name, int x, int y) {
+    GameMode(String name, int x, int y, int lineThickness) {
         this.name = name;
         this.x = x;
         this.y = y;
+        this.lineThickness = lineThickness;
     }
 
     public String getName() {
@@ -31,5 +32,14 @@ public enum GameMode {
 
     public int getY() {
         return y;
+    }
+
+    public int getLineThickness() {
+        return lineThickness;
+    }
+
+    public static GameMode getGameModeByName(String name) {
+        if (name.equals("classic")) { return GameMode.CLASSIC; }
+        return null;
     }
 }

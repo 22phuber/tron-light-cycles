@@ -1,13 +1,10 @@
 package ch.tron.game;
 
 import ch.tron.game.controller.Lobby;
+import ch.tron.game.model.GameMode;
 import ch.tron.middleman.messagedto.InAppMessage;
-import ch.tron.middleman.messagedto.transporttogame.LobbyConfigMessage;
-import ch.tron.middleman.messagedto.transporttogame.NewLobbyMessage;
-import ch.tron.middleman.messagedto.transporttogame.JoinLobbyMessage;
-import ch.tron.middleman.messagedto.transporttogame.PlayerUpdateMessage;
+import ch.tron.middleman.messagedto.transporttogame.*;
 import ch.tron.middleman.messagehandler.ToTransportMessageForwarder;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,20 +49,21 @@ public class GameManager {
         else if (msg instanceof NewLobbyMessage) {
 
             String groupId = ((NewLobbyMessage) msg).getGroupId();
-            String playerId = ((NewLobbyMessage) msg).getPlayerId();
-            JSONObject config = ((NewLobbyMessage) msg).getConfig();
 
-            lobbies.put(groupId, new Lobby(groupId, playerId, config));
+            lobbies.put(groupId, new Lobby(
+                    groupId,
+                    ((NewLobbyMessage) msg).getGroupName(),
+                    ((NewLobbyMessage) msg).getHostId(),
+                    ((NewLobbyMessage) msg).getHostName(),
+                    GameMode.getGameModeByName(((NewLobbyMessage) msg).getMode()),
+                    ((NewLobbyMessage) msg).getPlayersAllowed(),
+                    ((NewLobbyMessage) msg).isVisibleToPublic()
+            ));
             new Thread(lobbies.get(groupId)).start();
 
-        }else if(msg instanceof LobbyConfigMessage){
-
-            String groupId = ((LobbyConfigMessage) msg).getGroupId();
-            String playerId = ((LobbyConfigMessage) msg).getPlayerId();
-            JSONObject config = ((LobbyConfigMessage) msg).getConfig();
-
-            lobbies.get(groupId).setConfig(playerId, config);
-
+        }
+        else if (msg instanceof StartGameMessage) {
+            lobbies.get(((StartGameMessage) msg).getGroupId()).play();
         }
         else {
             LOGGER.info("Message type {} not supported", msg.getClass());

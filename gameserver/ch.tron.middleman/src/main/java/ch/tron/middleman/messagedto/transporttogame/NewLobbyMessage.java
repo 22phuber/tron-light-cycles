@@ -1,7 +1,6 @@
 package ch.tron.middleman.messagedto.transporttogame;
 
 import ch.tron.middleman.messagedto.InAppMessage;
-import org.json.JSONObject;
 
 /**
  * Is being sent from {@link ch.tron.transport} to {@link ch.tron.game}
@@ -10,38 +9,55 @@ import org.json.JSONObject;
  */
 public class NewLobbyMessage extends InAppMessage {
 
-    private final String playerId;
-    private final String  groupId;
-    private final JSONObject config;
+    private final String hostId;
+    private final String hostName;
+    private final String groupId;
+    private final String groupName;
+    private final String mode;
+    private final int playersAllowed;
+    private final boolean visibleToPublic;
 
-    /**
-     *
-     * @param playerId  The hosts id.
-     * @param groupId   The id of the game to be created.
-     * @param config    The configuration the host has chosen for this new
-     *                  game as a {@link JSONObject} with the following
-     *                  pattern:
-     *                  {
-     *                      "name": "theChosenGameName",
-     *                      "visibility": "theChosenVisibility",
-     *                      "mode": "theChosenGameMode",
-     *                      "playersAllowed": int },
-     *                      "hostName": "theClientsName"
-     *                  }
-     */
-    public NewLobbyMessage(String playerId, String groupId, JSONObject config) {
-        this.playerId = playerId;
+    public NewLobbyMessage(String hostId,
+                           String hostName,
+                           String groupId,
+                           String groupName,
+                           String mode,
+                           int playersAllowed,
+                           boolean visibleToPublic) {
+        this.hostId = hostId;
+        this.hostName = hostName;
         this.groupId = groupId;
-        this.config = config;
+        this.groupName = groupName;
+        this.mode = mode;
+        this.playersAllowed = playersAllowed;
+        this.visibleToPublic = visibleToPublic;
     }
 
-    public String getPlayerId() {
-        return playerId;
+    public String getHostId() {
+        return hostId;
+    }
+
+    public String getHostName() {
+        return hostName;
     }
 
     public String getGroupId() {
         return groupId;
     }
 
-    public JSONObject getConfig() { return config; }
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public String getMode() {
+        return mode;
+    }
+
+    public int getPlayersAllowed() {
+        return playersAllowed;
+    }
+
+    public boolean isVisibleToPublic() {
+        return visibleToPublic;
+    }
 }

@@ -43,10 +43,16 @@ public class JsonInboundHandler {
                 WebSocketController.addChannelToGroup(channel, gameId);
                 WebSocketController.removeChannelFromLonelyGroup(playerId);
 
+                JSONObject config = jo.getJSONObject("gameConfig");
+
                 TransportManager.getMessageForwarder().forwardMessage(new NewLobbyMessage(
                         playerId,
+                        config.getString("hostName"),
                         gameId,
-                        jo.getJSONObject("gameConfig")
+                        config.getString("name"),
+                        config.getString("mode"),
+                        config.getInt("playersAllowed"),
+                        config.getBoolean("public")
                 ));
                 TransportManager.getJsonOutboundHandler().sendJsonToChannel(
                         channel,
@@ -66,7 +72,9 @@ public class JsonInboundHandler {
                 ));
                 break;
             case "startGame":
-                TransportManager.getMessageForwarder().forwardMessage(new StartGameMessage(playerId));
+                TransportManager.getMessageForwarder().forwardMessage(new StartGameMessage(
+                        jo.getString("gameId")
+                ));
                 break;
             case "updateDirection":
                 TransportManager.getMessageForwarder().forwardMessage(new PlayerUpdateMessage(

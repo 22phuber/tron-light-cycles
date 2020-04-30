@@ -4,11 +4,11 @@ import ch.tron.middleman.messagedto.InAppMessage;
 
 public class StartGameMessage extends InAppMessage {
 
-    private final String host;
+    private final String groupId;
 
-    public StartGameMessage(String host) { this.host = host; }
+    public StartGameMessage(String groupId) { this.groupId = groupId; }
 
-    public String getHost() {
-        return host;
+    public String getGroupId() {
+        return groupId;
     }
 }

@@ -68,7 +68,7 @@
                 break;
 
             case "playerDeath":
-                console.log("PlayerDeath; gameId: " + msg.gameId + ", playerId: " + msg.playerId);
+                console.log("PlayerDeath; gameId: " + msg.gameId + ", hostId: " + msg.hostId);
                 break;
         }
     };
@@ -91,17 +91,17 @@
         json = {
             "subject": "createGame",
             "gameConfig": {
-                "name": "test game",
+                "name": "testGameName",
                 "public": true,
                 "mode": "classic",
-                "playersAllowed": 5
-            },
-            "hostName": "test host"
+                "playersAllowed": 1,
+                "hostName": "testHostName"
+            }
         };
         ws.send(JSON.stringify(json));
 
         // Start game
-        json = { "subject": "startGame" };
+        json = { "subject": "startGame", "gameId": gameId.toString() };
         ws.send(JSON.stringify(json));
     }
 
@@ -128,7 +128,9 @@
     function updateCanvas (players) {
         players.forEach(player => {
             ctx.fillStyle = player.color;
-            ctx.fillRect(player.posx % canvas_width, player.posy % canvas_height, lineThickness, lineThickness);
+            ctx.fillRect(player.posx % canvas_width,
+                player.posy % canvas_height,
+                lineThickness, lineThickness);
         });
     }
 

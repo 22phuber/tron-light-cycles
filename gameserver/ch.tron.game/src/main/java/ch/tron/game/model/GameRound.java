@@ -1,7 +1,6 @@
 package ch.tron.game.model;
 
 import ch.tron.game.GameManager;
-import ch.tron.game.config.CanvasConfig;
 import ch.tron.middleman.messagedto.gametotransport.GameStateUpdateMessage;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,19 +18,24 @@ import org.slf4j.LoggerFactory;
  */
 public class GameRound {
 
-    private GameStateUpdateMessage gameStateUpdateMessage;
-    private Map<String, Player> players;
     private final Logger logger = LoggerFactory.getLogger(GameRound.class);
-    private boolean[][] map;
+
+    private GameStateUpdateMessage gameStateUpdateMessage;
+
+    private final Map<String, Player> players;
+    private final int field_width;
+    private final int field_height;
+    private final Boolean[][] field;
+
     private final double FPS = 60;
     private final double LOOP_INTERVAL = 1000000000 / FPS;
 
-    public GameRound(String lobbyId, HashMap players, int x, int y) {
-
+    public GameRound(String lobbyId, HashMap players, int width, int height) {
         this.players = players;
         this.gameStateUpdateMessage = new GameStateUpdateMessage(lobbyId);
-        this.map = new boolean[x][y];
-
+        this.field_width = width;
+        this.field_height = height;
+        this.field = new Boolean[width][height];
     }
 
     public JSONObject playersJSON() throws JSONException {
@@ -67,7 +71,7 @@ public class GameRound {
         return sb.toString();
     }
 
-    public void start(){
+    public void start() {
         logger.info("Game loop running");
 
         long t_before = System.nanoTime();
@@ -79,15 +83,15 @@ public class GameRound {
                 players.values().forEach(player -> {
                     switch (player.getDir()) {
                         case 0:
-                            player.setPosx((player.getPosx() + 1) % CanvasConfig.WIDTH.value());
+                            player.setPosx((player.getPosx() + 1) % field_width);
                             break;
                         case 1:
-                            player.setPosy((player.getPosy() + 1) % CanvasConfig.HEIGHT.value());
+                            player.setPosy((player.getPosy() + 1) % field_height);
                             break;
                         case 2:
                             int x = player.getPosx();
                             if (x == 0) {
-                                player.setPosx(CanvasConfig.WIDTH.value());
+                                player.setPosx(field_width);
                             } else {
                                 player.setPosx(x - 1);
                             }
@@ -95,13 +99,13 @@ public class GameRound {
                         case 3:
                             int y = player.getPosy();
                             if (y == 0) {
-                                player.setPosy(CanvasConfig.HEIGHT.value());
+                                player.setPosy(field_height);
                             } else {
                                 player.setPosy(y - 1);
                             }
                             break;
                     }
-                    map[player.getPosx()][player.getPosy()] = true;
+                    field[player.getPosx()][player.getPosy()] = true;
                 });
                 gameStateUpdateMessage.setUpdate(playersJSON());
                 GameManager.getMessageForwarder().forwardMessage(gameStateUpdateMessage);
