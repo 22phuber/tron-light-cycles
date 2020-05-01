@@ -11,6 +11,7 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 
 import LoginDialog from "../loginDialog/loginDialog.component";
 import RegisterDialog from "../registerDialog/registerDialog.component";
+import ProfileDialog from "../profileDialog/profileDialog.component";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,6 +30,7 @@ function TronAppBar() {
   const [auth, setAuth] = React.useState(false);
   const [openLoginDialog, setOpenLoginDialog] = React.useState(false);
   const [openRegisterDialog, setOpenRegisterDialog] = React.useState(false);
+  const [openProfileDialog, setOpenProfileDialog] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const menuOpen = Boolean(anchorEl);
 
@@ -51,6 +53,9 @@ function TronAppBar() {
   const hideRegisterDialog = () => {
     setOpenRegisterDialog(false);
   };
+  const hideProfileDialog = () => {
+    setOpenProfileDialog(false);
+  };
 
   const handleLogin = () => {
     setAuth(true);
@@ -64,6 +69,7 @@ function TronAppBar() {
   const handleMyAccount = () => {
     alert("'My Account' clicked");
   };
+  
 
   const handleToggle = (event) => {
     setAnchorEl(event.currentTarget);
@@ -79,6 +85,10 @@ function TronAppBar() {
       <RegisterDialog
         open={openRegisterDialog}
         handleClose={hideRegisterDialog}
+      />
+      <ProfileDialog
+        open={openProfileDialog}
+        handleClose={hideProfileDialog}
       />
       <AppBar color="inherit" position="static">
         <Toolbar>
