@@ -12,7 +12,7 @@
 ### On game creation
 |Description|JSON|further information|FE|BEt|BEg|
 |---|---|---|---|---|---|
-|Client requests to create a new game.|`{ "subject": "createGame", "gameConfig": { "name": "theChosenGameName", "public": boolean, "mode": "theChosenGameMode", "playersAllowed": int } }`|gameMode = "classic" or "battleRoyale"|❌|✅|❌|
+|Client requests to create a new game.|`{ "subject": "createGame", "gameConfig": { "public": boolean, "mode": "theChosenGameMode", "playersAllowed": int } }`|gameMode = "classic" or "battleRoyale"|❌|✅|❌|
 |GameServer sends id of the just created game to client who requested the creation.|`{ "subject": "createGame", "gameId": "theGameId" }`||✅|✅|🆓|
 
 
