@@ -8,8 +8,8 @@ import IconButton from "@material-ui/core/IconButton";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import AccountCircle from "@material-ui/icons/AccountCircle";
-
-import LoginDialog from "../loginDialog/loginDialog";
+import LoginDialog from "../loginDialog/loginDialog.component";
+import RegisterDialog from "../registerDialog/registerDialog.component";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,6 +27,7 @@ function TronAppBar() {
   const classes = useStyles();
   const [auth, setAuth] = React.useState(false);
   const [openLoginDialog, setOpenLoginDialog] = React.useState(false);
+  const [openRegisterDialog, setOpenRegisterDialog] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const menuOpen = Boolean(anchorEl);
 
@@ -40,6 +41,14 @@ function TronAppBar() {
 
   const hideLoginDialog = () => {
     setOpenLoginDialog(false);
+  };
+
+  const showRegisterDialog = () => {
+    setOpenRegisterDialog(true);
+  };
+
+  const hideRegisterDialog = () => {
+    setOpenRegisterDialog(false);
   };
 
   const handleLogin = () => {
@@ -66,6 +75,10 @@ function TronAppBar() {
         handleClose={hideLoginDialog}
         handleAuth={handleLogin}
       />
+      <RegisterDialog
+        open={openRegisterDialog}
+        handleClose={hideRegisterDialog}
+      />
       <AppBar color="inherit" position="static">
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
@@ -73,7 +86,9 @@ function TronAppBar() {
           </Typography>
           {!auth ? (
             <div>
-              <Button color="inherit">Register</Button>
+              <Button color="inherit" onClick={showRegisterDialog}>
+                Register
+              </Button>
               <Button color="inherit" onClick={showLoginDialog}>
                 Login
               </Button>

@@ -8,13 +8,16 @@ import java.awt.Color;
 public class Player {
 
     private final String id;
+    private String name;
     private int posx;
     private int posy;
     private int dir;
     private Color color;
+    private boolean ready = false;
 
-    public Player(String  id, int posx, int posy, int dir, Color color) {
+    public Player(String  id, String name, int posx, int posy, int dir, Color color) {
         this.id = id;
+        this.name = name;
         this.posx = posx;
         this.posy = posy;
         this.dir = dir;
@@ -55,5 +58,19 @@ public class Player {
 
     public void setColor(Color color) {
         this.color = color;
+    }
+
+    public boolean isReady(){return this.ready;}
+
+    public void setReady(boolean status){this.ready = status;}
+
+    public boolean getReady(){return ready;}
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

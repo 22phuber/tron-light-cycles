@@ -53,6 +53,10 @@ public class WebSocketController {
         return state.getGroups();
     }
 
+    public static ChannelGroup getChannelGroup(String id) {
+        return state.getChannelGroup(id);
+    }
+
     public static Channel getChannel(String groupId, String playerId) {
         return state.getChannel(groupId, playerId);
     }

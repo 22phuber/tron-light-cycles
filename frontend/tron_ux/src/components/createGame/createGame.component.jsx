@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     flexWrap: "wrap",
-    padding: "16px",
+    padding: theme.spacing(4),
     "& > *": {
       margin: theme.spacing(0),
     },
@@ -24,50 +24,43 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const CreateGame = () => {
+const CreateGame = (props) => {
   const classes = useStyles();
-  const [values, setValues] = React.useState({
+
+  const [defaultValues, setDefaultValues] = React.useState({
     visibility: "public",
     mode: "classic",
-    maxPlayerLimit: "10",
+    playersAllowed: "10",
   });
 
-  const handleChange = (prop) => (event) => {
+  const handleChange = (property) => (event) => {
     const targetValue = event.target.value;
-    if (prop === "mode") {
+    if (property === "mode") {
       switch (targetValue) {
-        case "battleroyal":
-          setValues({ ...values, maxPlayerLimit: 100, [prop]: targetValue });
+        case "battleRoyale":
+          setDefaultValues({ ...defaultValues, playersAllowed: 100, [property]: targetValue });
           break;
         case "classic":
-          setValues({ ...values, maxPlayerLimit: 10, [prop]: targetValue });
+          setDefaultValues({ ...defaultValues, playersAllowed: 10, [property]: targetValue });
           break;
         default:
-          setValues({ ...values, [prop]: targetValue });
+          setDefaultValues({ ...defaultValues, [property]: targetValue });
           break;
       }
     } else {
-      setValues({ ...values, [prop]: targetValue });
-    }
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // form data
-    for (const [key, value] of new FormData(event.target).entries()) {
-      console.log("[" + key + "]" + value);
+      setDefaultValues({ ...defaultValues, [property]: targetValue });
     }
   };
 
   return (
     <div className={classes.root}>
-      <form onSubmit={handleSubmit} className={classes.form}>
+      <form onSubmit={props.handleSubmit} className={classes.form}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <TextField
               required
-              id="gamename"
-              name="gamename"
+              id="name"
+              name="name"
               label="Game name"
               fullWidth
               autoComplete="gamename"
@@ -80,7 +73,7 @@ const CreateGame = () => {
               <RadioGroup
                 aria-label="visibility"
                 name="visibility"
-                value={values.visibility}
+                value={defaultValues.visibility}
                 onChange={handleChange("visibility")}
               >
                 <FormControlLabel
@@ -102,7 +95,7 @@ const CreateGame = () => {
               <RadioGroup
                 aria-label="mode"
                 name="mode"
-                value={values.mode}
+                value={defaultValues.mode}
                 onChange={handleChange("mode")}
               >
                 <FormControlLabel
@@ -111,9 +104,9 @@ const CreateGame = () => {
                   label="Tron classic"
                 />
                 <FormControlLabel
-                  value="battleroyal"
+                  value="battleRoyale"
                   control={<Radio />}
-                  label="Battle Royal"
+                  label="Battle Royale"
                 />
               </RadioGroup>
             </FormControl>
@@ -121,8 +114,8 @@ const CreateGame = () => {
           <Grid item xs={12} sm={4}>
             <TextField
               required
-              id="maxplayers"
-              name="maxplayers"
+              id="playersAllowed"
+              name="playersAllowed"
               label="Max. Players"
               fullWidth
               autoComplete="maxplayers"
@@ -130,7 +123,7 @@ const CreateGame = () => {
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    /{values.maxPlayerLimit}
+                    /{defaultValues.playersAllowed}
                   </InputAdornment>
                 ),
               }}

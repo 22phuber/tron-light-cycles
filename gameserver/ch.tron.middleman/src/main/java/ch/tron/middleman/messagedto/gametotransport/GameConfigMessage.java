@@ -10,18 +10,18 @@ import ch.tron.middleman.messagedto.InAppMessage;
  */
 public class GameConfigMessage extends InAppMessage {
 
-    private final String playerId;
+    private final String groupId;
     private final int canvas_width;
     private final int canvas_height;
 
-    public GameConfigMessage(String playerId, int canvas_width, int canvas_height) {
-        this.playerId = playerId;
+    public GameConfigMessage(String groupId, int canvas_width, int canvas_height) {
+        this.groupId = groupId;
         this.canvas_width = canvas_width;
         this.canvas_height = canvas_height;
     }
 
-    public String getPlayerId() {
-        return playerId;
+    public String getGroupId() {
+        return groupId;
     }
 
     public int getCanvas_width() {

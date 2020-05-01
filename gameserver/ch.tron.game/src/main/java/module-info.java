@@ -1,3 +1,6 @@
+import ch.tron.game.ToGameMessageServiceImpl;
+import ch.tron.middleman.ToGameMessageService;
+
 module ch.tron.game {
     // Java
     requires java.desktop;
@@ -11,9 +14,8 @@ module ch.tron.game {
     // Tron
     requires ch.tron.middleman;
 
-
+    provides ToGameMessageService with ToGameMessageServiceImpl;
+    
     exports ch.tron.game;
-
-    opens ch.tron.game to ch.tron.middleman;
 
 }

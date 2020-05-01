@@ -73,4 +73,8 @@ public class WebSocketState {
         return groups;
     }
 
+    public ChannelGroup getChannelGroup(String id) {
+        return groups.get(id);
+    }
+
 }
