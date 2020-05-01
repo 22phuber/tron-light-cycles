@@ -75,7 +75,7 @@
 
 \begin{document}
 
-    \title{SWEN1\\Praktikum 03 GRASP\\
+    \title{SWEN1\\Praktikum 04 Design\\
         \vspace{1cm}
         \small{ZHAW  School of Engineering\\Klasse: IT18tb\_zh}
         \vspace{1.5cm}
@@ -92,91 +92,35 @@
 
     \tableofcontents
     \listoffigures
-    \lstlistoflistings
     \newpage
 
-    \section{Praktikum GRASP}
+    \section{Praktikum Design}
 
-    \subsection{Aufgabe 1 - Fassaden-Controller}
-    Die Klasse \textbf{Forum} ist der Fassaden-Controller.
+    \subsection{Systemoperation 1 - registerUser}
+     \inlinecode{Java}{registerUser(userData)} registriert einen neuen Benutzer, indem alle Daten in die Datenbank geschrieben werden.
 
-     \subsection{Aufgabe 2 - getNbrOfContributions()}
-     Die GRASP Entwurfsmuster \quotes{Information Expert}, \quotes{Controller}, \quotes{Low Coupling} und \quotes{High Cohesion} wurden in dieser Aufgabe angewendet. Das Forum kennt seine Topics, diese wiederum die enthaltenen Diskussionen. Die Diskussionen wissen über ihre Contributions Bescheid. Der Fassaden-Controller \textbf{Forum} koordiniert die Anfrage des Clients. \newline
-     \textit{Hinweis}: Das neue Klassendiagramm ist im \autoref{ssec:Klassendiagramm} ersichtlich.
+        \subsubsection{Sequenzdiagramm registerUser(userData)}
+        \label{sssec:Sequenzdiagramm_registerUser}
+        \begin{figure}[H]
+            \centering
+            \makebox[\textwidth][c]{\includegraphics[width=0.95\textwidth]{figures/Sequenzdiagramm_registerUser.png}}
+            \caption{UML Sequenzdiagramm - registerUser(...)}
+            \label{fig:Sequenzdiagramm_registerUser}
+        \end{figure}
+
+     \subsection{Systemoperation 2 - loginUser(username, pass)}
+     \inlinecode{Java}{loginUser(username, pass)} authentifiziert einen Benutzer gegenüber der Applikation, indem die eingegeben Daten mit den Daten aus der Datenbank verglichen werden.
 
          \subsubsection{Kommunikationsdiagramm}
           \begin{figure}[H]
              \centering
-             \makebox[\textwidth][c]{\includegraphics[width=0.85\textwidth]{figures/Kommunikationsdiagramm.png}}
-             \caption{UML Kommunikationsdiagramm - getNbrOfContributions()}
-             \label{fig:UMLKommunikationsdiagramm_getNbrOfContributions}
+             \makebox[\textwidth][c]{\includegraphics[width=0.95\textwidth]{figures/Kommunikationsdiagramm_loginUser.png}}
+             \caption{UML Kommunikationsdiagramm - loginUser(username, pass)}
+             \label{fig:UMLKommunikationsdiagramm_loginUser}
          \end{figure}
 
-     \subsection{Aufgabe 3 - addNewDiscussion(...)}
-     Die GRASP Entwurfsmuster \quotes{Information Expert}, \quotes{Controller}, \quotes{Creator}, \quotes{Low Coupling} und \quotes{High Cohesion} wurden in dieser Aufgabe angestrebt. Nur die Klasse \textbf{Topic} darf eine Discussion-Instanz erstellen. Ebenfalls weiss die Klasse \textbf{Topic} bestens über seine Discussion-Instanzen Bescheid. Der Fassaden-Controller \textbf{Forum} koordiniert die Anfrage des Clients.
-
-        \subsubsection{Sequenzdiagramm addNewDiscussion(...)}
-        \label{sssec:Sequenzdiagramm_addNewDiscussion}
-        \begin{figure}[H]
-            \centering
-            \makebox[\textwidth][c]{\includegraphics[width=1\textwidth]{figures/Sequenzdiagramm_addNewDiscussion.png}}
-            \caption{UML Sequenzdiagramm - addNewDiscussion(...)}
-            \label{fig:Sequenzdiagramm_addNewDiscussion}
-        \end{figure}
-
-     \subsection{Klassendiagramm}
-     \label{ssec:Klassendiagramm}
-     Das neue Klassendiagramm. Alle Neuerungen wurden mit Violett markiert.
-    \begin{itemize}
-        \item Neue Exception-Klasse \quotes{DiscussionDuplicateException}
-        \item Die Klasse \textbf{Topic} hat zwei neue Methoden:
-        \begin{itemize}
-             \item \inlinecode{Java}{protected void addDiscussion(String name)}
-             \item \inlinecode{Java}{private boolean checkIfNoDuplicate(String name)}
-        \end{itemize}
-        \item Die Klasse \textbf{Forum} hat zwei neue Methoden:
-        \begin{itemize}
-            \item \inlinecode{Java}{protected int getNbrOfContributions()}
-            \item \inlinecode{Java}{protected void addNewDiscussion(...)}
-        \end{itemize}
-        \item Die Klasse \textbf{ForumTest} hat etliche neue Test-Methoden welche im \autoref{sssec:ForumTest_Code} im Detail ersichtlich sind.
-    \end{itemize}
-     \newpage
-    \begin{figure}[H]
-        \centering
-        \makebox[\textwidth][c]{\includegraphics[width=0.65\textwidth]{figures/SWEN1_GRASP_Klassendiagramm_marks.png}}
-        \caption{UML Klassendiagramm - Forum}
-        \label{fig:UMLKlassendiagramm_Forum}
-    \end{figure}
-
-    \subsection{Aufgabe 4 - Neuer Code}
-    \label{ssec:Codeausschnitte}
-    Alle neuen Codeausschnitte sind hier aufgeführt. \newline
-    \textit{Hinweis}: Der ganze Quelltext kann unter folgendem Link angesehen werden: \\ \url{https://github.zhaw.ch/huberpa4/SWEN1/tree/master/Praktikum_GRASP-FS20}
-
-        \subsubsection{Klasse DiscussionDuplicateException}
-        \lstinputlisting[language=Java, caption=Klasse DiscussionDuplicateException]{listings/DiscussionDuplicateException.code}
-        \vspace{.5cm}
-
-        \subsubsection{Klasse Topic - Methode \inlinecode{Java}{protected void addDiscussion(String name)}}
-        \lstinputlisting[language=Java, caption=Klasse Topic - Methode addDiscussion(...)]{listings/Topic.addDiscussion.code}
-        \vspace{.5cm}
-
-        \subsubsection{Klasse Topic - Methode \inlinecode{Java}{private boolean checkIfNoDuplicate(String name)}}
-        \lstinputlisting[language=Java, caption=Klasse Topic - Methode checkIfNoDuplicate(...)]{listings/Topic.checkIfNoDuplicate.code}
-        \vspace{.5cm}
-
-        \subsubsection{Klasse Forum - Methode \inlinecode{Java}{protected int getNbrOfContributions()}}
-        \lstinputlisting[language=Java, caption=Klasse Forum - Methode getNbrOfContributions()]{listings/Forum.getNbrOfContributions.code}
-        \vspace{.5cm}
-
-        \subsubsection{Klasse Forum - Methode \inlinecode{Java}{protected void addNewDiscussion(...)}}
-        \lstinputlisting[language=Java, caption=Klasse Forum - Methode addNewDiscussion(...)]{listings/Forum.addNewDiscussion.code}
-        \vspace{.5cm}
-
-        \subsubsection{Klasse ForumTest}
-        \label{sssec:ForumTest_Code}
-        \lstinputlisting[language=Java, caption=Klasse ForumTest]{listings/ForumTest.code}
+     \subsection{Design-Klassen-Diagramm}
+     Ein Klassendiagramm existiert bereits für unseren Gameserver in Java. Jedoch wird die Authentifizierung nicht über Java gelöst und somit hat dieses Klassendiagramm nichts mit den zwei Systemoperationen zu tun. Es macht also wenig Sinn das Diagramm hier einzufügen.
 
 \end{document}
 
