@@ -150,6 +150,7 @@ const LobbyTable = (props) => {
     return () => {
       setUsedPlayerColors([]);
     };
+    // eslint-disable-next-line
   }, [players]);
 
   useEffect(() => {

@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import "./App.css";
 import { WebsocketSubjectMissing } from "./helpers/exceptions";
 import * as WSHelpers from "./helpers/websocket";
-import { DIRECTIONKEYS, locationURL } from "./helpers/helpers";
+import { DIRECTIONKEYS } from "./helpers/helpers";
 import { useInterval } from "./helpers/custom.hooks";
 import { ThemeProvider, makeStyles } from "@material-ui/styles";
 import {
@@ -92,26 +92,26 @@ const App = () => {
     },
     countdown: { count: 5 },
   });
-  const [playData, setPlayData] = useState({
-    gameState: {
-      gameId: "theGameId",
-      players: [
-        {
-          clientId: "theClientId",
-          posx: 3,
-          posy: 3,
-          dir: 3,
-          color: "rgb(22,22,22)",
-        },
-      ],
-    },
-    playerDeath: {
-      gameId: "theGameId",
-      clientId: "theDeadPlayerId",
-      posx: 66,
-      posy: 66,
-    },
-  });
+  // const [playData, setPlayData] = useState({
+  //   gameState: {
+  //     gameId: "theGameId",
+  //     players: [
+  //       {
+  //         clientId: "theClientId",
+  //         posx: 3,
+  //         posy: 3,
+  //         dir: 3,
+  //         color: "rgb(22,22,22)",
+  //       },
+  //     ],
+  //   },
+  //   playerDeath: {
+  //     gameId: "theGameId",
+  //     clientId: "theDeadPlayerId",
+  //     posx: 66,
+  //     posy: 66,
+  //   },
+  // });
   const [joinGameState, setJoinGameState] = useState({
     gameId: null,
     openJoinGameDialog: false,
@@ -121,6 +121,7 @@ const App = () => {
   let rAF;
 
   useEffect(() => {
+    handleWebsocket();
     if (queryString.has("id")) {
       console.log("Found gameid: " + queryString.get("id"));
       setJoinGameState({
@@ -128,11 +129,6 @@ const App = () => {
         openJoinGameDialog: true,
       });
     }
-  }, []);
-
-  useEffect(() => {
-    handleWebsocket();
-    document.addEventListener("keydown", handleKeyPress, false);
     return () => {
       console.log("useEffect ws.close() called");
       if (
@@ -140,8 +136,6 @@ const App = () => {
         websocketClient.current.readyState === WebSocket.OPEN
       )
         websocketClient.current.close();
-      console.log("useEffect remove eventistener called");
-      document.removeEventListener("keydown", handleKeyPress, false);
     };
     // eslint-disable-next-line
   }, []);
@@ -152,6 +146,18 @@ const App = () => {
       cancelAnimationFrame(rAF);
     };
   }, [rAF]);
+
+  useEffect(() => {
+    if (appState.playMode && !appState.lobbyMode) {
+      document.addEventListener("keydown", handleKeyPress, false);
+    } else {
+      document.removeEventListener("keydown", handleKeyPress, false);
+    }
+    return () => {
+      document.removeEventListener("keydown", handleKeyPress, false);
+    };
+    // eslint-disable-next-line
+  }, [appState]);
 
   useInterval(() => {
     fetchStateFromGameServer();
