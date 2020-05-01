@@ -19,10 +19,10 @@
 ### Before game start
 |Description|JSON|further information|FE|BEt|BEg|
 |---|---|---|---|---|---|
-|Game server continously updates all joined clients by broadcasting lobby-state.|`{ "subject": "lobbyState", players: [ { "clientId": "theClientId", "name": "thePlayersName" , "ready": boolean }, ...] }`|**continous broadcast**|✅|✅|❌|
+|Game server continously updates all joined clients by broadcasting lobby-state.|`{ "subject": "lobbyState", players: [ { "clientId": "theClientId", "ready": boolean }, ...] }`|**continous broadcast**|✅|✅|❌|
 |Client requests to join a specific game.|`{ "subject": "joinGame", "clientId": "theClientId", "gameId": "theGameId" }`||❌|✅|❌|
 |Game server sends the client the game configurations the client needs to know about in order to display the game correctly.|`{ "subject": "canvasConfig", "width": int, "height": int, "lineThickness": int }`||✅|✅|❌|
-|Client that is host of game to be started orders game server to start the game.| `{ "subject": "startGame", "gameId": "theGameId" }`|*change: 20-04-30, add gameId property*|❌|✅|❌|
+|Client that is host of game to be started orders game server to start the game.| `{ "subject": "startGame", "gameId": "theGameId" }`||❌|✅|❌|
 
 
 ### On game start
