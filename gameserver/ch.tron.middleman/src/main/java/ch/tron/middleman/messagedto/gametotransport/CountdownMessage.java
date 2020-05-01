@@ -5,11 +5,10 @@ import ch.tron.middleman.messagedto.InAppMessage;
 public class CountdownMessage extends InAppMessage {
 
     private final String groupId;
-    private final int count;
+    private int count;
 
-    public CountdownMessage(String groupId, int count) {
+    public CountdownMessage(String groupId) {
         this.groupId = groupId;
-        this.count = count;
     }
 
     public String getGroupId() {
@@ -18,5 +17,9 @@ public class CountdownMessage extends InAppMessage {
 
     public int getCount() {
         return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 }

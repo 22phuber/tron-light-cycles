@@ -13,6 +13,8 @@
     let canvas_height;
     let lineThickness;
 
+    let publicGames = [];
+
     let clientId;
     let gameId;
 
@@ -20,7 +22,7 @@
 
     let ws = new WebSocket(ws_uri);
 
-    ws.onopen = () => createGame();
+    ws.onopen = () => requestCurrentPublicGames();
 
     ws.onclose = () => console.log("Websocket closed");
 
@@ -36,7 +38,12 @@
                 break;
 
             case "currentPublicGames":
-                console.log("CurrentPublicGames: " + JSON.stringify(msg.games));
+                publicGames = msg.games;
+                if (publicGames.length > 0) {
+                    joinGame(publicGames[0].id);
+                } else {
+                    createGame();
+                }
                 break;
 
             case "createGame":
@@ -54,7 +61,7 @@
                 break;
 
             case "initialGameState":
-                console.log("InitialGameState; gameId: " + msg.gameId + ", players: " + msg.players);
+                console.log("InitialGameState; gameId: " + msg.gameId + ", players: " + JSON.stringify(msg.players));
                 break;
 
             case "canvasConfig":
@@ -98,10 +105,9 @@
             }
         });
     }
-    
-    function fetchCurrentPublicGames () {
-        let json = {"subject": "currentPublicGames"};
-        ws.send(JSON.stringify(json));
+
+    function requestCurrentPublicGames () {
+        ws.send(JSON.stringify({"subject": "currentPublicGames"}));
     }
     
     function createGame () {
@@ -111,15 +117,19 @@
                 "name": "testGameName",
                 "public": true,
                 "mode": "classic",
-                "playersAllowed": 1,
+                "playersAllowed": 3,
             }
         };
         ws.send(JSON.stringify(json));
     }
 
+    function joinGame (id) {
+        gameId = id;
+        ws.send(JSON.stringify({ "subject": "joinGame", "gameId": gameId }))
+    }
+
     function startGame () {
-        let json = { "subject": "startGame", "gameId": gameId };
-        ws.send(JSON.stringify(json));
+        ws.send(JSON.stringify({ "subject": "startGame", "gameId": gameId }));
     }
 
     function updateCanvas (players) {

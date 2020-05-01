@@ -1,6 +1,8 @@
 package ch.tron.game.model;
 
 import ch.tron.game.GameManager;
+import ch.tron.middleman.messagedto.gametotransport.CountdownMessage;
+import ch.tron.middleman.messagedto.gametotransport.GameConfigMessage;
 import ch.tron.middleman.messagedto.gametotransport.GameStateUpdateMessage;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -9,6 +11,7 @@ import org.json.JSONObject;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,20 +27,18 @@ public class GameRound {
 
     private final String lobbyId;
     private final Map<String, Player> players;
-    private final int field_width;
-    private final int field_height;
+    private final GameMode mode;
     private final Boolean[][] field;
 
     private final double FPS = 60;
     private final double LOOP_INTERVAL = 1000000000 / FPS;
 
-    public GameRound(String lobbyId, HashMap players, int width, int height) {
+    public GameRound(String lobbyId, HashMap players, GameMode mode) {
         this.lobbyId = lobbyId;
         this.players = players;
         this.gameStateUpdateMessage = new GameStateUpdateMessage(lobbyId);
-        this.field_width = width;
-        this.field_height = height;
-        this.field = new Boolean[width][height];
+        this.mode = mode;
+        this.field = new Boolean[mode.getX()][mode.getY()];
     }
 
     public JSONObject playersJSON() throws JSONException {
@@ -75,6 +76,31 @@ public class GameRound {
     }
 
     public void start() {
+
+        GameManager.getMessageForwarder().forwardMessage(new GameConfigMessage(
+                lobbyId,
+                mode.getX(),
+                mode.getY(),
+                mode.getLineThickness()
+        ));
+
+        gameStateUpdateMessage.setInitial(true);
+        gameStateUpdateMessage.setUpdate(playersJSON());
+        GameManager.getMessageForwarder().forwardMessage(gameStateUpdateMessage);
+        gameStateUpdateMessage.setInitial(false);
+
+        int count = 3;
+        final CountdownMessage countdownMsg = new CountdownMessage(lobbyId);
+        while (count != 0) {
+            try {
+                TimeUnit.MILLISECONDS.sleep(800);
+                countdownMsg.setCount(count--);
+                GameManager.getMessageForwarder().forwardMessage(countdownMsg);
+            } catch (InterruptedException e) {
+                logger.info(e.getMessage());
+            }
+        }
+
         logger.info("Game round started");
 
         long t_before = System.nanoTime();
@@ -86,15 +112,15 @@ public class GameRound {
                 players.values().forEach(player -> {
                     switch (player.getDir()) {
                         case 0:
-                            player.setPosx((player.getPosx() + 1) % field_width);
+                            player.setPosx((player.getPosx() + 1) % mode.getX());
                             break;
                         case 1:
-                            player.setPosy((player.getPosy() + 1) % field_height);
+                            player.setPosy((player.getPosy() + 1) % mode.getY());
                             break;
                         case 2:
                             int x = player.getPosx();
                             if (x == 0) {
-                                player.setPosx(field_width);
+                                player.setPosx(mode.getX());
                             } else {
                                 player.setPosx(x - 1);
                             }
@@ -102,7 +128,7 @@ public class GameRound {
                         case 3:
                             int y = player.getPosy();
                             if (y == 0) {
-                                player.setPosy(field_height);
+                                player.setPosy(mode.getY());
                             } else {
                                 player.setPosy(y - 1);
                             }
@@ -115,5 +141,4 @@ public class GameRound {
             }
         }
     }
-
 }

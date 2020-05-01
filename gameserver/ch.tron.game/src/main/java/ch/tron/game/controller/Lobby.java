@@ -57,13 +57,6 @@ public class Lobby implements Runnable {
 
             LOGGER.info("Entered Lobby");
 
-            GameManager.getMessageForwarder().forwardMessage(new GameConfigMessage(
-                    id,
-                    gameMode.getX(),
-                    gameMode.getY(),
-                    gameMode.getLineThickness()
-            ));
-
             while(!isPlaying()){
                 lobbyStateUpdateMessage.setUpdate(getLobbyState());
                 GameManager.getMessageForwarder().forwardMessage(lobbyStateUpdateMessage);
@@ -74,8 +67,7 @@ public class Lobby implements Runnable {
                 gameRound = new GameRound(
                         id,
                         (HashMap)players,
-                        gameMode.getX(),
-                        gameMode.getY()
+                        gameMode
                 );
 
                 gameRound.start();
@@ -136,10 +128,28 @@ public class Lobby implements Runnable {
         pl.setDir(pl_dir);
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getMaxPlayers() {
+        return maxPlayers;
+    }
+
+    public GameMode getGameMode() {
+        return gameMode;
+    }
+
     public synchronized void play() {
         players.get(hostId).setReady(true);
         this.playing = true;
     }
+
+    public int getPlayersJoined() { return players.size(); }
 
     public synchronized boolean isPlaying() { return playing; }
 
@@ -147,7 +157,7 @@ public class Lobby implements Runnable {
         return numberOfRounds;
     }
 
-    public boolean getVisibleToPublic() {
+    public boolean isVisibleToPublic() {
         return visibleToPublic;
     }
 
