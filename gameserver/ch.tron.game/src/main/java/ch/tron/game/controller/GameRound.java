@@ -1,6 +1,8 @@
-package ch.tron.game.model;
+package ch.tron.game.controller;
 
 import ch.tron.game.GameManager;
+import ch.tron.game.model.GameMode;
+import ch.tron.game.model.Player;
 import ch.tron.middleman.messagedto.gametotransport.CountdownMessage;
 import ch.tron.middleman.messagedto.gametotransport.GameConfigMessage;
 import ch.tron.middleman.messagedto.gametotransport.GameStateUpdateMessage;

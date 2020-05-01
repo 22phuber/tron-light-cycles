@@ -1,11 +1,9 @@
 package ch.tron.game.controller;
 
 import ch.tron.game.GameManager;
-import ch.tron.game.config.GameColors;
+import ch.tron.game.model.GameColors;
 import ch.tron.game.model.GameMode;
-import ch.tron.game.model.GameRound;
 import ch.tron.game.model.Player;
-import ch.tron.middleman.messagedto.gametotransport.GameConfigMessage;
 import ch.tron.middleman.messagedto.gametotransport.LobbyStateUpdateMessage;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -126,6 +124,7 @@ public class Lobby implements Runnable {
             default: // do nothing
         }
         pl.setDir(pl_dir);
+        pl.addTurn(pl.getPosx(), pl.getPosy(), pl_dir);
     }
 
     public String getId() {

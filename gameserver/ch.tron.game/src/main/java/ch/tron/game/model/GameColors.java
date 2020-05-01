@@ -1,4 +1,4 @@
-package ch.tron.game.config;
+package ch.tron.game.model;
 
 import java.awt.*;
 

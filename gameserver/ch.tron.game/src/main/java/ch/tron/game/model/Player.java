@@ -1,6 +1,7 @@
 package ch.tron.game.model;
 
-import java.awt.Color;
+import java.awt.*;
+import java.util.LinkedList;
 
 /**
  * Represents a game player.
@@ -13,6 +14,7 @@ public class Player {
     private int dir;
     private Color color;
     private boolean ready = false;
+    private final LinkedList turns = new LinkedList<Turn>();
 
     public Player(String  id, int posx, int posy, int dir, Color color) {
         this.id = id;
@@ -20,6 +22,10 @@ public class Player {
         this.posy = posy;
         this.dir = dir;
         this.color = color;
+    }
+
+    public void addTurn(int posx, int posy, int newDirection) {
+        turns.addLast(new Turn(posx, posy, newDirection));
     }
 
     public String getId() {
@@ -63,4 +69,8 @@ public class Player {
     public void setReady(boolean status){this.ready = status;}
 
     public boolean getReady(){return ready;}
+
+    public LinkedList getTurns() {
+        return turns;
+    }
 }
