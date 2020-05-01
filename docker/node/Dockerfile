@@ -1,9 +1,9 @@
 FROM node:13-alpine
 
-WORKDIR /apps
-RUN npm install ws mysql node-static
-ADD files/websocket.server.js /apps/
+WORKDIR /app
+COPY files/ /app/
+RUN npm install
 
-EXPOSE 9091
+EXPOSE 8080
 
-ENTRYPOINT ["node", "websocket.server.js"]
+ENTRYPOINT ["node", "server.js"]

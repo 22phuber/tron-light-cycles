@@ -26,11 +26,13 @@ services:
       context: ./node
     restart: unless-stopped
     ports:
-      - "9091:9091"
+      - "8080:8080"
     links:
       - "mysql"
     environment:
-      DB_HOST: mysql
-      DB_NAME: tron_light_cycles
-      DB_USER: tron
-      DB_PASS: tron
+      NODE_ENV: development
+      MYSQL_HOST: mysql
+      MYSQL_DATABASE: tron_light_cycles
+      MYSQL_USER: tron
+      MYSQL_PASSWORD: tron
+
