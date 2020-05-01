@@ -73,7 +73,8 @@ public class TransportManager {
         }
         else if (msg instanceof GameConfigMessage) {
             JSONObject jo = new JSONObject()
-                    .put("subject", "gameConfig")
+                    .put("subject", "canvasConfig")
+                    .put("width", ((GameConfigMessage) msg).getCanvas_width())
                     .put("height", ((GameConfigMessage) msg).getCanvas_height())
                     .put("lineThickness", ((GameConfigMessage) msg).getLineThickness());
             out.sendJsonToChannelGroup(WebSocketController.getChannelGroup(((GameConfigMessage) msg).getGroupId()), jo);

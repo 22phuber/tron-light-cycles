@@ -22,6 +22,7 @@ public class GameRound {
 
     private GameStateUpdateMessage gameStateUpdateMessage;
 
+    private final String lobbyId;
     private final Map<String, Player> players;
     private final int field_width;
     private final int field_height;
@@ -31,6 +32,7 @@ public class GameRound {
     private final double LOOP_INTERVAL = 1000000000 / FPS;
 
     public GameRound(String lobbyId, HashMap players, int width, int height) {
+        this.lobbyId = lobbyId;
         this.players = players;
         this.gameStateUpdateMessage = new GameStateUpdateMessage(lobbyId);
         this.field_width = width;
@@ -39,8 +41,9 @@ public class GameRound {
     }
 
     public JSONObject playersJSON() throws JSONException {
-        JSONObject players = new JSONObject();
-        players.put("subject", "player update");
+        JSONObject state = new JSONObject();
+        state.put("subject", "gameState")
+                .put("gameId", lobbyId);
         JSONArray all = new JSONArray();
         this.players.values().forEach(player -> {
             JSONObject one = new JSONObject();
@@ -55,8 +58,8 @@ public class GameRound {
             }
             all.put(one);
         });
-        players.put("players", all);
-        return players;
+        state.put("players", all);
+        return state;
     }
 
     private String awtColorToString(Color c) {
@@ -72,7 +75,7 @@ public class GameRound {
     }
 
     public void start() {
-        logger.info("Game loop running");
+        logger.info("Game round started");
 
         long t_before = System.nanoTime();
         while (true) {
@@ -105,7 +108,7 @@ public class GameRound {
                             }
                             break;
                     }
-                    field[player.getPosx()][player.getPosy()] = true;
+                    //field[player.getPosx()][player.getPosy()] = true;
                 });
                 gameStateUpdateMessage.setUpdate(playersJSON());
                 GameManager.getMessageForwarder().forwardMessage(gameStateUpdateMessage);

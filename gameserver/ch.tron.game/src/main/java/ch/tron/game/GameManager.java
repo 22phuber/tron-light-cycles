@@ -54,7 +54,6 @@ public class GameManager {
                     groupId,
                     ((NewLobbyMessage) msg).getGroupName(),
                     ((NewLobbyMessage) msg).getHostId(),
-                    ((NewLobbyMessage) msg).getHostName(),
                     GameMode.getGameModeByName(((NewLobbyMessage) msg).getMode()),
                     ((NewLobbyMessage) msg).getPlayersAllowed(),
                     ((NewLobbyMessage) msg).isVisibleToPublic()

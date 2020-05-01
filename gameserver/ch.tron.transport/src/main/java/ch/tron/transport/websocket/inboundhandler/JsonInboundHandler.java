@@ -46,10 +46,9 @@ public class JsonInboundHandler {
                 JSONObject config = jo.getJSONObject("gameConfig");
 
                 TransportManager.getMessageForwarder().forwardMessage(new NewLobbyMessage(
-                        playerId,
-                        config.getString("hostName"),
                         gameId,
                         config.getString("name"),
+                        playerId,
                         config.getString("mode"),
                         config.getInt("playersAllowed"),
                         config.getBoolean("public")

@@ -25,7 +25,6 @@ public class Lobby implements Runnable {
     private final String id;
     private final String name;
     private final String hostId;
-    private final String hostName;
     private final GameMode gameMode;
     private final int numberOfRounds = 5;
     private final int maxPlayers;
@@ -39,11 +38,10 @@ public class Lobby implements Runnable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Lobby.class);
 
-    public Lobby(String id, String name, String hostId, String hostName, GameMode mode, int maxPlayers, boolean visibleToPublic) {
+    public Lobby(String id, String name, String hostId, GameMode mode, int maxPlayers, boolean visibleToPublic) {
         this.id = id;
         this.name = name;
         this.hostId = hostId;
-        this.hostName = hostName;
         this.gameMode = mode;
         this.maxPlayers = maxPlayers;
         this.visibleToPublic = visibleToPublic;
@@ -53,16 +51,11 @@ public class Lobby implements Runnable {
         this.lobbyStateUpdateMessage = new LobbyStateUpdateMessage(id);
     }
 
-    public void run(){
+    public void run() {
 
         while(players.size() > 0){
 
             LOGGER.info("Entered Lobby");
-
-            while(!isPlaying()){
-                lobbyStateUpdateMessage.setUpdate(getLobbyState());
-                GameManager.getMessageForwarder().forwardMessage(lobbyStateUpdateMessage);
-            }
 
             GameManager.getMessageForwarder().forwardMessage(new GameConfigMessage(
                     id,
@@ -71,9 +64,12 @@ public class Lobby implements Runnable {
                     gameMode.getLineThickness()
             ));
 
-            while(roundsPlayed < numberOfRounds) {
+            while(!isPlaying()){
+                lobbyStateUpdateMessage.setUpdate(getLobbyState());
+                GameManager.getMessageForwarder().forwardMessage(lobbyStateUpdateMessage);
+            }
 
-                LOGGER.info("Entered GameRound");
+            while(roundsPlayed < numberOfRounds) {
 
                 gameRound = new GameRound(
                         id,
@@ -100,7 +96,6 @@ public class Lobby implements Runnable {
 
             Player pl = new Player(
                     playerId,
-                    "username",
                     50 * player_count,
                     50 * player_count,
                     1,
@@ -178,7 +173,6 @@ public class Lobby implements Runnable {
             JSONObject one = new JSONObject();
             try {
                 one.put("clientId", player.getId());
-                one.put("name", player.getName());
                 one.put("ready", player.getReady());
             } catch (JSONException e) {
                 e.printStackTrace();

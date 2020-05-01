@@ -7,6 +7,12 @@
 <body>
 <script>
 
+    let canvas;
+    let ctx;
+    let canvas_width;
+    let canvas_height;
+    let lineThickness;
+
     let clientId;
     let gameId;
 
@@ -14,7 +20,7 @@
 
     let ws = new WebSocket(ws_uri);
 
-    ws.onopen = () => test();
+    ws.onopen = () => createGame();
 
     ws.onclose = () => console.log("Websocket closed");
 
@@ -30,16 +36,17 @@
                 break;
 
             case "currentPublicGames":
-                console.log("CurrentPublicGames: " + msg.games);
+                console.log("CurrentPublicGames: " + JSON.stringify(msg.games));
                 break;
 
             case "createGame":
                 gameId = msg.gameId;
                 console.log("CreateGame; new gameId: " + gameId);
+                startGame();
                 break;
 
             case "lobbyState":
-                console.log("Current lobbyState: " + msg.players);
+                console.log("Current lobbyState: " + JSON.stringify(msg.players));
                 break;
 
             case "countdown":
@@ -52,7 +59,6 @@
 
             case "canvasConfig":
                 console.log("CanvasConfig: " + msg.width + " x " + msg.height);
-                console.log("LineThickness: " + msg.lineThickness);
                 if (canvas === undefined) {
                     canvas_width = msg.width;
                     canvas_height = msg.height;
@@ -73,38 +79,6 @@
         }
     };
 
-    let canvas;
-    let ctx;
-    let canvas_width;
-    let canvas_height;
-    let lineThickness;
-
-    function test() {
-
-        let json;
-
-        // Fetch all open public games
-        json = {"subject": "currentPublicGames"};
-        ws.send(JSON.stringify(json));
-
-        // Create a new game
-        json = {
-            "subject": "createGame",
-            "gameConfig": {
-                "name": "testGameName",
-                "public": true,
-                "mode": "classic",
-                "playersAllowed": 1,
-                "hostName": "testHostName"
-            }
-        };
-        ws.send(JSON.stringify(json));
-
-        // Start game
-        json = { "subject": "startGame", "gameId": gameId.toString() };
-        ws.send(JSON.stringify(json));
-    }
-
     function setUpCanvas (width, height) {
         canvas = document.createElement('canvas');
         canvas.id = "canvas";
@@ -123,6 +97,29 @@
                 sendPlayerUpdate(key);
             }
         });
+    }
+    
+    function fetchCurrentPublicGames () {
+        let json = {"subject": "currentPublicGames"};
+        ws.send(JSON.stringify(json));
+    }
+    
+    function createGame () {
+        let json = {
+            "subject": "createGame",
+            "gameConfig": {
+                "name": "testGameName",
+                "public": true,
+                "mode": "classic",
+                "playersAllowed": 1,
+            }
+        };
+        ws.send(JSON.stringify(json));
+    }
+
+    function startGame () {
+        let json = { "subject": "startGame", "gameId": gameId };
+        ws.send(JSON.stringify(json));
     }
 
     function updateCanvas (players) {

@@ -9,36 +9,26 @@ import ch.tron.middleman.messagedto.InAppMessage;
  */
 public class NewLobbyMessage extends InAppMessage {
 
-    private final String hostId;
-    private final String hostName;
     private final String groupId;
     private final String groupName;
+    private final String hostId;
     private final String mode;
     private final int playersAllowed;
     private final boolean visibleToPublic;
 
-    public NewLobbyMessage(String hostId,
-                           String hostName,
+    public NewLobbyMessage(
                            String groupId,
                            String groupName,
+                           String hostId,
                            String mode,
                            int playersAllowed,
                            boolean visibleToPublic) {
-        this.hostId = hostId;
-        this.hostName = hostName;
         this.groupId = groupId;
         this.groupName = groupName;
+        this.hostId = hostId;
         this.mode = mode;
         this.playersAllowed = playersAllowed;
         this.visibleToPublic = visibleToPublic;
-    }
-
-    public String getHostId() {
-        return hostId;
-    }
-
-    public String getHostName() {
-        return hostName;
     }
 
     public String getGroupId() {
@@ -47,6 +37,10 @@ public class NewLobbyMessage extends InAppMessage {
 
     public String getGroupName() {
         return groupName;
+    }
+
+    public String getHostId() {
+        return hostId;
     }
 
     public String getMode() {
