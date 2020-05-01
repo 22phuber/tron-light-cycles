@@ -62,6 +62,7 @@
 
             case "initialGameState":
                 console.log("InitialGameState; gameId: " + msg.gameId + ", players: " + JSON.stringify(msg.players));
+                clearCanvas();
                 break;
 
             case "canvasConfig":
@@ -81,7 +82,7 @@
                 break;
 
             case "playerDeath":
-                console.log("PlayerDeath; gameId: " + msg.gameId + ", hostId: " + msg.hostId);
+                console.log("PlayerDeath: " + JSON.stringify(msg));
                 break;
         }
     };
@@ -135,9 +136,7 @@
     function updateCanvas (players) {
         players.forEach(player => {
             ctx.fillStyle = player.color;
-            ctx.fillRect(player.posx % canvas_width,
-                player.posy % canvas_height,
-                lineThickness, lineThickness);
+            ctx.fillRect(player.posx, player.posy, lineThickness, lineThickness);
         });
     }
 
@@ -145,6 +144,10 @@
         let msg = { "subject": "updateDirection", "gameId": gameId, "key": key};
         let jsonstring = JSON.stringify(msg);
         ws.send(jsonstring);
+    }
+    
+    function clearCanvas() {
+        ctx.clearRect(0, 0, canvas_width, canvas_height);
     }
 
 </script>

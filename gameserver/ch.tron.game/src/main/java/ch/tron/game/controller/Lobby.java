@@ -61,6 +61,7 @@ public class Lobby implements Runnable {
             }
 
             while(roundsPlayed < numberOfRounds) {
+                resetPlayers();
 
                 gameRound = new GameRound(
                         id,
@@ -86,8 +87,8 @@ public class Lobby implements Runnable {
 
             Player pl = new Player(
                     playerId,
-                    50 * player_count,
-                    50 * player_count,
+                    50 * player_count + 50,
+                    50,
                     1,
                     colors[player_count % colors.length]);
 
@@ -96,35 +97,7 @@ public class Lobby implements Runnable {
     }
 
     public void updatePlayer(String playerId, String key) {
-        Player pl = players.get(playerId);
-        int pl_dir = pl.getDir();
-        // HTML5 canvas coordinate system default setting
-        // referenced by dir:
-        //            (dir = 3)
-        //                |
-        //                |
-        // (dir = 2) ----------- x (dir = 0)
-        //                |
-        //                |
-        //                y
-        //            (dir = 1)
-        switch (key) {
-            case "ArrowLeft":
-                pl_dir = (pl_dir != 0)? 2 : 0;
-                break;
-            case "ArrowRight":
-                pl_dir = (pl_dir != 2)? 0 : 2;
-                break;
-            case "ArrowUp":
-                pl_dir = (pl_dir != 1)? 3 : 1;
-                break;
-            case "ArrowDown":
-                pl_dir = (pl_dir != 3)? 1 : 3;
-                break;
-            default: // do nothing
-        }
-        pl.setDir(pl_dir);
-        pl.addTurn(pl.getPosx(), pl.getPosy(), pl_dir);
+        gameRound.updatePlayer(playerId, key);
     }
 
     public String getId() {
@@ -190,5 +163,19 @@ public class Lobby implements Runnable {
         });
         players.put("players", all);
         return players;
+    }
+
+    private void resetPlayers() {
+        int x = 0;
+        int y = 50;
+        for (Map.Entry<String, Player> player: players.entrySet()) {
+            x += 50;
+            Player pl = player.getValue();
+            pl.setPosx(x);
+            pl.setPosy(y);
+            pl.setDir(1);
+
+            pl.getTurns().clear();
+        }
     }
 }
