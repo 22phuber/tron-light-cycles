@@ -3,6 +3,7 @@ package ch.tron.game.controller;
 import ch.tron.game.GameManager;
 import ch.tron.game.model.GameMode;
 import ch.tron.game.model.Player;
+import ch.tron.game.model.Turn;
 import ch.tron.middleman.messagedto.gametotransport.CountdownMessage;
 import ch.tron.middleman.messagedto.gametotransport.DeathMessage;
 import ch.tron.middleman.messagedto.gametotransport.GameConfigMessage;
@@ -16,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -194,8 +196,16 @@ public class GameRound {
 
     private void die(Player pl) {
         playersAlive.remove(pl.getId());
+        JSONArray all = new JSONArray();
+        pl.getTurns().forEach(turn -> {
+            JSONObject one = new JSONObject()
+                    .put("posx", turn.getPosx())
+                    .put("posy", turn.getPosy())
+                    .put("newDirection", turn.getNewDirection());
+            all.put(one);
+        });
         GameManager.getMessageForwarder().forwardMessage(new DeathMessage(
-                lobbyId, pl.getId(), pl.getPosx(), pl.getPosy()
+                lobbyId, pl.getId(), pl.getPosx(), pl.getPosy(), all
         ));
     }
 

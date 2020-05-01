@@ -100,12 +100,14 @@ public class TransportManager {
         }
         else if (msg instanceof DeathMessage) {
             String groupId = ((DeathMessage) msg).getGroupId();
+
             JSONObject jo = new JSONObject()
                     .put("subject", "playerDeath")
                     .put("gameId", groupId)
                     .put("playerId", ((DeathMessage) msg).getPlayerId())
                     .put("posx", ((DeathMessage) msg).getPosx())
-                    .put("posy", ((DeathMessage) msg).getPosy());
+                    .put("posy", ((DeathMessage) msg).getPosy())
+                    .put("turns", ((DeathMessage) msg).getTurns());
             out.sendJsonToChannelGroup(
                     WebSocketController.getChannelGroup(groupId),
                     jo

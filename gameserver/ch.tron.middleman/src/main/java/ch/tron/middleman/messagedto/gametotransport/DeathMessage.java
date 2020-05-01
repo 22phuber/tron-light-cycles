@@ -1,6 +1,7 @@
 package ch.tron.middleman.messagedto.gametotransport;
 
 import ch.tron.middleman.messagedto.InAppMessage;
+import org.json.JSONArray;
 
 public class DeathMessage extends InAppMessage {
 
@@ -8,12 +9,14 @@ public class DeathMessage extends InAppMessage {
     private final String playerId;
     private final int posx;
     private final int posy;
+    private final JSONArray turns;
 
-    public DeathMessage(String groupId, String playerId, int posx, int posy) {
+    public DeathMessage(String groupId, String playerId, int posx, int posy, JSONArray turns) {
         this.groupId = groupId;
         this.playerId = playerId;
         this.posx = posx;
         this.posy = posy;
+        this.turns = turns;
     }
 
     public String getGroupId() {
@@ -30,5 +33,9 @@ public class DeathMessage extends InAppMessage {
 
     public int getPosy() {
         return posy;
+    }
+
+    public JSONArray getTurns() {
+        return turns;
     }
 }

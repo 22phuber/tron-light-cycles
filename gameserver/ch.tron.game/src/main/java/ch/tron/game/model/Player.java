@@ -15,7 +15,6 @@ public class Player {
     private Color color;
     private boolean ready = false;
     private final LinkedList turns = new LinkedList<Turn>();
-    private boolean dead = false;
 
     public Player(String  id, int posx, int posy, int dir, Color color) {
         this.id = id;
@@ -71,15 +70,7 @@ public class Player {
 
     public boolean getReady(){return ready;}
 
-    public LinkedList getTurns() {
+    public LinkedList<Turn> getTurns() {
         return turns;
-    }
-
-    public boolean isDead() {
-        return dead;
-    }
-
-    public void setDead(boolean dead) {
-        this.dead = dead;
     }
 }
