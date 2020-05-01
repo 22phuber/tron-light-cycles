@@ -16,10 +16,6 @@ export function connectToWSGameServer() {
   return new WebSocket(WSURL.gameServer);
 }
 
-export function connectToWSUXServer() {
-  return new WebSocket(WSURL.backendServer);
-}
-
 // Settings
 
 // JSON query objects
