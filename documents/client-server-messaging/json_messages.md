@@ -4,7 +4,7 @@
 
 |Description|JSON|further information|FE|BEt|BEg|
 |---|---|---|---|---|---|
-|Client sends client connection after successfully setup Wensocket connection to gameserver.|`{ subject: "clientConnected" }`||✅|❌|?|
+|Client sends clientConnected after successfully setup WebSocket connection to gameserver.|`{ subject: "clientConnected" }`||✅|❌|?|
 |Game server sends client the id of the just created connection.|`{ "subject": "clientId", "id": "theClientId" }`||✅|✅|🆓|
 |Client requests all currently publicly open games.|`{ "subject": "currentPublicGames" }`||✅|✅|✅|
 |Game server sends all currently publicly open games and their associated properties to client who requested them.|`{ "subject": "currentPublicGames", "games": [ { "id": "theGameId", "name": "theGameName", "playersJoined": int, "playersAllowed": int, "mode": "gameMode", }, ...] }`|gameMode = "classic" or "battleRoyale"|✅|✅|✅|
