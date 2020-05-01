@@ -4,7 +4,7 @@
 
 |Description|JSON|further information|FE|BEt|BEg|
 |---|---|---|---|---|---|
-|Client sends clientConnected after successfully setup WebSocket connection to gameserver.|`{ subject: "clientConnected" }`||✅|❌|?|
+|Client sends client connection after successfully setup Wensocket connection to gameserver.|`{ subject: "clientConnected" }`||✅|❌|?|
 |Game server sends client the id of the just created connection.|`{ "subject": "clientId", "id": "theClientId" }`||✅|✅|🆓|
 |Client requests all currently publicly open games.|`{ "subject": "currentPublicGames" }`||✅|✅|✅|
 |Game server sends all currently publicly open games and their associated properties to client who requested them.|`{ "subject": "currentPublicGames", "games": [ { "id": "theGameId", "name": "theGameName", "playersJoined": int, "playersAllowed": int, "mode": "gameMode", }, ...] }`|gameMode = "classic" or "battleRoyale"|✅|✅|✅|
@@ -37,6 +37,6 @@
 ### While game's running
 |Description|JSON|further information|FE|BEt|BEg|
 |---|---|---|---|---|---|
-|Game server continously broadcasts current game state to all clients being part of running game.|`{ "subject": "gameState", "gameId": "theGameId", "players": [ { "clientId": "theClientId", "posx": int, "posy": int, "dir": int, "color": "rgb(int,int,int)" }, ... ] }`|**continous broadcast**|❌|✅|✅|
+|Game server continously broadcasts current game state to all clients being part of running game. **Contains only players that are currently alive**|`{ "subject": "gameState", "gameId": "theGameId", "players": [ { "clientId": "theClientId", "posx": int, "posy": int, "dir": int, "color": "rgb(int,int,int)" }, ... ] }`|**continous broadcast**|❌|✅|✅|
 |Client sends direction update on key event.|`{ subject: "updateDirection", "gameId": "theGamesId", "key": "key" }`||✅|✅|✅|
 |Game server broadcasts occuring deaths to all clients being poart of running game.|`{ "subject": "playerDeath", "gameId": "theGameId", "playerId": "theDeadPlayerId", "posx": int, "posy": int }`|**broadcast**|❌|✅|❌|
