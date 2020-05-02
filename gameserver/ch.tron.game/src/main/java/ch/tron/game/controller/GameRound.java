@@ -42,7 +42,6 @@ public class GameRound {
         this.gameStateUpdateMessage = new GameStateUpdateMessage(lobbyId);
         this.mode = mode;
         this.field = new boolean[mode.getX()][mode.getY()];
-        setBorder();
     }
 
     public JSONObject playersJSON() throws JSONException {
@@ -107,27 +106,29 @@ public class GameRound {
                     int lineThickness = mode.getLineThickness();
                     switch (player.getDir()) {
                         case 0:
-                            if (posx != mode.getX() - lineThickness) {
+                            if (posx != mode.getX()) {
                                 player.setPosx(posx + lineThickness);
                             }
                             break;
                         case 1:
-                            if (posy != mode.getY() - lineThickness) {
+                            if (posy != mode.getY()) {
                                 player.setPosy(posy + lineThickness);
                             }
                             break;
                         case 2:
-                            if (posx != lineThickness) {
+                            if (posx != 0) {
                                 player.setPosx(posx - lineThickness);
                             }
                             break;
                         case 3:
-                            if (posy != lineThickness) {
+                            if (posy != 0) {
                                 player.setPosy(posy - lineThickness);
                             }
                             break;
                     }
-                    if (field[player.getPosx()][player.getPosy()]) {
+                    posx = player.getPosx();
+                    posy = player.getPosy();
+                    if (posx % mode.getX() == 0 || posy % mode.getY() == 0 || field[posx][posy]) {
                         die(player);
                     }
                     else {
@@ -192,24 +193,5 @@ public class GameRound {
         GameManager.getMessageForwarder().forwardMessage(new DeathMessage(
                 lobbyId, pl.getId(), pl.getPosx(), pl.getPosy(), all
         ));
-    }
-
-    private void setBorder() {
-        for (int x = 0; x < mode.getX(); x++) {
-            for (int y1 = 0, y2 = mode.getY()-mode.getLineThickness();
-                 y1 < mode.getLineThickness();
-                 y1++, y2++) {
-                field[x][y1] = true;
-                field[x][y2] = true;
-            }
-        }
-        for (int y = 0; y < mode.getY(); y++) {
-            for (int x1 = 0, x2 = mode.getX()-mode.getLineThickness();
-                x1 < mode.getLineThickness();
-                x1++, x2++) {
-                field[x1][y] = true;
-                field[x2][y] = true;
-            }
-        }
     }
 }
