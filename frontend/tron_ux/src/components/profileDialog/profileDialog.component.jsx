@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
  
   const ProfileDialog = (props) => {
     const classes = useStyles();
-  
+    const { username, password, color, email } = props;
     const [state, setState] = React.useState({
       color: "black",
     });
@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
           onClose={props.handleClose}
           aria-labelledby="profile-dialog"
         >
-          <DialogTitle id="profile-dialog">My Profile</DialogTitle>
+          <DialogTitle id="profile-dialog">My Account</DialogTitle>
           <form onSubmit={handleSubmit}>
             <DialogContent>
               <DialogContentText>

@@ -67,7 +67,7 @@ function TronAppBar() {
   };
 
   const handleMyAccount = () => {
-    alert("'My Account' clicked");
+    setOpenProfileDialog(true);
   };
   
 
