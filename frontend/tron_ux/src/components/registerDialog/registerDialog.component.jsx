@@ -78,8 +78,8 @@ const RegisterDialog = (props) => {
             />
             <TextField
               margin="dense"
-              id="name"
-              name="name"
+              id="lastname"
+              name="lastname"
               label="Name"
               type="text"
               autoComplete="lastname"

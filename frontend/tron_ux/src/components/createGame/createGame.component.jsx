@@ -26,28 +26,29 @@ const useStyles = makeStyles((theme) => ({
 
 const CreateGame = (props) => {
   const classes = useStyles();
+
   const [defaultValues, setDefaultValues] = React.useState({
     visibility: "public",
     mode: "classic",
-    maxPlayerLimit: "10",
+    playersAllowed: "10",
   });
 
-  const handleChange = (prop) => (event) => {
+  const handleChange = (property) => (event) => {
     const targetValue = event.target.value;
-    if (prop === "mode") {
+    if (property === "mode") {
       switch (targetValue) {
-        case "battleroyal":
-          setDefaultValues({ ...defaultValues, maxPlayerLimit: 100, [prop]: targetValue });
+        case "battleRoyale":
+          setDefaultValues({ ...defaultValues, playersAllowed: 100, [property]: targetValue });
           break;
         case "classic":
-          setDefaultValues({ ...defaultValues, maxPlayerLimit: 10, [prop]: targetValue });
+          setDefaultValues({ ...defaultValues, playersAllowed: 10, [property]: targetValue });
           break;
         default:
-          setDefaultValues({ ...defaultValues, [prop]: targetValue });
+          setDefaultValues({ ...defaultValues, [property]: targetValue });
           break;
       }
     } else {
-      setDefaultValues({ ...defaultValues, [prop]: targetValue });
+      setDefaultValues({ ...defaultValues, [property]: targetValue });
     }
   };
 
@@ -58,8 +59,8 @@ const CreateGame = (props) => {
           <Grid item xs={12}>
             <TextField
               required
-              id="gamename"
-              name="gamename"
+              id="name"
+              name="name"
               label="Game name"
               fullWidth
               autoComplete="gamename"
@@ -103,9 +104,9 @@ const CreateGame = (props) => {
                   label="Tron classic"
                 />
                 <FormControlLabel
-                  value="battleroyal"
+                  value="battleRoyale"
                   control={<Radio />}
-                  label="Battle Royal"
+                  label="Battle Royale"
                 />
               </RadioGroup>
             </FormControl>
@@ -113,8 +114,8 @@ const CreateGame = (props) => {
           <Grid item xs={12} sm={4}>
             <TextField
               required
-              id="maxplayers"
-              name="maxplayers"
+              id="playersAllowed"
+              name="playersAllowed"
               label="Max. Players"
               fullWidth
               autoComplete="maxplayers"
@@ -122,7 +123,7 @@ const CreateGame = (props) => {
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    /{defaultValues.maxPlayerLimit}
+                    /{defaultValues.playersAllowed}
                   </InputAdornment>
                 ),
               }}
