@@ -1,18 +1,17 @@
 package ch.tron.transport;
 
-import ch.tron.middleman.messagedto.gametotransport.GameConfigMessage;
-import ch.tron.middleman.messagedto.gametotransport.GameStateUpdateMessage;
-import ch.tron.middleman.messagedto.transporttogame.NewLobbyMessage;
+import ch.tron.middleman.messagedto.backAndForth.CurrentPublicGamesRequest;
+import ch.tron.middleman.messagedto.gametotransport.*;
 import ch.tron.middleman.messagehandler.ToGameMessageForwarder;
 import ch.tron.middleman.messagedto.InAppMessage;
 import ch.tron.transport.webserverconfig.SocketInitializer;
 import ch.tron.transport.websocket.controller.WebSocketController;
 import ch.tron.transport.websocket.outboundhandler.JsonOutboundHandler;
 import io.netty.channel.Channel;
-import io.netty.channel.group.ChannelGroup;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 /**
  * Connects {@link ch.tron.transport} to {@code ch.tron.middleman} by
@@ -28,12 +27,6 @@ public class TransportManager {
     private static final JsonOutboundHandler out = new JsonOutboundHandler();
 
     private static final ToGameMessageForwarder MESSAGE_FORWARDER = new ToGameMessageForwarder();
-
-    // This is temporary
-    // Adding a 'default'-ChannelGroup
-    // Connecting clients (new Channels) will be added to this group
-    // Saving the UUID instantiated 'default'-ChannelGroup
-    private static final String DEFAULT_CHANNEL_GROUP_ID = WebSocketController.newChannelGroup();
 
     public TransportManager() {
 
@@ -51,11 +44,12 @@ public class TransportManager {
      */
     public static void manageNewChannel(Channel channel) {
 
-        // This is temporary
-        // Automatically add new Channel to 'default'-ChannelGroup instantiated on top
-        WebSocketController.addChannelToGroup(channel, DEFAULT_CHANNEL_GROUP_ID);
+        WebSocketController.addChannelToLonelyGroup(channel);
 
-        MESSAGE_FORWARDER.forwardMessage(new NewLobbyMessage(channel.id().asLongText(), DEFAULT_CHANNEL_GROUP_ID, new JSONObject()));
+        JSONObject clientId = new JSONObject();
+        clientId.put("subject", "clientId");
+        clientId.put("id", channel.id().asLongText());
+        out.sendJsonToChannel(channel, clientId);
     }
 
     /**
@@ -66,31 +60,68 @@ public class TransportManager {
      */
     public static void handleInAppIncomingMessage(InAppMessage msg) {
 
-        if (msg instanceof GameStateUpdateMessage) {
-
-            ChannelGroup channelGroup = WebSocketController.getChannelGroup(msg.getGroupId());
-
-            JSONObject update = ((GameStateUpdateMessage) msg).getUpdate();
-
-            out.sendUpdate(channelGroup, update);
+        if (msg instanceof CurrentPublicGamesRequest) {
+            out.sendJsonToChannel(
+                    WebSocketController.getLonelyChannel(((CurrentPublicGamesRequest) msg).getPlayerId()),
+                    ((CurrentPublicGamesRequest) msg).getPublicGames());
+        }
+        else if (msg instanceof LobbyStateUpdateMessage) {
+            out.sendJsonToChannelGroup(
+                    WebSocketController.getChannelGroup(((LobbyStateUpdateMessage) msg).getGroupId()),
+                    ((LobbyStateUpdateMessage) msg).getUpdate()
+            );
         }
         else if (msg instanceof GameConfigMessage) {
+            JSONObject jo = new JSONObject()
+                    .put("subject", "canvasConfig")
+                    .put("width", ((GameConfigMessage) msg).getCanvas_width())
+                    .put("height", ((GameConfigMessage) msg).getCanvas_height())
+                    .put("lineThickness", ((GameConfigMessage) msg).getLineThickness());
+            out.sendJsonToChannelGroup(WebSocketController.getChannelGroup(((GameConfigMessage) msg).getGroupId()), jo);
+        }
+        else if (msg instanceof CountdownMessage) {
+            JSONObject jo = new JSONObject()
+                    .put("subject", "countdown")
+                    .put("count", ((CountdownMessage) msg).getCount());
+            out.sendJsonToChannelGroup(
+                    WebSocketController.getChannelGroup(((CountdownMessage) msg).getGroupId()),
+                    jo
+            );
+        }
+        else if (msg instanceof GameStateUpdateMessage) {
+            JSONObject update = ((GameStateUpdateMessage) msg).getUpdate();
+            if (((GameStateUpdateMessage) msg).isInitial()) {
+                update.put("subject", "initialGameState");
+            }
+            out.sendJsonToChannelGroup(
+                    WebSocketController.getChannelGroup(((GameStateUpdateMessage) msg).getGroupId()),
+                    update
+            );
+        }
+        else if (msg instanceof DeathMessage) {
+            String groupId = ((DeathMessage) msg).getGroupId();
 
-            ChannelGroup group = WebSocketController.getChannelGroup(msg.getGroupId());
-            int canvasWidth = ((GameConfigMessage) msg).getCanvas_width();
-            int canvasHeight = ((GameConfigMessage) msg).getCanvas_height();
-
-            JSONObject jo = new JSONObject();
-            jo.put("subject", "canvas config");
-            jo.put("width", canvasWidth);
-            jo.put("height", canvasHeight);
-
-            out.sendConfig(group, jo);
+            JSONObject jo = new JSONObject()
+                    .put("subject", "playerDeath")
+                    .put("gameId", groupId)
+                    .put("playerId", ((DeathMessage) msg).getPlayerId())
+                    .put("posx", ((DeathMessage) msg).getPosx())
+                    .put("posy", ((DeathMessage) msg).getPosy())
+                    .put("turns", ((DeathMessage) msg).getTurns());
+            out.sendJsonToChannelGroup(
+                    WebSocketController.getChannelGroup(groupId),
+                    jo
+            );
+        }
+        else {
+            LOGGER.info("Message type {} not supported", msg.getClass());
         }
     }
 
     public static ToGameMessageForwarder getMessageForwarder() {
         return MESSAGE_FORWARDER;
     }
+
+    public static JsonOutboundHandler getJsonOutboundHandler() { return out; }
 }
 

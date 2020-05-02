@@ -3,9 +3,9 @@ package ch.tron.transport.websocket.state;
 import io.netty.channel.Channel;
 import io.netty.channel.group.ChannelGroup;
 
-import java.util.AbstractQueue;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Holds all client-server-connections in groups where
@@ -14,16 +14,14 @@ import java.util.Map;
 public class WebSocketState {
 
     private final Map<String, ChannelGroup> groups = new HashMap<>();
+    private final Map<String, Channel> lonelyPlayers = new HashMap<>();
 
     /**
      * Creates a new {@link ChannelGroup} (group of client-server-connections)
      * @return  The id of the newly created {@link ChannelGroup} as a string
      */
     public String addChannelGroup(ChannelGroup group) {
-        //final String id = UUID.randomUUID().toString();
-
-        // This is temporary
-        final String id = "defaultId";
+        final String id = UUID.randomUUID().toString();
 
         groups.put(id, group);
 
@@ -36,6 +34,24 @@ public class WebSocketState {
      */
     public void removeChannelGroup(String id) {
         groups.remove(id);
+    }
+
+    /**
+     * Puts a given players connection to a default connection pool.
+     * @param channel   The {@link Channel} that represents a players
+     *                  connection to the server.
+     */
+    public void setPlayerAsLonely(Channel channel) {
+        lonelyPlayers.put(channel.id().asLongText(), channel);
+    }
+
+    /**
+     * Removes a given player from the default connection pool. To be
+     * called when a player attends a group of players.
+     * @param playerId  The id of the given player.
+     */
+    public void setPlayerAsGrouped(String playerId) {
+        lonelyPlayers.remove(playerId);
     }
 
     /**
@@ -60,13 +76,17 @@ public class WebSocketState {
         groups.get(groupId).remove(channel);
     }
 
+    public Channel getLonelyChannel(String playerId) {
+
+        return lonelyPlayers.get(playerId);
+    }
+
     public Channel getChannel(String groupId, String playerId) {
 
-        Channel channel = groups.get(groupId).stream()
+        return groups.get(groupId).stream()
                 .filter(ch -> ch.id().asLongText().equals(playerId))
                 .findFirst()
                 .orElse(null);
-        return channel;
     }
 
     public Map<String, ChannelGroup> getGroups() {

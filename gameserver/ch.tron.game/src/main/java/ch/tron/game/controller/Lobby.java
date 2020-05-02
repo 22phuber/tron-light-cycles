@@ -1,12 +1,8 @@
 package ch.tron.game.controller;
 
 import ch.tron.game.GameManager;
-import ch.tron.game.config.CanvasConfig;
-import ch.tron.game.config.GameColors;
-import ch.tron.game.model.Game;
-import ch.tron.game.model.GameRound;
+import ch.tron.game.model.GameMode;
 import ch.tron.game.model.Player;
-import ch.tron.middleman.messagedto.gametotransport.GameConfigMessage;
 import ch.tron.middleman.messagedto.gametotransport.LobbyStateUpdateMessage;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,88 +10,126 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Represents a game lobby that holds all available types of tron {@link Game}.
+ * Represents a gameMode lobby that holds all available types of tron
  */
-public class Lobby implements Runnable{
+public class Lobby implements Runnable {
 
+    private final String id;
+    private final String name;
+    private final String hostId;
+    private final GameMode gameMode;
+    private final int numberOfRounds = 5;
     private final int maxPlayers;
+    private final boolean visibleToPublic;
+
     private LobbyStateUpdateMessage lobbyStateUpdateMessage;
-    private Game game;
-    private GameRound gameRound;
     private Map<String, Player> players = new HashMap<>();
+    private GameRound gameRound;
     private int roundsPlayed = 0;
-    private String id;
-    private String name;
-    private int numberOfRounds = 5;
-    private Player host;
     private boolean playing;
-    private boolean visibility;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(Lobby.class);
 
-    public Lobby(String id, String host, JSONObject config) {
+    public Lobby(String id, String name, String hostId, String hostColor, GameMode mode, int maxPlayers, boolean visibleToPublic) {
         this.id = id;
-        this.maxPlayers = 10;
-        //this.game = new Game(config.getJSONObject("lobbyConfig").getString("mode"));
-        this.game = new Game("classic");
-        addPlayer(host);
-        //this.players.put(players.get(host).getId(),players.get(host));
-        //this.name = config.getJSONObject("lobbyConfig").getString("name");
-        this.name = "test";
-        /*if(config.getJSONObject("lobbyConfig").getBoolean("visibility")){
-            visibility = true;
-        }else{
-            visibility = false;
-        }*/
-        visibility = true;
-        //this.maxPlayers = config.getJSONObject("lobbyConfig").getInt("playersAllowed");
-        this.host = players.get(host);
+        this.name = name;
+        this.hostId = hostId;
+        this.gameMode = mode;
+        this.maxPlayers = maxPlayers;
+        this.visibleToPublic = visibleToPublic;
+
+        addPlayer(hostId, hostColor);
+
         this.lobbyStateUpdateMessage = new LobbyStateUpdateMessage(id);
     }
 
-    public void run(){
+    public void run() {
 
-        //No Players in Lobby -> terminate Lobby
         while(players.size() > 0){
 
             LOGGER.info("Entered Lobby");
 
-            numberOfRounds = 5;
-            /*
             while(!isPlaying()){
-
                 lobbyStateUpdateMessage.setUpdate(getLobbyState());
                 GameManager.getMessageForwarder().forwardMessage(lobbyStateUpdateMessage);
-
             }
-            */
 
-            //send GameConfig to all Players in Lobby
-            GameManager.getMessageForwarder().forwardMessage(new GameConfigMessage(id, 400, 400));
+            while(roundsPlayed < numberOfRounds) {
+                resetPlayers();
 
+                gameRound = new GameRound(
+                        id,
+                        (HashMap)players,
+                        gameMode
+                );
 
-            //run set numbers of rounds. Default 5
-            while(numberOfRounds > 0) {
-
-                LOGGER.info("Entered GameRound");
-                gameRound = new GameRound(id, (HashMap)players); //change back to getReadyPlayers()
                 gameRound.start();
-                numberOfRounds--;
                 roundsPlayed++;
-
             }
 
-            synchronized (this) {
-                playing = false;
-            }
+            synchronized (this) { playing = false; }
         }
     }
 
-    private HashMap getReadyPlayer() {
+    //New Players are added to PlayerList in Lobby, they will join in the next GameRound
+    public void addPlayer(String playerId, String color) {
+
+        int player_count = players.size();
+        if (player_count < maxPlayers) {
+
+            Player pl = new Player(
+                    playerId,
+                    50 * player_count + 50,
+                    50,
+                    1,
+                    color);
+
+            players.put(pl.getId(), pl);
+        }
+    }
+
+    public void updatePlayer(String playerId, String key) {
+        gameRound.updatePlayer(playerId, key);
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getMaxPlayers() {
+        return maxPlayers;
+    }
+
+    public GameMode getGameMode() {
+        return gameMode;
+    }
+
+    public synchronized void play() {
+        players.get(hostId).setReady(true);
+        this.playing = true;
+    }
+
+    public int getPlayersJoined() { return players.size(); }
+
+    public synchronized boolean isPlaying() { return playing; }
+
+    public int getNumberOfRounds() {
+        return numberOfRounds;
+    }
+
+    public boolean isVisibleToPublic() {
+        return visibleToPublic;
+    }
+
+    private HashMap getReadyPlayers() {
 
         Map<String, Player> readyPlayers = new HashMap<>();
 
@@ -117,7 +151,6 @@ public class Lobby implements Runnable{
             JSONObject one = new JSONObject();
             try {
                 one.put("clientId", player.getId());
-                one.put("name", player.getName());
                 one.put("ready", player.getReady());
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -126,100 +159,19 @@ public class Lobby implements Runnable{
         });
         players.put("players", all);
         return players;
-
     }
 
-    //New Players are added to PlayerList in Lobby, they will join in the next GameRound
-    public void addPlayer(String playerId) {
+    private void resetPlayers() {
+        int x = 0;
+        int y = 50;
+        for (Map.Entry<String, Player> player: players.entrySet()) {
+            x += 50;
+            Player pl = player.getValue();
+            pl.setPosx(x);
+            pl.setPosy(y);
+            pl.setDir(1);
 
-        if(players.size() < maxPlayers) {
-
-            int player_count = players.size();
-            Color[] colors = GameColors.getColors10();
-
-            Player pl = new Player(
-                    playerId,
-                    "username",
-                    50 * player_count,
-                    50 * player_count,
-                    1,
-                    colors[player_count % colors.length]);
-
-            players.put(pl.getId(), pl);
+            pl.getTurns().clear();
         }
-    }
-
-    public void setGame(Game game){
-        this.game = game;
-    }
-
-    public void updatePlayer(String playerId, String key) {
-        Player pl = players.get(playerId);
-        int pl_dir = pl.getDir();
-        // HTML5 canvas coordinate system default setting
-        // referenced by dir:
-        //            (dir = 3)
-        //                |
-        //                |
-        // (dir = 2) ----------- x (dir = 0)
-        //                |
-        //                |
-        //                y
-        //            (dir = 1)
-        switch (key) {
-            case "ArrowLeft":
-                pl_dir = (pl_dir != 0)? 2 : 0;
-                break;
-            case "ArrowRight":
-                pl_dir = (pl_dir != 2)? 0 : 2;
-                break;
-            case "ArrowUp":
-                pl_dir = (pl_dir != 1)? 3 : 1;
-                break;
-            case "ArrowDown":
-                pl_dir = (pl_dir != 3)? 1 : 3;
-                break;
-            default: // do nothing
-        }
-        pl.setDir(pl_dir);
-    }
-
-    public synchronized boolean isPlaying() {
-        return playing;
-    }
-
-    public Game getGame() {
-        return game;
-    }
-
-    public int getNumberOfRounds() {
-        return numberOfRounds;
-    }
-
-    public void setNumberOfRounds(int numberOfRounds) {
-        this.numberOfRounds = numberOfRounds;
-    }
-
-    public synchronized void setConfig(String playerId, JSONObject config) {
-        if(playerId == host.getId()){
-
-            if(config.getJSONObject("lobbyConfig").getBoolean("play")){
-                host.setReady(true);
-                this.playing = true;
-            }
-
-            /*
-            if(!this.game.getName().equals(config.getJSONObject("lobbyConfig").getString("game"))){
-                this.game = new Game(config.getJSONObject("lobbyConfig").getString("game"));
-            }
-             */
-
-            this.visibility = config.getJSONObject("lobbyConfig").getBoolean("public");
-
-        }
-    }
-
-    public boolean getVisibility() {
-        return visibility;
     }
 }

@@ -2,77 +2,176 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Tron</title>
+    <title>Tron backend testing</title>
 </head>
 <body>
-<!--<button id="play_btn" onclick="startGame()">Play</button>-->
-</body>
-
-
 <script>
-
-    const ws_uri = "ws://localhost:9000/ws";
-    let ws = new WebSocket(ws_uri);
 
     let canvas;
     let ctx;
     let canvas_width;
     let canvas_height;
+    let lineThickness;
 
-    document.body.addEventListener('keydown', (event) => {
-        let key = event.key;
-    if (key === "ArrowLeft" || key === "ArrowRight") {
-        sendPlayerUpdate(key);
-    }
-    });
+    let playerColors = [];
+    playerColors.push("rgb(44,123,246)");
+    playerColors.push("rgb(155,86,163)");
+    playerColors.push("rgb(229,93,156)");
+    playerColors.push("rgb(237,95,93)");
+    playerColors.push("rgb(233,135,58)");
+    playerColors.push("rgb(243,185,75)");
+    playerColors.push("rgb(120,183,86)");
+    playerColors.push("rgb(140,140,140)");
+    playerColors.push("rgb(67,70,74)");
+    playerColors.push("rgb(28,29,30)");
+
+    let publicGames = [];
+
+    let clientId;
+    let gameId;
+
+    const ws_uri = "ws://localhost:9000/ws";
+
+    let ws = new WebSocket(ws_uri);
+
+    ws.onopen = () => requestCurrentPublicGames();
+
+    ws.onclose = () => console.log("Websocket closed");
+
+    ws.onerror = (err) => console.log("Error: " + err);
 
     ws.onmessage = (msg) => {
         msg = JSON.parse(msg.data);
         switch (msg.subject) {
-            case "canvas config":
+
+            case "clientId":
+                clientId = msg.id;
+                console.log("New connection; clientId: " + clientId);
+                break;
+
+            case "currentPublicGames":
+                publicGames = msg.games;
+                if (publicGames.length > 0) {
+                    joinGame(publicGames[0].id);
+                } else {
+                    createGame();
+                }
+                break;
+
+            case "createGame":
+                gameId = msg.gameId;
+                console.log("CreateGame; new gameId: " + gameId);
+                startGame();
+                break;
+
+            case "lobbyState":
+                console.log("Current lobbyState: " + JSON.stringify(msg.players));
+                break;
+
+            case "countdown":
+                console.log("Countdown; count: " + msg.count);
+                break;
+
+            case "initialGameState":
+                console.log("InitialGameState; gameId: " + msg.gameId + ", players: " + JSON.stringify(msg.players));
+                clearCanvas();
+                break;
+
+            case "canvasConfig":
+                console.log("CanvasConfig: " + msg.width + " x " + msg.height);
                 if (canvas === undefined) {
                     canvas_width = msg.width;
                     canvas_height = msg.height;
+                    lineThickness = msg.lineThickness;
                     setUpCanvas(canvas_width, canvas_height);
                 }
                 break;
-            case "player update":
+
+            case "gameState":
                 if (ctx !== undefined) {
                     updateCanvas(msg.players);
                 }
                 break;
+
+            case "playerDeath":
+                console.log("PlayerDeath: " + JSON.stringify(msg));
+                break;
         }
     };
 
-    sendPlayerUpdate = (key) => {
-        let msg = { "subject": "update dir", "key": key };
-        let jsonstring = JSON.stringify(msg);
-        ws.send(jsonstring);
-    };
-
-    /*
-    startGame = () => {
-        ws = new WebSocket(ws_uri);
-        setUpCanvas();
-    }
-    */
-
-    setUpCanvas = (width, height) => {
-        // document.getElementById("play_btn").remove();
+    function setUpCanvas (width, height) {
         canvas = document.createElement('canvas');
         canvas.id = "canvas";
         canvas.width = width;
         canvas.height = height;
         document.body.appendChild(canvas);
         ctx = canvas.getContext("2d");
-    };
 
-    updateCanvas = (players) => {
+        document.body.addEventListener('keydown', (event) => {
+            console.log("Event @body: " + event.key);
+            let key = event.key;
+            if (key === "ArrowLeft" ||
+                key === "ArrowRight" ||
+                key === "ArrowUp" ||
+                key === "ArrowDown") {
+                sendPlayerUpdate(key);
+            }
+        });
+    }
+
+    function requestCurrentPublicGames () {
+        ws.send(JSON.stringify({"subject": "currentPublicGames"}));
+    }
+    
+    function createGame () {
+        let json = {
+            "subject": "createGame",
+            "gameConfig": {
+                "name": "testGameName",
+                "public": true,
+                "mode": "classic",
+                "playersAllowed": 3,
+            },
+            "hostColor": playerColors[getRandomInt()]
+        };
+        ws.send(JSON.stringify(json));
+    }
+
+    function joinGame (id) {
+        gameId = id;
+        ws.send(JSON.stringify({
+            "subject": "joinGame",
+            "gameId": gameId,
+            "playerColor": playerColors[getRandomInt()]}
+        ));
+    }
+
+    function startGame () {
+        ws.send(JSON.stringify({ "subject": "startGame", "gameId": gameId }));
+    }
+
+    function updateCanvas (players) {
         players.forEach(player => {
             ctx.fillStyle = player.color;
-        ctx.fillRect(player.posx % canvas_width, player.posy % canvas_height, 10, 10);
-    });
-    };
+            ctx.fillRect(player.posx, player.posy, lineThickness, lineThickness);
+        });
+    }
+
+    function sendPlayerUpdate (key) {
+        let msg = { "subject": "updateDirection", "gameId": gameId, "key": key};
+        ws.send(JSON.stringify(msg));
+    }
+    
+    function clearCanvas() {
+        ctx.clearRect(0, 0, canvas_width, canvas_height);
+    }
+
+    function getRandomInt() {
+        min = Math.ceil(0);
+        max = Math.floor(9);
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
 
 </script>
+</body>
 </html>

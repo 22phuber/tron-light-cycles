@@ -8,7 +8,6 @@ import IconButton from "@material-ui/core/IconButton";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import AccountCircle from "@material-ui/icons/AccountCircle";
-
 import LoginDialog from "../loginDialog/loginDialog.component";
 import RegisterDialog from "../registerDialog/registerDialog.component";
 import ProfileDialog from "../profileDialog/profileDialog.component";

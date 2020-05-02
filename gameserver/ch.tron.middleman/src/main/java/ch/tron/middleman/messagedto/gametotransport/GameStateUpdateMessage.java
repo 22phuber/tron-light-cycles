@@ -15,6 +15,8 @@ public class GameStateUpdateMessage extends InAppMessage {
 
     private JSONObject update;
 
+    private boolean initial = false;
+
     public GameStateUpdateMessage(String groupId) {
         this.groupId = groupId;
     }
@@ -27,7 +29,34 @@ public class GameStateUpdateMessage extends InAppMessage {
         return update;
     }
 
+    /**
+     * Sets the current game state
+     * @param update    The current game state as {@link JSONObject}
+     *                  with the following pattern:
+     *                  {
+     *                      "subject": "gameState",
+     *                      "gameId": "theGameId",
+     *                      "players": [
+     *                          {
+     *                              "clientId": "theClientId",
+     *                              "posx": int,
+     *                              "posy": int,
+     *                              "dir": int,
+     *                              "color": "rgb(int,int,int)"
+     *                          },
+     *                          ...
+     *                      ]
+     *                  }
+     */
     public void setUpdate(JSONObject update) {
         this.update = update;
+    }
+
+    public boolean isInitial() {
+        return initial;
+    }
+
+    public void setInitial(boolean initial) {
+        this.initial = initial;
     }
 }

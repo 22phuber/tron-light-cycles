@@ -5,7 +5,7 @@ import org.json.JSONObject;
 
 public class LobbyStateUpdateMessage extends InAppMessage {
 
-    private String groupId;
+    private final String groupId;
     private JSONObject update;
 
     public LobbyStateUpdateMessage(String groupId){
@@ -16,14 +16,25 @@ public class LobbyStateUpdateMessage extends InAppMessage {
         return groupId;
     }
 
-    public void setGroupId(String groupId) {
-        this.groupId = groupId;
-    }
-
     public JSONObject getUpdate() {
         return update;
     }
 
+    /**
+     * Sets the lobby state.
+     * @param update    The lobby state as {@link JSONObject}
+     *                  with the following pattern:
+     *                  {
+     *                      players: [
+     *                          {
+     *                              "clientId": "theClientId",
+     *                              "name": "thePlayersName" ,
+     *                              "ready": boolean
+     *                          },
+     *                          ...
+     *                      ]
+     *                  }
+     */
     public void setUpdate(JSONObject update) {
         this.update = update;
     }
