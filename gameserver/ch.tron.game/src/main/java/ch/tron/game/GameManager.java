@@ -62,6 +62,7 @@ public class GameManager {
                     groupId,
                     ((NewLobbyMessage) msg).getGroupName(),
                     ((NewLobbyMessage) msg).getHostId(),
+                    ((NewLobbyMessage) msg).getHostColor(),
                     GameMode.getGameModeByName(((NewLobbyMessage) msg).getMode()),
                     ((NewLobbyMessage) msg).getPlayersAllowed(),
                     ((NewLobbyMessage) msg).isVisibleToPublic()
@@ -70,10 +71,10 @@ public class GameManager {
         }
         else if (msg instanceof JoinLobbyMessage) {
 
-            String groupId = ((JoinLobbyMessage) msg).getGroupId();
-            String playerId = ((JoinLobbyMessage) msg).getPlayerId();
 
-            lobbies.get(groupId).addPlayer(playerId);
+            lobbies.get(((JoinLobbyMessage) msg).getGroupId())
+                    .addPlayer(((JoinLobbyMessage) msg).getPlayerId(),
+                            ((JoinLobbyMessage) msg).getColor());
         }
         else if (msg instanceof PlayerUpdateMessage) {
 

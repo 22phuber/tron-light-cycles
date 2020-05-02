@@ -1,7 +1,6 @@
 package ch.tron.game.controller;
 
 import ch.tron.game.GameManager;
-import ch.tron.game.model.GameColors;
 import ch.tron.game.model.GameMode;
 import ch.tron.game.model.Player;
 import ch.tron.middleman.messagedto.gametotransport.LobbyStateUpdateMessage;
@@ -11,7 +10,6 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,7 +34,7 @@ public class Lobby implements Runnable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Lobby.class);
 
-    public Lobby(String id, String name, String hostId, GameMode mode, int maxPlayers, boolean visibleToPublic) {
+    public Lobby(String id, String name, String hostId, String hostColor, GameMode mode, int maxPlayers, boolean visibleToPublic) {
         this.id = id;
         this.name = name;
         this.hostId = hostId;
@@ -44,7 +42,7 @@ public class Lobby implements Runnable {
         this.maxPlayers = maxPlayers;
         this.visibleToPublic = visibleToPublic;
 
-        addPlayer(hostId);
+        addPlayer(hostId, hostColor);
 
         this.lobbyStateUpdateMessage = new LobbyStateUpdateMessage(id);
     }
@@ -78,19 +76,17 @@ public class Lobby implements Runnable {
     }
 
     //New Players are added to PlayerList in Lobby, they will join in the next GameRound
-    public void addPlayer(String playerId) {
+    public void addPlayer(String playerId, String color) {
 
         int player_count = players.size();
         if (player_count < maxPlayers) {
-
-            Color[] colors = GameColors.getColors10();
 
             Player pl = new Player(
                     playerId,
                     50 * player_count + 50,
                     50,
                     1,
-                    colors[player_count % colors.length]);
+                    color);
 
             players.put(pl.getId(), pl);
         }

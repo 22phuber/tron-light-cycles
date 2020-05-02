@@ -12,11 +12,11 @@ public class Player {
     private int posx;
     private int posy;
     private int dir;
-    private Color color;
+    private final String color;
     private boolean ready = false;
     private final LinkedList turns = new LinkedList<Turn>();
 
-    public Player(String  id, int posx, int posy, int dir, Color color) {
+    public Player(String  id, int posx, int posy, int dir, String color) {
         this.id = id;
         this.posx = posx;
         this.posy = posy;
@@ -56,12 +56,8 @@ public class Player {
         this.dir = dir;
     }
 
-    public Color getColor() {
+    public String getColor() {
         return color;
-    }
-
-    public void setColor(Color color) {
-        this.color = color;
     }
 
     public boolean isReady(){return this.ready;}

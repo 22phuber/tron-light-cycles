@@ -49,6 +49,7 @@ public class JsonInboundHandler {
                         gameId,
                         config.getString("name"),
                         playerId,
+                        jo.getString("hostColor"),
                         config.getString("mode"),
                         config.getInt("playersAllowed"),
                         config.getBoolean("public")
@@ -67,6 +68,7 @@ public class JsonInboundHandler {
 
                 TransportManager.getMessageForwarder().forwardMessage(new JoinLobbyMessage(
                         playerId,
+                        jo.getString("playerColor"),
                         gameId
                 ));
                 break;

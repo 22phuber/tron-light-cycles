@@ -13,6 +13,18 @@
     let canvas_height;
     let lineThickness;
 
+    let playerColors = [];
+    playerColors.push("rgb(44,123,246)");
+    playerColors.push("rgb(155,86,163)");
+    playerColors.push("rgb(229,93,156)");
+    playerColors.push("rgb(237,95,93)");
+    playerColors.push("rgb(233,135,58)");
+    playerColors.push("rgb(243,185,75)");
+    playerColors.push("rgb(120,183,86)");
+    playerColors.push("rgb(140,140,140)");
+    playerColors.push("rgb(67,70,74)");
+    playerColors.push("rgb(28,29,30)");
+
     let publicGames = [];
 
     let clientId;
@@ -119,14 +131,19 @@
                 "public": true,
                 "mode": "classic",
                 "playersAllowed": 3,
-            }
+            },
+            "hostColor": playerColors[0]
         };
         ws.send(JSON.stringify(json));
     }
 
     function joinGame (id) {
         gameId = id;
-        ws.send(JSON.stringify({ "subject": "joinGame", "gameId": gameId }))
+        ws.send(JSON.stringify({
+            "subject": "joinGame",
+            "gameId": gameId,
+            "playerColor": playerColors[1]}
+        ));
     }
 
     function startGame () {
@@ -142,8 +159,7 @@
 
     function sendPlayerUpdate (key) {
         let msg = { "subject": "updateDirection", "gameId": gameId, "key": key};
-        let jsonstring = JSON.stringify(msg);
-        ws.send(jsonstring);
+        ws.send(JSON.stringify(msg));
     }
     
     function clearCanvas() {

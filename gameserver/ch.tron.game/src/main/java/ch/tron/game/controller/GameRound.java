@@ -3,7 +3,6 @@ package ch.tron.game.controller;
 import ch.tron.game.GameManager;
 import ch.tron.game.model.GameMode;
 import ch.tron.game.model.Player;
-import ch.tron.game.model.Turn;
 import ch.tron.middleman.messagedto.gametotransport.CountdownMessage;
 import ch.tron.middleman.messagedto.gametotransport.DeathMessage;
 import ch.tron.middleman.messagedto.gametotransport.GameConfigMessage;
@@ -12,12 +11,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,7 +57,7 @@ public class GameRound {
                 one.put("posx", player.getPosx());
                 one.put("posy", player.getPosy());
                 one.put("dir", player.getDir());
-                one.put("color", awtColorToString(player.getColor()));
+                one.put("color", player.getColor());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -68,18 +65,6 @@ public class GameRound {
         });
         state.put("players", all);
         return state;
-    }
-
-    private String awtColorToString(Color c) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("rgb(")
-                .append(c.getRed())
-                .append(",")
-                .append(c.getGreen())
-                .append(",")
-                .append(c.getBlue())
-                .append(")");
-        return sb.toString();
     }
 
     public void start() {
