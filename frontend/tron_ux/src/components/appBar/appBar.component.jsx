@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function TronAppBar() {
+const TronAppBar = (props) => {
   const classes = useStyles();
   const [auth, setAuth] = React.useState(false);
   const [openLoginDialog, setOpenLoginDialog] = React.useState(false);
@@ -51,7 +51,8 @@ function TronAppBar() {
     setOpenRegisterDialog(false);
   };
 
-  const handleLogin = () => {
+  const handleLogin = (data) => {
+    console.log("handleLogin data:" + JSON.stringify(data));
     setAuth(true);
   };
 
@@ -128,6 +129,6 @@ function TronAppBar() {
       </AppBar>
     </div>
   );
-}
+};
 
 export default TronAppBar;

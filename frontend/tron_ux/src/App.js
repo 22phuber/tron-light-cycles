@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import "./App.css";
 import { WebsocketSubjectMissing } from "./helpers/exceptions";
 import * as WSHelpers from "./helpers/websocket";
-import { DIRECTIONKEYS } from "./helpers/helpers";
+import { DIRECTIONKEYS,  getRandomName } from "./helpers/helpers";
 import { useInterval } from "./helpers/custom.hooks";
 import { ThemeProvider, makeStyles } from "@material-ui/styles";
 import {
@@ -58,12 +58,14 @@ const App = () => {
     wsError: false,
   });
   // State: My Player
-  const [myPlayerData, setMyPlayerData] = useState({
-    name: "myPlayerName",
-    clientId: null,
-    color: "black",
-    ready: true,
-  });
+  const [myPlayerData, setMyPlayerData] = useState(
+    JSON.parse(localStorage.getItem("myPlayerData")) || {
+      name: getRandomName(),
+      clientId: null,
+      color: null,
+      ready: true
+    }
+  );
   // State: Game data
   const [gameData, setGameData] = useState({
     gameConfig: {
@@ -119,6 +121,10 @@ const App = () => {
   const [wsplayerdata, setWsPlayerData] = useState(null); // -> playData
   // Request Animation Frame variable
   let rAF;
+
+  useEffect(() => {
+    localStorage.setItem("myPlayerData", JSON.stringify(myPlayerData));
+  }, [myPlayerData]);
 
   useEffect(() => {
     handleWebsocket();
@@ -289,7 +295,8 @@ const App = () => {
 
   // load public games and send client connected
   function fetchStateFromGameServer() {
-    if (!myPlayerData.clientId) sendWsData(WSHelpers.QUERY.CLIENTCONNECTED);
+    // Remove?
+    // if (!myPlayerData.clientId) sendWsData(WSHelpers.QUERY.CLIENTCONNECTED);
     if (!appState.playMode && !appState.lobbyMode) {
       console.log("loadGames");
       sendWsData(WSHelpers.QUERY.UPDATEPUBLICGAMES);

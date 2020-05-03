@@ -6,17 +6,40 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import Typography from "@material-ui/core/Typography";
+import { signIn } from "../../helpers/api";
 
 const LoginDialog = (props) => {
+  const [loginFailed, setLoginFailed] = React.useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();
     // form data
+    let user = {};
     for (const [key, value] of new FormData(event.target).entries()) {
-      console.log("[" + key + "]" + value);
+      user[key] = value;
     }
-    props.handleAuth();
-    props.handleClose();
+    // try to signIn user
+    signIn(user, handleAuth);
+  };
+
+  const handleAuth = (data) => {
+    switch (data.responseCode) {
+      case 200:
+        setLoginFailed(false);
+        props.handleAuth(data);
+        props.handleClose();
+        break;
+      default:
+        setLoginFailed(true);
+        break;
+    }
+  };
+
+  const handleClick = () => {
+    if (loginFailed) {
+      setLoginFailed(false);
+    }
   };
 
   return (
@@ -34,6 +57,7 @@ const LoginDialog = (props) => {
             </DialogContentText>
             <TextField
               autoFocus
+              onClick={handleClick}
               margin="dense"
               id="username"
               name="username"
@@ -44,6 +68,7 @@ const LoginDialog = (props) => {
               required
             />
             <TextField
+              onClick={handleClick}
               margin="dense"
               id="password"
               name="password"
@@ -53,6 +78,11 @@ const LoginDialog = (props) => {
               fullWidth
               required
             />
+            {loginFailed && (
+              <Typography variant="subtitle1" color="error">
+                Unknown username or wrong password! Please try again
+              </Typography>
+            )}
           </DialogContent>
           <DialogActions>
             <Button onClick={props.handleClose} color="primary">
