@@ -26,6 +26,11 @@ public class Lobby implements Runnable {
     private final int maxPlayers;
     private final boolean visibleToPublic;
 
+    private final int FPS = 10;
+    private final long LOOP_INTERVAL = 1000000000 / FPS;
+    private long now;
+    private long delta;
+
     private LobbyStateUpdateMessage lobbyStateUpdateMessage;
     private Map<String, Player> players = new HashMap<>();
     private int roundsPlayed = 0;
@@ -53,8 +58,17 @@ public class Lobby implements Runnable {
             LOGGER.info("Entered Lobby");
 
             while(!isPlaying()){
+                now = System.nanoTime();
                 lobbyStateUpdateMessage.setUpdate(getLobbyState());
                 GameManager.getMessageForwarder().forwardMessage(lobbyStateUpdateMessage);
+                delta = System.nanoTime() - now;
+                if(delta < LOOP_INTERVAL){
+                    try {
+                        Thread.sleep((LOOP_INTERVAL - delta) / 1000000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
 
             while(roundsPlayed < numberOfRounds) {
