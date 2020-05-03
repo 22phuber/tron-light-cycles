@@ -60,6 +60,7 @@ public class GameManager {
             lobbies.put(groupId, new Lobby(
                     groupId,
                     ((NewLobbyMessage) msg).getGroupName(),
+                    ((NewLobbyMessage) msg).getPlayerName(),
                     ((NewLobbyMessage) msg).getHostId(),
                     ((NewLobbyMessage) msg).getHostColor(),
                     ((NewLobbyMessage) msg).getMode(),
@@ -73,6 +74,7 @@ public class GameManager {
 
             lobbies.get(((JoinLobbyMessage) msg).getGroupId())
                     .addPlayer(((JoinLobbyMessage) msg).getPlayerId(),
+                            ((JoinLobbyMessage) msg).getPlayerName(),
                             ((JoinLobbyMessage) msg).getColor());
         }
         else if (msg instanceof PlayerUpdateMessage) {
