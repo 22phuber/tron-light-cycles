@@ -12,7 +12,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import NativeSelect from "@material-ui/core/NativeSelect";
- 
+
 const useStyles = makeStyles((theme) => ({
     formControl: {
       margin: theme.spacing(0),
@@ -24,14 +24,14 @@ const useStyles = makeStyles((theme) => ({
       width: '100%',
     },
   }));
- 
+
   const ProfileDialog = (props) => {
     const classes = useStyles();
-    const { username, password, color, email } = props;
+    //const { username, password, color, email } = props;
     const [state, setState] = React.useState({
       color: "black",
     });
-  
+
     const handleSubmit = (event) => {
       event.preventDefault();
       // form data
@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
       }
       props.handleClose();
     };
-  
+
     const handleChange = (event) => {
       const name = event.target.name;
       setState({
@@ -82,7 +82,7 @@ const useStyles = makeStyles((theme) => ({
                 fullWidth
                 required
                 helperText="Change your password"
-              />         
+              />
               <TextField
                 margin="dense"
                 id="email"
@@ -132,5 +132,5 @@ const useStyles = makeStyles((theme) => ({
       </div>
     );
   };
-  
+
   export default ProfileDialog;
