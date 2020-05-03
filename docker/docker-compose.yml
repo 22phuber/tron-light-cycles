@@ -1,6 +1,6 @@
-version: '3'
-services:
+version: "3"
 
+services:
   nginx:
     build:
       context: ./nginx
@@ -20,3 +20,21 @@ services:
       MYSQL_DATABASE: tron_light_cycles
       MYSQL_USER: tron
       MYSQL_PASSWORD: tron
+
+  node:
+    build:
+      context: ./node
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    links:
+      - "mysql"
+    depends_on:
+      - "mysql"
+    environment:
+      NODE_ENV: development
+      MYSQL_HOST: mysql
+      MYSQL_DATABASE: tron_light_cycles
+      MYSQL_USER: tron
+      MYSQL_PASSWORD: tron
+

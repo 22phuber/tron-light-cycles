@@ -6,7 +6,6 @@
 const WSURL = Object.freeze({
   nettyGameServer: "ws://localhost:9000/ws", // java netty (gameserver)
   gameServer: "ws://localhost:9090/ws", // local nodejs websocket test server
-  uxServer: "ws://localhost:9091/ws", // TODO: Serverside nodejs ws server OR remove
 });
 
 export function connectToWSNettyGameServer() {
@@ -15,10 +14,6 @@ export function connectToWSNettyGameServer() {
 
 export function connectToWSGameServer() {
   return new WebSocket(WSURL.gameServer);
-}
-
-export function connectToWSUXServer() {
-  return new WebSocket(WSURL.uxServer);
 }
 
 // Settings

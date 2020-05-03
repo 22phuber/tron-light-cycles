@@ -39,4 +39,4 @@
 |---|---|---|---|---|---|
 |Game server continously broadcasts current game state to all clients being part of running game. **Contains only players that are currently alive**|`{ "subject": "gameState", "gameId": "theGameId", "players": [ { "clientId": "theClientId", "posx": int, "posy": int, "dir": int, "color": "rgb(int,int,int)" }, ... ] }`|**continous broadcast**|❌|✅|✅|
 |Client sends direction update on key event.|`{ subject: "updateDirection", "gameId": "theGamesId", "key": "key" }`||✅|✅|✅|
-|Game server broadcasts occuring deaths to all clients being poart of running game.|`{ "subject": "playerDeath", "gameId": "theGameId", "playerId": "theDeadPlayerId", "posx": int, "posy": int, "turns": [ { "posx": int, "posy": int, "newDirection": int }, ... ] }`|**broadcast**|❌|✅|❌|
+|Game server broadcasts occuring deaths to all clients being poart of running game.|`{ "subject": "playerDeath", "gameId": "theGameId", "playerId": "theDeadPlayerId", "posx": int, "posy": int, "turns": [ { "posx": int, "posy": int, "newDirection": int }, ... ] }`|**broadcast**|❌|✅|✅|
