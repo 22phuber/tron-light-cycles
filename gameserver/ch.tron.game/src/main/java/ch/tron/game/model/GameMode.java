@@ -1,7 +1,6 @@
 package ch.tron.game.model;
 
 import ch.tron.game.GameManager;
-import ch.tron.game.controller.GameRound;
 import ch.tron.middleman.messagedto.gametotransport.DeathMessage;
 import ch.tron.middleman.messagedto.gametotransport.GameStateUpdateMessage;
 import org.json.JSONArray;
@@ -10,7 +9,6 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -19,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public abstract class GameMode {
 
-    final Logger logger = LoggerFactory.getLogger(GameRound.class);
+    final Logger logger = LoggerFactory.getLogger(GameMode.class);
     final GameStateUpdateMessage gameStateUpdateMessage;
     final int x;
     final int y;

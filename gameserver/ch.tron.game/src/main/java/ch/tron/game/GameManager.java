@@ -1,7 +1,6 @@
 package ch.tron.game;
 
 import ch.tron.game.controller.Lobby;
-import ch.tron.game.model.GameMode;
 import ch.tron.middleman.messagedto.InAppMessage;
 import ch.tron.middleman.messagedto.backAndForth.CurrentPublicGamesRequest;
 import ch.tron.middleman.messagedto.transporttogame.*;
@@ -47,7 +46,7 @@ public class GameManager {
                             .put("name", lobby.getName())
                             .put("playersJoined", lobby.getPlayersJoined())
                             .put("playersAllowed", lobby.getMaxPlayers())
-                            .put("mode", lobby.getGameMode().getClass().getSimpleName());
+                            .put("mode", lobby.getGame().getClass().getSimpleName());
                     all.put(one);
                 }
             }
