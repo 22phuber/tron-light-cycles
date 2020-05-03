@@ -230,7 +230,6 @@ const App = () => {
               };
             });
             setAppState({ playMode: true, lobbyMode: true });
-            // TODO: send back joinGame
             console.log("WS[createGame] gameId: " + dataFromServer.gameId);
             console.log(window.location.href);
             break;
