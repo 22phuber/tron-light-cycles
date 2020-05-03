@@ -39,14 +39,14 @@ public class Lobby implements Runnable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Lobby.class);
 
-    public Lobby(String id, String name, String playerName, String hostId, String hostColor, String mode, int maxPlayers, boolean visibleToPublic) {
+    public Lobby(String id, String name, String hostName, String hostId, String hostColor, String mode, int maxPlayers, boolean visibleToPublic) {
         this.id = id;
         this.name = name;
         this.hostId = hostId;
         this.maxPlayers = maxPlayers;
         this.visibleToPublic = visibleToPublic;
 
-        addPlayer(hostId, playerName, hostColor);
+        addPlayer(hostId, hostName, hostColor);
 
         this.mode = mode;
         this.game = GameMode.getGameModeByName(this.mode, this.id, this.players);
