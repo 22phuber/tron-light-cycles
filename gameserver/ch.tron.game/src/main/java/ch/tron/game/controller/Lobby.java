@@ -21,7 +21,8 @@ public class Lobby implements Runnable {
     private final String id;
     private final String name;
     private final String hostId;
-    private final GameMode game;
+    private GameMode game;
+    private String mode;
     private final int numberOfRounds = 5;
     private final int maxPlayers;
     private final boolean visibleToPublic;
@@ -47,7 +48,8 @@ public class Lobby implements Runnable {
 
         addPlayer(hostId, hostColor);
 
-        this.game = GameMode.getGameModeByName(mode, this.id, this.players);
+        this.mode = mode;
+        this.game = GameMode.getGameModeByName(this.mode, this.id, this.players);
         this.lobbyStateUpdateMessage = new LobbyStateUpdateMessage(id);
     }
 
@@ -73,6 +75,7 @@ public class Lobby implements Runnable {
 
             while(roundsPlayed < numberOfRounds) {
                 resetPlayers();
+                game = GameMode.getGameModeByName(mode, id, getReadyPlayers());
                 game.start();
                 roundsPlayed++;
             }
@@ -135,7 +138,7 @@ public class Lobby implements Runnable {
         return visibleToPublic;
     }
 
-    private HashMap getReadyPlayers() {
+    private HashMap<String, Player> getReadyPlayers() {
 
         Map<String, Player> readyPlayers = new HashMap<>();
 
@@ -145,7 +148,7 @@ public class Lobby implements Runnable {
             }
         }
 
-        return (HashMap) readyPlayers;
+        return (HashMap<String, Player>) readyPlayers;
     }
 
     private JSONObject getLobbyState() {
