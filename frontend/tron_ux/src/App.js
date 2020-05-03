@@ -165,8 +165,8 @@ const App = () => {
   // handles websocket connection
   function handleWebsocket() {
     var connectInterval;
-    websocketClient.current = WSHelpers.connectToWSGameServer();
-    //ws.current = WebsocketHelpers.connectToWSNettyGameServer();
+    //websocketClient.current = WSHelpers.connectToWSGameServer();
+    websocketClient.current = WSHelpers.connectToWSNettyGameServer();
     // OPEN
     websocketClient.current.onopen = () => {
       console.log("Websocket connected");
@@ -192,18 +192,21 @@ const App = () => {
             });
             break;
           case "clientId":
+            console.log("WS[clientId]: "+JSON.stringify(dataFromServer));
             setMyPlayerData((prevMyPlayerData) => {
               return { ...prevMyPlayerData, clientId: dataFromServer.id };
             });
-            console.log("WS[clientId]: " + dataFromServer.id);
+            console.log("WS[clientId] id: " + dataFromServer.id);
             break;
           case "currentPublicGames":
+            console.log("WS[currentPublicGames]: "+JSON.stringify(dataFromServer));
             setGameData((prevGameData) => {
               return { ...prevGameData, publicGames: dataFromServer.games };
             });
-            //console.log("WS[currentPublicGames]: " + JSON.stringify(dataFromServer.games));
+            console.log("WS[currentPublicGames] games: " + JSON.stringify(dataFromServer.games));
             break;
           case "canvasConfig":
+            console.log("WS[canvasConfig]: "+JSON.stringify(dataFromServer));
             setGameData((prevGameData) => {
               return {
                 ...prevGameData,
@@ -214,9 +217,9 @@ const App = () => {
                 },
               };
             });
-            console.log("WS[canvasConfig]: " + JSON.stringify(dataFromServer));
             break;
           case "createGame":
+            console.log("WS[createGame]: "+JSON.stringify(dataFromServer));
             setGameData((prevGameData) => {
               return {
                 ...prevGameData,
@@ -228,10 +231,11 @@ const App = () => {
             });
             setAppState({ playMode: true, lobbyMode: true });
             // TODO: send back joinGame
-            console.log("WS[createGame]: " + dataFromServer.gameId);
+            console.log("WS[createGame] gameId: " + dataFromServer.gameId);
             console.log(window.location.href);
             break;
           case "lobbyState":
+            console.log("WS[lobbyState]: "+JSON.stringify(dataFromServer));
             setGameData((prevGameData) => {
               return {
                 ...prevGameData,
@@ -241,7 +245,7 @@ const App = () => {
               };
             });
             console.log(
-              "WS[lobbyState]: " + JSON.stringify(dataFromServer.players)
+              "WS[lobbyState] players: " + JSON.stringify(dataFromServer.players)
             );
             break;
           default:

@@ -31,9 +31,8 @@ export const QUERY = Object.freeze({
       public: true,
       mode: "classic",
       playersAllowed: 5,
-      playing: false,
-      host: "0123456789",
     },
+    hostColor: "rgb(0,0,0)",
   },
   DELETEGAME: {
     subject: "deleteGame",
