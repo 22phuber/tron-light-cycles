@@ -21,29 +21,35 @@ public class Lobby implements Runnable {
     private final String id;
     private final String name;
     private final String hostId;
-    private final GameMode gameMode;
+    private GameMode game;
+    private String mode;
     private final int numberOfRounds = 5;
     private final int maxPlayers;
     private final boolean visibleToPublic;
 
+    private final int FPS = 10;
+    private final long LOOP_INTERVAL = 1000000000 / FPS;
+    private long now;
+    private long delta;
+
     private LobbyStateUpdateMessage lobbyStateUpdateMessage;
     private Map<String, Player> players = new HashMap<>();
-    private GameRound gameRound;
     private int roundsPlayed = 0;
     private boolean playing;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Lobby.class);
 
-    public Lobby(String id, String name, String hostId, String hostColor, GameMode mode, int maxPlayers, boolean visibleToPublic) {
+    public Lobby(String id, String name, String hostId, String hostColor, String mode, int maxPlayers, boolean visibleToPublic) {
         this.id = id;
         this.name = name;
         this.hostId = hostId;
-        this.gameMode = mode;
         this.maxPlayers = maxPlayers;
         this.visibleToPublic = visibleToPublic;
 
         addPlayer(hostId, hostColor);
 
+        this.mode = mode;
+        this.game = GameMode.getGameModeByName(this.mode, this.id, this.players);
         this.lobbyStateUpdateMessage = new LobbyStateUpdateMessage(id);
     }
 
@@ -54,20 +60,23 @@ public class Lobby implements Runnable {
             LOGGER.info("Entered Lobby");
 
             while(!isPlaying()){
+                now = System.nanoTime();
                 lobbyStateUpdateMessage.setUpdate(getLobbyState());
                 GameManager.getMessageForwarder().forwardMessage(lobbyStateUpdateMessage);
+                delta = System.nanoTime() - now;
+                if(delta < LOOP_INTERVAL){
+                    try {
+                        Thread.sleep((LOOP_INTERVAL - delta) / 1000000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
 
             while(roundsPlayed < numberOfRounds) {
                 resetPlayers();
-
-                gameRound = new GameRound(
-                        id,
-                        (HashMap)players,
-                        gameMode
-                );
-
-                gameRound.start();
+                game = GameMode.getGameModeByName(mode, id, getReadyPlayers());
+                game.start();
                 roundsPlayed++;
             }
 
@@ -93,7 +102,7 @@ public class Lobby implements Runnable {
     }
 
     public void updatePlayer(String playerId, String key) {
-        gameRound.updatePlayer(playerId, key);
+        game.updatePlayer(playerId, key);
     }
 
     public String getId() {
@@ -108,8 +117,8 @@ public class Lobby implements Runnable {
         return maxPlayers;
     }
 
-    public GameMode getGameMode() {
-        return gameMode;
+    public GameMode getGame() {
+        return game;
     }
 
     public synchronized void play() {
@@ -129,7 +138,7 @@ public class Lobby implements Runnable {
         return visibleToPublic;
     }
 
-    private HashMap getReadyPlayers() {
+    private HashMap<String, Player> getReadyPlayers() {
 
         Map<String, Player> readyPlayers = new HashMap<>();
 
@@ -139,7 +148,7 @@ public class Lobby implements Runnable {
             }
         }
 
-        return (HashMap) readyPlayers;
+        return (HashMap<String, Player>) readyPlayers;
     }
 
     private JSONObject getLobbyState() {
