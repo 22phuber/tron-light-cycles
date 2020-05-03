@@ -126,8 +126,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// TODO: Show Generated Game Link
-
 const LobbyTable = (props) => {
   const classes = useStyles();
   const gameLinkRef = useRef(null);
