@@ -1,14 +1,24 @@
 package ch.tron.transport.websocket.inboundhandler;
 
+import ch.tron.middleman.messagedto.backAndForth.CurrentPublicGamesRequest;
+import ch.tron.middleman.messagedto.transporttogame.JoinLobbyMessage;
+import ch.tron.middleman.messagedto.transporttogame.NewLobbyMessage;
 import ch.tron.middleman.messagedto.transporttogame.PlayerUpdateMessage;
+import ch.tron.middleman.messagedto.transporttogame.StartGameMessage;
 import ch.tron.transport.TransportManager;
+import ch.tron.transport.websocket.controller.WebSocketController;
+import io.netty.channel.Channel;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Manages forwarding of messages of type {@link JSONObject} from
  * a game player (client) to {@link ch.tron.game}
  */
 public class JsonInboundHandler {
+
+    private final Logger logger = LoggerFactory.getLogger(TransportManager.class);
 
     private final String playerId;
 
@@ -20,13 +30,61 @@ public class JsonInboundHandler {
 
     private void handleMsg(JSONObject jo) {
 
-        if (jo.getString("subject").equals("update dir")) {
+        String subject = jo.getString("subject");
 
-            String key = jo.getString("key");
+        switch (subject) {
+            case "currentPublicGames":
+                TransportManager.getMessageForwarder().forwardMessage(new CurrentPublicGamesRequest(playerId));
+                break;
+            case "createGame":
+                String gameId = WebSocketController.newChannelGroup();
 
-            // default-groupId here is temporary
-            // will come with the message from client in the future
-            TransportManager.getMessageForwarder().forwardMessage(new PlayerUpdateMessage("defaultId", playerId, key));
+                Channel channel = WebSocketController.getLonelyChannel(playerId);
+                WebSocketController.addChannelToGroup(channel, gameId);
+                WebSocketController.removeChannelFromLonelyGroup(playerId);
+
+                JSONObject config = jo.getJSONObject("gameConfig");
+
+                TransportManager.getMessageForwarder().forwardMessage(new NewLobbyMessage(
+                        gameId,
+                        config.getString("name"),
+                        playerId,
+                        jo.getString("hostColor"),
+                        config.getString("mode"),
+                        config.getInt("playersAllowed"),
+                        config.getBoolean("public")
+                ));
+                TransportManager.getJsonOutboundHandler().sendJsonToChannel(
+                        channel,
+                        new JSONObject().put("subject", "createGame").put("gameId", gameId)
+                );
+                break;
+            case "joinGame":
+                gameId = jo.getString("gameId");
+
+                channel = WebSocketController.getLonelyChannel(playerId);
+                WebSocketController.addChannelToGroup(channel, gameId);
+                WebSocketController.removeChannelFromLonelyGroup(playerId);
+
+                TransportManager.getMessageForwarder().forwardMessage(new JoinLobbyMessage(
+                        playerId,
+                        jo.getString("playerColor"),
+                        gameId
+                ));
+                break;
+            case "startGame":
+                TransportManager.getMessageForwarder().forwardMessage(new StartGameMessage(
+                        jo.getString("gameId")
+                ));
+                break;
+            case "updateDirection":
+                TransportManager.getMessageForwarder().forwardMessage(new PlayerUpdateMessage(
+                        jo.getString("gameId"),
+                        playerId,
+                        jo.getString("key")
+                ));
+                break;
+            default: logger.info("Subject type {} not supported", subject);
         }
     }
 }

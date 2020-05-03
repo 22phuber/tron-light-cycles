@@ -12,24 +12,25 @@ import org.json.JSONObject;
 public class JsonOutboundHandler {
 
     /**
-     * Sends updated game state to game players (clients)
-     * attending a given {@link ChannelGroup}.
-     * @param group     The {@link ChannelGroup} to send the updates to.
-     * @param update    The updated game state.
+     * Sends a JsonString to a client.
+     *
+     * @param channel   The {@link Channel} representing the connection
+     *                  to the client.
+     * @param jo        The {@link JSONObject} holding the information
+     *                  to be sent.
      */
-    public void sendUpdate(ChannelGroup group, JSONObject update) {
-
-        group.writeAndFlush(new TextWebSocketFrame(update.toString()));
+    public void sendJsonToChannel(Channel channel, JSONObject jo) {
+        channel.writeAndFlush(new TextWebSocketFrame(jo.toString()));
     }
 
     /**
-     * Sends the game configuration of the game to all players (clients)
-     * attending a given {@link ChannelGroup}.
-     * @param group     The {@link ChannelGroup} to send the config to.
-     * @param config    The game configuration information.
+     * Sends a JsonString to a group of clients.
+     *
+     * @param group     The {@link ChannelGroup} to send to.
+     * @param jo        The {@link JSONObject} holding the information
+     *                  to be sent.
      */
-    public void sendConfig(ChannelGroup group, JSONObject config) {
-
-        group.writeAndFlush(new TextWebSocketFrame(config.toString()));
+    public void sendJsonToChannelGroup(ChannelGroup group, JSONObject jo) {
+        group.writeAndFlush(new TextWebSocketFrame(jo.toString()));
     }
 }

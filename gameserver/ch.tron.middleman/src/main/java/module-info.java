@@ -7,6 +7,7 @@ module ch.tron.middleman {
 
     exports ch.tron.middleman;
     exports ch.tron.middleman.messagedto;
+    exports ch.tron.middleman.messagedto.backAndForth;
     exports ch.tron.middleman.messagedto.transporttogame;
     exports ch.tron.middleman.messagedto.gametotransport;
     exports ch.tron.middleman.messagehandler;

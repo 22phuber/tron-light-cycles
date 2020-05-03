@@ -1,12 +1,12 @@
 package ch.tron.game;
 
 import ch.tron.game.controller.Lobby;
+import ch.tron.game.model.GameMode;
 import ch.tron.middleman.messagedto.InAppMessage;
-import ch.tron.middleman.messagedto.transporttogame.LobbyConfigMessage;
-import ch.tron.middleman.messagedto.transporttogame.NewLobbyMessage;
-import ch.tron.middleman.messagedto.transporttogame.JoinLobbyMessage;
-import ch.tron.middleman.messagedto.transporttogame.PlayerUpdateMessage;
+import ch.tron.middleman.messagedto.backAndForth.CurrentPublicGamesRequest;
+import ch.tron.middleman.messagedto.transporttogame.*;
 import ch.tron.middleman.messagehandler.ToTransportMessageForwarder;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,39 +34,57 @@ public class GameManager {
      * @param msg   Message of type {@link InAppMessage}.
      */
     public static void handleInAppIncomingMessage(InAppMessage msg) {
-        
-        if (msg instanceof JoinLobbyMessage) {
+        if (msg instanceof CurrentPublicGamesRequest) {
+            JSONArray all = new JSONArray();
+            JSONObject jo = new JSONObject()
+                    .put("subject", "currentPublicGames")
+                    .put("games", all);
+            for (Map.Entry<String, Lobby> entry: lobbies.entrySet()) {
+                Lobby lobby = entry.getValue();
+                if (lobby.isVisibleToPublic()) {
+                    JSONObject one = new JSONObject()
+                            .put("id", lobby.getId())
+                            .put("name", lobby.getName())
+                            .put("playersJoined", lobby.getPlayersJoined())
+                            .put("playersAllowed", lobby.getMaxPlayers())
+                            .put("mode", lobby.getGameMode().getName());
+                    all.put(one);
+                }
+            }
+            ((CurrentPublicGamesRequest) msg).setPublicGames(jo);
+            MESSAGE_FORWARDER.forwardMessage(msg);
+        }
+        else if (msg instanceof NewLobbyMessage) {
 
-            String groupId = msg.getGroupId();
-            String playerId = ((JoinLobbyMessage) msg).getPlayerId();
+            String groupId = ((NewLobbyMessage) msg).getGroupId();
 
-            lobbies.get(groupId).addPlayer(playerId);
+            lobbies.put(groupId, new Lobby(
+                    groupId,
+                    ((NewLobbyMessage) msg).getGroupName(),
+                    ((NewLobbyMessage) msg).getHostId(),
+                    ((NewLobbyMessage) msg).getHostColor(),
+                    GameMode.getGameModeByName(((NewLobbyMessage) msg).getMode()),
+                    ((NewLobbyMessage) msg).getPlayersAllowed(),
+                    ((NewLobbyMessage) msg).isVisibleToPublic()
+            ));
+            new Thread(lobbies.get(groupId)).start();
+        }
+        else if (msg instanceof JoinLobbyMessage) {
+
+
+            lobbies.get(((JoinLobbyMessage) msg).getGroupId())
+                    .addPlayer(((JoinLobbyMessage) msg).getPlayerId(),
+                            ((JoinLobbyMessage) msg).getColor());
         }
         else if (msg instanceof PlayerUpdateMessage) {
 
-            String groupId = msg.getGroupId();
+            String groupId = ((PlayerUpdateMessage) msg).getGroupId();
             String playerId = ((PlayerUpdateMessage) msg).getPlayerId();
 
             lobbies.get(groupId).updatePlayer(playerId, ((PlayerUpdateMessage) msg).getKey());
         }
-        // TODO: M3: Implement
-        else if (msg instanceof NewLobbyMessage) {
-
-            String groupId = msg.getGroupId();
-            String playerId = ((NewLobbyMessage) msg).getPlayerId();
-            JSONObject config = ((NewLobbyMessage) msg).getConfig();
-
-            lobbies.put(groupId, new Lobby(groupId, playerId, config));
-            new Thread(lobbies.get(groupId)).start();
-
-        }else if(msg instanceof LobbyConfigMessage){
-
-            String groupId = msg.getGroupId();
-            String playerId = ((LobbyConfigMessage) msg).getPlayerId();
-            JSONObject config = ((LobbyConfigMessage) msg).getConfig();
-
-            lobbies.get(groupId).setConfig(playerId, config);
-
+        else if (msg instanceof StartGameMessage) {
+            lobbies.get(((StartGameMessage) msg).getGroupId()).play();
         }
         else {
             LOGGER.info("Message type {} not supported", msg.getClass());

@@ -44,6 +44,7 @@ public class TextWebSocketFrameHandler extends SimpleChannelInboundHandler<TextW
             logger.info("Invalid JSON");
             return;
         }
+        // TODO: Make JsonInboundHandler as object property and reuse
         new JsonInboundHandler(ctx.channel().id().asLongText(), jo);
     }
 }
