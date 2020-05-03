@@ -37,7 +37,7 @@ public class Classic extends GameMode{
             }
         }
 
-        logger.info("Game round started");
+        logger.info("Classic game started");
 
         long t_before = System.nanoTime();
         while (playersAlive.size() > 0) {
