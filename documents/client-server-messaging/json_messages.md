@@ -1,5 +1,9 @@
 ## Client-Server-Messaging
 
+### SSD Game procedure
+![Game procedure SSD png](GameProcedure_SSD.png)
+Draw.io file: [Game procedure SSD draw.io file](GameProcedure_SSD.drawio)
+
 ### On opening ws-connection
 
 |Description|JSON|further information|FE|BEt|BEg|
