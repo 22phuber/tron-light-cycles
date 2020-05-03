@@ -47,7 +47,7 @@ public class GameManager {
                             .put("name", lobby.getName())
                             .put("playersJoined", lobby.getPlayersJoined())
                             .put("playersAllowed", lobby.getMaxPlayers())
-                            .put("mode", lobby.getGameMode().getName());
+                            .put("mode", lobby.getGameMode().getClass().getSimpleName());
                     all.put(one);
                 }
             }
@@ -63,7 +63,7 @@ public class GameManager {
                     ((NewLobbyMessage) msg).getGroupName(),
                     ((NewLobbyMessage) msg).getHostId(),
                     ((NewLobbyMessage) msg).getHostColor(),
-                    GameMode.getGameModeByName(((NewLobbyMessage) msg).getMode()),
+                    ((NewLobbyMessage) msg).getMode(),
                     ((NewLobbyMessage) msg).getPlayersAllowed(),
                     ((NewLobbyMessage) msg).isVisibleToPublic()
             ));
