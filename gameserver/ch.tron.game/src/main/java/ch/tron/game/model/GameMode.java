@@ -24,8 +24,10 @@ public abstract class GameMode {
     final int lineThickness;
     final Map<String, Player> playersAlive;
     final boolean[][] field;
-    final double FPS = 60;
-    final double LOOP_INTERVAL = 1000000000 / FPS;
+    final int FPS = 60;
+    final long LOOP_INTERVAL = 1000000000 / FPS;
+    long now;
+    long delta;
     final String lobbyId;
 
     public GameMode(int x, int y, int lineThickness, String lobbyId, Map<String, Player> players){

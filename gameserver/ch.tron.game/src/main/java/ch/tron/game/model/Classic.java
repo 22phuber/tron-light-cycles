@@ -16,6 +16,8 @@ public class Classic extends GameMode{
     @Override
     public void start() {
 
+        now = System.nanoTime();
+
         GameManager.getMessageForwarder().forwardMessage(new GameConfigMessage(lobbyId, x, y, lineThickness));
 
         gameStateUpdateMessage.setInitial(true);
@@ -83,6 +85,15 @@ public class Classic extends GameMode{
                 });
                 gameStateUpdateMessage.setUpdate(playersJSON());
                 GameManager.getMessageForwarder().forwardMessage(gameStateUpdateMessage);
+            }
+        }
+
+        delta = System.nanoTime() - now;
+        if(delta < LOOP_INTERVAL){
+            try {
+                Thread.sleep((LOOP_INTERVAL - delta) / 1000000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
 
