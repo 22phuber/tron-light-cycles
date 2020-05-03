@@ -20,6 +20,24 @@ export function locationURL() {
 }
 
 /**
+ * Get my player data from localStorage or create default
+ */
+export function getMyPlayerData() {
+  return (
+    JSON.parse(localStorage.getItem("myPlayerData")) || {
+      username: getRandomName(),
+      clientId: null,
+      color: null,
+      ready: true,
+      firstname: null,
+      name: null,
+      email: null,
+      ranking: 0,
+    }
+  );
+}
+
+/**
  * Creates a random name object
  */
 export function getRandomName() {

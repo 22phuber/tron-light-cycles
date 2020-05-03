@@ -82,6 +82,7 @@ export async function signUp(user, callback) {
       password: user.password,
       firstname: user.firstname,
       name: user.lastname,
+      email: user.email,
       cycle_color: user.cycle_color,
     }),
   })

@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import "./App.css";
 import { WebsocketSubjectMissing } from "./helpers/exceptions";
 import * as WSHelpers from "./helpers/websocket";
-import { DIRECTIONKEYS,  getRandomName } from "./helpers/helpers";
+import { DIRECTIONKEYS, getMyPlayerData } from "./helpers/helpers";
 import { useInterval } from "./helpers/custom.hooks";
 import { ThemeProvider, makeStyles } from "@material-ui/styles";
 import {
@@ -58,14 +58,7 @@ const App = () => {
     wsError: false,
   });
   // State: My Player
-  const [myPlayerData, setMyPlayerData] = useState(
-    JSON.parse(localStorage.getItem("myPlayerData")) || {
-      name: getRandomName(),
-      clientId: null,
-      color: null,
-      ready: true
-    }
-  );
+  const [myPlayerData, setMyPlayerData] = useState(getMyPlayerData());
   // State: Game data
   const [gameData, setGameData] = useState({
     gameConfig: {
@@ -296,7 +289,7 @@ const App = () => {
   // load public games and send client connected
   function fetchStateFromGameServer() {
     // Remove?
-    // if (!myPlayerData.clientId) sendWsData(WSHelpers.QUERY.CLIENTCONNECTED);
+    if (!myPlayerData.clientId) sendWsData(WSHelpers.QUERY.CLIENTCONNECTED);
     if (!appState.playMode && !appState.lobbyMode) {
       console.log("loadGames");
       sendWsData(WSHelpers.QUERY.UPDATEPUBLICGAMES);
@@ -313,10 +306,26 @@ const App = () => {
     }
   }
 
+  function handleMyPlayerData(data) {
+    console.log(data);
+    for (const [key, value] of Object.entries(data)) {
+      switch (key) {
+        case "cycle_color":
+          handleMyPlayer("color", value);
+          break;
+        default:
+          handleMyPlayer(key, value);
+          break;
+      }
+    }
+  }
+
   function handleMyPlayer(key, val) {
-    setMyPlayerData((prevMyPlayerData) => {
-      return { ...prevMyPlayerData, [key]: val };
-    });
+    if (key in myPlayerData) {
+      setMyPlayerData((prevMyPlayerData) => {
+        return { ...prevMyPlayerData, [key]: val };
+      });
+    }
   }
 
   // playerData for game rendering
@@ -405,7 +414,10 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <header>
-        <TronAppBar />
+        <TronAppBar
+          handleMyPlayerData={handleMyPlayerData}
+          myPlayer={myPlayerData}
+        />
       </header>
       <JoinGameDialog
         open={joinGameState.openJoinGameDialog}

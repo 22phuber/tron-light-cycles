@@ -19,7 +19,6 @@ const LoginDialog = (props) => {
     for (const [key, value] of new FormData(event.target).entries()) {
       user[key] = value;
     }
-    // try to signIn user
     signIn(user, handleAuth);
   };
 
@@ -27,7 +26,7 @@ const LoginDialog = (props) => {
     switch (data.responseCode) {
       case 200:
         setLoginFailed(false);
-        props.handleAuth(data);
+        props.handleAuth(data.data);
         props.handleClose();
         break;
       default:
