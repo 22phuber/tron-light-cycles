@@ -145,6 +145,7 @@
         ws.send(JSON.stringify({
             "subject": "joinGame",
             "gameId": gameId,
+            "playerName": "username",
             "playerColor": playerColors[getRandomInt()]}
         ));
     }
