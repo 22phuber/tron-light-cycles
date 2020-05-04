@@ -132,7 +132,10 @@
                 "mode": "classic",
                 "playersAllowed": 3,
             },
-            "hostColor": playerColors[getRandomInt()]
+            "host":{
+                "playerName": "username",
+                "color": playerColors[getRandomInt()]
+            }
         };
         ws.send(JSON.stringify(json));
     }

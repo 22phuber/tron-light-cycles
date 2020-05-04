@@ -52,7 +52,7 @@ public class JsonInboundHandler {
                         config.getString("name"),
                         playerId,
                         host.getString("playerName"),
-                        host.getString("hostColor"),
+                        host.getString("color"),
                         config.getString("mode"),
                         config.getInt("playersAllowed"),
                         config.getBoolean("public")
