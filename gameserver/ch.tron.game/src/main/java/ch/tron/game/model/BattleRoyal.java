@@ -46,4 +46,9 @@ public class BattleRoyal extends GameMode{
             }
         }
     }
+
+    @Override
+    public void move() {
+
+    }
 }
