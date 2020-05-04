@@ -28,7 +28,6 @@ public class BattleRoyal extends GameMode{
             now = System.nanoTime();
 
             move();
-            moveWalls();
             render();
 
             delta = System.nanoTime() - now;
@@ -45,6 +44,7 @@ public class BattleRoyal extends GameMode{
     @Override
     public void move() {
         //gameplay logic comes in here
+        moveWalls();
     }
 
     public void moveWalls(){
