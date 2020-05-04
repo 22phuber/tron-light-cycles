@@ -27,7 +27,7 @@ public class Lobby implements Runnable {
     private final int maxPlayers;
     private final boolean visibleToPublic;
 
-    private final int FPS = 10;
+    private final int FPS = 1;
     private final long LOOP_INTERVAL = 1000000000 / FPS;
     private long now;
     private long delta;
