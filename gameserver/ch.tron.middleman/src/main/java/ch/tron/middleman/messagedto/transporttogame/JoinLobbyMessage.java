@@ -10,11 +10,13 @@ import ch.tron.middleman.messagedto.InAppMessage;
 public class JoinLobbyMessage extends InAppMessage {
 
     private final String playerId;
+    private final String playerName;
     private final String color;
     private final String  groupId;
 
-    public JoinLobbyMessage(String playerId, String color, String groupId) {
+    public JoinLobbyMessage(String playerId, String playerName, String color, String groupId) {
         this.playerId = playerId;
+        this.playerName = playerName;
         this.color = color;
         this.groupId = groupId;
     }
@@ -28,4 +30,6 @@ public class JoinLobbyMessage extends InAppMessage {
     public String getGroupId() {
         return groupId;
     }
+
+    public String getPlayerName() { return playerName; }
 }

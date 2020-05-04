@@ -12,22 +12,24 @@ public class NewLobbyMessage extends InAppMessage {
     private final String groupId;
     private final String groupName;
     private final String hostId;
+    private final String playerName;
     private final String hostColor;
     private final String mode;
     private final int playersAllowed;
     private final boolean visibleToPublic;
 
     public NewLobbyMessage(
-                           String groupId,
-                           String groupName,
-                           String hostId,
-                           String hostColor,
-                           String mode,
-                           int playersAllowed,
-                           boolean visibleToPublic) {
+            String groupId,
+            String groupName,
+            String hostId,
+            String playerName, String hostColor,
+            String mode,
+            int playersAllowed,
+            boolean visibleToPublic) {
         this.groupId = groupId;
         this.groupName = groupName;
         this.hostId = hostId;
+        this.playerName = playerName;
         this.hostColor = hostColor;
         this.mode = mode;
         this.playersAllowed = playersAllowed;
@@ -59,4 +61,6 @@ public class NewLobbyMessage extends InAppMessage {
     public boolean isVisibleToPublic() {
         return visibleToPublic;
     }
+
+    public String getPlayerName() { return playerName; }
 }

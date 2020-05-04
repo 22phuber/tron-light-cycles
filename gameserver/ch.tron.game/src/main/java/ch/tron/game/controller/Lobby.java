@@ -39,14 +39,14 @@ public class Lobby implements Runnable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Lobby.class);
 
-    public Lobby(String id, String name, String hostId, String hostColor, String mode, int maxPlayers, boolean visibleToPublic) {
+    public Lobby(String id, String name, String hostName, String hostId, String hostColor, String mode, int maxPlayers, boolean visibleToPublic) {
         this.id = id;
         this.name = name;
         this.hostId = hostId;
         this.maxPlayers = maxPlayers;
         this.visibleToPublic = visibleToPublic;
 
-        addPlayer(hostId, hostColor);
+        addPlayer(hostId, hostName, hostColor);
 
         this.mode = mode;
         this.game = GameMode.getGameModeByName(this.mode, this.id, this.players);
@@ -84,14 +84,15 @@ public class Lobby implements Runnable {
         }
     }
 
-    //New Players are added to PlayerList in Lobby, they will join in the next game
-    public void addPlayer(String playerId, String color) {
+    //New Players are added to PlayerList in Lobby, they will join in the next GameRound
+    public void addPlayer(String playerId, String name, String color) {
 
         int player_count = players.size();
         if (player_count < maxPlayers) {
 
             Player pl = new Player(
                     playerId,
+                    name,
                     50 * player_count + 50,
                     50,
                     1,
@@ -161,6 +162,8 @@ public class Lobby implements Runnable {
             try {
                 one.put("clientId", player.getId());
                 one.put("ready", player.getReady());
+                one.put("name", player.getName());
+                one.put("color", player.getColor());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
