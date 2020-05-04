@@ -1,7 +1,9 @@
 package ch.tron.game.model;
 
 import ch.tron.game.GameManager;
+import ch.tron.middleman.messagedto.gametotransport.CountdownMessage;
 import ch.tron.middleman.messagedto.gametotransport.DeathMessage;
+import ch.tron.middleman.messagedto.gametotransport.GameConfigMessage;
 import ch.tron.middleman.messagedto.gametotransport.GameStateUpdateMessage;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -11,9 +13,10 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 /**
- * Represents a tron game.
+ * Template for every GameMode
  */
 public abstract class GameMode {
 
@@ -42,12 +45,37 @@ public abstract class GameMode {
 
     public abstract void start();
 
+    public abstract void move();
+
+    public final void countdown(){
+        int count = 3;
+        final CountdownMessage countdownMsg = new CountdownMessage(lobbyId);
+        while (count != 0) {
+            try {
+                TimeUnit.MILLISECONDS.sleep(800);
+                countdownMsg.setCount(count--);
+                GameManager.getMessageForwarder().forwardMessage(countdownMsg);
+            } catch (InterruptedException e) {
+                logger.info(e.getMessage());
+            }
+        }
+    }
+
+    public final void initialize(){
+        GameManager.getMessageForwarder().forwardMessage(new GameConfigMessage(lobbyId, x, y, lineThickness));
+
+        gameStateUpdateMessage.setInitial(true);
+        gameStateUpdateMessage.setUpdate(render());
+        GameManager.getMessageForwarder().forwardMessage(gameStateUpdateMessage);
+        gameStateUpdateMessage.setInitial(false);
+    }
+
     public static final GameMode getGameModeByName(String name, String lobbyId, Map<String, Player> players) {
         if (name.equals("classic")) { return new Classic(lobbyId, players); }
         return null;
     }
 
-    public final JSONObject playersJSON() throws JSONException {
+    public final JSONObject render() throws JSONException {
         JSONObject state = new JSONObject();
         state.put("subject", "gameState")
                 .put("gameId", lobbyId);
