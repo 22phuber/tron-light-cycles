@@ -45,11 +45,14 @@ public class JsonInboundHandler {
 
                 JSONObject config = jo.getJSONObject("gameConfig");
 
+                JSONObject host = jo.getJSONObject("host");
+
                 TransportManager.getMessageForwarder().forwardMessage(new NewLobbyMessage(
                         gameId,
                         config.getString("name"),
                         playerId,
-                        jo.getString("hostColor"),
+                        host.getString("playerName"),
+                        host.getString("hostColor"),
                         config.getString("mode"),
                         config.getInt("playersAllowed"),
                         config.getBoolean("public")
@@ -68,6 +71,7 @@ public class JsonInboundHandler {
 
                 TransportManager.getMessageForwarder().forwardMessage(new JoinLobbyMessage(
                         playerId,
+                        jo.getString("playerName"),
                         jo.getString("playerColor"),
                         gameId
                 ));
