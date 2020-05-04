@@ -32,7 +32,10 @@ export const QUERY = Object.freeze({
       mode: "classic",
       playersAllowed: 5,
     },
-    hostColor: "rgb(0,0,0)",
+    host: {
+      playerName: "theChosenPlayerName",
+      color: "rgb(0,0,0)"
+    }
   },
   DELETEGAME: {
     subject: "deleteGame",
