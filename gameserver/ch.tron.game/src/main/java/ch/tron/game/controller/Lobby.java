@@ -162,8 +162,8 @@ public class Lobby implements Runnable {
             try {
                 one.put("clientId", player.getId());
                 one.put("ready", player.getReady());
-                one.put("color", player.getColor());
                 one.put("name", player.getName());
+                one.put("color", player.getColor());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
