@@ -98,6 +98,7 @@ public class Lobby implements Runnable {
                     1,
                     color);
 
+            pl.setReady(true);
             players.put(pl.getId(), pl);
         }
     }
