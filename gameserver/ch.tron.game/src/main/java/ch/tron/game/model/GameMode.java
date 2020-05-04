@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Represents a tron game.
+ * Template for every GameMode
  */
 public abstract class GameMode {
 

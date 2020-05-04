@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Represents a gameMode lobby that holds all available types of tron
+ * Represents a lobby that holds all available types of tron
  */
 public class Lobby implements Runnable {
 
@@ -84,7 +84,7 @@ public class Lobby implements Runnable {
         }
     }
 
-    //New Players are added to PlayerList in Lobby, they will join in the next GameRound
+    //New Players are added to PlayerList in Lobby, they will join in the next game
     public void addPlayer(String playerId, String color) {
 
         int player_count = players.size();
