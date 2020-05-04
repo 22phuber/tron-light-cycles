@@ -70,7 +70,6 @@ public class GameManager {
         }
         else if (msg instanceof JoinLobbyMessage) {
 
-
             lobbies.get(((JoinLobbyMessage) msg).getGroupId())
                     .addPlayer(((JoinLobbyMessage) msg).getPlayerId(),
                             ((JoinLobbyMessage) msg).getColor());
