@@ -9,7 +9,7 @@ import java.util.LinkedList;
 public class Player {
 
     private final String id;
-    private String name;
+    private final String name;
     private int posx;
     private int posy;
     private int dir;
@@ -19,6 +19,7 @@ public class Player {
 
     public Player(String  id, String name, int posx, int posy, int dir, String color) {
         this.id = id;
+        this.name = name;
         this.posx = posx;
         this.posy = posy;
         this.dir = dir;
@@ -72,6 +73,4 @@ public class Player {
     }
 
     public String getName() {return name;}
-
-    public void setName(String name) {this.name = name;}
 }
