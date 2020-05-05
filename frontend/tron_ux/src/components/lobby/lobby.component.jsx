@@ -130,11 +130,12 @@ const LobbyTable = (props) => {
   const classes = useStyles();
   const gameLinkRef = useRef(null);
   // dispatch vars from props
-  const { players, myPlayer, gameConfig, gameId } = props;
+  const { players, myPlayer, gameConfig, gameId, host } = props;
 
   // TODO: disable used colors from other users in select dropdown!
   // TODO: Send my Player updates (color/ready) to gameserver!
   const [playerState, setPlayerState] = useState(null);
+  const [gameHost, setGameHost] = useState(null);
   const [myPlayerState, setMyPlayerState] = useState(null);
   const [currentGameId, setCurrentGameId] = useState(null);
   const [usedPlayerColors, setUsedPlayerColors] = useState([]);
@@ -160,6 +161,10 @@ const LobbyTable = (props) => {
   useEffect(() => {
     setMyPlayerState(myPlayer);
   }, [myPlayer]);
+
+  useEffect(() => {
+    setGameHost(host);
+  }, [host]);
 
   const handleMyPlayerChanges = (event, setting) => {
     switch (setting) {
@@ -399,7 +404,7 @@ const LobbyTable = (props) => {
                           >
                             <StyledTableCell component="th" scope="row">
                               {player.playerName || player.clientId}{" "}
-                              {/* {player.playerName === gameConfig.host.playerName ? (
+                              {player.clientId === gameHost.clientId ? (
                                 <Tooltip
                                   title="Game Host"
                                   aria-label="game host"
@@ -411,7 +416,7 @@ const LobbyTable = (props) => {
                                 </Tooltip>
                               ) : (
                                 "\u00A0"
-                              )} */}
+                              )}
                             </StyledTableCell>
                             <StyledTableCell align="right">
                               {myPlayerState.clientId === player.clientId ? (

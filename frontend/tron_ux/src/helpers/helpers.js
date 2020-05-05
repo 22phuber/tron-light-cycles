@@ -42,7 +42,9 @@ export function getMyPlayerData() {
  * Get lobbyState data from localStorage or create default
  */
 export function getLobbyState() {
-  return JSON.parse(localStorage.getItem("lobbyState")) || { players: [] };
+  return (
+    JSON.parse(localStorage.getItem("lobbyState")) || { players: [], host: {} }
+  );
 }
 
 /**
@@ -78,8 +80,6 @@ export function getPublicGames() {
 export function getGameConfig() {
   return JSON.parse(localStorage.getItem("gameConfig")) || null;
 }
-
-
 
 /************* Random Na *************/
 /**

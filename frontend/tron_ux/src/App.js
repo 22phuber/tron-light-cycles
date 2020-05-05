@@ -224,7 +224,10 @@ const App = () => {
             break;
           case "lobbyState":
             console.log("WS[lobbyState]: " + JSON.stringify(dataFromServer));
-            setLobbyState({ players: dataFromServer.players });
+            setLobbyState({
+              players: dataFromServer.players,
+              host: dataFromServer.host,
+            });
             break;
           default:
             console.error("WARN: Unknown subject");
@@ -454,6 +457,7 @@ const App = () => {
                     <LobbyTable
                       exitLobby={cancelLobby}
                       players={lobbyState.players}
+                      host={lobbyState.host}
                       gameConfig={gameConfig}
                       gameId={gameId}
                       myPlayer={myPlayerData}
