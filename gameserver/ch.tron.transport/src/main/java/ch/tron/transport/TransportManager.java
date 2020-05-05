@@ -79,14 +79,6 @@ public class TransportManager {
                     .put("lineThickness", ((GameConfigMessage) msg).getLineThickness());
             out.sendJsonToChannelGroup(WebSocketController.getChannelGroup(((GameConfigMessage) msg).getGroupId()), jo);
         }
-        else if (msg instanceof SingleGameConfigMessage) {
-            JSONObject jo = new JSONObject()
-                    .put("subject", "canvasConfig")
-                    .put("width", ((SingleGameConfigMessage) msg).getCanvas_width())
-                    .put("height", ((SingleGameConfigMessage) msg).getCanvas_height())
-                    .put("lineThickness", ((SingleGameConfigMessage) msg).getLineThickness());
-            out.sendJsonToChannelGroup(WebSocketController.getChannelGroup(((SingleGameConfigMessage) msg).getPlayerId()), jo);
-        }
         else if (msg instanceof CountdownMessage) {
             JSONObject jo = new JSONObject()
                     .put("subject", "countdown")
