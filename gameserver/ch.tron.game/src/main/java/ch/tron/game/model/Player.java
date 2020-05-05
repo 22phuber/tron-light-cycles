@@ -19,6 +19,7 @@ public class Player {
 
     public Player(String  id, String name, int posx, int posy, int dir, String color) {
         this.id = id;
+        this.name = name;
         this.posx = posx;
         this.posy = posy;
         this.dir = dir;
