@@ -130,11 +130,13 @@ const LobbyTable = (props) => {
   const classes = useStyles();
   const gameLinkRef = useRef(null);
   // dispatch vars from props
-  const { players, myPlayer, gameConfig } = props;
+  const { players, myPlayer, gameConfig, gameId } = props;
 
   // TODO: disable used colors from other users in select dropdown!
+  // TODO: Send my Player updates (color/ready) to gameserver!
   const [playerState, setPlayerState] = useState(null);
-  const [gameId, setGameId] = useState(null);
+  const [myPlayerState, setMyPlayerState] = useState(null);
+  const [currentGameId, setCurrentGameId] = useState(null);
   const [usedPlayerColors, setUsedPlayerColors] = useState([]);
 
   useEffect(() => {
@@ -152,11 +154,12 @@ const LobbyTable = (props) => {
   }, [players]);
 
   useEffect(() => {
-    if (gameConfig.gameId) {
-      setGameId(gameConfig.gameId);
-      console.log("setGameId called");
-    }
-  }, [gameConfig.gameId]);
+    setCurrentGameId(gameId);
+  }, [gameId]);
+
+  useEffect(() => {
+    setMyPlayerState(myPlayer);
+  }, [myPlayer]);
 
   const handleMyPlayerChanges = (event, setting) => {
     switch (setting) {
@@ -238,7 +241,7 @@ const LobbyTable = (props) => {
 
   return (
     <div className={classes.root}>
-      {gameId ? (
+      {currentGameId ? (
         <form onSubmit={handleSubmit} className={classes.form}>
           <Grid
             container
@@ -259,7 +262,7 @@ const LobbyTable = (props) => {
                   </Typography>
                   <Typography variant="h5" component="h2">
                     <span ref={gameLinkRef}>
-                      {locationURL() + "/?id=" + gameConfig.gameId}
+                      {locationURL() + "/?id=" + currentGameId}
                     </span>
                     {
                       /* Logical shortcut for only displaying the
@@ -386,13 +389,17 @@ const LobbyTable = (props) => {
                         playerState.map((player) => (
                           <StyledTableRow
                             key={
-                              normalizeName(player.name) + "_" + player.clientId
+                              normalizeName(
+                                player.playerName || player.clientId
+                              ) +
+                              "_" +
+                              player.clientId
                             }
                             hover
                           >
                             <StyledTableCell component="th" scope="row">
-                              {player.name}{" "}
-                              {player.clientId === gameConfig.host ? (
+                              {player.playerName || player.clientId}{" "}
+                              {/* {player.playerName === gameConfig.host.playerName ? (
                                 <Tooltip
                                   title="Game Host"
                                   aria-label="game host"
@@ -404,21 +411,21 @@ const LobbyTable = (props) => {
                                 </Tooltip>
                               ) : (
                                 "\u00A0"
-                              )}
+                              )} */}
                             </StyledTableCell>
                             <StyledTableCell align="right">
-                              {myPlayer.clientId === player.clientId ? (
+                              {myPlayerState.clientId === player.clientId ? (
                                 // Select: Myplayers color?
                                 <div className={classes.colorSelectWrapper}>
                                   <Tooltip
-                                    title={myPlayer.color}
-                                    aria-label={myPlayer.color}
+                                    title={myPlayerState.color}
+                                    aria-label={myPlayerState.color}
                                   >
                                     <Paper
                                       elevation={3}
                                       className={classes.colorPaper}
                                       style={{
-                                        backgroundColor: myPlayer.color,
+                                        backgroundColor: myPlayerState.color,
                                       }}
                                     >
                                       {"\u00A0"}
@@ -427,16 +434,18 @@ const LobbyTable = (props) => {
                                   <FormControl
                                     className={classes.formControl}
                                     disabled={
-                                      myPlayer.clientId !== player.clientId
+                                      myPlayerState.clientId !== player.clientId
                                     }
                                   >
                                     <Select
-                                      value={myPlayer.color}
+                                      value={myPlayerState.color}
                                       onChange={(e) => {
                                         handleMyPlayerChanges(e, "color");
                                       }}
                                       name={
-                                        normalizeName(player.name) + "_color"
+                                        normalizeName(
+                                          player.playerName || player.clientId
+                                        ) + "_color"
                                       }
                                       displayEmpty
                                       className={classes.selectColor}
@@ -496,12 +505,12 @@ const LobbyTable = (props) => {
                               )}
                             </StyledTableCell>
                             <StyledTableCell align="right">
-                              {myPlayer.clientId === player.clientId ? ( // Switch: Myplayers ready?
+                              {myPlayerState.clientId === player.clientId ? ( // Switch: Myplayers ready?
                                 <Switch
                                   disabled={
-                                    myPlayer.clientId !== player.clientId
+                                    myPlayerState.clientId !== player.clientId
                                   }
-                                  checked={myPlayer.ready}
+                                  checked={myPlayerState.ready}
                                   onChange={(e) => {
                                     handleMyPlayerChanges(e, "ready");
                                   }}

@@ -75,12 +75,14 @@ const GameTable = (props) => {
                   {game.name}
                 </StyledTableCell>
                 <StyledTableCell align="right">{game.mode}</StyledTableCell>
-                <StyledTableCell align="right">{game.players}</StyledTableCell>
+                <StyledTableCell align="right">
+                  {game.playersJoined + "/" + game.playersAllowed}
+                </StyledTableCell>
                 <StyledTableCell align="right">
                   <Tooltip title={"Join [" + game.id + "]"}>
                     <IconButton
                       color="inherit"
-                      aria-label="add to shopping cart"
+                      aria-label="join game"
                     >
                       <DirectionsBikeRoundedIcon />
                     </IconButton>
