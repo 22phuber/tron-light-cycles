@@ -171,7 +171,7 @@ public class Lobby implements Runnable {
             all.put(one);
         });
         players.put("players", all);
-        players.put("host", hostId);
+        players.put("host", (new JSONObject()).put("clientId", hostId));
         return players;
     }
 
