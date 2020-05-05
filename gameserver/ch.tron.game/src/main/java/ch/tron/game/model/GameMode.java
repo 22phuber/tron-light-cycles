@@ -1,6 +1,7 @@
 package ch.tron.game.model;
 
 import ch.tron.game.GameManager;
+import ch.tron.game.controller.Lobby;
 import ch.tron.middleman.messagedto.gametotransport.CountdownMessage;
 import ch.tron.middleman.messagedto.gametotransport.DeathMessage;
 import ch.tron.middleman.messagedto.gametotransport.GameConfigMessage;
@@ -47,7 +48,12 @@ public abstract class GameMode {
 
     public final void countdown(){
         int count = 3;
-        final CountdownMessage countdownMsg = new CountdownMessage(lobbyId);
+        Lobby lobby = GameManager.getLobbies().get(lobbyId);
+        final CountdownMessage countdownMsg = new CountdownMessage(
+                lobbyId,
+                lobby.getRoundsPlayed() + 1,
+                lobby.getNumberOfRounds()
+        );
         while (count != 0) {
             try {
                 TimeUnit.MILLISECONDS.sleep(800);

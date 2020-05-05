@@ -80,9 +80,13 @@ public class TransportManager {
             out.sendJsonToChannelGroup(WebSocketController.getChannelGroup(((GameConfigMessage) msg).getGroupId()), jo);
         }
         else if (msg instanceof CountdownMessage) {
+            JSONObject round = new JSONObject()
+                    .put("current", ((CountdownMessage) msg).getCurrentRound())
+                    .put("total", ((CountdownMessage) msg).getTotalRounds());
             JSONObject jo = new JSONObject()
                     .put("subject", "countdown")
-                    .put("count", ((CountdownMessage) msg).getCount());
+                    .put("count", ((CountdownMessage) msg).getCount())
+                    .put("round", round);
             out.sendJsonToChannelGroup(
                     WebSocketController.getChannelGroup(((CountdownMessage) msg).getGroupId()),
                     jo

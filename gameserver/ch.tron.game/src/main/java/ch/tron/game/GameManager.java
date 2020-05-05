@@ -90,4 +90,8 @@ public class GameManager {
             LOGGER.info("Message type {} not supported", msg.getClass());
         }
     }
+
+    public static Map<String, Lobby> getLobbies() {
+        return lobbies;
+    }
 }

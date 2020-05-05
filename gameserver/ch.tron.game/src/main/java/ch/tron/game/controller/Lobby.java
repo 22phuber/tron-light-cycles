@@ -3,6 +3,7 @@ package ch.tron.game.controller;
 import ch.tron.game.GameManager;
 import ch.tron.game.model.GameMode;
 import ch.tron.game.model.Player;
+import ch.tron.middleman.messagedto.gametotransport.CountdownMessage;
 import ch.tron.middleman.messagedto.gametotransport.LobbyStateUpdateMessage;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -12,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Represents a lobby that holds all available types of tron
@@ -134,6 +136,10 @@ public class Lobby implements Runnable {
 
     public int getNumberOfRounds() {
         return numberOfRounds;
+    }
+
+    public int getRoundsPlayed() {
+        return roundsPlayed;
     }
 
     public boolean isVisibleToPublic() {
