@@ -34,8 +34,8 @@ Draw.io file: [Game procedure SSD draw.io file](GameProcedure_SSD.drawio)
 ### On game start
 |Description|JSON|further information|FE|BEt|BEg|
 |---|---|---|---|---|---|
-|Game server broadcasts initial game state to all players being part of the starting game.|`{ "subject": "initialGameState", "gameId": "theGameId", "round": { "current": int, "total": int }, "players": [ { "id": "theClientId", "posx": int, "posy": int, "dir": int, "color": "rgb(int,int,int)" }, ... ] }`|**broadcast**|❌|✅|✅|
-|Game server broadcasts countdown to all players being part of the starting game.|`{ "subject": "countdown", "count": int }`|**continous broadcast**|❌|✅|✅|
+|Game server broadcasts initial game state to all players being part of the starting game.|`{ "subject": "initialGameState", "gameId": "theGameId", "players": [ { "id": "theClientId", "posx": int, "posy": int, "dir": int, "color": "rgb(int,int,int)" }, ... ] }`|**broadcast**|❌|✅|✅|
+|Game server broadcasts countdown to all players being part of the starting game.|`{ "subject": "countdown", "count": int, "round": { "current": int, "total": int } }`|**continous broadcast**|❌|✅|✅|
 
 
 ### While game's running
