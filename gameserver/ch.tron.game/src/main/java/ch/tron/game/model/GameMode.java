@@ -29,8 +29,6 @@ public abstract class GameMode {
     final boolean[][] field;
     final int FPS = 60;
     final long LOOP_INTERVAL = 1000000000 / FPS;
-    long now;
-    long delta;
     final String lobbyId;
 
     public GameMode(int x, int y, int lineThickness, String lobbyId, Map<String, Player> players){
@@ -144,6 +142,17 @@ public abstract class GameMode {
         GameManager.getMessageForwarder().forwardMessage(new DeathMessage(
                 lobbyId, pl.getId(), pl.getPosx(), pl.getPosy(), all
         ));
+    }
+
+    public void sleepForDelta(long now) {
+        long delta = System.nanoTime() - now;
+        if(delta < LOOP_INTERVAL){
+            try {
+                Thread.sleep((LOOP_INTERVAL - delta) / 1000000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }
