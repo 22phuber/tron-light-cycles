@@ -8,10 +8,6 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
 const JoinGameDialog = (props) => {
-  const handleJoin = (event) => {
-    console.log("handleJoin called");
-  };
-
   return (
     <div>
       <Dialog
@@ -21,23 +17,31 @@ const JoinGameDialog = (props) => {
       >
         <DialogTitle id="login-dialog">Join game</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            Do you want to join this game?
-          </DialogContentText>
+          <DialogContentText>Do you want to join this game?</DialogContentText>
           <TextField
-            id="standard-read-only-input"
-            label="Read Only"
-            defaultValue={props.gameId}
+            id="game-id-read-only-input"
+            label="Game ID"
+            defaultValue={props.joinGameState.gameId}
             InputProps={{
               readOnly: true,
             }}
           />
+          {props.joinGameState.name && (
+            <TextField
+              id="game-name-read-only-input"
+              label="Game name"
+              defaultValue={props.joinGameState.name}
+              InputProps={{
+                readOnly: true,
+              }}
+            />
+          )}
         </DialogContent>
         <DialogActions>
           <Button onClick={props.handleClose} color="primary">
             Cancel
           </Button>
-          <Button color="default" onClick={handleJoin}>
+          <Button color="default" onClick={props.handleJoinGame}>
             Join
           </Button>
         </DialogActions>

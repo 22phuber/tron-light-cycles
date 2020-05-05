@@ -272,7 +272,9 @@ const LobbyTable = (props) => {
                     {
                       /* Logical shortcut for only displaying the
                        * Icon if the copy command exists */
-                      document.queryCommandSupported("copy") && (
+                      (document.queryCommandSupported("copy") ||
+                        typeof navigator.clipboard.writeText !==
+                          "undefined") && (
                         <Tooltip
                           title="Copy to clipboard"
                           aria-label="Copy to clipboard"
@@ -301,7 +303,7 @@ const LobbyTable = (props) => {
                     Lobbyname
                   </Typography>
                   <Typography variant="h5" component="h2">
-                    {gameConfig.name}
+                    {gameConfig.name || "-"}
                   </Typography>
                 </CardContent>
               </Card>
@@ -317,7 +319,11 @@ const LobbyTable = (props) => {
                     Visibility
                   </Typography>
                   <Typography variant="h5" component="h2">
-                    {gameConfig.public ? "public" : "private"}
+                    {gameConfig.public !== null
+                      ? gameConfig.public
+                        ? "public"
+                        : "private"
+                      : "-"}
                   </Typography>
                 </CardContent>
               </Card>
@@ -333,7 +339,7 @@ const LobbyTable = (props) => {
                     Game mode
                   </Typography>
                   <Typography variant="h5" component="h2">
-                    {gameConfig.mode}
+                    {gameConfig.mode || "-"}
                   </Typography>
                 </CardContent>
               </Card>
@@ -349,7 +355,7 @@ const LobbyTable = (props) => {
                     Max. Players
                   </Typography>
                   <Typography variant="h5" component="h2">
-                    {gameConfig.playersAllowed}
+                    {gameConfig.playersAllowed || "-"}
                   </Typography>
                 </CardContent>
               </Card>
@@ -404,7 +410,8 @@ const LobbyTable = (props) => {
                           >
                             <StyledTableCell component="th" scope="row">
                               {player.playerName || player.clientId}{" "}
-                              {player.clientId === gameHost.clientId ? (
+                              {gameHost &&
+                              player.clientId === gameHost.clientId ? (
                                 <Tooltip
                                   title="Game Host"
                                   aria-label="game host"

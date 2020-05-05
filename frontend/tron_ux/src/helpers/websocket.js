@@ -40,9 +40,9 @@ export const QUERY = Object.freeze({
   },
   JOINGAME: {
     subject: "joinGame",
-    clientId: "theClientId",
     gameId: "theGameId",
-    color: "playerColor",
+    playerName: "thePlayersName",
+    playerColor: "rgb(0,0,0)",
   },
   STARTGAME: { subject: "startGame" },
 });

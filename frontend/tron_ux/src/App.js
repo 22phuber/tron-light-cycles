@@ -23,7 +23,7 @@ import {
   CircularProgress,
 } from "@material-ui/core";
 import TronAppBar from "./components/appBar/appBar.component";
-import GameTable from "./components/table/table.component";
+import GameTable from "./components/publicGames/publicGames.component";
 import CreateGame from "./components/createGame/createGame.component";
 import Footer from "./components/footer/footer.component";
 import GameCanvas from "./components/gameCanvas/gameCanvas.component";
@@ -93,6 +93,7 @@ const App = () => {
   // });
   const [joinGameState, setJoinGameState] = useState({
     gameId: null,
+    gameName: null,
     openJoinGameDialog: false,
   });
   const [wsplayerdata, setWsPlayerData] = useState(null); // -> playData
@@ -125,13 +126,6 @@ const App = () => {
 
   useEffect(() => {
     handleWebsocket();
-    if (queryString.has("id")) {
-      console.log("Found gameid: " + queryString.get("id"));
-      setJoinGameState({
-        gameId: queryString.get("id"),
-        openJoinGameDialog: true,
-      });
-    }
     return () => {
       console.log("useEffect ws.close() called");
       if (
@@ -141,6 +135,16 @@ const App = () => {
         websocketClient.current.close();
     };
     // eslint-disable-next-line
+  }, []);
+
+  useEffect(() => {
+    if (queryString.has("id")) {
+      setJoinGameState({
+        gameId: queryString.get("id"),
+        gameName: queryString.has("name") ? queryString.get("name") : null,
+        openJoinGameDialog: true,
+      });
+    }
   }, []);
 
   useEffect(() => {
@@ -169,6 +173,7 @@ const App = () => {
   // handles websocket connection
   function handleWebsocket() {
     var connectInterval;
+    // CONNECT
     //websocketClient.current = WSHelpers.connectToWSGameServer();
     websocketClient.current = WSHelpers.connectToWSNettyGameServer();
     // OPEN
@@ -231,6 +236,7 @@ const App = () => {
             break;
           default:
             console.error("WARN: Unknown subject");
+            console.error("WS[Payload]:" + JSON.stringify(dataFromServer));
             break;
         }
       } else {
@@ -273,7 +279,7 @@ const App = () => {
 
   // load public games and send client connected
   function fetchStateFromGameServer() {
-    // Remove?
+    // TODO: Remove?
     //if (!myPlayerData.clientId) sendWsData(WSHelpers.QUERY.CLIENTCONNECTED);
     if (!appState.playMode && !appState.lobbyMode) {
       console.log("loadGames");
@@ -368,6 +374,28 @@ const App = () => {
     setAppState({ playMode: true, lobbyMode: true });
   }
 
+  // handle join game
+  function handleJoinGame(joinData) {
+    const gameId = joinData.gameId || joinGameState.gameId;
+    const gameName = joinData.name || joinGameState.name;
+    sendWsData({
+      ...WSHelpers.QUERY.JOINGAME,
+      gameId: gameId,
+      playerName: myPlayerData.username,
+      playerColor: myPlayerData.color,
+    });
+    setGameId(gameId);
+    // find game id in public games to receive infos?
+    setGameConfig({
+      mode: null,
+      name: gameName,
+      playersAllowed: null,
+      public: null,
+    });
+    hideJoinGameDialog();
+    setAppState({ playMode: true, lobbyMode: true });
+  }
+
   // cancel Lobby- & play Mode
   function cancelLobby() {
     setAppState({ playMode: false, lobbyMode: false });
@@ -381,9 +409,11 @@ const App = () => {
     // lobbyState?
   }
 
+  // hide join game and clear url from params
   const hideJoinGameDialog = () => {
     setJoinGameState({
       gameId: null,
+      gameName: null,
       openJoinGameDialog: false,
     });
     // Remove all querystring params from location
@@ -401,7 +431,8 @@ const App = () => {
       </header>
       <JoinGameDialog
         open={joinGameState.openJoinGameDialog}
-        gameId={joinGameState.gameId}
+        joinGameState={joinGameState}
+        handleJoinGame={handleJoinGame}
         handleClose={hideJoinGameDialog}
       />
       {!appState.playMode ? (
@@ -417,7 +448,10 @@ const App = () => {
                 >
                   Public games
                 </Typography>
-                <GameTable publicGames={publicGames} />
+                <GameTable
+                  handleJoinGame={handleJoinGame}
+                  publicGames={publicGames}
+                />
               </Box>
             </Container>
           </section>
