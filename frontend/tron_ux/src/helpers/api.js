@@ -27,6 +27,16 @@ export const API = Object.freeze({
       password: null,
     },
   },
+  CHANGEVALUES: {
+    url: baseURL + "/api/auth/signup",
+    contentType: "application/json",
+    payload: {
+      username: null,
+      email: null,
+      password: null,
+      cycle_color: "rgb(0,0,0)",
+    },
+  },
 });
 
 /**
