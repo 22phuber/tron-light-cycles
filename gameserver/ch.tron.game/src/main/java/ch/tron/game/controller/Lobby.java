@@ -172,6 +172,12 @@ public class Lobby implements Runnable {
         });
         players.put("players", all);
         players.put("host", (new JSONObject()).put("clientId", hostId));
+        JSONObject lobbyConfig = new JSONObject();
+        lobbyConfig.put("name", name);
+        lobbyConfig.put("public", visibleToPublic);
+        lobbyConfig.put("mode", mode);
+        lobbyConfig.put("playersAllowed", maxPlayers);
+        players.put("gameConig", lobbyConfig);
         return players;
     }
 
