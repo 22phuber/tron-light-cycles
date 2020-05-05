@@ -8,6 +8,7 @@ import ch.tron.transport.webserverconfig.SocketInitializer;
 import ch.tron.transport.websocket.controller.WebSocketController;
 import ch.tron.transport.websocket.outboundhandler.JsonOutboundHandler;
 import io.netty.channel.Channel;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -116,6 +117,21 @@ public class TransportManager {
                     WebSocketController.getChannelGroup(groupId),
                     jo
             );
+        }
+        else if (msg instanceof ScoreMessage) {
+            String groupId = ((ScoreMessage) msg).getGameId();
+
+            JSONArray scores = new JSONArray();
+            ((ScoreMessage) msg).getPlayerScores().forEach((id, score) -> {
+                scores.put(new JSONObject()
+                        .put("clientId", id)
+                        .put("score", score));
+            });
+            JSONObject jo = new JSONObject()
+                    .put("subject", "roundScores")
+                    .put("gameId", groupId)
+                    .put("playerScores", scores);
+            out.sendJsonToChannelGroup(WebSocketController.getChannelGroup(groupId), jo);
         }
         else {
             LOGGER.info("Message type {} not supported", msg.getClass());

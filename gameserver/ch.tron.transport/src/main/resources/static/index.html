@@ -96,6 +96,10 @@
             case "playerDeath":
                 console.log("PlayerDeath: " + JSON.stringify(msg));
                 break;
+
+            case "roundScores":
+                console.log("RoundScores: " + JSON.stringify(msg.playerScores));
+                break;
         }
     };
 

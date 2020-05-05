@@ -2,16 +2,16 @@ package ch.tron.game.model;
 
 import ch.tron.game.GameManager;
 import ch.tron.game.controller.Lobby;
-import ch.tron.middleman.messagedto.gametotransport.CountdownMessage;
-import ch.tron.middleman.messagedto.gametotransport.DeathMessage;
-import ch.tron.middleman.messagedto.gametotransport.GameConfigMessage;
-import ch.tron.middleman.messagedto.gametotransport.GameStateUpdateMessage;
+import ch.tron.middleman.messagedto.gametotransport.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
@@ -27,10 +27,12 @@ public abstract class GameMode {
     final int y;
     final int lineThickness;
     final Map<String, Player> playersAlive;
+    final List<String> playersDead = new LinkedList<>();
     final boolean[][] field;
     final int FPS = 60;
     final long LOOP_INTERVAL = 1000000000 / FPS;
     final String lobbyId;
+    final int scoreFactor = 1;
 
     public GameMode(int x, int y, int lineThickness, String lobbyId, Map<String, Player> players){
         this.x = x;
@@ -137,6 +139,7 @@ public abstract class GameMode {
 
     public final void die(Player pl) {
         playersAlive.remove(pl.getId());
+        playersDead.add(pl.getId());
         JSONArray all = new JSONArray();
         pl.getTurns().forEach(turn -> {
             JSONObject one = new JSONObject()
@@ -161,4 +164,15 @@ public abstract class GameMode {
         }
     }
 
+    public void sendScore() {
+        Map<String, Integer> scores = new HashMap<>();
+        playersDead.forEach(playerId -> {
+            scores.put(playerId, calculateScore(playersDead.indexOf(playerId) + 1));
+        });
+        GameManager.getMessageForwarder().forwardMessage(new ScoreMessage(lobbyId, scores));
+    }
+
+    private int calculateScore(int rank) {
+        return rank * scoreFactor;
+    }
 }

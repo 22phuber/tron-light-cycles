@@ -79,6 +79,7 @@ public class Lobby implements Runnable {
                 resetPlayers();
                 game = GameMode.getGameModeByName(mode, id, getReadyPlayers());
                 game.start();
+                game.sendScore();
                 roundsPlayed++;
             }
 
