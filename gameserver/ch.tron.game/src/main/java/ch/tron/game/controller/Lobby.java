@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Represents a gameMode lobby that holds all available types of tron
+ * Represents a lobby that holds all available types of tron
  */
 public class Lobby implements Runnable {
 
@@ -27,7 +27,7 @@ public class Lobby implements Runnable {
     private final int maxPlayers;
     private final boolean visibleToPublic;
 
-    private final int FPS = 10;
+    private final int FPS = 1;
     private final long LOOP_INTERVAL = 1000000000 / FPS;
     private long now;
     private long delta;
@@ -39,14 +39,14 @@ public class Lobby implements Runnable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Lobby.class);
 
-    public Lobby(String id, String name, String hostId, String hostColor, String mode, int maxPlayers, boolean visibleToPublic) {
+    public Lobby(String id, String name, String hostName, String hostId, String hostColor, String mode, int maxPlayers, boolean visibleToPublic) {
         this.id = id;
         this.name = name;
         this.hostId = hostId;
         this.maxPlayers = maxPlayers;
         this.visibleToPublic = visibleToPublic;
 
-        addPlayer(hostId, hostColor);
+        addPlayer(hostId, hostName, hostColor);
 
         this.mode = mode;
         this.game = GameMode.getGameModeByName(this.mode, this.id, this.players);
@@ -85,18 +85,20 @@ public class Lobby implements Runnable {
     }
 
     //New Players are added to PlayerList in Lobby, they will join in the next GameRound
-    public void addPlayer(String playerId, String color) {
+    public void addPlayer(String playerId, String name, String color) {
 
         int player_count = players.size();
         if (player_count < maxPlayers) {
 
             Player pl = new Player(
                     playerId,
+                    name,
                     50 * player_count + 50,
                     50,
                     1,
                     color);
 
+            pl.setReady(true);
             players.put(pl.getId(), pl);
         }
     }
@@ -161,6 +163,8 @@ public class Lobby implements Runnable {
             try {
                 one.put("clientId", player.getId());
                 one.put("ready", player.getReady());
+                one.put("name", player.getName());
+                one.put("color", player.getColor());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
