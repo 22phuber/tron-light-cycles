@@ -47,5 +47,5 @@ export const QUERY = Object.freeze({
     gameId: "theGameId",
     color: "playerColor",
   },
-  STARTGAME: { subject: "startGame" },
+  STARTGAME: { subject: "startGame", gameId: "theGameId" },
 });
