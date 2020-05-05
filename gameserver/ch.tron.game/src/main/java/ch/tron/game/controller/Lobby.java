@@ -177,7 +177,7 @@ public class Lobby implements Runnable {
         lobbyConfig.put("public", visibleToPublic);
         lobbyConfig.put("mode", mode);
         lobbyConfig.put("playersAllowed", maxPlayers);
-        players.put("gameConig", lobbyConfig);
+        players.put("gameConfig", lobbyConfig);
         return players;
     }
 
