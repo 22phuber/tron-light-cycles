@@ -78,20 +78,18 @@ export async function signIn(user, callback) {
  * @param {*} user
  * @param {*} callback
  */
-export async function signUp(user, callback) {
+export async function changeValues(user, callback) {
   var responseData = { responseCode: 0, data: null };
-  fetch(API.SIGNUP.url, {
+  fetch(API.CHANGEVALUES.url, {
     method: "POST",
     headers: {
-      Accept: API.SIGNUP.contentType,
-      "Content-Type": API.SIGNUP.contentType,
+      Accept: API.CHANGEVALUES.contentType,
+      "Content-Type": API.CHANGEVALUES.contentType,
     },
     body: JSON.stringify({
-      ...API.SIGNUP.payload,
+      ...API.CHANGEVALUES.payload,
       username: user.username,
       password: user.password,
-      firstname: user.firstname,
-      name: user.lastname,
       email: user.email,
       cycle_color: user.cycle_color,
     }),
@@ -109,4 +107,41 @@ export async function signUp(user, callback) {
     .catch((error) => {
       console.log(error);
     });
+}
+
+* Signup with all userdata
+* @param {*} user
+* @param {*} callback
+*/
+export async function signUp(user, callback) {
+ var responseData = { responseCode: 0, data: null };
+ fetch(API.SIGNUP.url, {
+   method: "POST",
+   headers: {
+     Accept: API.SIGNUP.contentType,
+     "Content-Type": API.SIGNUP.contentType,
+   },
+   body: JSON.stringify({
+     ...API.SIGNUP.payload,
+     username: user.username,
+     password: user.password,
+     firstname: user.firstname,
+     name: user.lastname,
+     email: user.email,
+     cycle_color: user.cycle_color,
+   }),
+ })
+   .then((res) => {
+     responseData.responseCode = res.status;
+     return res.json();
+   })
+   .then((data) => {
+     responseData.data = data;
+     if (callback) {
+       callback(responseData);
+     }
+   })
+   .catch((error) => {
+     console.log(error);
+   });
 }
