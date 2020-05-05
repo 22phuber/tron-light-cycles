@@ -29,6 +29,7 @@ import Footer from "./components/footer/footer.component";
 import GameCanvas from "./components/gameCanvas/gameCanvas.component";
 import LobbyTable from "./components/lobby/lobby.component";
 import JoinGameDialog from "./components/joinGameDialog/joinGameDialog.component";
+import { LazyLog } from "react-lazylog";
 
 const theme = createMuiTheme({
   palette: {
@@ -39,6 +40,10 @@ const theme = createMuiTheme({
 const useStyles = makeStyles({
   box: {
     opacity: "0.975",
+  },
+  boxPlay: {
+    opacity: "0.975",
+    textAlign: "center",
   },
   typography: {
     textShadow: " 0px 0px 22px rgba(145, 253, 253, 1);",
@@ -76,27 +81,9 @@ const App = () => {
     gameName: null,
     openJoinGameDialog: false,
   });
-  const [playData, setPlayData] = useState({
-    gameState: {
-      gameId: "theGameId",
-      players: [
-        {
-          clientId: "theClientId",
-          posx: 3,
-          posy: 3,
-          dir: 3,
-          color: "rgb(22,22,22)",
-        },
-      ],
-    },
-    playerDeath: {
-      gameId: "theGameId",
-      clientId: "theDeadPlayerId",
-      posx: 66,
-      posy: 66,
-    },
-  });
-  const [wsplayerdata, setWsPlayerData] = useState(null); // -> playData
+  const [playData, setPlayData] = useState([]);
+  const [clearCanvas, setClearCanvas] = useState(false);
+  const [inGameData, setInGameData] = useState({ messages: [] });
 
   // Request Animation Frame variable
   let rAF;
@@ -197,12 +184,35 @@ const App = () => {
       if (dataFromServer && dataFromServer.subject) {
         switch (dataFromServer.subject) {
           case "gameState":
+            console.log("gameState: " + JSON.stringify(dataFromServer.players));
             rAF = window.requestAnimationFrame(() => {
-              handlePlayerData(dataFromServer.players);
+              setPlayData(dataFromServer.players);
             });
             break;
           case "initialGameState":
-            // ????????????????
+            console.log(
+              "WS[initialGameState]:" + JSON.stringify(dataFromServer)
+            );
+            //setClearCanvas(!clearCanvas);
+            console.log("clearCanvas Set");
+            setAppState({ playMode: true, lobbyMode: false });
+            setPlayData(dataFromServer.players);
+            console.log(
+              "setPlayData: " + JSON.stringify(dataFromServer.players)
+            );
+            setInGameData({
+              messages: ["Game starts in 3 seconds, be prepared!"],
+            });
+            break;
+          case "countdown":
+            console.log("WS[countdown]:" + JSON.stringify(dataFromServer));
+            setInGameData(
+              inGameData.messages.push("Countdown: " + dataFromServer.count)
+            );
+            break;
+          case "playerDeath":
+            console.log("WS[playerDeath]:" + JSON.stringify(dataFromServer));
+            handlePlayerDeath(dataFromServer);
             break;
           case "clientId":
             console.log("WS[clientId]: " + JSON.stringify(dataFromServer));
@@ -243,7 +253,9 @@ const App = () => {
             break;
           default:
             console.error("WARN: Unknown subject");
-            console.error("WS[Payload]:" + JSON.stringify(dataFromServer));
+            console.log(
+              "WS[Unknown subject]:" + JSON.stringify(dataFromServer)
+            );
             break;
         }
       } else {
@@ -266,7 +278,7 @@ const App = () => {
 
     // close
     websocketClient.current.onclose = (e) => {
-      setWsPlayerData(null); // reset data (removes artifacts)
+      setPlayData(null); // reset data (removes artifacts)
       console.log(
         `Websocket is closed. Reconnect will be attempted in ${Math.min(
           10000 / 1000,
@@ -324,11 +336,6 @@ const App = () => {
         return { ...prevMyPlayerData, [key]: val };
       });
     }
-  }
-
-  // playerData for game rendering
-  function handlePlayerData(data) {
-    setWsPlayerData(data);
   }
 
   // sends data to websocket server
@@ -434,8 +441,23 @@ const App = () => {
       ...WSHelpers.QUERY.STARTGAME,
       gameId: gameId,
     });
-    console.log("[WS]: Start game sent")
-    setAppState({ playMode: true, lobbyMode: false });
+    console.log("[WS]: Start game sent");
+  }
+
+  // player Death
+  function handlePlayerDeath(data) {
+    const { playerId, posx, posy } = data;
+    if (playerId === myPlayerData.clientId) {
+      setInGameData(
+        inGameData.messages.push("You died! { x:" + posx + ", y:" + posy + " }")
+      );
+    } else {
+      setInGameData(
+        inGameData.messages.push(
+          "Another player died! { x:" + posx + ", y:" + posy + " }"
+        )
+      );
+    }
   }
 
   return (
@@ -522,22 +544,46 @@ const App = () => {
             </React.Fragment>
           ) : (
             <React.Fragment>
-              {wsplayerdata && !websocketState.wsError ? (
-                <GameCanvas
-                  width={canvasConfig.width}
-                  height={canvasConfig.height}
-                  playersData={wsplayerdata}
-                />
-              ) : (
-                <div>
-                  Connecting to Game server...
-                  <br />
-                  <CircularProgress
-                    color="inherit"
-                    className={classes.circularProgress}
-                  />
-                </div>
-              )}
+              <React.Fragment>
+                <Container maxWidth="lg">
+                  <Box my={4} className={classes.boxPlay}>
+                    <Typography
+                      variant="h2"
+                      component="h2"
+                      gutterBottom
+                      className={classes.typography}
+                    >
+                      {gameConfig.name || "GAMENAME"}
+                    </Typography>
+                    <Paper>
+                      {playData && !websocketState.wsError ? (
+                        <React.Fragment>
+                          <GameCanvas
+                            canvasConfig={canvasConfig}
+                            playersData={playData}
+                            clear={clearCanvas}
+                          />
+                          {/* <LazyLog
+                            extraLines={1}
+                            text={inGameData.messages.join("\n")}
+                            follow
+                            caseInsensitive
+                          /> */}
+                        </React.Fragment>
+                      ) : (
+                        <div>
+                          Connecting to Game server...
+                          <br />
+                          <CircularProgress
+                            color="inherit"
+                            className={classes.circularProgress}
+                          />
+                        </div>
+                      )}
+                    </Paper>
+                  </Box>
+                </Container>
+              </React.Fragment>
             </React.Fragment>
           )}
         </section>

@@ -1,17 +1,31 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import "./gameCanvas.styles.css";
 
-const GameCanvas = props => {
+const GameCanvas = (props) => {
   const canvasRef = useRef(null);
-  const lineThickness = 5;
+
   const canvasId = "gameCanvas";
+  const { playersData, canvasConfig, clear } = props;
+  const { width, height, lineThickness } = canvasConfig;
+
+  //var ctx = null;
 
   useEffect(() => {
-    const { playersData, width, height } = props;
+
+    console.log("useEffect[] called");
+  }, []);
+
+  // useEffect(() => {
+  //   console.log("useEffect[clear] called");
+  //   clearCanvas();
+  // }, [clear]);
+
+  useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
+    console.log("useEffect called");
     if (playersData) {
-      playersData.forEach(player => {
+      playersData.forEach((player) => {
         ctx.fillStyle = player.color;
         ctx.fillRect(
           player.posx % width,
@@ -23,11 +37,15 @@ const GameCanvas = props => {
     }
   });
 
+  // function clearCanvas() {
+  //   ctx.clearRect(0, 0, width, height);
+  // }
+
   return (
     <canvas
       id={canvasId}
-      width={props.width}
-      height={props.height}
+      width={width}
+      height={height}
       ref={canvasRef}
     ></canvas>
   );
