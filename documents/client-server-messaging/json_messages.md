@@ -34,7 +34,7 @@ Draw.io file: [Game procedure SSD draw.io file](GameProcedure_SSD.drawio)
 ### On game start
 |Description|JSON|further information|FE|BEt|BEg|
 |---|---|---|---|---|---|
-|Game server broadcasts initial game state to all players being part of the starting game.|`{ "subject": "initialGameState", "gameId": "theGameId" ,"players": [ { "id": "theClientId", "posx": int, "posy": int, "dir": int, "color": "rgb(int,int,int)" }, ... ] }`|**broadcast**|❌|✅|✅|
+|Game server broadcasts initial game state to all players being part of the starting game.|`{ "subject": "initialGameState", "gameId": "theGameId", "round": { "current": int, "total": int }, "players": [ { "id": "theClientId", "posx": int, "posy": int, "dir": int, "color": "rgb(int,int,int)" }, ... ] }`|**broadcast**|❌|✅|✅|
 |Game server broadcasts countdown to all players being part of the starting game.|`{ "subject": "countdown", "count": int }`|**continous broadcast**|❌|✅|✅|
 
 
@@ -44,3 +44,4 @@ Draw.io file: [Game procedure SSD draw.io file](GameProcedure_SSD.drawio)
 |Game server continously broadcasts current game state to all clients being part of running game. **Contains only players that are currently alive**|`{ "subject": "gameState", "gameId": "theGameId", "players": [ { "clientId": "theClientId", "posx": int, "posy": int, "dir": int, "color": "rgb(int,int,int)" }, ... ] }`|**continous broadcast**|❌|✅|✅|
 |Client sends direction update on key event.|`{ subject: "updateDirection", "gameId": "theGamesId", "key": "key" }`||✅|✅|✅|
 |Game server broadcasts occuring deaths to all clients being poart of running game.|`{ "subject": "playerDeath", "gameId": "theGameId", "playerId": "theDeadPlayerId", "posx": int, "posy": int, "turns": [ { "posx": int, "posy": int, "newDirection": int }, ... ] }`|**broadcast**|❌|✅|✅|
+|Game server broadcasts scores when round ended.|{ "subject": "roundScores", "players": [ { "clientId": "theClientId", "playerName": "ThePlayersName", "score": int }, ... ] }|**broadcast**|❌|❌|❌|
