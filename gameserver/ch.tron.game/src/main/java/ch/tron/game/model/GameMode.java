@@ -1,10 +1,7 @@
 package ch.tron.game.model;
 
 import ch.tron.game.GameManager;
-import ch.tron.middleman.messagedto.gametotransport.CountdownMessage;
-import ch.tron.middleman.messagedto.gametotransport.DeathMessage;
-import ch.tron.middleman.messagedto.gametotransport.GameConfigMessage;
-import ch.tron.middleman.messagedto.gametotransport.GameStateUpdateMessage;
+import ch.tron.middleman.messagedto.gametotransport.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,6 +38,14 @@ public abstract class GameMode {
         this.field = new boolean[x][y];
     }
 
+    public final void getGameConfigMessage(String playerId){
+        GameManager.getMessageForwarder().forwardMessage(new SingleGameConfigMessage(playerId, x, y, lineThickness));
+        gameStateUpdateMessage.setInitial(true);
+        gameStateUpdateMessage.setUpdate(render());
+        GameManager.getMessageForwarder().forwardMessage(gameStateUpdateMessage);
+        gameStateUpdateMessage.setInitial(false);
+    };
+
     public abstract void start();
 
     public abstract void move();
@@ -61,7 +66,6 @@ public abstract class GameMode {
 
     public final void initialize(){
         GameManager.getMessageForwarder().forwardMessage(new GameConfigMessage(lobbyId, x, y, lineThickness));
-
         gameStateUpdateMessage.setInitial(true);
         gameStateUpdateMessage.setUpdate(render());
         GameManager.getMessageForwarder().forwardMessage(gameStateUpdateMessage);

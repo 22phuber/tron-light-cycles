@@ -1,6 +1,7 @@
 package ch.tron.game.model;
 
 import ch.tron.game.GameManager;
+import ch.tron.middleman.messagedto.gametotransport.GameConfigMessage;
 
 import java.util.Map;
 

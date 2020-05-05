@@ -35,7 +35,7 @@ public class Lobby implements Runnable {
     private LobbyStateUpdateMessage lobbyStateUpdateMessage;
     private Map<String, Player> players = new HashMap<>();
     private int roundsPlayed = 0;
-    private boolean playing;
+    private boolean playing = false;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Lobby.class);
 
@@ -73,6 +73,8 @@ public class Lobby implements Runnable {
                 }
             }
 
+            playing = true;
+
             while(roundsPlayed < numberOfRounds) {
                 resetPlayers();
                 game = GameMode.getGameModeByName(mode, id, getReadyPlayers());
@@ -80,7 +82,7 @@ public class Lobby implements Runnable {
                 roundsPlayed++;
             }
 
-            synchronized (this) { playing = false; }
+            playing = false;
         }
     }
 
@@ -100,6 +102,10 @@ public class Lobby implements Runnable {
 
             pl.setReady(true);
             players.put(pl.getId(), pl);
+
+            if(playing) {
+                game.getGameConfigMessage(playerId);
+            }
         }
     }
 
