@@ -179,14 +179,6 @@ const LobbyTable = (props) => {
     }
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // form data
-    for (const [key, value] of new FormData(event.target).entries()) {
-      console.log("[" + key + "]" + value);
-    }
-  };
-
   const copyToClipboard = (event) => {
     const textToCopy = gameLinkRef.current.innerText;
     if (typeof navigator.clipboard.writeText !== "undefined") {
@@ -247,7 +239,7 @@ const LobbyTable = (props) => {
   return (
     <div className={classes.root}>
       {currentGameId ? (
-        <form onSubmit={handleSubmit} className={classes.form}>
+        <React.Fragment>
           <Grid
             container
             spacing={3}
@@ -376,10 +368,10 @@ const LobbyTable = (props) => {
               <Button
                 variant="contained"
                 color="primary"
-                type="submit"
+                onClick={props.handleStartGame}
                 fullWidth
               >
-                Start
+                Start Game
               </Button>
             </Grid>
             <Grid container spacing={1}>
@@ -572,7 +564,7 @@ const LobbyTable = (props) => {
               </Grid>
             </Grid>
           </Grid>
-        </form>
+        </React.Fragment>
       ) : (
         <div className={classes.progress}>
           <div>Requesting new game ...</div>

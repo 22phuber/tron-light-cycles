@@ -23,7 +23,7 @@ export function connectToWSGameServer() {
 export const QUERY = Object.freeze({
   // CLIENTCONNECTED: { subject: "clientConnected" }, // TODO: REMOVE
   UPDATEPUBLICGAMES: { subject: "currentPublicGames" },
-  UPDATEDIRECTION: { subject: "updateDirection", key: "" },
+  UPDATEDIRECTION: { subject: "updateDirection", gameId: "theGameId", key: "keyPressed" },
   CREATEGAME: {
     subject: "createGame",
     gameConfig: {
@@ -44,5 +44,5 @@ export const QUERY = Object.freeze({
     playerName: "thePlayersName",
     playerColor: "rgb(0,0,0)",
   },
-  STARTGAME: { subject: "startGame" },
+  STARTGAME: { subject: "startGame", gameId: "theGameId" },
 });

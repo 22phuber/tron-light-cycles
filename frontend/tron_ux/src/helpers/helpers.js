@@ -19,7 +19,7 @@ export function locationURL() {
   );
 }
 
-/************* STATE & localStorage *************/
+/************* STATES from/to localStorage *************/
 /**
  * Get my player data from localStorage or create default
  */
@@ -43,7 +43,10 @@ export function getMyPlayerData() {
  */
 export function getLobbyState() {
   return (
-    JSON.parse(localStorage.getItem("lobbyState")) || { players: [], host: {} }
+    JSON.parse(localStorage.getItem("lobbyState")) || {
+      players: [],
+      host: {},
+    }
   );
 }
 
@@ -81,7 +84,7 @@ export function getGameConfig() {
   return JSON.parse(localStorage.getItem("gameConfig")) || null;
 }
 
-/************* Random Na *************/
+/************* Random Name *************/
 /**
  * Creates a random name object
  */

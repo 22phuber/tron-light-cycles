@@ -71,32 +71,33 @@ const App = () => {
   const [lobbyState, setLobbyState] = useState(getLobbyState());
   const [canvasConfig, setCanvasConfig] = useState(getCanvasConfig());
   const [publicGames, setPublicGames] = useState(getPublicGames());
-  // const [playData, setPlayData] = useState({
-  //   gameState: {
-  //     gameId: "theGameId",
-  //     players: [
-  //       {
-  //         clientId: "theClientId",
-  //         posx: 3,
-  //         posy: 3,
-  //         dir: 3,
-  //         color: "rgb(22,22,22)",
-  //       },
-  //     ],
-  //   },
-  //   playerDeath: {
-  //     gameId: "theGameId",
-  //     clientId: "theDeadPlayerId",
-  //     posx: 66,
-  //     posy: 66,
-  //   },
-  // });
   const [joinGameState, setJoinGameState] = useState({
     gameId: null,
     gameName: null,
     openJoinGameDialog: false,
   });
+  const [playData, setPlayData] = useState({
+    gameState: {
+      gameId: "theGameId",
+      players: [
+        {
+          clientId: "theClientId",
+          posx: 3,
+          posy: 3,
+          dir: 3,
+          color: "rgb(22,22,22)",
+        },
+      ],
+    },
+    playerDeath: {
+      gameId: "theGameId",
+      clientId: "theDeadPlayerId",
+      posx: 66,
+      posy: 66,
+    },
+  });
   const [wsplayerdata, setWsPlayerData] = useState(null); // -> playData
+
   // Request Animation Frame variable
   let rAF;
 
@@ -200,6 +201,9 @@ const App = () => {
               handlePlayerData(dataFromServer.players);
             });
             break;
+          case "initialGameState":
+            // ????????????????
+            break;
           case "clientId":
             console.log("WS[clientId]: " + JSON.stringify(dataFromServer));
             setMyPlayerData((prevMyPlayerData) => {
@@ -232,6 +236,9 @@ const App = () => {
             setLobbyState({
               players: dataFromServer.players,
               host: dataFromServer.host,
+            });
+            setGameConfig((prevGameConfig) => {
+              return { ...prevGameConfig, ...dataFromServer.gameConfig };
             });
             break;
           default:
@@ -347,6 +354,7 @@ const App = () => {
       sendWsData({
         ...WSHelpers.QUERY.UPDATEDIRECTION,
         key: pressedKey,
+        gameId: gameId,
       });
     }
   }
@@ -419,6 +427,16 @@ const App = () => {
     // Remove all querystring params from location
     window.history.pushState({}, document.title, "/");
   };
+
+  //
+  function handleStartGame() {
+    sendWsData({
+      ...WSHelpers.QUERY.STARTGAME,
+      gameId: gameId,
+    });
+    console.log("[WS]: Start game sent")
+    setAppState({ playMode: true, lobbyMode: false });
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -496,6 +514,7 @@ const App = () => {
                       gameId={gameId}
                       myPlayer={myPlayerData}
                       handleMyPlayer={handleMyPlayer}
+                      handleStartGame={handleStartGame}
                     />
                   </Paper>
                 </Box>
