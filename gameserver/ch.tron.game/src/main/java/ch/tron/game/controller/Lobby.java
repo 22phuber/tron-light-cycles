@@ -87,6 +87,10 @@ public class Lobby implements Runnable {
         }
     }
 
+    public void removePlayer(String playerId){
+        players.remove(playerId);
+    }
+
     //New Players are added to PlayerList in Lobby, they will join in the next GameRound
     public void addPlayer(String playerId, String name, String color) {
 
