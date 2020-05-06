@@ -184,6 +184,10 @@
         ws.send(JSON.stringify({ "subject": "deleteGame", "gameId": gameId}));
     }
 
+    function leaveGame(){
+        ws.send(JSON.stringify({ "subject": "leaveGame", "gameId": gameId}));
+    }
+
 </script>
 </body>
 </html>
