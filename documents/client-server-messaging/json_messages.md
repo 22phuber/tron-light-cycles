@@ -8,7 +8,7 @@ Draw.io file: [Game procedure SSD draw.io file](GameProcedure_SSD.drawio)
 
 |Description|JSON|further information|FE|BEt|BEg|
 |---|---|---|---|---|---|
-|Client sends client connection after successfully setup Wensocket connection to gameserver.|`{ subject: "clientConnected" }`||✅|❌|?|
+|Client sends client connection after successfully setup Websocket connection to gameserver.|`{ subject: "clientConnected" }`||✅|❌|Not necessary|
 |Game server sends client the id of the just created connection.|`{ "subject": "clientId", "id": "theClientId" }`||✅|✅|🆓|
 |Client requests all currently publicly open games.|`{ "subject": "currentPublicGames" }`||✅|✅|✅|
 |Game server sends all currently publicly open games and their associated properties to client who requested them.|`{ "subject": "currentPublicGames", "games": [ { "id": "theGameId", "name": "theGameName", "playersJoined": int, "playersAllowed": int, "mode": "gameMode", }, ...] }`|gameMode = "classic" or "battleRoyale"|✅|✅|✅|
@@ -50,4 +50,4 @@ Draw.io file: [Game procedure SSD draw.io file](GameProcedure_SSD.drawio)
 ### At any point
 |Description|JSON|further information|FE|BEt|BEg|
 |---|---|---|---|---|---|
-|Player exits Lobby, while in Game or in Lobby(doesn't matter)|`{ "subject": "leaveGame"}`||❌|✅|✅|
+|Player exits Lobby, while in Game or in Lobby(doesn't matter)|`{ "subject": "leaveGame", "gameId": "theGameId"}`||❌|✅|✅|
