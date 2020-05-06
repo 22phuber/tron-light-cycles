@@ -8,16 +8,12 @@ const GameCanvas = (props) => {
   const { playersData, canvasConfig, clear } = props;
   const { width, height, lineThickness } = canvasConfig;
 
-  //var ctx = null;
-
   useEffect(() => {
-    console.log("useEffect[] called");
-  }, []);
-
-  // useEffect(() => {
-  //   console.log("useEffect[clear] called");
-  //   clearCanvas();
-  // }, [clear]);
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    console.log("useEffect[clear] called");
+    ctx.clearRect(0, 0, width, height);
+  }, [clear]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -35,10 +31,6 @@ const GameCanvas = (props) => {
       });
     }
   });
-
-  // function clearCanvas() {
-  //   ctx.clearRect(0, 0, width, height);
-  // }
 
   return (
     <canvas

@@ -29,7 +29,6 @@ import Footer from "./components/footer/footer.component";
 import GameCanvas from "./components/gameCanvas/gameCanvas.component";
 import LobbyTable from "./components/lobby/lobby.component";
 import JoinGameDialog from "./components/joinGameDialog/joinGameDialog.component";
-import { LazyLog } from "react-lazylog";
 
 const theme = createMuiTheme({
   palette: {
@@ -81,8 +80,10 @@ const App = () => {
     gameName: null,
     openJoinGameDialog: false,
   });
-  const [playData, setPlayData] = useState([]);
-  const [clearCanvas, setClearCanvas] = useState(false);
+
+  var [playData, setPlayData] = useState([]);
+
+  const [clearCanvas, setClearCanvas] = useState({ clear: false });
   const [inGameData, setInGameData] = useState({ messages: [] });
 
   // Request Animation Frame variable
@@ -193,13 +194,17 @@ const App = () => {
             console.log(
               "WS[initialGameState]:" + JSON.stringify(dataFromServer)
             );
-            //setClearCanvas(!clearCanvas);
+            setClearCanvas((prevClearCanvas) => {
+              return {
+                clear: !prevClearCanvas,
+              };
+            });
             console.log("clearCanvas Set");
             setAppState({ playMode: true, lobbyMode: false });
-            setPlayData(dataFromServer.players);
             console.log(
               "setPlayData: " + JSON.stringify(dataFromServer.players)
             );
+            setPlayData(dataFromServer.players);
             setInGameData({
               messages: ["Game starts in 3 seconds, be prepared!"],
             });
@@ -212,7 +217,7 @@ const App = () => {
             break;
           case "playerDeath":
             console.log("WS[playerDeath]:" + JSON.stringify(dataFromServer));
-            handlePlayerDeath(dataFromServer);
+            //handlePlayerDeath(dataFromServer);
             break;
           case "clientId":
             console.log("WS[clientId]: " + JSON.stringify(dataFromServer));
@@ -278,7 +283,7 @@ const App = () => {
 
     // close
     websocketClient.current.onclose = (e) => {
-      setPlayData(null); // reset data (removes artifacts)
+      setPlayData([]); // reset data (removes artifacts)
       console.log(
         `Websocket is closed. Reconnect will be attempted in ${Math.min(
           10000 / 1000,
@@ -561,14 +566,9 @@ const App = () => {
                           <GameCanvas
                             canvasConfig={canvasConfig}
                             playersData={playData}
+                            messages={inGameData.messages}
                             clear={clearCanvas}
                           />
-                          {/* <LazyLog
-                            extraLines={1}
-                            text={inGameData.messages.join("\n")}
-                            follow
-                            caseInsensitive
-                          /> */}
                         </React.Fragment>
                       ) : (
                         <div>
