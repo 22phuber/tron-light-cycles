@@ -11,7 +11,6 @@ const GameCanvas = (props) => {
   //var ctx = null;
 
   useEffect(() => {
-
     console.log("useEffect[] called");
   }, []);
 
