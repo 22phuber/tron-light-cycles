@@ -40,6 +40,7 @@ const useStyles = makeStyles((theme) => ({
         console.log("[" + key + "]" + value);
       }
       props.handleClose();
+      changeValues.(user, handleChange);
     };
 
     const handleChange = (event) => {
