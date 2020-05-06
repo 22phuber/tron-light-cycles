@@ -86,6 +86,10 @@ public class JsonInboundHandler {
                 ));
                 break;
             case "leaveGame":
+                channel = WebSocketController.getChannelFromGroup(jo.getString("gameId"), playerId);
+                WebSocketController.addChannelToLonelyGroup(channel);
+                WebSocketController.removeChannelFromGroup(channel, jo.getString("gameId"));
+
                 TransportManager.getMessageForwarder().forwardMessage(new RemovePlayerMessage(
                         jo.getString("gameId"),
                         playerId
