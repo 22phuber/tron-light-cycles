@@ -21,6 +21,8 @@ import {
   Box,
   Container,
   CircularProgress,
+  Button,
+  TextareaAutosize,
 } from "@material-ui/core";
 import TronAppBar from "./components/appBar/appBar.component";
 import GameTable from "./components/publicGames/publicGames.component";
@@ -43,6 +45,11 @@ const useStyles = makeStyles({
   boxPlay: {
     opacity: "0.975",
     textAlign: "center",
+  },
+  gameLog: {
+    backgroundColor: "#636363",
+    fontColor: "white",
+    width: "60%",
   },
   typography: {
     textShadow: " 0px 0px 22px rgba(145, 253, 253, 1);",
@@ -81,10 +88,10 @@ const App = () => {
     openJoinGameDialog: false,
   });
 
-  var [playData, setPlayData] = useState([]);
+  var [playData, setPlayData] = useState(null);
 
   const [clearCanvas, setClearCanvas] = useState({ clear: false });
-  const [inGameData, setInGameData] = useState({ messages: [] });
+  const [inGameMessages, setInGameMessages] = useState([]);
 
   // Request Animation Frame variable
   let rAF;
@@ -116,7 +123,6 @@ const App = () => {
   useEffect(() => {
     handleWebsocket();
     return () => {
-      console.log("useEffect ws.close() called");
       if (
         websocketClient.current &&
         websocketClient.current.readyState === WebSocket.OPEN
@@ -138,7 +144,6 @@ const App = () => {
 
   useEffect(() => {
     return () => {
-      console.log("cancelAnimationFrame called");
       cancelAnimationFrame(rAF);
     };
   }, [rAF]);
@@ -185,7 +190,6 @@ const App = () => {
       if (dataFromServer && dataFromServer.subject) {
         switch (dataFromServer.subject) {
           case "gameState":
-            console.log("gameState: " + JSON.stringify(dataFromServer.players));
             rAF = window.requestAnimationFrame(() => {
               setPlayData(dataFromServer.players);
             });
@@ -199,25 +203,20 @@ const App = () => {
                 clear: !prevClearCanvas,
               };
             });
-            console.log("clearCanvas Set");
             setAppState({ playMode: true, lobbyMode: false });
-            console.log(
-              "setPlayData: " + JSON.stringify(dataFromServer.players)
-            );
             setPlayData(dataFromServer.players);
-            setInGameData({
-              messages: ["Game starts in 3 seconds, be prepared!"],
-            });
+            setInGameMessages(["Game starts in 3 seconds, be ready!"]);
             break;
           case "countdown":
             console.log("WS[countdown]:" + JSON.stringify(dataFromServer));
-            setInGameData(
-              inGameData.messages.push("Countdown: " + dataFromServer.count)
-            );
+            setInGameMessages((prevInGameMessages) => [
+              "Countdown: " + dataFromServer.count,
+              ...prevInGameMessages,
+            ]);
             break;
           case "playerDeath":
             console.log("WS[playerDeath]:" + JSON.stringify(dataFromServer));
-            //handlePlayerDeath(dataFromServer);
+            handlePlayerDeath(dataFromServer);
             break;
           case "clientId":
             console.log("WS[clientId]: " + JSON.stringify(dataFromServer));
@@ -452,17 +451,13 @@ const App = () => {
   // player Death
   function handlePlayerDeath(data) {
     const { playerId, posx, posy } = data;
+    var message = "";
     if (playerId === myPlayerData.clientId) {
-      setInGameData(
-        inGameData.messages.push("You died! { x:" + posx + ", y:" + posy + " }")
-      );
+      message = "You died! { x:" + posx + ", y:" + posy + " }";
     } else {
-      setInGameData(
-        inGameData.messages.push(
-          "Another player died! { x:" + posx + ", y:" + posy + " }"
-        )
-      );
+      message = "Another player died! { x:" + posx + ", y:" + posy + " }";
     }
+    setInGameMessages((prevInGameMessages) => [message, ...prevInGameMessages]);
   }
 
   return (
@@ -549,41 +544,64 @@ const App = () => {
             </React.Fragment>
           ) : (
             <React.Fragment>
-              <React.Fragment>
-                <Container maxWidth="lg">
-                  <Box my={4} className={classes.boxPlay}>
-                    <Typography
-                      variant="h2"
-                      component="h2"
-                      gutterBottom
-                      className={classes.typography}
-                    >
-                      {gameConfig.name || "GAMENAME"}
-                    </Typography>
-                    <Paper>
-                      {playData && !websocketState.wsError ? (
-                        <React.Fragment>
-                          <GameCanvas
-                            canvasConfig={canvasConfig}
-                            playersData={playData}
-                            messages={inGameData.messages}
-                            clear={clearCanvas}
-                          />
-                        </React.Fragment>
-                      ) : (
+              <Container maxWidth="lg">
+                <Box my={4} className={classes.boxPlay}>
+                  <Typography
+                    variant="h2"
+                    component="h2"
+                    gutterBottom
+                    className={classes.typography}
+                  >
+                    Game: {gameConfig.name || "GAMENAME"}
+                  </Typography>
+                  <Paper>
+                    {playData && !websocketState.wsError ? (
+                      <React.Fragment>
+                        <GameCanvas
+                          canvasConfig={canvasConfig}
+                          playersData={playData}
+                          clear={clearCanvas}
+                        />
                         <div>
-                          Connecting to Game server...
-                          <br />
-                          <CircularProgress
-                            color="inherit"
-                            className={classes.circularProgress}
+                          <TextareaAutosize
+                            aria-label="textarea game log"
+                            rowsMin={4}
+                            className={classes.gameLog}
+                            value={
+                              inGameMessages ? inGameMessages.join("\n") : ""
+                            }
+                            placeholder="game log ..."
                           />
                         </div>
-                      )}
-                    </Paper>
-                  </Box>
-                </Container>
-              </React.Fragment>
+                        <div>
+                          <Button
+                            variant="outlined"
+                            color="primary"
+                            size="small"
+                            onClick={() =>
+                              setAppState({
+                                playMode: true,
+                                lobbyMode: true,
+                              })
+                            }
+                          >
+                            Back to Lobby
+                          </Button>
+                        </div>
+                      </React.Fragment>
+                    ) : (
+                      <div>
+                        Connecting to Game server...
+                        <br />
+                        <CircularProgress
+                          color="inherit"
+                          className={classes.circularProgress}
+                        />
+                      </div>
+                    )}
+                  </Paper>
+                </Box>
+              </Container>
             </React.Fragment>
           )}
         </section>

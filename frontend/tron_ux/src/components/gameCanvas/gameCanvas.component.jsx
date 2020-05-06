@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect } from "react";
 import "./gameCanvas.styles.css";
 
 const GameCanvas = (props) => {
@@ -11,14 +11,12 @@ const GameCanvas = (props) => {
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
-    console.log("useEffect[clear] called");
     ctx.clearRect(0, 0, width, height);
   }, [clear]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
-    console.log("useEffect called");
     if (playersData) {
       playersData.forEach((player) => {
         ctx.fillStyle = player.color;
