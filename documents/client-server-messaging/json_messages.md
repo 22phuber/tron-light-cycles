@@ -45,3 +45,9 @@ Draw.io file: [Game procedure SSD draw.io file](GameProcedure_SSD.drawio)
 |Client sends direction update on key event.|`{ subject: "updateDirection", "gameId": "theGamesId", "key": "key" }`||✅|✅|✅|
 |Game server broadcasts occuring deaths to all clients being poart of running game.|`{ "subject": "playerDeath", "gameId": "theGameId", "playerId": "theDeadPlayerId", "posx": int, "posy": int, "turns": [ { "posx": int, "posy": int, "newDirection": int }, ... ] }`|**broadcast**|❌|✅|✅|
 |Game server broadcasts scores when round ended.|{ "subject": "roundScores", "gameId": "theGameId", "playerScores": [ { "clientId": "theClientId", "score": int }, ... ] }|**broadcast**|❌|✅|✅|
+
+
+### At any point
+|Description|JSON|further information|FE|BEt|BEg|
+|---|---|---|---|---|---|
+|Player exits Lobby, while in Game or in Lobby(doesn't matter)|`{ "subject": "leaveGame"}`||❌|✅|✅|
