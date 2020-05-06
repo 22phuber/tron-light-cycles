@@ -18,7 +18,7 @@ Draw.io file: [Game procedure SSD draw.io file](GameProcedure_SSD.drawio)
 |Description|JSON|further information|FE|BEt|BEg|
 |---|---|---|---|---|---|
 |Client requests to create a new game.|`{ "subject": "createGame", "gameConfig": { "name": "theChosenGameName", "public": boolean, "mode": "theChosenGameMode", "playersAllowed": int }, "host": { "playerName": "thePlayersName", "color": "rgb(int,int,int)" } }`|gameMode = "classic" or "battleRoyale"|✅|✅|✅|
-|Client requests to delete a game.|`{subject: "deleteGame", gameId: "theGameId" }`||✅|❌|❌|
+|Client requests to delete a game.|`{subject: "deleteGame", gameId: "theGameId" }`||✅|✅|✅|
 |GameServer sends id of the just created game to client who requested the creation.|`{ "subject": "createGame", "gameId": "theGameId" }`||✅|✅|🆓|
 
 
