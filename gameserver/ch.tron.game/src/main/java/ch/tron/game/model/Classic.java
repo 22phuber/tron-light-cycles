@@ -1,11 +1,8 @@
 package ch.tron.game.model;
 
 import ch.tron.game.GameManager;
-import ch.tron.middleman.messagedto.gametotransport.CountdownMessage;
-import ch.tron.middleman.messagedto.gametotransport.GameConfigMessage;
 
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 public class Classic extends GameMode{
 
@@ -21,22 +18,14 @@ public class Classic extends GameMode{
         countdown();
 
         while (playersAlive.size() > 0) {
-            now = System.nanoTime();
+            long now = System.nanoTime();
 
             move();
 
             gameStateUpdateMessage.setUpdate(render());
             GameManager.getMessageForwarder().forwardMessage(gameStateUpdateMessage);
 
-            delta = System.nanoTime() - now;
-            if(delta < LOOP_INTERVAL){
-                try {
-                    Thread.sleep((LOOP_INTERVAL - delta) / 1000000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-
+            sleepForDelta(now);
         }
 
     }

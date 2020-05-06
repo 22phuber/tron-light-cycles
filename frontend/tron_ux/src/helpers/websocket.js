@@ -21,9 +21,9 @@ export function connectToWSGameServer() {
 // JSON query objects
 // see: https://github.com/22phuber/tron-light-cycles/blob/develop/documents/client-server-messaging/json_messages.md
 export const QUERY = Object.freeze({
-  CLIENTCONNECTED: { subject: "clientConnected" },
+  // CLIENTCONNECTED: { subject: "clientConnected" }, // TODO: REMOVE
   UPDATEPUBLICGAMES: { subject: "currentPublicGames" },
-  UPDATEDIRECTION: { subject: "updateDirection", key: "" },
+  UPDATEDIRECTION: { subject: "updateDirection", gameId: "theGameId", key: "keyPressed" },
   CREATEGAME: {
     subject: "createGame",
     gameConfig: {
@@ -43,9 +43,9 @@ export const QUERY = Object.freeze({
   },
   JOINGAME: {
     subject: "joinGame",
-    clientId: "theClientId",
     gameId: "theGameId",
-    color: "playerColor",
+    playerName: "thePlayersName",
+    playerColor: "rgb(0,0,0)",
   },
   STARTGAME: { subject: "startGame", gameId: "theGameId" },
 });

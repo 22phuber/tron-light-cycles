@@ -79,7 +79,6 @@ const TronAppBar = (props) => {
     setOpenProfileDialog(true);
   };
 
-
   const handleToggle = (event) => {
     setAnchorEl(event.currentTarget);
   };

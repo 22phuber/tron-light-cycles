@@ -1,10 +1,7 @@
 package ch.tron.transport.websocket.inboundhandler;
 
 import ch.tron.middleman.messagedto.backAndForth.CurrentPublicGamesRequest;
-import ch.tron.middleman.messagedto.transporttogame.JoinLobbyMessage;
-import ch.tron.middleman.messagedto.transporttogame.NewLobbyMessage;
-import ch.tron.middleman.messagedto.transporttogame.PlayerUpdateMessage;
-import ch.tron.middleman.messagedto.transporttogame.StartGameMessage;
+import ch.tron.middleman.messagedto.transporttogame.*;
 import ch.tron.transport.TransportManager;
 import ch.tron.transport.websocket.controller.WebSocketController;
 import io.netty.channel.Channel;
@@ -86,6 +83,22 @@ public class JsonInboundHandler {
                         jo.getString("gameId"),
                         playerId,
                         jo.getString("key")
+                ));
+                break;
+            case "leaveGame":
+                channel = WebSocketController.getChannelFromGroup(jo.getString("gameId"), playerId);
+                WebSocketController.addChannelToLonelyGroup(channel);
+                WebSocketController.removeChannelFromGroup(channel, jo.getString("gameId"));
+
+                TransportManager.getMessageForwarder().forwardMessage(new RemovePlayerMessage(
+                        jo.getString("gameId"),
+                        playerId
+                ));
+                break;
+            case "deleteGame":
+                TransportManager.getMessageForwarder().forwardMessage(new TerminateGameMessage(
+                        jo.getString("gameId"),
+                        playerId
                 ));
                 break;
             default: logger.info("Subject type {} not supported", subject);

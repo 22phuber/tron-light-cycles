@@ -69,7 +69,7 @@
                 break;
 
             case "countdown":
-                console.log("Countdown; count: " + msg.count);
+                console.log("Countdown: " + JSON.stringify(msg));
                 break;
 
             case "initialGameState":
@@ -95,6 +95,10 @@
 
             case "playerDeath":
                 console.log("PlayerDeath: " + JSON.stringify(msg));
+                break;
+
+            case "roundScores":
+                console.log("RoundScores: " + JSON.stringify(msg.playerScores));
                 break;
         }
     };
@@ -174,6 +178,14 @@
         let min = Math.ceil(0);
         let max = Math.floor(9);
         return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function deleteGame(){
+        ws.send(JSON.stringify({ "subject": "deleteGame", "gameId": gameId}));
+    }
+
+    function leaveGame(){
+        ws.send(JSON.stringify({ "subject": "leaveGame", "gameId": gameId}));
     }
 
 </script>

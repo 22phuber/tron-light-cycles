@@ -3,6 +3,7 @@ package ch.tron.game.controller;
 import ch.tron.game.GameManager;
 import ch.tron.game.model.GameMode;
 import ch.tron.game.model.Player;
+import ch.tron.middleman.messagedto.gametotransport.CountdownMessage;
 import ch.tron.middleman.messagedto.gametotransport.LobbyStateUpdateMessage;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -12,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Represents a lobby that holds all available types of tron
@@ -36,6 +38,7 @@ public class Lobby implements Runnable {
     private Map<String, Player> players = new HashMap<>();
     private int roundsPlayed = 0;
     private boolean playing;
+    private boolean terminate = false;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Lobby.class);
 
@@ -55,11 +58,11 @@ public class Lobby implements Runnable {
 
     public void run() {
 
-        while(players.size() > 0){
+        while(players.size() > 0 && !terminate){
 
             LOGGER.info("Entered Lobby");
 
-            while(!isPlaying()){
+            while(!isPlaying() && !terminate){
                 now = System.nanoTime();
                 lobbyStateUpdateMessage.setUpdate(getLobbyState());
                 GameManager.getMessageForwarder().forwardMessage(lobbyStateUpdateMessage);
@@ -73,15 +76,26 @@ public class Lobby implements Runnable {
                 }
             }
 
-            while(roundsPlayed < numberOfRounds) {
+            while(roundsPlayed < numberOfRounds && !terminate) {
                 resetPlayers();
                 game = GameMode.getGameModeByName(mode, id, getReadyPlayers());
                 game.start();
+                game.sendScore();
                 roundsPlayed++;
             }
 
             synchronized (this) { playing = false; }
         }
+    }
+
+    public void terminate(String playerId){
+        if(playerId.equals(hostId)){
+            terminate = true;
+        }
+    }
+
+    public void removePlayer(String playerId){
+        players.remove(playerId);
     }
 
     //New Players are added to PlayerList in Lobby, they will join in the next GameRound
@@ -136,6 +150,10 @@ public class Lobby implements Runnable {
         return numberOfRounds;
     }
 
+    public int getRoundsPlayed() {
+        return roundsPlayed;
+    }
+
     public boolean isVisibleToPublic() {
         return visibleToPublic;
     }
@@ -163,7 +181,7 @@ public class Lobby implements Runnable {
             try {
                 one.put("clientId", player.getId());
                 one.put("ready", player.getReady());
-                one.put("name", player.getName());
+                one.put("playerName", player.getName());
                 one.put("color", player.getColor());
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -171,6 +189,13 @@ public class Lobby implements Runnable {
             all.put(one);
         });
         players.put("players", all);
+        players.put("host", (new JSONObject()).put("clientId", hostId));
+        JSONObject lobbyConfig = new JSONObject();
+        lobbyConfig.put("name", name);
+        lobbyConfig.put("public", visibleToPublic);
+        lobbyConfig.put("mode", mode);
+        lobbyConfig.put("playersAllowed", maxPlayers);
+        players.put("gameConfig", lobbyConfig);
         return players;
     }
 

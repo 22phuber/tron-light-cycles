@@ -19,6 +19,7 @@ export function locationURL() {
   );
 }
 
+/************* STATES from/to localStorage *************/
 /**
  * Get my player data from localStorage or create default
  */
@@ -27,7 +28,7 @@ export function getMyPlayerData() {
     JSON.parse(localStorage.getItem("myPlayerData")) || {
       username: getRandomName(),
       clientId: null,
-      color: null,
+      color: "rgb(128,128,128)",
       ready: true,
       firstname: null,
       name: null,
@@ -37,6 +38,53 @@ export function getMyPlayerData() {
   );
 }
 
+/**
+ * Get lobbyState data from localStorage or create default
+ */
+export function getLobbyState() {
+  return (
+    JSON.parse(localStorage.getItem("lobbyState")) || {
+      players: [],
+      host: {},
+    }
+  );
+}
+
+/**
+ * Get gameId from localStorage or set null
+ */
+export function getGameId() {
+  return JSON.parse(localStorage.getItem("gameId")) || null;
+}
+
+/**
+ * Get canvas config from localStorage or set default
+ */
+export function getCanvasConfig() {
+  return (
+    JSON.parse(localStorage.getItem("canvasConfig")) || {
+      height: 400,
+      width: 400,
+      lineThickness: 5,
+    }
+  );
+}
+
+/**
+ * Get public games from localStorage or set an empty array
+ */
+export function getPublicGames() {
+  return JSON.parse(localStorage.getItem("publicGames")) || [];
+}
+
+/**
+ * Get game config from localStorage or set empty
+ */
+export function getGameConfig() {
+  return JSON.parse(localStorage.getItem("gameConfig")) || null;
+}
+
+/************* Random Name *************/
 /**
  * Creates a random name object
  */

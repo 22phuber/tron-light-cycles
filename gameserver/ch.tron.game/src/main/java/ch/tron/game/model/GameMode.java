@@ -1,16 +1,17 @@
 package ch.tron.game.model;
 
 import ch.tron.game.GameManager;
-import ch.tron.middleman.messagedto.gametotransport.CountdownMessage;
-import ch.tron.middleman.messagedto.gametotransport.DeathMessage;
-import ch.tron.middleman.messagedto.gametotransport.GameConfigMessage;
-import ch.tron.middleman.messagedto.gametotransport.GameStateUpdateMessage;
+import ch.tron.game.controller.Lobby;
+import ch.tron.middleman.messagedto.gametotransport.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
@@ -26,12 +27,12 @@ public abstract class GameMode {
     final int y;
     final int lineThickness;
     final Map<String, Player> playersAlive;
+    final List<String> playersDead = new LinkedList<>();
     final boolean[][] field;
     final int FPS = 60;
     final long LOOP_INTERVAL = 1000000000 / FPS;
-    long now;
-    long delta;
     final String lobbyId;
+    final int scoreFactor = 1;
 
     public GameMode(int x, int y, int lineThickness, String lobbyId, Map<String, Player> players){
         this.x = x;
@@ -49,7 +50,12 @@ public abstract class GameMode {
 
     public final void countdown(){
         int count = 3;
-        final CountdownMessage countdownMsg = new CountdownMessage(lobbyId);
+        Lobby lobby = GameManager.getLobbies().get(lobbyId);
+        final CountdownMessage countdownMsg = new CountdownMessage(
+                lobbyId,
+                lobby.getRoundsPlayed() + 1,
+                lobby.getNumberOfRounds()
+        );
         while (count != 0) {
             try {
                 TimeUnit.MILLISECONDS.sleep(800);
@@ -133,6 +139,7 @@ public abstract class GameMode {
 
     public final void die(Player pl) {
         playersAlive.remove(pl.getId());
+        playersDead.add(pl.getId());
         JSONArray all = new JSONArray();
         pl.getTurns().forEach(turn -> {
             JSONObject one = new JSONObject()
@@ -146,4 +153,26 @@ public abstract class GameMode {
         ));
     }
 
+    public void sleepForDelta(long now) {
+        long delta = System.nanoTime() - now;
+        if(delta < LOOP_INTERVAL){
+            try {
+                Thread.sleep((LOOP_INTERVAL - delta) / 1000000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void sendScore() {
+        Map<String, Integer> scores = new HashMap<>();
+        playersDead.forEach(playerId -> {
+            scores.put(playerId, calculateScore(playersDead.indexOf(playerId) + 1));
+        });
+        GameManager.getMessageForwarder().forwardMessage(new ScoreMessage(lobbyId, scores));
+    }
+
+    private int calculateScore(int rank) {
+        return rank * scoreFactor;
+    }
 }
