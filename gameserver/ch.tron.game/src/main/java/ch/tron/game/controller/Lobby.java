@@ -38,6 +38,7 @@ public class Lobby implements Runnable {
     private Map<String, Player> players = new HashMap<>();
     private int roundsPlayed = 0;
     private boolean playing;
+    private boolean terminate = false;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Lobby.class);
 
@@ -57,7 +58,7 @@ public class Lobby implements Runnable {
 
     public void run() {
 
-        while(players.size() > 0){
+        while(players.size() > 0 || !terminate){
 
             LOGGER.info("Entered Lobby");
 
@@ -84,6 +85,12 @@ public class Lobby implements Runnable {
             }
 
             synchronized (this) { playing = false; }
+        }
+    }
+
+    public void terminate(String playerId){
+        if(playerId.equals(hostId)){
+            terminate = true;
         }
     }
 

@@ -91,6 +91,12 @@ public class JsonInboundHandler {
                         playerId
                 ));
                 break;
+            case "deleteGame":
+                TransportManager.getMessageForwarder().forwardMessage(new TerminateGameMessage(
+                        jo.getString("gameId"),
+                        playerId
+                ));
+                break;
             default: logger.info("Subject type {} not supported", subject);
         }
     }

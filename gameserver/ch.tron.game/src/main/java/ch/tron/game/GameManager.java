@@ -82,8 +82,10 @@ public class GameManager {
                 lobbies.get(groupId).updatePlayer(playerId, ((PlayerUpdateMessage) msg).getKey());
             } else if (msg instanceof StartGameMessage) {
                 lobbies.get(((StartGameMessage) msg).getGroupId()).play();
-            } else if(msg instanceof RemovePlayerMessage){
+            } else if(msg instanceof RemovePlayerMessage) {
                 lobbies.get(((RemovePlayerMessage) msg).getGroupId()).removePlayer(((RemovePlayerMessage) msg).getPlayerId());
+            } else if(msg instanceof TerminateGameMessage){
+                lobbies.get(((TerminateGameMessage) msg).getGroupId()).terminate(((TerminateGameMessage) msg).getPlayerId());
             } else {
                 LOGGER.info("Message type {} not supported", msg.getClass());
             }
