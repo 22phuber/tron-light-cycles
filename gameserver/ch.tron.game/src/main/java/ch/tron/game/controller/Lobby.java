@@ -58,11 +58,11 @@ public class Lobby implements Runnable {
 
     public void run() {
 
-        while(players.size() > 0 || !terminate){
+        while(players.size() > 0 && !terminate){
 
             LOGGER.info("Entered Lobby");
 
-            while(!isPlaying()){
+            while(!isPlaying() && !terminate){
                 now = System.nanoTime();
                 lobbyStateUpdateMessage.setUpdate(getLobbyState());
                 GameManager.getMessageForwarder().forwardMessage(lobbyStateUpdateMessage);
@@ -76,7 +76,7 @@ public class Lobby implements Runnable {
                 }
             }
 
-            while(roundsPlayed < numberOfRounds) {
+            while(roundsPlayed < numberOfRounds && !terminate) {
                 resetPlayers();
                 game = GameMode.getGameModeByName(mode, id, getReadyPlayers());
                 game.start();
