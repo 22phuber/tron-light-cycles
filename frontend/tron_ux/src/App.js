@@ -77,6 +77,7 @@ const App = () => {
     wsError: false,
   });
   const [myPlayerData, setMyPlayerData] = useState(getMyPlayerData());
+  var myPlayerId = "";
   const [gameConfig, setGameConfig] = useState(getGameConfig());
   const [gameId, setGameId] = useState(getGameId());
   const [lobbyState, setLobbyState] = useState(getLobbyState());
@@ -87,9 +88,7 @@ const App = () => {
     gameName: null,
     openJoinGameDialog: false,
   });
-
   var [playData, setPlayData] = useState(null);
-
   const [clearCanvas, setClearCanvas] = useState({ clear: false });
   const [inGameMessages, setInGameMessages] = useState([]);
 
@@ -98,6 +97,7 @@ const App = () => {
 
   useEffect(() => {
     localStorage.setItem("myPlayerData", JSON.stringify(myPlayerData));
+    myPlayerId = myPlayerData.clientId;
   }, [myPlayerData]);
 
   useEffect(() => {
@@ -205,7 +205,10 @@ const App = () => {
             });
             setAppState({ playMode: true, lobbyMode: false });
             setPlayData(dataFromServer.players);
-            setInGameMessages(["Game starts in 3 seconds, be ready!"]);
+            setInGameMessages((prevInGameMessages) => [
+              "Game starts in 3 seconds, be ready!",
+              ...prevInGameMessages,
+            ]);
             break;
           case "countdown":
             console.log("WS[countdown]:" + JSON.stringify(dataFromServer));
@@ -216,10 +219,11 @@ const App = () => {
             break;
           case "playerDeath":
             console.log("WS[playerDeath]:" + JSON.stringify(dataFromServer));
-            handlePlayerDeath(dataFromServer);
+            handlePlayerDeath(dataFromServer, myPlayerId);
             break;
           case "clientId":
             console.log("WS[clientId]: " + JSON.stringify(dataFromServer));
+            myPlayerId = dataFromServer.id;
             setMyPlayerData((prevMyPlayerData) => {
               return { ...prevMyPlayerData, clientId: dataFromServer.id };
             });
@@ -449,10 +453,13 @@ const App = () => {
   }
 
   // player Death
-  function handlePlayerDeath(data) {
+  function handlePlayerDeath(data, myPlayerId) {
     const { playerId, posx, posy } = data;
+    console.log(
+      "My clientId: " + myPlayerId + " - Death message playerId: " + playerId
+    );
     var message = "";
-    if (playerId === myPlayerData.clientId) {
+    if (playerId === myPlayerId) {
       message = "You died! { x:" + posx + ", y:" + posy + " }";
     } else {
       message = "Another player died! { x:" + posx + ", y:" + posy + " }";
@@ -555,50 +562,36 @@ const App = () => {
                     Game: {gameConfig.name || "GAMENAME"}
                   </Typography>
                   <Paper>
-                    {playData && !websocketState.wsError ? (
-                      <React.Fragment>
-                        <GameCanvas
-                          canvasConfig={canvasConfig}
-                          playersData={playData}
-                          clear={clearCanvas}
-                        />
-                        <div>
-                          <TextareaAutosize
-                            aria-label="textarea game log"
-                            rowsMin={4}
-                            className={classes.gameLog}
-                            value={
-                              inGameMessages ? inGameMessages.join("\n") : ""
-                            }
-                            placeholder="game log ..."
-                          />
-                        </div>
-                        <div>
-                          <Button
-                            variant="outlined"
-                            color="primary"
-                            size="small"
-                            onClick={() =>
-                              setAppState({
-                                playMode: true,
-                                lobbyMode: true,
-                              })
-                            }
-                          >
-                            Back to Lobby
-                          </Button>
-                        </div>
-                      </React.Fragment>
-                    ) : (
-                      <div>
-                        Connecting to Game server...
-                        <br />
-                        <CircularProgress
-                          color="inherit"
-                          className={classes.circularProgress}
-                        />
-                      </div>
-                    )}
+                    <GameCanvas
+                      canvasConfig={canvasConfig}
+                      playersData={playData}
+                      clear={clearCanvas}
+                    />
+                    <div>
+                      <TextareaAutosize
+                        aria-label="textarea game log"
+                        rowsMin={3}
+                        rowsMax={8}
+                        className={classes.gameLog}
+                        value={inGameMessages ? inGameMessages.join("\n") : ""}
+                        placeholder="game log ..."
+                      />
+                    </div>
+                    <div>
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        size="small"
+                        onClick={() =>
+                          setAppState({
+                            playMode: true,
+                            lobbyMode: true,
+                          })
+                        }
+                      >
+                        Back to Lobby
+                      </Button>
+                    </div>
                   </Paper>
                 </Box>
               </Container>

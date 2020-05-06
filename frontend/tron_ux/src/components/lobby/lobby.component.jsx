@@ -21,6 +21,7 @@ import Typography from "@material-ui/core/Typography";
 import HomeIcon from "@material-ui/icons/Home";
 import HowToRegIcon from "@material-ui/icons/HowToReg";
 import FileCopyIcon from "@material-ui/icons/FileCopyOutlined";
+import DirectionsBikeIcon from "@material-ui/icons/DirectionsBike";
 
 import { locationURL } from "../../helpers/helpers";
 
@@ -78,6 +79,11 @@ const useStyles = makeStyles((theme) => ({
   hostHomeIcon: {
     color: "green",
     marginLeft: "5px",
+    verticalAlign: "middle",
+  },
+  cycleIcon: {
+    color: "#666",
+    marginRight: "10px",
     verticalAlign: "middle",
   },
   readyCircularProgress: {
@@ -401,6 +407,9 @@ const LobbyTable = (props) => {
                             hover
                           >
                             <StyledTableCell component="th" scope="row">
+                              <Tooltip title={player.clientId} aria-label="player id tooltip">
+                                <DirectionsBikeIcon fontSize="small" className={classes.cycleIcon} />
+                              </Tooltip>
                               {player.playerName || player.clientId}{" "}
                               {gameHost &&
                               player.clientId === gameHost.clientId ? (
