@@ -180,6 +180,10 @@
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
+    function deleteGame(){
+        ws.send(JSON.stringify({ "subject": "deleteGame", "gameId": gameId}));
+    }
+
 </script>
 </body>
 </html>
