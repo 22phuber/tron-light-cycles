@@ -25,7 +25,7 @@ public class Lobby implements Runnable {
     private final String hostId;
     private GameMode game;
     private String mode;
-    private final int numberOfRounds = 5;
+    private int numberOfRounds = 5;
     private final int maxPlayers;
     private final boolean visibleToPublic;
 
@@ -61,6 +61,9 @@ public class Lobby implements Runnable {
         while(players.size() > 0 && !terminate){
 
             LOGGER.info("Entered Lobby");
+
+            numberOfRounds = 5;
+            roundsPlayed = 0;
 
             while(!isPlaying() && !terminate){
                 now = System.nanoTime();
