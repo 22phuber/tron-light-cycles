@@ -26,8 +26,10 @@ public class Player {
         this.color = color;
     }
 
-    public void addTurn(int posx, int posy, int newDirection) {
-        turns.addLast(new Turn(posx, posy, newDirection));
+    public Turn addTurn(int newDirection) {
+        Turn turn = new Turn(newDirection);
+        turns.addLast(turn);
+        return turn;
     }
 
     public String getId() {

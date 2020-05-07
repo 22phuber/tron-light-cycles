@@ -90,7 +90,7 @@ public class GameManager {
                 LOGGER.info("Message type {} not supported", msg.getClass());
             }
         } catch (Exception e) {
-            LOGGER.error(e.getCause().toString());
+            e.printStackTrace();
         }
     }
 

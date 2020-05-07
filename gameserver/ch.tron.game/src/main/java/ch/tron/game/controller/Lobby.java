@@ -1,7 +1,6 @@
 package ch.tron.game.controller;
 
 import ch.tron.game.GameManager;
-import ch.tron.game.model.GameMode;
 import ch.tron.game.model.Player;
 import ch.tron.middleman.messagedto.gametotransport.LobbyStateUpdateMessage;
 import org.json.JSONArray;
@@ -29,6 +28,7 @@ public class Lobby implements Runnable {
 
     private final int FPS = 1;
     private final long LOOP_INTERVAL = 1000000000 / FPS;
+    private final int fieldFactor = 5;
     private long now;
     private long delta;
 
@@ -50,7 +50,7 @@ public class Lobby implements Runnable {
         addPlayer(hostId, hostName, hostColor);
 
         this.mode = mode;
-        this.game = GameMode.getGameModeByName(this.mode, this.id, this.players);
+        this.game = GameMode.getGameModeByName(this.mode, this.id, this.players, fieldFactor);
         this.lobbyStateUpdateMessage = new LobbyStateUpdateMessage(id);
     }
 
@@ -79,7 +79,7 @@ public class Lobby implements Runnable {
 
             while(roundsPlayed < numberOfRounds && !terminate) {
                 resetPlayers();
-                game = GameMode.getGameModeByName(mode, id, getReadyPlayers());
+                game = GameMode.getGameModeByName(mode, id, getReadyPlayers(), fieldFactor);
                 game.start();
                 game.sendScore();
                 roundsPlayed++;
@@ -115,8 +115,8 @@ public class Lobby implements Runnable {
             Player pl = new Player(
                     playerId,
                     name,
-                    50 * player_count + 50,
-                    50,
+                    player_count * fieldFactor,
+                    fieldFactor,
                     1,
                     color);
 
@@ -201,9 +201,9 @@ public class Lobby implements Runnable {
 
     private void resetPlayers() {
         int x = 0;
-        int y = 50;
+        int y = fieldFactor;
         for (Map.Entry<String, Player> player: players.entrySet()) {
-            x += 50;
+            x += fieldFactor * 6;
             Player pl = player.getValue();
             pl.setPosx(x);
             pl.setPosy(y);

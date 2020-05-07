@@ -1,4 +1,6 @@
-package ch.tron.game.model;
+package ch.tron.game.controller;
+
+import ch.tron.game.model.Player;
 
 import java.util.Map;
 
@@ -8,7 +10,8 @@ public class BattleRoyal extends GameMode{
     private long lastWallInterval;
 
     public BattleRoyal(String lobbyId, Map<String, Player> players) {
-        super(10000, 10000, 5, lobbyId, players);
+
+        super(10000, 10000, 4, 2, lobbyId, players);
     }
 
     @Override
