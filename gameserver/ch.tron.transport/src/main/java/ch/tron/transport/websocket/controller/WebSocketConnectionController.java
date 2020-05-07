@@ -1,39 +1,37 @@
-package ch.tron.transport.websocket.state;
+package ch.tron.transport.websocket.controller;
 
 import io.netty.channel.Channel;
 import io.netty.channel.group.ChannelGroup;
+import io.netty.channel.group.DefaultChannelGroup;
+import io.netty.util.concurrent.ImmediateEventExecutor;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-/**
- * Holds all client-server-connections in groups where
- * each group represents a specific game round.
- */
-public class WebSocketState {
+public class WebSocketConnectionController {
 
-    private final Map<String, ChannelGroup> groups = new HashMap<>();
-    private final Map<String, Channel> lonelyPlayers = new HashMap<>();
+    private static final Map<String, ChannelGroup> groups = new HashMap<>();
+    private static final Map<String, Channel> lonelyPlayers = new HashMap<>();
 
     /**
      * Creates a new {@link ChannelGroup} (group of client-server-connections)
      * @return  The id of the newly created {@link ChannelGroup} as a string
      */
-    public String addChannelGroup(ChannelGroup group) {
+    public static String newChannelGroup() {
         final String id = UUID.randomUUID().toString();
-
-        groups.put(id, group);
-
+        groups.put(
+                id, new DefaultChannelGroup(ImmediateEventExecutor.INSTANCE)
+        );
         return id;
     }
 
     /**
      * Removes the {@link ChannelGroup} (group of client-server-connections) with the given id
-     * @param id   The id of the {@link ChannelGroup} to be deleted
+     * @param groupId   The id of the {@link ChannelGroup} to be deleted
      */
-    public void removeChannelGroup(String id) {
-        groups.remove(id);
+    public static boolean deleteChannelGroup(String groupId) {
+        return groups.remove(groupId) != null;
     }
 
     /**
@@ -41,7 +39,7 @@ public class WebSocketState {
      * @param channel   The {@link Channel} that represents a players
      *                  connection to the server.
      */
-    public void setPlayerAsLonely(Channel channel) {
+    public static void addChannelToLonelyGroup(Channel channel) {
         lonelyPlayers.put(channel.id().asLongText(), channel);
     }
 
@@ -50,8 +48,8 @@ public class WebSocketState {
      * called when a player attends a group of players.
      * @param playerId  The id of the given player.
      */
-    public void setPlayerAsGrouped(String playerId) {
-        lonelyPlayers.remove(playerId);
+    public static boolean removeChannelFromLonelyGroup(String playerId) {
+        return lonelyPlayers.remove(playerId) != null;
     }
 
     /**
@@ -59,11 +57,8 @@ public class WebSocketState {
      * @param channel   The {@link Channel} to add.
      * @param groupId   The id of the {@link ChannelGroup} the {@link Channel} is to be added to
      */
-    public void addChannelToGroup(Channel channel, String groupId) {
-
-        ChannelGroup group = groups.get(groupId);
-
-        group.add(channel);
+    public static void addChannelToGroup(Channel channel, String  groupId) {
+        groups.get(groupId).add(channel);
     }
 
     /**
@@ -71,30 +66,30 @@ public class WebSocketState {
      * @param channel   The {@link Channel} to remove.
      * @param groupId   The id of the {@link ChannelGroup} the {@link Channel} is to be removed from
      */
-    public void removeChannelFromGroup(Channel channel, String groupId) {
-
-        groups.get(groupId).remove(channel);
+    public static boolean removeChannelFromGroup(Channel channel, String groupId) {
+        return groups.get(groupId).remove(channel);
     }
 
-    public Channel getLonelyChannel(String playerId) {
-
-        return lonelyPlayers.get(playerId);
+    public static ChannelGroup getChannelGroupById(String groupId) {
+        return groups.get(groupId);
     }
 
-    public Channel getChannel(String groupId, String playerId) {
-
+    public static Channel getChannelFromGroup(String groupId, String playerId) {
         return groups.get(groupId).stream()
                 .filter(ch -> ch.id().asLongText().equals(playerId))
                 .findFirst()
                 .orElse(null);
     }
 
-    public Map<String, ChannelGroup> getGroups() {
-        return groups;
+    public static Channel getLonelyChannel(String playerId) {
+        return lonelyPlayers.get(playerId);
     }
 
-    public ChannelGroup getChannelGroup(String id) {
-        return groups.get(id);
+    public static String findGroupIdOfChannel(Channel channel) {
+        return groups.entrySet().stream()
+                .filter(entry -> entry.getValue().contains(channel))
+                .findFirst()
+                .map(Map.Entry::getKey)
+                .orElse(null);
     }
-
 }

@@ -2,12 +2,14 @@ package ch.tron.transport;
 
 import ch.tron.middleman.messagedto.backAndForth.CurrentPublicGamesRequest;
 import ch.tron.middleman.messagedto.gametotransport.*;
+import ch.tron.middleman.messagedto.transporttogame.RemovePlayerMessage;
 import ch.tron.middleman.messagehandler.ToGameMessageForwarder;
 import ch.tron.middleman.messagedto.InAppMessage;
 import ch.tron.transport.webserverconfig.SocketInitializer;
-import ch.tron.transport.websocket.controller.WebSocketController;
+import ch.tron.transport.websocket.controller.WebSocketConnectionController;
 import ch.tron.transport.websocket.outboundhandler.JsonOutboundHandler;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -45,7 +47,9 @@ public class TransportManager {
      */
     public static void manageNewChannel(Channel channel) {
 
-        WebSocketController.addChannelToLonelyGroup(channel);
+        handleConnectionLoss(channel);
+
+        WebSocketConnectionController.addChannelToLonelyGroup(channel);
 
         JSONObject clientId = new JSONObject();
         clientId.put("subject", "clientId");
@@ -63,12 +67,12 @@ public class TransportManager {
 
         if (msg instanceof CurrentPublicGamesRequest) {
             out.sendJsonToChannel(
-                    WebSocketController.getLonelyChannel(((CurrentPublicGamesRequest) msg).getPlayerId()),
+                    WebSocketConnectionController.getLonelyChannel(((CurrentPublicGamesRequest) msg).getPlayerId()),
                     ((CurrentPublicGamesRequest) msg).getPublicGames());
         }
         else if (msg instanceof LobbyStateUpdateMessage) {
             out.sendJsonToChannelGroup(
-                    WebSocketController.getChannelGroup(((LobbyStateUpdateMessage) msg).getGroupId()),
+                    WebSocketConnectionController.getChannelGroupById(((LobbyStateUpdateMessage) msg).getGroupId()),
                     ((LobbyStateUpdateMessage) msg).getUpdate()
             );
         }
@@ -78,7 +82,7 @@ public class TransportManager {
                     .put("width", ((GameConfigMessage) msg).getCanvas_width())
                     .put("height", ((GameConfigMessage) msg).getCanvas_height())
                     .put("lineThickness", ((GameConfigMessage) msg).getLineThickness());
-            out.sendJsonToChannelGroup(WebSocketController.getChannelGroup(((GameConfigMessage) msg).getGroupId()), jo);
+            out.sendJsonToChannelGroup(WebSocketConnectionController.getChannelGroupById(((GameConfigMessage) msg).getGroupId()), jo);
         }
         else if (msg instanceof CountdownMessage) {
             JSONObject round = new JSONObject()
@@ -89,7 +93,7 @@ public class TransportManager {
                     .put("count", ((CountdownMessage) msg).getCount())
                     .put("round", round);
             out.sendJsonToChannelGroup(
-                    WebSocketController.getChannelGroup(((CountdownMessage) msg).getGroupId()),
+                    WebSocketConnectionController.getChannelGroupById(((CountdownMessage) msg).getGroupId()),
                     jo
             );
         }
@@ -99,7 +103,7 @@ public class TransportManager {
                 update.put("subject", "initialGameState");
             }
             out.sendJsonToChannelGroup(
-                    WebSocketController.getChannelGroup(((GameStateUpdateMessage) msg).getGroupId()),
+                    WebSocketConnectionController.getChannelGroupById(((GameStateUpdateMessage) msg).getGroupId()),
                     update
             );
         }
@@ -114,7 +118,7 @@ public class TransportManager {
                     .put("posy", ((DeathMessage) msg).getPosy())
                     .put("turns", ((DeathMessage) msg).getTurns());
             out.sendJsonToChannelGroup(
-                    WebSocketController.getChannelGroup(groupId),
+                    WebSocketConnectionController.getChannelGroupById(groupId),
                     jo
             );
         }
@@ -131,7 +135,7 @@ public class TransportManager {
                     .put("subject", "roundScores")
                     .put("gameId", groupId)
                     .put("playerScores", scores);
-            out.sendJsonToChannelGroup(WebSocketController.getChannelGroup(groupId), jo);
+            out.sendJsonToChannelGroup(WebSocketConnectionController.getChannelGroupById(groupId), jo);
         }
         else {
             LOGGER.info("Message type {} not supported", msg.getClass());
@@ -143,5 +147,20 @@ public class TransportManager {
     }
 
     public static JsonOutboundHandler getJsonOutboundHandler() { return out; }
-}
 
+    private static void handleConnectionLoss(Channel channel) {
+        ChannelFuture closeFuture = channel.closeFuture();
+        closeFuture.addListener(channelFuture -> {
+            String playerId = channel.id().asLongText();
+            String groupId = WebSocketConnectionController.findGroupIdOfChannel(channel);
+            LOGGER.info("Connection of client: {} attending game {} lost", playerId, groupId);
+            if (groupId == null) {
+                WebSocketConnectionController.removeChannelFromLonelyGroup(playerId);
+            }
+            else {
+                getMessageForwarder().forwardMessage(new RemovePlayerMessage(groupId, playerId));
+                WebSocketConnectionController.removeChannelFromGroup(channel, groupId);
+            }
+        });
+    }
+}

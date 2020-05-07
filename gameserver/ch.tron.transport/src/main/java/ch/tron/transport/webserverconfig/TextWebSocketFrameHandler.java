@@ -2,8 +2,7 @@ package ch.tron.transport.webserverconfig;
 
 import ch.tron.transport.TransportManager;
 import ch.tron.transport.websocket.inboundhandler.JsonInboundHandler;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.channel.*;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import org.json.JSONException;
