@@ -20,37 +20,41 @@ public class Lobby implements Runnable {
     private final String id;
     private final String name;
     private final String hostId;
-    private GameMode game;
-    private String mode;
-    private int numberOfRounds = 5;
+    private final String mode;
     private final int maxPlayers;
     private final boolean visibleToPublic;
 
-    private final int FPS = 1;
-    private final long LOOP_INTERVAL = 1000000000 / FPS;
-    private final int fieldFactor = 5;
-    private long now;
-    private long delta;
+    private GameMode game;
 
-    private LobbyStateUpdateMessage lobbyStateUpdateMessage;
-    private Map<String, Player> players = new HashMap<>();
+    private final int numberOfRounds = 5;
+    private final LobbyStateUpdateMessage lobbyStateUpdateMessage;
+    private final Map<String, Player> players = new HashMap<>();
+
     private int roundsPlayed = 0;
     private boolean playing;
     private boolean terminate = false;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Lobby.class);
 
-    public Lobby(String id, String name, String hostName, String hostId, String hostColor, String mode, int maxPlayers, boolean visibleToPublic) {
+    public Lobby(String id,
+                 String name,
+                 String hostName,
+                 String hostId,
+                 String hostColor,
+                 String mode,
+                 int maxPlayers,
+                 boolean visibleToPublic) {
         this.id = id;
         this.name = name;
         this.hostId = hostId;
         this.maxPlayers = maxPlayers;
         this.visibleToPublic = visibleToPublic;
+        this.mode = mode;
+
+        this.game = getGameModeByName(this.mode, this.id, this.players);
 
         addPlayer(hostId, hostName, hostColor);
 
-        this.mode = mode;
-        this.game = GameMode.getGameModeByName(this.mode, this.id, this.players, fieldFactor);
         this.lobbyStateUpdateMessage = new LobbyStateUpdateMessage(id);
     }
 
@@ -60,14 +64,15 @@ public class Lobby implements Runnable {
 
             LOGGER.info("Entered Lobby");
 
-            numberOfRounds = 5;
             roundsPlayed = 0;
 
             while(!isPlaying() && !terminate){
-                now = System.nanoTime();
+                long now = System.nanoTime();
                 lobbyStateUpdateMessage.setUpdate(getLobbyState());
                 GameManager.getMessageForwarder().forwardMessage(lobbyStateUpdateMessage);
-                delta = System.nanoTime() - now;
+                long delta = System.nanoTime() - now;
+                int FPS = 1;
+                long LOOP_INTERVAL = 1000000000 / FPS;
                 if(delta < LOOP_INTERVAL){
                     try {
                         Thread.sleep((LOOP_INTERVAL - delta) / 1000000);
@@ -79,7 +84,7 @@ public class Lobby implements Runnable {
 
             while(roundsPlayed < numberOfRounds && !terminate) {
                 resetPlayers();
-                game = GameMode.getGameModeByName(mode, id, getReadyPlayers(), fieldFactor);
+                game = getGameModeByName(mode, id, getReadyPlayers());
                 game.start();
                 game.sendScore();
                 roundsPlayed++;
@@ -108,18 +113,9 @@ public class Lobby implements Runnable {
 
     //New Players are added to PlayerList in Lobby, they will join in the next GameRound
     public void addPlayer(String playerId, String name, String color) {
-
         int player_count = players.size();
         if (player_count < maxPlayers) {
-
-            Player pl = new Player(
-                    playerId,
-                    name,
-                    player_count * fieldFactor,
-                    fieldFactor,
-                    1,
-                    color);
-
+            Player pl = new Player(playerId, name, color);
             pl.setReady(true);
             players.put(pl.getId(), pl);
         }
@@ -161,6 +157,11 @@ public class Lobby implements Runnable {
         return visibleToPublic;
     }
 
+    private GameMode getGameModeByName(String name, String lobbyId, Map<String, Player> players) {
+        if (name.equals("classic")) { return new Classic(lobbyId, players, 4); }
+        return null;
+    }
+
     private HashMap<String, Player> getReadyPlayers() {
         HashMap<String, Player> readyPlayers = new HashMap<>();
         for(Map.Entry<String, Player>player : this.players.entrySet()){
@@ -200,15 +201,15 @@ public class Lobby implements Runnable {
     }
 
     private void resetPlayers() {
+        int gridInterval = game.getGridInterval();
         int x = 0;
-        int y = fieldFactor;
+        int y = gridInterval;
         for (Map.Entry<String, Player> player: players.entrySet()) {
-            x += fieldFactor * 6;
+            x += 4 * gridInterval;
             Player pl = player.getValue();
             pl.setPosx(x);
             pl.setPosy(y);
             pl.setDir(1);
-
             pl.getTurns().clear();
         }
     }

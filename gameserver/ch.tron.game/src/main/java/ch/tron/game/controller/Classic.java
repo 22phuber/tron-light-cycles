@@ -9,9 +9,14 @@ import java.util.function.BiPredicate;
 
 public class Classic extends GameMode{
 
-    public Classic(String lobbyId, Map<String, Player> players, int fieldFactor){
+    public Classic(String lobbyId, Map<String, Player> players, int gridInterval){
 
-        super(fieldFactor * 200,fieldFactor * 200, fieldFactor*2, fieldFactor, lobbyId, players);
+        super(gridInterval * 200,
+                gridInterval * 200,
+                gridInterval,
+                gridInterval / 2,
+                lobbyId,
+                players);
     }
 
     @Override
@@ -43,7 +48,7 @@ public class Classic extends GameMode{
 
             BiPredicate<Integer, Integer> posOnGrid = (x, y) -> x % gridInterval == 0 && y % gridInterval == 0;
 
-            Turn turn = null;
+            Turn turn;
             if (player.getTurns().size() != 0) {
                 turn = player.getTurns().getLast();
                 if (turn.isOnHold() && posOnGrid.test(posx, posy)) {
@@ -88,13 +93,5 @@ public class Classic extends GameMode{
                 }
             }
         });
-    }
-
-    private void executeTurn(Player pl, Turn turn, int posx, int posy) {
-        pl.setDir(turn.getNewDirection());
-
-        turn.setOnHold(false);
-        turn.setPosx(posx);
-        turn.setPosy(posy);
     }
 }

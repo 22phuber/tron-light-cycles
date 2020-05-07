@@ -17,12 +17,9 @@ public class Player {
     private boolean ready = false;
     private final LinkedList turns = new LinkedList<Turn>();
 
-    public Player(String  id, String name, int posx, int posy, int dir, String color) {
+    public Player(String  id, String name, String color) {
         this.id = id;
         this.name = name;
-        this.posx = posx;
-        this.posy = posy;
-        this.dir = dir;
         this.color = color;
     }
 

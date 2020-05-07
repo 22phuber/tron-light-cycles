@@ -26,7 +26,6 @@ public abstract class GameMode {
 
     final String lobbyId;
     final GameStateUpdateMessage gameStateUpdateMessage;
-    final List<Turn> turnsOnHold = new LinkedList<>();
 
     final int fieldWitdh;
     final int fieldHeight;
@@ -40,15 +39,21 @@ public abstract class GameMode {
     final long LOOP_INTERVAL = 1000000000 / FPS;
     final int scoreFactor = 1;
 
-    public GameMode(int fieldWitdh, int fieldHeight, int gridInterval, int velocity, String lobbyId, Map<String, Player> players){
-        this.fieldWitdh = fieldWitdh;
+    public GameMode (
+            int fieldWidth,
+            int fieldHeight,
+            int gridInterval,
+            int velocity,
+            String lobbyId,
+            Map<String, Player> players) {
+        this.fieldWitdh = fieldWidth;
         this.fieldHeight = fieldHeight;
         this.gridInterval = gridInterval;
         this.velocity = velocity;
         this.lobbyId = lobbyId;
         this.gameStateUpdateMessage = new GameStateUpdateMessage(lobbyId);
         this.playersAlive = new ConcurrentHashMap<>(players);
-        this.field = new boolean[fieldWitdh][fieldHeight];
+        this.field = new boolean[fieldWidth][fieldHeight];
     }
 
     public abstract void start();
@@ -81,11 +86,6 @@ public abstract class GameMode {
         gameStateUpdateMessage.setUpdate(render());
         GameManager.getMessageForwarder().forwardMessage(gameStateUpdateMessage);
         gameStateUpdateMessage.setInitial(false);
-    }
-
-    public static final GameMode getGameModeByName(String name, String lobbyId, Map<String, Player> players, int fieldFactor) {
-        if (name.equals("classic")) { return new Classic(lobbyId, players, fieldFactor); }
-        return null;
     }
 
     public final JSONObject render() throws JSONException {
@@ -152,6 +152,25 @@ public abstract class GameMode {
         }
     }
 
+    public void executeTurn(Player pl, Turn turn, int posx, int posy) {
+        pl.setDir(turn.getNewDirection());
+
+        turn.setOnHold(false);
+        turn.setPosx(posx);
+        turn.setPosy(posy);
+    }
+
+    public void sleepForDelta(long now) {
+        long delta = System.nanoTime() - now;
+        if(delta < LOOP_INTERVAL){
+            try {
+                Thread.sleep((LOOP_INTERVAL - delta) / 1000000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public final void die(Player pl) {
         playersAlive.remove(pl.getId());
         playersDead.add(pl.getId());
@@ -166,17 +185,6 @@ public abstract class GameMode {
         GameManager.getMessageForwarder().forwardMessage(new DeathMessage(
                 lobbyId, pl.getId(), pl.getPosx(), pl.getPosy(), all
         ));
-    }
-
-    public void sleepForDelta(long now) {
-        long delta = System.nanoTime() - now;
-        if(delta < LOOP_INTERVAL){
-            try {
-                Thread.sleep((LOOP_INTERVAL - delta) / 1000000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     public void sendScore() {
