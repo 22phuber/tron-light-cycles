@@ -5,10 +5,18 @@ import ch.tron.middleman.messagedto.InAppMessage;
 public class StartGameMessage extends InAppMessage {
 
     private final String groupId;
+    private final String playerId;
 
-    public StartGameMessage(String groupId) { this.groupId = groupId; }
+    public StartGameMessage(String groupId, String playerId) {
+        this.groupId = groupId;
+        this.playerId = playerId;
+    }
 
     public String getGroupId() {
         return groupId;
+    }
+
+    public String getPlayerId() {
+        return playerId;
     }
 }

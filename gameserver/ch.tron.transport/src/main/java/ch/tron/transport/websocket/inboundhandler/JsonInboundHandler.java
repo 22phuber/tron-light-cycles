@@ -75,7 +75,8 @@ public class JsonInboundHandler {
                 break;
             case "startGame":
                 TransportManager.getMessageForwarder().forwardMessage(new StartGameMessage(
-                        jo.getString("gameId")
+                        jo.getString("gameId"),
+                        playerId
                 ));
                 break;
             case "updateDirection":

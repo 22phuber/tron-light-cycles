@@ -3,7 +3,6 @@ package ch.tron.game.controller;
 import ch.tron.game.GameManager;
 import ch.tron.game.model.GameMode;
 import ch.tron.game.model.Player;
-import ch.tron.middleman.messagedto.gametotransport.CountdownMessage;
 import ch.tron.middleman.messagedto.gametotransport.LobbyStateUpdateMessage;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,7 +12,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Represents a lobby that holds all available types of tron
@@ -91,6 +89,13 @@ public class Lobby implements Runnable {
         }
     }
 
+    public synchronized void play(String playerId) {
+        if (hostId.equals(playerId)) {
+            players.get(hostId).setReady(true);
+            this.playing = true;
+        }
+    }
+
     public void terminate(String playerId){
         if(playerId.equals(hostId)){
             terminate = true;
@@ -140,11 +145,6 @@ public class Lobby implements Runnable {
         return game;
     }
 
-    public synchronized void play() {
-        players.get(hostId).setReady(true);
-        this.playing = true;
-    }
-
     public int getPlayersJoined() { return players.size(); }
 
     public synchronized boolean isPlaying() { return playing; }
@@ -162,16 +162,13 @@ public class Lobby implements Runnable {
     }
 
     private HashMap<String, Player> getReadyPlayers() {
-
-        Map<String, Player> readyPlayers = new HashMap<>();
-
+        HashMap<String, Player> readyPlayers = new HashMap<>();
         for(Map.Entry<String, Player>player : this.players.entrySet()){
             if(player.getValue().isReady()){
                 readyPlayers.put(player.getKey(), player.getValue());
             }
         }
-
-        return (HashMap<String, Player>) readyPlayers;
+        return readyPlayers;
     }
 
     private JSONObject getLobbyState() {
