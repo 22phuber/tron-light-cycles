@@ -20,7 +20,6 @@ import {
   Paper,
   Box,
   Container,
-  CircularProgress,
   Button,
   TextareaAutosize,
 } from "@material-ui/core";
@@ -97,7 +96,6 @@ const App = () => {
 
   useEffect(() => {
     localStorage.setItem("myPlayerData", JSON.stringify(myPlayerData));
-    myPlayerId = myPlayerData.clientId;
   }, [myPlayerData]);
 
   useEffect(() => {
@@ -140,6 +138,7 @@ const App = () => {
         openJoinGameDialog: true,
       });
     }
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -454,7 +453,7 @@ const App = () => {
 
   // player Death
   function handlePlayerDeath(data, myPlayerId) {
-    const { playerId, posx, posy } = data;
+    const { playerId, posx, posy, playerName } = data;
     console.log(
       "My clientId: " + myPlayerId + " - Death message playerId: " + playerId
     );
@@ -462,7 +461,8 @@ const App = () => {
     if (playerId === myPlayerId) {
       message = "You died! { x:" + posx + ", y:" + posy + " }";
     } else {
-      message = "Another player died! { x:" + posx + ", y:" + posy + " }";
+      message =
+        "Player [" + playerName + "] died! { x:" + posx + ", y:" + posy + " }";
     }
     setInGameMessages((prevInGameMessages) => [message, ...prevInGameMessages]);
   }

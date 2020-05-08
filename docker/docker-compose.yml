@@ -37,4 +37,3 @@ services:
       MYSQL_DATABASE: tron_light_cycles
       MYSQL_USER: tron
       MYSQL_PASSWORD: tron
-
