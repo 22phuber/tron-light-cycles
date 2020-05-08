@@ -3,7 +3,7 @@ package ch.tron.transport.websocket.inboundhandler;
 import ch.tron.middleman.messagedto.backAndForth.CurrentPublicGamesRequest;
 import ch.tron.middleman.messagedto.transporttogame.*;
 import ch.tron.transport.TransportManager;
-import ch.tron.transport.websocket.controller.WebSocketController;
+import ch.tron.transport.websocket.controller.WebSocketConnectionController;
 import io.netty.channel.Channel;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -34,11 +34,11 @@ public class JsonInboundHandler {
                 TransportManager.getMessageForwarder().forwardMessage(new CurrentPublicGamesRequest(playerId));
                 break;
             case "createGame":
-                String gameId = WebSocketController.newChannelGroup();
+                String gameId = WebSocketConnectionController.newChannelGroup();
 
-                Channel channel = WebSocketController.getLonelyChannel(playerId);
-                WebSocketController.addChannelToGroup(channel, gameId);
-                WebSocketController.removeChannelFromLonelyGroup(playerId);
+                Channel channel = WebSocketConnectionController.getLonelyChannel(playerId);
+                WebSocketConnectionController.addChannelToGroup(channel, gameId);
+                WebSocketConnectionController.removeChannelFromLonelyGroup(playerId);
 
                 JSONObject config = jo.getJSONObject("gameConfig");
 
@@ -62,9 +62,9 @@ public class JsonInboundHandler {
             case "joinGame":
                 gameId = jo.getString("gameId");
 
-                channel = WebSocketController.getLonelyChannel(playerId);
-                WebSocketController.addChannelToGroup(channel, gameId);
-                WebSocketController.removeChannelFromLonelyGroup(playerId);
+                channel = WebSocketConnectionController.getLonelyChannel(playerId);
+                WebSocketConnectionController.addChannelToGroup(channel, gameId);
+                WebSocketConnectionController.removeChannelFromLonelyGroup(playerId);
 
                 TransportManager.getMessageForwarder().forwardMessage(new JoinLobbyMessage(
                         playerId,
@@ -75,7 +75,8 @@ public class JsonInboundHandler {
                 break;
             case "startGame":
                 TransportManager.getMessageForwarder().forwardMessage(new StartGameMessage(
-                        jo.getString("gameId")
+                        jo.getString("gameId"),
+                        playerId
                 ));
                 break;
             case "updateDirection":
@@ -86,9 +87,10 @@ public class JsonInboundHandler {
                 ));
                 break;
             case "leaveGame":
-                channel = WebSocketController.getChannelFromGroup(jo.getString("gameId"), playerId);
-                WebSocketController.addChannelToLonelyGroup(channel);
-                WebSocketController.removeChannelFromGroup(channel, jo.getString("gameId"));
+                gameId = jo.getString("gameId");
+                channel = WebSocketConnectionController.getChannelFromGroup(gameId, playerId);
+                WebSocketConnectionController.addChannelToLonelyGroup(channel);
+                WebSocketConnectionController.removeChannelFromGroup(channel, gameId);
 
                 TransportManager.getMessageForwarder().forwardMessage(new RemovePlayerMessage(
                         jo.getString("gameId"),
