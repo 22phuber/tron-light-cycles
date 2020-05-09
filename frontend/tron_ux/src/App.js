@@ -43,7 +43,11 @@ const useStyles = makeStyles({
   },
   boxPlay: {
     opacity: "0.975",
-    textAlign: "center",
+  },
+  paperPlay: {
+    display: "flex",
+    justifyContent: "space-around",
+    padding: theme.spacing(3),
   },
   gameLog: {
     backgroundColor: "#636363",
@@ -90,6 +94,10 @@ const App = () => {
   var [playData, setPlayData] = useState(null);
   const [clearCanvas, setClearCanvas] = useState({ clear: false });
   const [inGameMessages, setInGameMessages] = useState([]);
+  const [roundState, setRoundState] = useState({
+    round: { current: 0, total: 0 },
+  });
+  const [scoreState, setScoreState] = useState({ score: 0 });
 
   // Request Animation Frame variable
   let rAF;
@@ -195,7 +203,7 @@ const App = () => {
             break;
           case "initialGameState":
             console.log(
-              "WS[initialGameState]:" + JSON.stringify(dataFromServer)
+              "WS[initialGameState]: " + JSON.stringify(dataFromServer)
             );
             setClearCanvas((prevClearCanvas) => {
               return {
@@ -210,14 +218,14 @@ const App = () => {
             ]);
             break;
           case "countdown":
-            console.log("WS[countdown]:" + JSON.stringify(dataFromServer));
+            console.log("WS[countdown]: " + JSON.stringify(dataFromServer));
             setInGameMessages((prevInGameMessages) => [
               "Countdown: " + dataFromServer.count,
               ...prevInGameMessages,
             ]);
             break;
           case "playerDeath":
-            console.log("WS[playerDeath]:" + JSON.stringify(dataFromServer));
+            console.log("WS[playerDeath]: " + JSON.stringify(dataFromServer));
             handlePlayerDeath(dataFromServer, myPlayerId);
             break;
           case "clientId":
@@ -261,7 +269,7 @@ const App = () => {
           default:
             console.error("WARN: Unknown subject");
             console.log(
-              "WS[Unknown subject]:" + JSON.stringify(dataFromServer)
+              "WS[Unknown subject]: " + JSON.stringify(dataFromServer)
             );
             break;
         }
@@ -363,11 +371,22 @@ const App = () => {
 
   // key press for game directions
   function handleKeyPress(event) {
-    const pressedKey = event.key;
-    if (DIRECTIONKEYS.includes(pressedKey)) {
+    const { key, keyCode } = event;
+    // Prevent default action for arrow keys => scroll
+    switch (keyCode) {
+      case 37:
+      case 39:
+      case 38:
+      case 40:
+        event.preventDefault();
+        break;
+      default:
+        break; // do not block other keys
+    }
+    if (DIRECTIONKEYS.includes(key)) {
       sendWsData({
         ...WSHelpers.QUERY.UPDATEDIRECTION,
-        key: pressedKey,
+        key: key,
         gameId: gameId,
       });
     }
@@ -561,7 +580,7 @@ const App = () => {
                   >
                     Game: {gameConfig.name || "GAMENAME"}
                   </Typography>
-                  <Paper>
+                  <Paper className={classes.paperPlay}>
                     <GameCanvas
                       canvasConfig={canvasConfig}
                       playersData={playData}
@@ -576,8 +595,6 @@ const App = () => {
                         value={inGameMessages ? inGameMessages.join("\n") : ""}
                         placeholder="game log ..."
                       />
-                    </div>
-                    <div>
                       <Button
                         variant="outlined"
                         color="primary"
