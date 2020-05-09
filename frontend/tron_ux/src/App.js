@@ -14,9 +14,7 @@ import {
 import { useInterval } from "./helpers/custom.hooks";
 import { ThemeProvider, makeStyles } from "@material-ui/styles";
 import {
-  CssBaseline,
   Typography,
-  createMuiTheme,
   Paper,
   Box,
   Container,
@@ -30,14 +28,9 @@ import Footer from "./components/footer/footer.component";
 import GameCanvas from "./components/gameCanvas/gameCanvas.component";
 import LobbyTable from "./components/lobby/lobby.component";
 import JoinGameDialog from "./components/joinGameDialog/joinGameDialog.component";
+import { useSnackbar } from "notistack";
 
-const theme = createMuiTheme({
-  palette: {
-    type: "dark",
-  },
-});
-
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   box: {
     opacity: "0.975",
   },
@@ -46,7 +39,8 @@ const useStyles = makeStyles({
   },
   paperPlay: {
     display: "flex",
-    justifyContent: "space-around",
+    flexDirection: "column",
+    justifyContent: "center",
     padding: theme.spacing(3),
   },
   gameLog: {
@@ -60,11 +54,13 @@ const useStyles = makeStyles({
   circularProgress: {
     margin: "25px",
   },
-});
+}));
 
 /* APP */
 const App = () => {
   const classes = useStyles();
+  // Snackbar
+  const { enqueueSnackbar } = useSnackbar();
   // get and parse queryString
   const queryString = new URLSearchParams(window.location.search);
   // State: Application modes
@@ -93,11 +89,11 @@ const App = () => {
   });
   var [playData, setPlayData] = useState(null);
   const [clearCanvas, setClearCanvas] = useState({ clear: false });
-  const [inGameMessages, setInGameMessages] = useState([]);
+  // const [inGameMessages, setInGameMessages] = useState([]);
   const [roundState, setRoundState] = useState({
     round: { current: 0, total: 0 },
   });
-  const [scoreState, setScoreState] = useState({ score: 0 });
+  // const [scoreState, setScoreState] = useState({ score: 0 });
 
   // Request Animation Frame variable
   let rAF;
@@ -201,6 +197,22 @@ const App = () => {
               setPlayData(dataFromServer.players);
             });
             break;
+          case "lobbyState":
+            console.log("WS[lobbyState]: " + JSON.stringify(dataFromServer));
+            setLobbyState({
+              players: dataFromServer.players,
+              host: dataFromServer.host,
+            });
+            setGameConfig((prevGameConfig) => {
+              return { ...prevGameConfig, ...dataFromServer.gameConfig };
+            });
+            break;
+          case "currentPublicGames":
+            // console.log(
+            //   "WS[currentPublicGames]: " + JSON.stringify(dataFromServer)
+            // );
+            setPublicGames(dataFromServer.games);
+            break;
           case "initialGameState":
             console.log(
               "WS[initialGameState]: " + JSON.stringify(dataFromServer)
@@ -212,38 +224,47 @@ const App = () => {
             });
             setAppState({ playMode: true, lobbyMode: false });
             setPlayData(dataFromServer.players);
-            setInGameMessages((prevInGameMessages) => [
-              "Game starts in 3 seconds, be ready!",
-              ...prevInGameMessages,
-            ]);
+            // setInGameMessages((prevInGameMessages) => [
+            //   "Game starts in 3 seconds, be ready!",
+            //   ...prevInGameMessages,
+            // ]);
             break;
           case "countdown":
             console.log("WS[countdown]: " + JSON.stringify(dataFromServer));
-            setInGameMessages((prevInGameMessages) => [
-              "Countdown: " + dataFromServer.count,
-              ...prevInGameMessages,
-            ]);
+            enqueueSnackbar(
+              " Round: " +
+                dataFromServer.round.current +
+                " - Countdown: " +
+                dataFromServer.count,
+              {
+                variant: "info",
+                disableWindowBlurListener: true,
+              }
+            );
+            // setInGameMessages((prevInGameMessages) => [
+            //   "Countdown: " + dataFromServer.count,
+            //   ...prevInGameMessages,
+            // ]);
+            setRoundState((prevRoundState) => {
+              return {
+                round: {
+                  ...prevRoundState.round,
+                  current: dataFromServer.count,
+                  total: dataFromServer.total,
+                },
+              };
+            });
             break;
           case "playerDeath":
             console.log("WS[playerDeath]: " + JSON.stringify(dataFromServer));
             handlePlayerDeath(dataFromServer, myPlayerId);
             break;
-          case "clientId":
-            console.log("WS[clientId]: " + JSON.stringify(dataFromServer));
-            myPlayerId = dataFromServer.id;
-            setMyPlayerData((prevMyPlayerData) => {
-              return { ...prevMyPlayerData, clientId: dataFromServer.id };
-            });
-            console.log("WS[clientId] id: " + dataFromServer.id);
-            break;
-          case "currentPublicGames":
-            console.log(
-              "WS[currentPublicGames]: " + JSON.stringify(dataFromServer)
-            );
-            setPublicGames(dataFromServer.games);
+          case "roundScores":
+            console.log("WS[roundScores]: " + JSON.stringify(dataFromServer));
+            handleRoundScores(dataFromServer, myPlayerId);
             break;
           case "canvasConfig":
-            console.log("WS[canvasConfig]: " + JSON.stringify(dataFromServer));
+            // console.log("WS[canvasConfig]: " + JSON.stringify(dataFromServer));
             const { width, height, lineThickness } = dataFromServer;
             setCanvasConfig({
               height: height,
@@ -252,19 +273,17 @@ const App = () => {
             });
             break;
           case "createGame":
-            console.log("WS[createGame]: " + JSON.stringify(dataFromServer));
+            // console.log("WS[createGame]: " + JSON.stringify(dataFromServer));
             setGameId(dataFromServer.gameId);
             setAppState({ playMode: true, lobbyMode: true });
             break;
-          case "lobbyState":
-            console.log("WS[lobbyState]: " + JSON.stringify(dataFromServer));
-            setLobbyState({
-              players: dataFromServer.players,
-              host: dataFromServer.host,
+          case "clientId":
+            // console.log("WS[clientId]: " + JSON.stringify(dataFromServer));
+            myPlayerId = dataFromServer.id;
+            setMyPlayerData((prevMyPlayerData) => {
+              return { ...prevMyPlayerData, clientId: dataFromServer.id };
             });
-            setGameConfig((prevGameConfig) => {
-              return { ...prevGameConfig, ...dataFromServer.gameConfig };
-            });
+            console.log("WS[clientId] id: " + dataFromServer.id);
             break;
           default:
             console.error("WARN: Unknown subject");
@@ -473,22 +492,50 @@ const App = () => {
   // player Death
   function handlePlayerDeath(data, myPlayerId) {
     const { playerId, posx, posy, playerName } = data;
-    console.log(
-      "My clientId: " + myPlayerId + " - Death message playerId: " + playerId
-    );
-    var message = "";
+    var message = "",
+      variant = "info";
     if (playerId === myPlayerId) {
-      message = "You died! { x:" + posx + ", y:" + posy + " }";
+      message = " Oh No, YOU died! { x:" + posx + ", y:" + posy + " }";
+      variant = "error";
     } else {
       message =
-        "Player [" + playerName + "] died! { x:" + posx + ", y:" + posy + " }";
+        " Player [" +
+        (playerName || playerId) +
+        "] died! { x:" +
+        posx +
+        ", y:" +
+        posy +
+        " }";
+      variant = "warning";
     }
-    setInGameMessages((prevInGameMessages) => [message, ...prevInGameMessages]);
+    enqueueSnackbar(message, {
+      variant: variant,
+      disableWindowBlurListener: true,
+    });
+    // setInGameMessages((prevInGameMessages) => [message, ...prevInGameMessages]);
+  }
+
+  // round scores
+  function handleRoundScores(data, myPlayerId) {
+    const { playerScores } = data;
+    var message = " Hm, YOU didn't win this time ... but maybe next time!",
+      variant = "default";
+    playerScores.forEach((player) => {
+      if (player.clientId === myPlayerId) {
+        if (player.score >= playerScores.length) {
+          message = " Yes, YOU won this round!";
+          variant = "success";
+        }
+      }
+    });
+    enqueueSnackbar(message, {
+      variant: variant,
+      disableWindowBlurListener: true,
+    });
   }
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
+    <React.Fragment>
       <header>
         <TronAppBar
           handleMyPlayerData={handleMyPlayerData}
@@ -587,14 +634,14 @@ const App = () => {
                       clear={clearCanvas}
                     />
                     <div>
-                      <TextareaAutosize
+                      {/* <TextareaAutosize
                         aria-label="textarea game log"
                         rowsMin={3}
                         rowsMax={8}
                         className={classes.gameLog}
                         value={inGameMessages ? inGameMessages.join("\n") : ""}
                         placeholder="game log ..."
-                      />
+                      /> */}
                       <Button
                         variant="outlined"
                         color="primary"
@@ -617,7 +664,7 @@ const App = () => {
         </section>
       )}
       <Footer />
-    </ThemeProvider>
+    </React.Fragment>
   );
 };
 
