@@ -90,9 +90,7 @@ const App = () => {
   var [playData, setPlayData] = useState(null);
   const [clearCanvas, setClearCanvas] = useState({ clear: false });
   // const [inGameMessages, setInGameMessages] = useState([]);
-  const [roundState, setRoundState] = useState({
-    round: { current: 0, total: 0 },
-  });
+  var roundState = {};
   // const [scoreState, setScoreState] = useState({ score: 0 });
 
   // Request Animation Frame variable
@@ -245,15 +243,7 @@ const App = () => {
             //   "Countdown: " + dataFromServer.count,
             //   ...prevInGameMessages,
             // ]);
-            setRoundState((prevRoundState) => {
-              return {
-                round: {
-                  ...prevRoundState.round,
-                  current: dataFromServer.count,
-                  total: dataFromServer.total,
-                },
-              };
-            });
+            roundState = dataFromServer.round;
             break;
           case "playerDeath":
             console.log("WS[playerDeath]: " + JSON.stringify(dataFromServer));
@@ -262,6 +252,11 @@ const App = () => {
           case "roundScores":
             console.log("WS[roundScores]: " + JSON.stringify(dataFromServer));
             handleRoundScores(dataFromServer, myPlayerId);
+            if (roundState.current === roundState.total) {
+              setTimeout(function () {
+                setAppState({ playMode: true, lobbyMode: true });
+              }, 3000);
+            }
             break;
           case "canvasConfig":
             // console.log("WS[canvasConfig]: " + JSON.stringify(dataFromServer));
