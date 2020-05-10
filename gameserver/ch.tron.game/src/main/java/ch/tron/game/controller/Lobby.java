@@ -159,6 +159,7 @@ public class Lobby implements Runnable {
 
     private GameMode getGameModeByName(String name, String lobbyId, Map<String, Player> players) {
         if (name.equals("classic")) { return new Classic(lobbyId, players, 4); }
+        else if(name.equals("battleroyal")){return new BattleRoyal(lobbyId, players, 10000, 10000);}
         return null;
     }
 
