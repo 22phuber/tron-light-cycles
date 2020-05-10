@@ -12,14 +12,14 @@ import {
   getGameConfig,
 } from "./helpers/helpers";
 import { useInterval } from "./helpers/custom.hooks";
-import { ThemeProvider, makeStyles } from "@material-ui/styles";
+import { makeStyles } from "@material-ui/styles";
 import {
   Typography,
   Paper,
   Box,
   Container,
   Button,
-  TextareaAutosize,
+  // TextareaAutosize,
 } from "@material-ui/core";
 import TronAppBar from "./components/appBar/appBar.component";
 import GameTable from "./components/publicGames/publicGames.component";
