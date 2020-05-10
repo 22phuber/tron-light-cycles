@@ -88,7 +88,7 @@ public abstract class GameMode {
         gameStateUpdateMessage.setInitial(false);
     }
 
-    public final JSONObject render() throws JSONException {
+    public JSONObject render() throws JSONException {
         JSONObject state = new JSONObject();
         state.put("subject", "gameState")
                 .put("gameId", lobbyId);
@@ -171,7 +171,7 @@ public abstract class GameMode {
         }
     }
 
-    public final void die(Player pl) {
+    public void die(Player pl) {
         playersAlive.remove(pl.getId());
         playersDead.add(pl.getId());
         JSONArray all = new JSONArray();
