@@ -87,20 +87,24 @@
     \newpage
 
     \tableofcontents
-
+	\listoffigures
     \newpage
     
     \section{Beschreibung}
     
     Ein Spieler besitzt ein sogenanntes Licht-Motorrad. Dieses zieht während der Fahrt eine Linie nach sich, die bestehen bleibt. Fährt ein Spieler in eine dieser Linien, scheidet dieser aus. Gewinner ist, wer im Spiel bleibt, bis alle anderen Spieler ausgeschieden sind.
     
-    \section{Login}
+    \section{Anmeldung}
     
     Dem User stehen verschiedene Möglichkeiten zur Verfügung. Durch das erstmalige Betreten wird der User automatisch als Gast angemeldet und kann direkt einem Spiel beitreten oder ein Spiel erstellen. 
     Falls der User sich registrieren möchte um Punkte für die Statistik zu sammeln, so hat er hier die Möglichkeit dazu. --1--
     --BILD--
     Sollte bereits ein Account vorhanden sein, dann ist der Login hier --2-- vorzufinden.
     
+    
+    Nach erfolgreicher Anmeldung kann der User bei MyAccount seine verschiedenen Daten einsehen oder ändern. 
+    
+    --MyAccount--
     
     \section{Spielablauf}
     
@@ -126,8 +130,13 @@
 	\subsection{Lobby}
 	
 	Sobald eine Lobby erstellt oder einer beigetreten wurde, sollte der folgende Ausschnitt ersichtlich sein.
-    
-    \makebox[\textwidth][c]{\includegraphics[width=1\textwidth]{figures/Lobby.png}}
+    \begin{figure}[H]
+    	\centering
+    	\makebox[\textwidth][c]{\includegraphics[width=0.95\textwidth]{figures/Lobby.png}}
+    	\caption{Lobbytestcaption}
+    	\label{fig:Lobbytest_caption}
+    \end{figure}
+  
     
     --1-- Dieser URL kann kopiert werden und an einen Freund gesendet werden. Dieser kann den URL in den Browser kopieren und tritt somit nach Bestätigung eines Fensters der Lobby bei.
     
@@ -138,6 +147,8 @@
     --4-- Sobald alle Spieler ein grünes Symbol haben, bedeutet das, dass der Ersteller der Lobby das Spiel starten kann
     
     \subsection{Spielen}
+    
+    Nachdem der Lobbyersteller auf Start Game geklickt hat, erscheint ein Spielfeld und ein Countdown zählt runter.
     
     --BILD--
     
