@@ -19,7 +19,8 @@ import {
   Box,
   Container,
   Button,
-  // TextareaAutosize,
+  Card,
+  CardContent,
 } from "@material-ui/core";
 import TronAppBar from "./components/appBar/appBar.component";
 import GameTable from "./components/publicGames/publicGames.component";
@@ -43,6 +44,23 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
     padding: theme.spacing(3),
   },
+  playInfos: {
+    display: "flex",
+    justifyContent: "space-between",
+    padding: theme.spacing(1),
+    "& > *": {
+      flexGrow: "1",
+      marginBottom: theme.spacing(1),
+      marginLeft: theme.spacing(2),
+      marginRight: theme.spacing(2),
+    },
+    "& > *:first-child": {
+      marginLeft: "0",
+    },
+    "& > *:last-child": {
+      marginRight: "0",
+    },
+  },
   gameLog: {
     backgroundColor: "#636363",
     fontColor: "white",
@@ -53,6 +71,14 @@ const useStyles = makeStyles((theme) => ({
   },
   circularProgress: {
     margin: "25px",
+  },
+  card: {
+    backgroundColor: "#636363",
+    textAlign: "center",
+    minWidth: "35%",
+  },
+  cardTitle: {
+    fontSize: 14,
   },
 }));
 
@@ -89,8 +115,9 @@ const App = () => {
   });
   var [playData, setPlayData] = useState(null);
   const [clearCanvas, setClearCanvas] = useState({ clear: false });
-  // const [inGameMessages, setInGameMessages] = useState([]);
-  var roundState = {};
+  var roundInfoObject = {};
+  const [roundState, setRoundState] = useState({});
+  const [countdownState, setCountdownState] = useState(null);
   // const [scoreState, setScoreState] = useState({ score: 0 });
 
   // Request Animation Frame variable
@@ -191,6 +218,7 @@ const App = () => {
       if (dataFromServer && dataFromServer.subject) {
         switch (dataFromServer.subject) {
           case "gameState":
+            setCountdownState(0);
             rAF = window.requestAnimationFrame(() => {
               setPlayData(dataFromServer.players);
             });
@@ -222,28 +250,22 @@ const App = () => {
             });
             setAppState({ playMode: true, lobbyMode: false });
             setPlayData(dataFromServer.players);
-            // setInGameMessages((prevInGameMessages) => [
-            //   "Game starts in 3 seconds, be ready!",
-            //   ...prevInGameMessages,
-            // ]);
             break;
           case "countdown":
             console.log("WS[countdown]: " + JSON.stringify(dataFromServer));
-            enqueueSnackbar(
-              " Round: " +
-                dataFromServer.round.current +
-                " - Countdown: " +
-                dataFromServer.count,
-              {
-                variant: "info",
-                disableWindowBlurListener: true,
-              }
-            );
-            // setInGameMessages((prevInGameMessages) => [
-            //   "Countdown: " + dataFromServer.count,
-            //   ...prevInGameMessages,
-            // ]);
-            roundState = dataFromServer.round;
+            roundInfoObject = dataFromServer.round;
+            setRoundState(roundInfoObject);
+            setCountdownState(dataFromServer.count);
+            // enqueueSnackbar(
+            //   " Round: " +
+            //     dataFromServer.round.current +
+            //     " - Countdown: " +
+            //     dataFromServer.count,
+            //   {
+            //     variant: "info",
+            //     disableWindowBlurListener: true,
+            //   }
+            // );
             break;
           case "playerDeath":
             console.log("WS[playerDeath]: " + JSON.stringify(dataFromServer));
@@ -252,7 +274,7 @@ const App = () => {
           case "roundScores":
             console.log("WS[roundScores]: " + JSON.stringify(dataFromServer));
             handleRoundScores(dataFromServer, myPlayerId);
-            if (roundState.current === roundState.total) {
+            if (roundInfoObject.current === roundInfoObject.total) {
               setTimeout(function () {
                 setAppState({ playMode: true, lobbyMode: true });
               }, 3000);
@@ -360,7 +382,43 @@ const App = () => {
   }
 
   function handleMyPlayer(key, val) {
+    var wsKey, wsValue;
+    const { username, color, ready } = myPlayerData;
+    var playerUpdate = {
+      playerName: username,
+      playerColor: color,
+      ready: ready,
+    };
     if (key in myPlayerData) {
+      switch (key) {
+        case "name":
+          wsKey = "playerName";
+          wsValue = val;
+          break;
+        case "color":
+          wsKey = "playerColor";
+          wsValue = val;
+          break;
+        case "ready":
+          wsKey = key;
+          wsValue = val;
+          break;
+        default:
+          console.error("WARN: Key not supported for PLAYERCONFIGUPDATE");
+          break;
+      }
+      playerUpdate = { ...playerUpdate, [wsKey]: wsValue };
+      sendWsData({
+        ...WSHelpers.QUERY.PLAYERCONFIGUPDATE,
+        ...playerUpdate,
+      });
+      console.log(
+        "WS Client: " +
+          JSON.stringify({
+            ...WSHelpers.QUERY.PLAYERCONFIGUPDATE,
+            ...playerUpdate,
+          })
+      );
       setMyPlayerData((prevMyPlayerData) => {
         return { ...prevMyPlayerData, [key]: val };
       });
@@ -454,14 +512,31 @@ const App = () => {
   // cancel Lobby- & play Mode
   function cancelLobby() {
     setAppState({ playMode: false, lobbyMode: false });
-    if (gameId) {
+    if (gameId && myPlayerData.clientId === lobbyState.host.clientId) {
       sendWsData({
         ...WSHelpers.QUERY.DELETEGAME,
         gameId: gameId,
       });
+      console.log(
+        "WS Client: " +
+          JSON.stringify({
+            ...WSHelpers.QUERY.DELETEGAME,
+            gameId: gameId,
+          })
+      );
     }
+    sendWsData({
+      ...WSHelpers.QUERY.LEAVEGAME,
+      gameId: gameId,
+    });
+    console.log(
+      "WS Client: " +
+        JSON.stringify({
+          ...WSHelpers.QUERY.LEAVEGAME,
+          gameId: gameId,
+        })
+    );
     setGameId(null);
-    // lobbyState?
   }
 
   // hide join game and clear url from params
@@ -554,7 +629,7 @@ const App = () => {
                   gutterBottom
                   className={classes.typography}
                 >
-                  Public games
+                  Public Games
                 </Typography>
                 <GameTable
                   handleJoinGame={handleJoinGame}
@@ -623,24 +698,28 @@ const App = () => {
                     Game: {gameConfig.name || "GAMENAME"}
                   </Typography>
                   <Paper className={classes.paperPlay}>
-                    <GameCanvas
-                      canvasConfig={canvasConfig}
-                      playersData={playData}
-                      clear={clearCanvas}
-                    />
-                    <div>
-                      {/* <TextareaAutosize
-                        aria-label="textarea game log"
-                        rowsMin={3}
-                        rowsMax={8}
-                        className={classes.gameLog}
-                        value={inGameMessages ? inGameMessages.join("\n") : ""}
-                        placeholder="game log ..."
-                      /> */}
+                    <div className={classes.playInfos}>
+                      <Card className={classes.card}>
+                        <CardContent>
+                          <Typography
+                            className={classes.cardTitle}
+                            color="textSecondary"
+                            gutterBottom
+                          >
+                            COUNTDOWN
+                          </Typography>
+                          <Typography variant="h5" component="h2">
+                            {countdownState && countdownState > 0
+                              ? countdownState
+                              : countdownState === 0
+                              ? "GO!"
+                              : "-"}
+                          </Typography>
+                        </CardContent>
+                      </Card>
                       <Button
                         variant="outlined"
-                        color="primary"
-                        size="small"
+                        color="secondary"
                         onClick={() =>
                           setAppState({
                             playMode: true,
@@ -648,9 +727,30 @@ const App = () => {
                           })
                         }
                       >
-                        Back to Lobby
+                        Give up <br />( Back to Lobby )
                       </Button>
+                      <Card className={classes.card}>
+                        <CardContent>
+                          <Typography
+                            className={classes.cardTitle}
+                            color="textSecondary"
+                            gutterBottom
+                          >
+                            ROUND
+                          </Typography>
+                          <Typography variant="h5" component="h2">
+                            {roundState
+                              ? roundState.current + "/" + roundState.total
+                              : "-"}
+                          </Typography>
+                        </CardContent>
+                      </Card>
                     </div>
+                    <GameCanvas
+                      canvasConfig={canvasConfig}
+                      playersData={playData}
+                      clear={clearCanvas}
+                    />
                   </Paper>
                 </Box>
               </Container>
