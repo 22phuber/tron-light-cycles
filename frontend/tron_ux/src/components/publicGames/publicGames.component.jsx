@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -49,6 +49,20 @@ const GameTable = (props) => {
   const classes = useStyles();
 
   const { publicGames } = props;
+  const [noGamesState, setNoGamesState] = useState(false);
+
+  useEffect(() => {
+    setNoGamesState(false);
+    setTimeout(function () {
+      if (
+        publicGames &&
+        Array.isArray(publicGames) &&
+        publicGames.length <= 0
+      ) {
+        setNoGamesState(true);
+      }
+    }, 3000);
+  }, [publicGames]);
 
   const headerCells = (
     <TableRow>
@@ -68,7 +82,7 @@ const GameTable = (props) => {
       >
         <TableHead>{headerCells}</TableHead>
         <TableBody>
-          {(publicGames &&
+          {Array.isArray(publicGames) && publicGames.length > 0 ? (
             publicGames.map((game) => (
               <StyledTableRow key={game.name + "_" + game.id} hover>
                 <StyledTableCell component="th" scope="row">
@@ -83,24 +97,38 @@ const GameTable = (props) => {
                     <IconButton
                       color="inherit"
                       aria-label="join game"
-                      onClick={(e)  => props.handleJoinGame({
-                        gameId: game.id,
-                        name: game.name,
-                      })}
+                      onClick={(e) =>
+                        props.handleJoinGame({
+                          gameId: game.id,
+                          name: game.name,
+                        })
+                      }
                     >
                       <DirectionsBikeRoundedIcon />
                     </IconButton>
                   </Tooltip>
                 </StyledTableCell>
               </StyledTableRow>
-            ))) || (
+            ))
+          ) : noGamesState ? (
             <StyledTableRow hover>
               <StyledTableCell colSpan={4} align="center">
                 <div>
-                  Loading public games ...
+                  <em>
+                    No public games are running <br />
+                    Trying again in a few seconds ...
+                  </em>
+                </div>
+              </StyledTableCell>
+            </StyledTableRow>
+          ) : (
+            <StyledTableRow hover>
+              <StyledTableCell colSpan={4} align="center">
+                <div>
+                  <em>Searching for public games ...</em>
                   <br />
                   <CircularProgress
-                    color="inherit"
+                    color="secondary"
                     className={classes.progress}
                   />
                 </div>
