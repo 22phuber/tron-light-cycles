@@ -26,7 +26,7 @@ Draw.io file: [Game procedure SSD draw.io file](GameProcedure_SSD.drawio)
 |Description|JSON|further information|FE|BEt|BEg|
 |---|---|---|---|---|---|
 |Game server continously updates all joined clients by broadcasting lobby-state.|`{ "subject": "lobbyState", players: [ { "clientId": "theClientId", "ready": boolean }, ...], "host": { "clientId":"theHostClientsId" }, "gameConfig": {"name": "theChosenGameName", "public": boolean, "mode": "theChosenGameMode", "playersAllowed": int } }`|**continous broadcast**|✅|✅|✅|
-|Client requests to join a specific game.|`{ "subject": "joinGame", "gameId": "theGameId", "playerName":"ThePlayersName", "playerColor": "rgb(int,int,int)" }`||❌|✅|✅|
+|Client requests to join a specific game.|`{ "subject": "joinGame", "gameId": "theGameId", "playerName":"ThePlayersName", "playerColor": "rgb(int,int,int)" }`||✅|✅|✅|
 |Client sends player config update on change|`{ "subject": "playerConfigUpdate", "playerName": "thePlayersName", "playerColor": "rgb(int,int,int)","ready": boolean }`||❌|❌|❌|
 |Game server sends the client the game configurations the client needs to know about in order to display the game correctly.|`{ "subject": "canvasConfig", "width": int, "height": int, "lineThickness": int }`||✅|✅|✅|
 |Client that is host of game to be started orders game server to start the game.| `{ "subject": "startGame", "gameId": "theGameId" }`||✅|✅|✅|
