@@ -91,6 +91,11 @@ const useStyles = makeStyles((theme) => ({
     color: "orange",
     animationDuration: "2000ms",
   },
+  waitCircularProgress: {
+    marginLeft: "15px",
+    color: "primary",
+    animationDuration: "750ms",
+  },
   root: {
     display: "flex",
     flexWrap: "wrap",
@@ -145,15 +150,19 @@ const LobbyTable = (props) => {
   const [myPlayerState, setMyPlayerState] = useState(null);
   const [currentGameId, setCurrentGameId] = useState(null);
   const [usedPlayerColors, setUsedPlayerColors] = useState([]);
+  const [allPlayerReadyState, setAllPlayerReadyState] = useState(false);
 
   useEffect(() => {
     setPlayerState(players);
+    var allPlayersReady = true;
     if (Array.isArray(players) && players.length) {
       players.map((player) => {
         setUsedPlayerColors(usedPlayerColors.concat(player.color));
+        if (player.ready === false) allPlayersReady = false;
         return true;
       });
     }
+    setAllPlayerReadyState(allPlayersReady);
     return () => {
       setUsedPlayerColors([]);
     };
@@ -367,18 +376,39 @@ const LobbyTable = (props) => {
                 fullWidth
                 onClick={props.exitLobby}
               >
-                Cancel
+                Leave Lobby
               </Button>
             </Grid>
             <Grid item xs={6}>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={props.handleStartGame}
-                fullWidth
-              >
-                Start Game
-              </Button>
+              {gameHost.clientId === myPlayer.clientId ? (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={props.handleStartGame}
+                  fullWidth
+                  disabled={!allPlayerReadyState}
+                >
+                  Start Game
+                </Button>
+              ) : (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={(e) => {
+                    e.preventDefault();
+                  }}
+                  fullWidth
+                  disabled
+                >
+                  Wait for other players
+                  <CircularProgress
+                    disableShrink
+                    size={22}
+                    thickness={4}
+                    className={classes.waitCircularProgress}
+                  />
+                </Button>
+              )}
             </Grid>
             <Grid container spacing={1}>
               <Grid item xs={12}>
@@ -407,8 +437,14 @@ const LobbyTable = (props) => {
                             hover
                           >
                             <StyledTableCell component="th" scope="row">
-                              <Tooltip title={player.clientId} aria-label="player id tooltip">
-                                <DirectionsBikeIcon fontSize="small" className={classes.cycleIcon} />
+                              <Tooltip
+                                title={player.clientId}
+                                aria-label="player id tooltip"
+                              >
+                                <DirectionsBikeIcon
+                                  fontSize="small"
+                                  className={classes.cycleIcon}
+                                />
                               </Tooltip>
                               {player.playerName || player.clientId}{" "}
                               {gameHost &&
