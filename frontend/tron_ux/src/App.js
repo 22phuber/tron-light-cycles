@@ -382,7 +382,43 @@ const App = () => {
   }
 
   function handleMyPlayer(key, val) {
+    var wsKey, wsValue;
+    const { username, color, ready } = myPlayerData;
+    var playerUpdate = {
+      playerName: username,
+      playerColor: color,
+      ready: ready,
+    };
     if (key in myPlayerData) {
+      switch (key) {
+        case "name":
+          wsKey = "playerName";
+          wsValue = val;
+          break;
+        case "color":
+          wsKey = "playerColor";
+          wsValue = val;
+          break;
+        case "ready":
+          wsKey = key;
+          wsValue = val;
+          break;
+        default:
+          console.error("WARN: Key not supported for PLAYERCONFIGUPDATE");
+          break;
+      }
+      playerUpdate = { ...playerUpdate, [wsKey]: wsValue };
+      sendWsData({
+        ...WSHelpers.QUERY.PLAYERCONFIGUPDATE,
+        ...playerUpdate,
+      });
+      console.log(
+        "WS Client: " +
+          JSON.stringify({
+            ...WSHelpers.QUERY.PLAYERCONFIGUPDATE,
+            ...playerUpdate,
+          })
+      );
       setMyPlayerData((prevMyPlayerData) => {
         return { ...prevMyPlayerData, [key]: val };
       });
@@ -489,6 +525,17 @@ const App = () => {
           })
       );
     }
+    sendWsData({
+      ...WSHelpers.QUERY.LEAVEGAME,
+      gameId: gameId,
+    });
+    console.log(
+      "WS Client: " +
+        JSON.stringify({
+          ...WSHelpers.QUERY.LEAVEGAME,
+          gameId: gameId,
+        })
+    );
     setGameId(null);
   }
 
@@ -582,7 +629,7 @@ const App = () => {
                   gutterBottom
                   className={classes.typography}
                 >
-                  Public games
+                  Public Games
                 </Typography>
                 <GameTable
                   handleJoinGame={handleJoinGame}
