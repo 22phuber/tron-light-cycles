@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Predicate;
 
 /**
  * Represents a lobby that holds all available types of tron
@@ -33,7 +34,7 @@ public class Lobby implements Runnable {
     private final Map<String, Player> players = new ConcurrentHashMap<>();
 
     private int roundsPlayed = 0;
-    private boolean playing;
+    private boolean playing = false;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Lobby.class);
 
@@ -63,11 +64,11 @@ public class Lobby implements Runnable {
 
         while (players.size() > 0){
 
-            LOGGER.info("Entered Lobby");
+            LOGGER.info("Entered Lobby {}", id);
 
             roundsPlayed = 0;
 
-            while (!isPlaying()) {
+            while (!isPlaying() && players.size() > 0) {
                 long now = System.nanoTime();
                 lobbyStateUpdateMessage.setUpdate(getLobbyState());
                 GameManager.getMessageForwarder().forwardMessage(lobbyStateUpdateMessage);
@@ -83,7 +84,7 @@ public class Lobby implements Runnable {
                 }
             }
 
-            while (roundsPlayed < numberOfRounds) {
+            while (roundsPlayed < numberOfRounds && players.size() > 0) {
                 resetPlayers();
                 game = getGameModeByName(mode, id, getReadyPlayers());
                 game.start();
@@ -215,6 +216,7 @@ public class Lobby implements Runnable {
     }
 
     private void terminateThisLobby() {
+        LOGGER.info("Terminating Lobby: {}", id);
         GameManager.removeLobby(id);
         GameManager.getMessageForwarder().forwardMessage(new TerminateGameMessage(id));
     }
