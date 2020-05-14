@@ -22,7 +22,7 @@ import HomeIcon from "@material-ui/icons/Home";
 import HowToRegIcon from "@material-ui/icons/HowToReg";
 import FileCopyIcon from "@material-ui/icons/FileCopyOutlined";
 import DirectionsBikeIcon from "@material-ui/icons/DirectionsBike";
-
+import { useSnackbar } from "notistack";
 import { locationURL } from "../../helpers/helpers";
 
 const StyledTableCell = withStyles((theme) => ({
@@ -139,6 +139,7 @@ const useStyles = makeStyles((theme) => ({
 
 const LobbyTable = (props) => {
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
   const gameLinkRef = useRef(null);
   // dispatch vars from props
   const { players, myPlayer, gameConfig, gameId, host } = props;
@@ -179,6 +180,18 @@ const LobbyTable = (props) => {
 
   useEffect(() => {
     setGameHost(host);
+    console.log(
+      "Host: " + JSON.stringify(host) + " | Player: " + JSON.stringify(myPlayer)
+    );
+    if (
+      myPlayer.clientId === host.clientId &&
+      gameHost.clientId !== host.clientId
+    ) {
+      enqueueSnackbar(" Congrats, You are now the new Game Host!", {
+        variant: "info",
+        disableWindowBlurListener: true,
+      });
+    }
   }, [host]);
 
   const handleMyPlayerChanges = (event, setting) => {
