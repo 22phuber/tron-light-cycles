@@ -98,10 +98,12 @@ public class JsonInboundHandler {
                 ));
                 break;
             case "deleteGame":
+                gameId = jo.getString("gameId");
                 TransportManager.getMessageForwarder().forwardMessage(new TerminateGameMessage(
-                        jo.getString("gameId"),
+                        gameId,
                         playerId
                 ));
+                WebSocketConnectionController.deleteChannelGroup(gameId);
                 break;
             default: logger.info("Subject type {} not supported", subject);
         }
