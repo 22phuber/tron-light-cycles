@@ -23,7 +23,7 @@ ReactDOM.render(
           success: "🥇",
           error: "☠️",
           warning: "⚰️",
-          info: "🏁",
+          info: "🎮",
           default: "👻",
         }}
       >
