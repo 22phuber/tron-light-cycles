@@ -256,16 +256,6 @@ const App = () => {
             roundInfoObject = dataFromServer.round;
             setRoundState(roundInfoObject);
             setCountdownState(dataFromServer.count);
-            // enqueueSnackbar(
-            //   " Round: " +
-            //     dataFromServer.round.current +
-            //     " - Countdown: " +
-            //     dataFromServer.count,
-            //   {
-            //     variant: "info",
-            //     disableWindowBlurListener: true,
-            //   }
-            // );
             break;
           case "playerDeath":
             console.log("WS[playerDeath]: " + JSON.stringify(dataFromServer));
@@ -511,20 +501,6 @@ const App = () => {
 
   // cancel Lobby- & play Mode
   function cancelLobby() {
-    setAppState({ playMode: false, lobbyMode: false });
-    if (gameId && myPlayerData.clientId === lobbyState.host.clientId) {
-      sendWsData({
-        ...WSHelpers.QUERY.DELETEGAME,
-        gameId: gameId,
-      });
-      console.log(
-        "WS Client: " +
-          JSON.stringify({
-            ...WSHelpers.QUERY.DELETEGAME,
-            gameId: gameId,
-          })
-      );
-    }
     sendWsData({
       ...WSHelpers.QUERY.LEAVEGAME,
       gameId: gameId,
@@ -537,6 +513,7 @@ const App = () => {
         })
     );
     setGameId(null);
+    setAppState({ playMode: false, lobbyMode: false });
   }
 
   // hide join game and clear url from params
