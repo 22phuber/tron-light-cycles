@@ -1,6 +1,7 @@
 package ch.tron.transport.websocket.inboundhandler;
 
 import ch.tron.middleman.messagedto.backAndForth.CurrentPublicGamesRequest;
+import ch.tron.middleman.messagedto.gametotransport.TerminateGameMessage;
 import ch.tron.middleman.messagedto.transporttogame.*;
 import ch.tron.transport.TransportManager;
 import ch.tron.transport.websocket.controller.WebSocketConnectionController;
@@ -96,14 +97,6 @@ public class JsonInboundHandler {
                         jo.getString("gameId"),
                         playerId
                 ));
-                break;
-            case "deleteGame":
-                gameId = jo.getString("gameId");
-                TransportManager.getMessageForwarder().forwardMessage(new TerminateGameMessage(
-                        gameId,
-                        playerId
-                ));
-                WebSocketConnectionController.deleteChannelGroup(gameId);
                 break;
             default: logger.info("Subject type {} not supported", subject);
         }

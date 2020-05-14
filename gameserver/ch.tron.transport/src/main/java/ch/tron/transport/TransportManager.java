@@ -137,6 +137,9 @@ public class TransportManager {
                     .put("playerScores", scores);
             out.sendJsonToChannelGroup(WebSocketConnectionController.getChannelGroupById(groupId), jo);
         }
+        else if (msg instanceof TerminateGameMessage) {
+            WebSocketConnectionController.deleteChannelGroup(((TerminateGameMessage) msg).getGroupId());
+        }
         else {
             LOGGER.info("Message type {} not supported", msg.getClass());
         }

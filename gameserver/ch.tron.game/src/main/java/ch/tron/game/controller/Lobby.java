@@ -3,6 +3,7 @@ package ch.tron.game.controller;
 import ch.tron.game.GameManager;
 import ch.tron.game.model.Player;
 import ch.tron.middleman.messagedto.gametotransport.LobbyStateUpdateMessage;
+import ch.tron.middleman.messagedto.gametotransport.TerminateGameMessage;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Represents a lobby that holds all available types of tron
@@ -19,7 +21,7 @@ public class Lobby implements Runnable {
 
     private final String id;
     private final String name;
-    private final String hostId;
+    private String hostId;
     private final String mode;
     private final int maxPlayers;
     private final boolean visibleToPublic;
@@ -28,11 +30,10 @@ public class Lobby implements Runnable {
 
     private final int numberOfRounds = 5;
     private final LobbyStateUpdateMessage lobbyStateUpdateMessage;
-    private final Map<String, Player> players = new HashMap<>();
+    private final Map<String, Player> players = new ConcurrentHashMap<>();
 
     private int roundsPlayed = 0;
     private boolean playing;
-    private boolean terminate = false;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Lobby.class);
 
@@ -60,13 +61,13 @@ public class Lobby implements Runnable {
 
     public void run() {
 
-        while(players.size() > 0 && !terminate){
+        while (players.size() > 0){
 
             LOGGER.info("Entered Lobby");
 
             roundsPlayed = 0;
 
-            while(!isPlaying() && !terminate){
+            while (!isPlaying()) {
                 long now = System.nanoTime();
                 lobbyStateUpdateMessage.setUpdate(getLobbyState());
                 GameManager.getMessageForwarder().forwardMessage(lobbyStateUpdateMessage);
@@ -82,7 +83,7 @@ public class Lobby implements Runnable {
                 }
             }
 
-            while(roundsPlayed < numberOfRounds && !terminate) {
+            while (roundsPlayed < numberOfRounds) {
                 resetPlayers();
                 game = getGameModeByName(mode, id, getReadyPlayers());
                 game.start();
@@ -92,6 +93,7 @@ public class Lobby implements Runnable {
 
             synchronized (this) { playing = false; }
         }
+        terminateThisLobby();
     }
 
     public synchronized void play(String playerId) {
@@ -101,14 +103,11 @@ public class Lobby implements Runnable {
         }
     }
 
-    public void terminate(String playerId){
-        if(playerId.equals(hostId)){
-            terminate = true;
-        }
-    }
-
     public void removePlayer(String playerId){
         players.remove(playerId);
+        if (playerId.equals(hostId)) {
+            setNewHost();
+        }
     }
 
     //New Players are added to PlayerList in Lobby, they will join in the next GameRound
@@ -213,5 +212,14 @@ public class Lobby implements Runnable {
             pl.setDir(1);
             pl.getTurns().clear();
         }
+    }
+
+    private void terminateThisLobby() {
+        GameManager.removeLobby(id);
+        GameManager.getMessageForwarder().forwardMessage(new TerminateGameMessage(id));
+    }
+
+    private void setNewHost() {
+        this.hostId = players.keySet().stream().findAny().orElse(null);
     }
 }
