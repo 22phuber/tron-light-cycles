@@ -8,7 +8,7 @@ Draw.io file: [Game procedure SSD draw.io file](GameProcedure_SSD.drawio)
 
 |Description|JSON|further information|FE|BEt|BEg|
 |---|---|---|---|---|---|
-|~~Client sends client connection after successfully setup Websocket connection to gameserver.~~ REMOVED|`{ subject: "clientConnected" }`||:skull:|❌|Not necessary|
+|~~Client sends client connection after successfully setup Websocket connection to gameserver.~~ **REMOVED**|`{ subject: "clientConnected" }`||:skull:|❌|Not necessary|
 |Game server sends client the id of the just created connection.|`{ "subject": "clientId", "id": "theClientId" }`||✅|✅|🆓|
 |Client requests all currently publicly open games.|`{ "subject": "currentPublicGames" }`||✅|✅|✅|
 |Game server sends all currently publicly open games and their associated properties to client who requested them.|`{ "subject": "currentPublicGames", "games": [ { "id": "theGameId", "name": "theGameName", "playersJoined": int, "playersAllowed": int, "mode": "gameMode", }, ...] }`|gameMode = "classic" or "battleRoyale"|✅|✅|✅|
@@ -18,7 +18,7 @@ Draw.io file: [Game procedure SSD draw.io file](GameProcedure_SSD.drawio)
 |Description|JSON|further information|FE|BEt|BEg|
 |---|---|---|---|---|---|
 |Client requests to create a new game.|`{ "subject": "createGame", "gameConfig": { "name": "theChosenGameName", "public": boolean, "mode": "theChosenGameMode", "playersAllowed": int }, "host": { "playerName": "thePlayersName", "color": "rgb(int,int,int)" } }`|gameMode = "classic" or "battleRoyale"|✅|✅|✅|
-|Client requests to delete a game.|`{subject: "deleteGame", gameId: "theGameId" }`||✅|partially|✅|
+|~~Client requests to delete a game.~~ **REMOVED**|`{subject: "deleteGame", gameId: "theGameId" }`||✅|partially|✅|
 |GameServer sends id of the just created game to client who requested the creation.|`{ "subject": "createGame", "gameId": "theGameId" }`||✅|✅|🆓|
 
 
