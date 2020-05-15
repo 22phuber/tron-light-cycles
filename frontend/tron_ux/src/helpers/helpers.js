@@ -2,6 +2,7 @@
  * Description: General helpers
  */
 
+// Supported direction keys
 export const DIRECTIONKEYS = Object.freeze([
   "ArrowLeft",
   "ArrowRight",
@@ -17,6 +18,24 @@ export function locationURL() {
   return (
     window.location.protocol + "//" + window.location.hostname + locationPort
   );
+}
+
+/**
+ * Converts and returns, depending on input param:
+ * - String "rgb(0,0,0)" to {"r":0,"g":0,"b":0,"a":1}
+ * - Object {"r":0,"g":0,"b":0,"a":1} to "rgb(0,0,0)"
+ * Alpha is ignored
+ * @param {*} __color String in format "rgb(<0-255>,<0-255>,<0-255>)" or Object in format {"r":<0-255>,"g":<0-255>,"b":<0-255>,"a":1}
+ */
+export function convertRGB(__color) {
+  if (/rgb/i.test(__color)) {
+    var rgb = __color.replace(/[^\d,]/g, "").split(",");
+    return { r: rgb[0], g: rgb[1], b: rgb[2], a: 1 };
+  }
+  if (typeof __color === "object" && __color !== null) {
+    return "rgb(" + __color.r + "," + __color.g + "," + __color.b + ")";
+  }
+  return null;
 }
 
 /************* STATES from/to localStorage *************/
