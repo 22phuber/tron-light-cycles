@@ -113,6 +113,7 @@ public class TransportManager {
             JSONObject jo = new JSONObject()
                     .put("subject", "playerDeath")
                     .put("gameId", groupId)
+                    .put("playerName", ((DeathMessage) msg).getPlayerName())
                     .put("playerId", ((DeathMessage) msg).getPlayerId())
                     .put("posx", ((DeathMessage) msg).getPosx())
                     .put("posy", ((DeathMessage) msg).getPosy())
