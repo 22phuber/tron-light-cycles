@@ -20,11 +20,11 @@ ReactDOM.render(
       <SnackbarProvider
         maxSnack={3}
         iconVariant={{
-          success: "🥇",
+          success: "🏆",
           error: "☠️",
           warning: "⚰️",
           info: "🎮",
-          default: "👻",
+          default: "⚔️",
         }}
       >
         <App />
