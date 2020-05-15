@@ -9,11 +9,8 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import { CircularProgress, LinearProgress } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
-import FormControl from "@material-ui/core/FormControl";
 import Button from "@material-ui/core/Button";
-import MenuItem from "@material-ui/core/MenuItem";
 import Switch from "@material-ui/core/Switch";
-import Select from "@material-ui/core/Select";
 import Tooltip from "@material-ui/core/Tooltip";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -23,7 +20,8 @@ import HowToRegIcon from "@material-ui/icons/HowToReg";
 import FileCopyIcon from "@material-ui/icons/FileCopyOutlined";
 import DirectionsBikeIcon from "@material-ui/icons/DirectionsBike";
 import { useSnackbar } from "notistack";
-import { locationURL } from "../../helpers/helpers";
+import { SketchPicker } from "react-color";
+import { locationURL, convertRGB } from "../../helpers/helpers";
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -132,8 +130,20 @@ const useStyles = makeStyles((theme) => ({
   colorPaper: {
     width: "50%",
   },
-  colorSelectWrapper: {
-    display: "flex",
+  color: {
+    width: "100%",
+    cursor: "pointer",
+  },
+  popover: {
+    position: "absolute",
+    zIndex: "2",
+  },
+  cover: {
+    position: "fixed",
+    top: "0px",
+    right: "0px",
+    bottom: "0px",
+    left: "0px",
   },
 }));
 
@@ -151,13 +161,15 @@ const LobbyTable = (props) => {
     gameCreatorFlag,
   } = props;
 
-  // TODO: disable used colors from other users in select dropdown!
   const [playerState, setPlayerState] = useState(null);
   const [gameHost, setGameHost] = useState(null);
   const [myPlayerState, setMyPlayerState] = useState(null);
   const [currentGameId, setCurrentGameId] = useState(null);
-  const [usedPlayerColors, setUsedPlayerColors] = useState([]);
+  // const [usedPlayerColors, setUsedPlayerColors] = useState([]);
   const [allPlayerReadyState, setAllPlayerReadyState] = useState(false);
+  // Color Picker
+  const [displayColorPicker, setDisplayColorPicker] = useState(false);
+  const [playerColor, setPlayerColor] = useState({});
 
   useEffect(() => {
     setPlayerState(null);
@@ -172,14 +184,14 @@ const LobbyTable = (props) => {
         handlePlayersLeft();
       }
       players.map((player) => {
-        setUsedPlayerColors(usedPlayerColors.concat(player.color));
+        // setUsedPlayerColors(usedPlayerColors.concat(player.color));
         if (player.ready === false) allPlayersReady = false;
         return true;
       });
     }
     setAllPlayerReadyState(allPlayersReady);
     return () => {
-      setUsedPlayerColors([]);
+      // setUsedPlayerColors([]);
       setPlayerState(null);
     };
     // eslint-disable-next-line
@@ -191,11 +203,11 @@ const LobbyTable = (props) => {
 
   useEffect(() => {
     setMyPlayerState(myPlayer);
+    setPlayerColor(convertRGB(myPlayer.color));
   }, [myPlayer]);
 
   useEffect(() => {
     setGameHost(host);
-    console.log("useEffect setGameHost triggered");
     if (
       !gameCreatorFlag &&
       gameHost &&
@@ -226,12 +238,27 @@ const LobbyTable = (props) => {
       case "ready":
         props.handleMyPlayer("ready", event.target.checked);
         break;
-      case "color":
-        props.handleMyPlayer("color", event.target.value);
-        break;
       default:
         break;
     }
+  };
+
+  const handleColorPickerClick = () => {
+    setDisplayColorPicker(true);
+  };
+
+  const handleColorPickerClose = () => {
+    setDisplayColorPicker(false);
+  };
+
+  const handleColorPickerChange = (color) => {
+    // console.log("handleColorPickerChange: " + convertRGB(color.rgb));
+    setPlayerColor(color.rgb);
+  };
+
+  const handleColorPickerChangeComplete = (color, event) => {
+    // console.log("handleColorPickerChangeComplete: " + convertRGB(color.rgb));
+    props.handleMyPlayer("color", convertRGB(color.rgb));
   };
 
   const handlePlayersJoined = () => {
@@ -241,7 +268,7 @@ const LobbyTable = (props) => {
         return obj.clientId === obj2.clientId;
       });
     });
-    console.log("Players joined game: " + JSON.stringify(joinedPlayers));
+    // console.log("Players joined game: " + JSON.stringify(joinedPlayers));
     joinedPlayers.forEach((joinedPlayer) => {
       if (joinedPlayer.clientId !== myPlayer.clientId) {
         enqueueSnackbar(
@@ -263,7 +290,7 @@ const LobbyTable = (props) => {
         return obj.clientId === obj2.clientId;
       });
     });
-    console.log("Players left game: " + JSON.stringify(playersLeft));
+    // console.log("Players left game: " + JSON.stringify(playersLeft));
     playersLeft.forEach((playerLeft) => {
       if (playerLeft.clientId !== myPlayer.clientId) {
         enqueueSnackbar(
@@ -548,77 +575,54 @@ const LobbyTable = (props) => {
                             </StyledTableCell>
                             <StyledTableCell align="right">
                               {myPlayerState.clientId === player.clientId ? (
-                                // Select: Myplayers color?
-                                <div className={classes.colorSelectWrapper}>
-                                  <Tooltip
-                                    title={myPlayerState.color}
-                                    aria-label={myPlayerState.color}
-                                  >
-                                    <Paper
-                                      elevation={3}
-                                      className={classes.colorPaper}
-                                      style={{
-                                        backgroundColor: myPlayerState.color,
-                                      }}
-                                    >
-                                      {"\u00A0"}
-                                    </Paper>
-                                  </Tooltip>
-                                  <FormControl
-                                    className={classes.formControl}
-                                    disabled={
-                                      myPlayerState.clientId !== player.clientId
+                                // Color Picker
+                                <div>
+                                  <Paper
+                                    elevation={3}
+                                    onClick={handleColorPickerClick}
+                                    className={classes.color}
+                                    style={
+                                      playerColor
+                                        ? {
+                                            background:
+                                              "rgba(" +
+                                              playerColor.r +
+                                              ", " +
+                                              playerColor.g +
+                                              "," +
+                                              playerColor.b +
+                                              ", 1)",
+                                          }
+                                        : {
+                                            background: "rgba(255,255,255,1)",
+                                          }
                                     }
                                   >
-                                    <Select
-                                      value={myPlayerState.color}
-                                      onChange={(e) => {
-                                        handleMyPlayerChanges(e, "color");
-                                      }}
-                                      name={
-                                        normalizeName(
-                                          player.playerName || player.clientId
-                                        ) + "_color"
-                                      }
-                                      displayEmpty
-                                      className={classes.selectColor}
-                                    >
-                                      <MenuItem value={"red"}>Red</MenuItem>
-                                      <MenuItem value={"green"}>Green</MenuItem>
-                                      <MenuItem value={"lightGreen"}>
-                                        Light Green
-                                      </MenuItem>
-                                      <MenuItem value={"lime"}>Lime</MenuItem>
-                                      <MenuItem value={"black"}>Black</MenuItem>
-                                      <MenuItem value={"blue"}>Blue</MenuItem>
-                                      <MenuItem value={"yellow"}>
-                                        Yellow
-                                      </MenuItem>
-                                      <MenuItem value={"lightBlue"}>
-                                        Light Blue
-                                      </MenuItem>
-                                      <MenuItem value={"indigo"}>
-                                        Indigo
-                                      </MenuItem>
-                                      <MenuItem value={"cyan"}>Cyan</MenuItem>
-                                      <MenuItem value={"purple"}>
-                                        Purple
-                                      </MenuItem>
-                                      <MenuItem value={"deepPurple"}>
-                                        Deep Purple
-                                      </MenuItem>
-                                      <MenuItem value={"amber"}>Amber</MenuItem>
-                                      <MenuItem value={"orange"}>
-                                        Orange
-                                      </MenuItem>
-                                      <MenuItem value={"deepOrange"}>
-                                        Deep Orange
-                                      </MenuItem>
-                                      <MenuItem value={"teal"}>Teal</MenuItem>
-                                      <MenuItem value={"pink"}>Pink</MenuItem>
-                                      <MenuItem value={"gray"}>Gray</MenuItem>
-                                    </Select>
-                                  </FormControl>
+                                    {"\u00A0"}
+                                  </Paper>
+                                  {displayColorPicker ? (
+                                    <div className={classes.popover}>
+                                      <div
+                                        className={classes.cover}
+                                        onClick={handleColorPickerClose}
+                                      />
+                                      <SketchPicker
+                                        disableAlpha={true}
+                                        color={
+                                          playerColor || {
+                                            r: 255,
+                                            g: 255,
+                                            b: 255,
+                                            a: 1,
+                                          }
+                                        }
+                                        onChange={handleColorPickerChange}
+                                        onChangeComplete={
+                                          handleColorPickerChangeComplete
+                                        }
+                                      />
+                                    </div>
+                                  ) : null}
                                 </div>
                               ) : (
                                 // player color as paper
