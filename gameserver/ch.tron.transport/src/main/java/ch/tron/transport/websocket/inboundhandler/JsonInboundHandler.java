@@ -74,6 +74,15 @@ public class JsonInboundHandler {
                         gameId
                 ));
                 break;
+            case "playerConfigUpdate":
+                TransportManager.getMessageForwarder().forwardMessage(new PlayerConfigUpdateMessage(
+                        jo.getString("gameId"),
+                        playerId,
+                        jo.getString("playerName"),
+                        jo.getString("playerColor"),
+                        jo.getBoolean("ready")
+                ));
+                break;
             case "startGame":
                 TransportManager.getMessageForwarder().forwardMessage(new StartGameMessage(
                         jo.getString("gameId"),
