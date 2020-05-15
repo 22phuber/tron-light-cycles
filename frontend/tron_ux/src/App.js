@@ -5,7 +5,6 @@ import * as WSHelpers from "./helpers/websocket";
 import {
   DIRECTIONKEYS,
   getMyPlayerData,
-  getLobbyState,
   getGameId,
   getCanvasConfig,
   getPublicGames,
@@ -105,7 +104,10 @@ const App = () => {
   var myPlayerId = "";
   const [gameConfig, setGameConfig] = useState(getGameConfig());
   const [gameId, setGameId] = useState(getGameId());
-  const [lobbyState, setLobbyState] = useState(getLobbyState());
+  const [lobbyState, setLobbyState] = useState({
+    players: [],
+    host: {},
+  });
   const [canvasConfig, setCanvasConfig] = useState(getCanvasConfig());
   const [publicGames, setPublicGames] = useState(getPublicGames());
   const [joinGameState, setJoinGameState] = useState({
@@ -117,6 +119,7 @@ const App = () => {
   const [clearCanvas, setClearCanvas] = useState({ clear: false });
   var roundInfoObject = {};
   const [roundState, setRoundState] = useState({});
+  const [gameCreator, setGameCreator] = useState(false);
   const [countdownState, setCountdownState] = useState(null);
   // const [scoreState, setScoreState] = useState({ score: 0 });
 
@@ -474,6 +477,7 @@ const App = () => {
       },
     });
     setGameConfig(tempGameConfig);
+    setGameCreator(true);
     setAppState({ playMode: true, lobbyMode: true });
   }
 
@@ -513,6 +517,11 @@ const App = () => {
         })
     );
     setGameId(null);
+    setGameCreator(false);
+    setLobbyState({
+      players: [],
+      host: {},
+    });
     setAppState({ playMode: false, lobbyMode: false });
   }
 
@@ -540,7 +549,7 @@ const App = () => {
   function handlePlayerDeath(data, myPlayerId) {
     const { playerId, posx, posy, playerName } = data;
     var message = "",
-      variant = "info";
+      variant = "warning";
     if (playerId === myPlayerId) {
       message = " Oh No, YOU died! { x:" + posx + ", y:" + posy + " }";
       variant = "error";
@@ -553,7 +562,6 @@ const App = () => {
         ", y:" +
         posy +
         " }";
-      variant = "warning";
     }
     enqueueSnackbar(message, {
       variant: variant,
@@ -566,7 +574,7 @@ const App = () => {
   function handleRoundScores(data, myPlayerId) {
     const { playerScores } = data;
     var message = " Hm, YOU didn't win this time ... but maybe next time!",
-      variant = "default";
+      variant = "info";
     playerScores.forEach((player) => {
       if (player.clientId === myPlayerId) {
         if (player.score >= playerScores.length) {
@@ -657,6 +665,7 @@ const App = () => {
                       myPlayer={myPlayerData}
                       handleMyPlayer={handleMyPlayer}
                       handleStartGame={handleStartGame}
+                      gameCreatorFlag={gameCreator}
                     />
                   </Paper>
                 </Box>
