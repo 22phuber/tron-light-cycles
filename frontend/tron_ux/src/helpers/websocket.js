@@ -57,5 +57,6 @@ export const QUERY = Object.freeze({
     subject: "playerConfigUpdate",
     playerName: "thePlayersName",
     playerColor: "rgb(int,int,int)",
+    gameId: "theGameId",
   },
 });

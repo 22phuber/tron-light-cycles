@@ -381,6 +381,7 @@ const App = () => {
       playerName: username,
       playerColor: color,
       ready: ready,
+      gameId: gameId,
     };
     if (key in myPlayerData) {
       switch (key) {
