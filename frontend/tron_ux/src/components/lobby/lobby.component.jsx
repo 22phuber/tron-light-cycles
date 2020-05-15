@@ -142,10 +142,16 @@ const LobbyTable = (props) => {
   const { enqueueSnackbar } = useSnackbar();
   const gameLinkRef = useRef(null);
   // dispatch vars from props
-  const { players, myPlayer, gameConfig, gameId, host } = props;
+  const {
+    players,
+    myPlayer,
+    gameConfig,
+    gameId,
+    host,
+    gameCreatorFlag,
+  } = props;
 
   // TODO: disable used colors from other users in select dropdown!
-  // TODO: Send my Player updates (color/ready) to gameserver!
   const [playerState, setPlayerState] = useState(null);
   const [gameHost, setGameHost] = useState(null);
   const [myPlayerState, setMyPlayerState] = useState(null);
@@ -154,9 +160,17 @@ const LobbyTable = (props) => {
   const [allPlayerReadyState, setAllPlayerReadyState] = useState(false);
 
   useEffect(() => {
+    setPlayerState(null);
+  }, []);
+
+  useEffect(() => {
     setPlayerState(players);
     var allPlayersReady = true;
     if (Array.isArray(players) && players.length) {
+      if (Array.isArray(playerState) && playerState.length) {
+        handlePlayersJoined();
+        handlePlayersLeft();
+      }
       players.map((player) => {
         setUsedPlayerColors(usedPlayerColors.concat(player.color));
         if (player.ready === false) allPlayersReady = false;
@@ -166,6 +180,7 @@ const LobbyTable = (props) => {
     setAllPlayerReadyState(allPlayersReady);
     return () => {
       setUsedPlayerColors([]);
+      setPlayerState(null);
     };
     // eslint-disable-next-line
   }, [players]);
@@ -180,19 +195,31 @@ const LobbyTable = (props) => {
 
   useEffect(() => {
     setGameHost(host);
-    console.log(
-      "Host: " + JSON.stringify(host) + " | Player: " + JSON.stringify(myPlayer)
-    );
+    console.log("useEffect setGameHost triggered");
     if (
-      myPlayer.clientId === host.clientId &&
-      gameHost.clientId !== host.clientId
+      !gameCreatorFlag &&
+      gameHost &&
+      host.clientId !== gameHost.clientId &&
+      myPlayer.clientId === host.clientId
     ) {
+      console.log(
+        "Host: " +
+          JSON.stringify(host) +
+          " | Player: " +
+          JSON.stringify(myPlayer) +
+          " | gameHost: " +
+          JSON.stringify(gameHost)
+      );
       enqueueSnackbar(" Congrats, You are now the new Game Host!", {
         variant: "info",
         disableWindowBlurListener: true,
       });
     }
-  }, [host]);
+    return () => {
+      setGameHost(null);
+    };
+    // eslint-disable-next-line
+  }, [host, myPlayer]);
 
   const handleMyPlayerChanges = (event, setting) => {
     switch (setting) {
@@ -205,6 +232,50 @@ const LobbyTable = (props) => {
       default:
         break;
     }
+  };
+
+  const handlePlayersJoined = () => {
+    var joinedPlayers;
+    joinedPlayers = players.filter(function (obj) {
+      return !playerState.some(function (obj2) {
+        return obj.clientId === obj2.clientId;
+      });
+    });
+    console.log("Players joined game: " + JSON.stringify(joinedPlayers));
+    joinedPlayers.forEach((joinedPlayer) => {
+      if (joinedPlayer.clientId !== myPlayer.clientId) {
+        enqueueSnackbar(
+          " Player [" + joinedPlayer.playerName + "] joined the Lobby!",
+          {
+            variant: "default",
+            disableWindowBlurListener: true,
+            dense: true,
+          }
+        );
+      }
+    });
+  };
+
+  const handlePlayersLeft = () => {
+    var playersLeft;
+    playersLeft = playerState.filter(function (obj) {
+      return !players.some(function (obj2) {
+        return obj.clientId === obj2.clientId;
+      });
+    });
+    console.log("Players left game: " + JSON.stringify(playersLeft));
+    playersLeft.forEach((playerLeft) => {
+      if (playerLeft.clientId !== myPlayer.clientId) {
+        enqueueSnackbar(
+          " Player [" + playerLeft.playerName + "] left the Lobby!",
+          {
+            variant: "warning",
+            disableWindowBlurListener: true,
+            dense: true,
+          }
+        );
+      }
+    });
   };
 
   const copyToClipboard = (event) => {
