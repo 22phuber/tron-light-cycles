@@ -9,12 +9,12 @@ import java.util.LinkedList;
 public class Player {
 
     private final String id;
-    private final String name;
+    private String name;
+    private String color;
+    private boolean ready = false;
     private int posx;
     private int posy;
     private int dir;
-    private final String color;
-    private boolean ready = false;
     private final LinkedList turns = new LinkedList<Turn>();
 
     public Player(String  id, String name, String color) {
@@ -61,6 +61,10 @@ public class Player {
         return color;
     }
 
+    public void setColor(String color) {
+        this.color = color;
+    }
+
     public boolean isReady(){return this.ready;}
 
     public void setReady(boolean status){this.ready = status;}
@@ -72,4 +76,8 @@ public class Player {
     }
 
     public String getName() {return name;}
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

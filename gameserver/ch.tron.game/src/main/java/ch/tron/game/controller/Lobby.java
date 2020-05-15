@@ -121,6 +121,13 @@ public class Lobby implements Runnable {
         }
     }
 
+    public void updatePlayerConfig(String id, String name, String color, boolean ready) {
+        Player pl = players.get(id);
+        pl.setName(name);
+        pl.setColor(color);
+        pl.setReady(ready);
+    }
+
     public void updatePlayer(String playerId, String key) {
         game.updatePlayer(playerId, key);
     }

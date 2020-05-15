@@ -80,7 +80,16 @@ public class GameManager {
                 String playerId = ((PlayerUpdateMessage) msg).getPlayerId();
 
                 lobbies.get(groupId).updatePlayer(playerId, ((PlayerUpdateMessage) msg).getKey());
-            } else if (msg instanceof StartGameMessage) {
+            } else if (msg instanceof PlayerConfigUpdateMessage) {
+                Lobby lobby = lobbies.get(((PlayerConfigUpdateMessage) msg).getGroupId());
+                lobby.updatePlayerConfig(
+                        ((PlayerConfigUpdateMessage) msg).getPlayerId(),
+                        ((PlayerConfigUpdateMessage) msg).getPlayerName(),
+                        ((PlayerConfigUpdateMessage) msg).getPlayerColor(),
+                        ((PlayerConfigUpdateMessage) msg).isReady()
+                );
+            }
+            else if (msg instanceof StartGameMessage) {
                 lobbies.get(((StartGameMessage) msg).getGroupId()).play(((StartGameMessage) msg).getPlayerId());
             } else if(msg instanceof RemovePlayerMessage) {
                 Lobby lobby = lobbies.get(((RemovePlayerMessage) msg).getGroupId());
