@@ -105,7 +105,7 @@ const TronAppBar = (props) => {
           </Typography>
           {!auth ? (
             <React.Fragment>
-              <div className={classes.myPlayer}>[{myPlayer}]</div>
+              <div className={classes.myPlayer}>username: [{myPlayer}]</div>
               <div>
                 <Button color="inherit" onClick={showRegisterDialog}>
                   Register
@@ -117,7 +117,7 @@ const TronAppBar = (props) => {
             </React.Fragment>
           ) : (
             <React.Fragment>
-              <div className={classes.myPlayer}>[{myPlayer}]</div>
+              <div className={classes.myPlayer}>username: [{myPlayer}]</div>
               <div>
                 <IconButton
                   aria-label="account of current user"
