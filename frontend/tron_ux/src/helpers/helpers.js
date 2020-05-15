@@ -39,18 +39,6 @@ export function getMyPlayerData() {
 }
 
 /**
- * Get lobbyState data from localStorage or create default
- */
-export function getLobbyState() {
-  return (
-    JSON.parse(localStorage.getItem("lobbyState")) || {
-      players: [],
-      host: {},
-    }
-  );
-}
-
-/**
  * Get gameId from localStorage or set null
  */
 export function getGameId() {
