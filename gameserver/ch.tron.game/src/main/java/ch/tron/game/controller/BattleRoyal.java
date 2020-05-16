@@ -179,17 +179,17 @@ public class BattleRoyal extends GameMode{
     public void die(Player pl) {
         playersAlive.remove(pl.getId());
         playersDead.add(pl.getId());
-        JSONArray all = new JSONArray();
+        JSONArray allTurns = new JSONArray();
         pl.getTurns().forEach(turn -> {
-            JSONObject one = new JSONObject()
+            JSONObject oneTurn = new JSONObject()
                     .put("posx", turn.getPosx())
                     .put("posy", turn.getPosy())
                     .put("newDirection", turn.getNewDirection());
-            all.put(one);
+            allTurns.put( oneTurn);
         });
         wallCleaner.remove(pl.getId());
         GameManager.getMessageForwarder().forwardMessage(new DeathMessage(
-                lobbyId, pl.getId(), pl.getPosx(), pl.getPosy(), all
+                lobbyId, pl.getId(), pl.getName(), pl.getPosx(), pl.getPosy(), allTurns
         ));
     }
 }
