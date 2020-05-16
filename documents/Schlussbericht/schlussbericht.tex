@@ -1,0 +1,193 @@
+\documentclass[11pt,ngerman]{article}
+\usepackage{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{babel}
+\usepackage{lmodern}%get scalable font
+\usepackage{titling}
+\usepackage{relsize}
+\usepackage{biblatex}
+\usepackage{hyperref}
+\usepackage{glossaries}
+\usepackage{paralist}
+\usepackage[table, dvipsnames]{xcolor}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{float}
+\restylefloat{table}
+\usepackage{setspace}
+\usepackage{multicol}
+\usepackage{graphicx}
+\usepackage[space]{grffile}
+\usepackage[most]{tcolorbox}
+\usepackage{enumitem}
+\usepackage{textcomp}
+\usepackage{listings}
+
+% Document geometry
+\geometry{a4paper, top=25mm, left=25mm, right=25mm, bottom=20mm,
+    headsep=10mm, footskip=12mm}
+
+% Link colors
+\hypersetup{
+    colorlinks,
+    linkcolor={blue},
+    citecolor={red},
+    urlcolor={blue}
+}
+
+% double quotes macro
+% usage: \quotes{arg1}  => in text: "arg1"
+\newcommand{\quotes}[1]{``#1''}
+
+% inline code macro
+\definecolor{lightgray}{gray}{0.9}
+\lstset{
+    showstringspaces=false,
+    basicstyle=\ttfamily,
+    keywordstyle=\color{blue},
+    commentstyle=\color[grey]{0.6},
+    stringstyle=\color[RGB]{255,150,75}
+}
+\newcommand{\inlinecode}[2]{\colorbox{lightgray}{\lstinline[language=#1]$#2$}}
+
+% Glossary
+% Das Glossar definiert alle wichtigen Begriffe zur Sicherstellung einer einheitlichen Terminologie.
+% Es sollen keine allgemeinen Begriffe erklärt werden, die den Adressaten bekannt sind (z. B. Java, CPU etc.).
+% Glossareinträge müssen im Text verwendet werden, damit diese im Glossar im Appendix \printglossary angezeigt werden
+\makeglossaries
+\loadglsentries{glossary} % loads glossary definitions from external file
+
+
+% bibliography file
+\addbibresource{\jobname.bib}
+
+% pre-, post title setting
+\pretitle{\begin{center}\linespread{1.5}\huge}
+    \posttitle{\par\end{center}\vspace{0.5em}}
+
+\begin{document}
+
+    \title{\includegraphics[width=1\textwidth]{figures/Tron-Legacy_Bike.png}\\ Tron Licht-Motorräder Computerspiel\\
+        \vspace{1cm}
+        \smaller{}Schlussbericht \\
+        \vspace{0.5cm}
+        \small{}ZHAW  School of Engineering
+        \vspace{1.5cm}
+    }
+    \author{
+        Akca, Deniz\\
+        \small{akcaden1@students.zhaw.ch}
+        \and
+        Holenstein, Christian\\
+        \small{holenchr@students.zhaw.ch}
+        \and
+        Huber, Patrick\\
+        \small{huberpa4@students.zhaw.ch}
+        \and
+        Iten, Mike\\
+        \small{itenmik1@students.zhaw.ch}
+        \vspace{1.5cm}
+    }
+   \date{\today}
+
+    \maketitle
+    \newpage
+
+    \tableofcontents
+    \listoftables
+    \listoffigures
+    \newpage
+
+    \section{Ausgangslage}
+
+    \subsection{Original Tron}
+    1982 wurde der Film "Tron"\ von Steven Lisberger ausgestrahlt, der grosse Beliebtheit erlangte \cite{lisbergerTRON1982}\cite{TronFilm2020}. Danach wurden verschiedene Spielversionen von Tron produziert.
+
+    \subsection{Spielbeschreibung}
+    Ein Spieler besitzt ein sogenanntes Licht-Motorrad. Dieses zieht während der Fahrt eine Linie nach sich, die bestehen bleibt. Fährt ein Spieler in eine dieser Linien, scheidet dieser aus. Gewinner ist, wer im Spiel bleibt, bis alle anderen Spieler ausgeschieden sind.
+
+    \section{Idee}
+    Es soll ein Tron-Spiel entwickelt werden, welches eine ansprechende und simple Benutzeroberfläche besitzt, sodass schnell und einfach gespielt werden kann. Das Spiel wird im Multiplayer-Modus angeboten werden. Ein Spieler wird gegen ihm bekannte Spieler oder zufällig ausgewählte Spieler antreten können.
+
+    \section{Kundennutzen}
+    Als kleine, spassige Ablenkungen in der Pause oder als sonstiger Zeitvertreib, versüsst unser Spiel den Alltag des Anwenders. Es besticht durch seine Einfachheit. Dies führt dazu, dass die Konzentration des Spielers voll und ganz auf das Spiel selbst gelenkt ist und er dieses in vollen Zügen geniessen kann. Danach wird er erholt zu seinen täglichen Aufgaben zurückkehren. Über ein Gastkonto ist es einem Spieler möglich, ohne jegliche Registrierung, sofort zu spielen. Möchte ein Spieler seine Fortschritte gespeichert und abrufbar haben, kann er einen Account einrichten. Die gespeicherten Punkte dienen dann als Indiz für die Applikation, um den Spieler gegen ähnlich starke Gegner antreten zu lassen. Ausserdem kann das Spiel mit Freunden gespielt werden. Ein spannender Feierabend oder Samstagnachmittag - reich an sozialer Interaktion - ist garantiert.
+    Es gibt reichlich weitere Features, die gegebenenfalls implementiert werden können (siehe \ref{Weiterführende Ideen}), um kontinuierlicher Spielspass gewährleisten zu können.
+
+    \section{Stand der Technik / Konkurrenzanalyse}
+    Es gibt mehrere kostenlose online Spiele, welche im Browser gespielt werden können. \Gls{Multiplayer} ist teilweise möglich. Mindestens Drei dieser Tron-Spiele können ebenfalls über das Netzwerk (\Gls{Game Server}) gespielt werden. \cite{TronGameBasisKostenlosOnline}\cite{sphinxCyclewarsIoOnline}\cite{TronLightCyclesEu}\cite{PlayersOnlineXtremeTron}
+    Viele der vorhandenen Spiele nutzen veraltete Technologien wie den \Gls{Adobe Flash Player} \cite{SayingGoodbyeFlash2017}\cite{FlashFutureInteractive2017} und nicht mehr zeitgemässe Grafiken. Ausserdem sind die grafischen Oberflächen häufig schwer verständlich.
+    Momentan sind zwei moderne Tron Spiele auf dem Markt, die sich jedoch nicht nur auf das fahren von Licht-Motorräder beschränken. Vielmehr handelt es sich dabei um komplexe Action Spiele in 3-D Grafik, jeweils mit geführter Storyline.\cite{TronEvolution2020}\cite{TRONRUNr}
+
+    \section{Hauptablauf (Kontextszenario)}
+
+    \subsection{Anwender-Identifikation/-Verifikation}
+	Der Anwender meldet sich anonym als Gast in der Applikation an oder loggt sich mit einem bestehenden Account ein. Um in ein Spiel zu gelangen, kann der Anwender entscheiden, ob er eine Lobby erstellen oder einer bestehenden Lobby beitreten möchten.
+
+	\subsection{\Gls{Lobby} erstellen}
+	Falls der Anwender eine Lobby erstellt, kann er auswählen ob diese nur für Freunde sichtbar ist oder auch andere Spieler beitreten können. Als Ersteller der Lobby kann der Anwender das Spiel starten, wenn alle anderen Spieler in der Lobby den Status auf 'bereit' gewechselt haben.
+
+	\subsection{\Gls{Lobby} beitreten}
+	Falls der Anwender einer Lobby beitreten möchte, kann er sich eine gewünschte Lobby aus der Lobby-Liste aussuchen. Als Nicht-Ersteller der Lobby kann der Status auf 'bereit' gewechselt werden und auf den Start des Spiels gewartet werden.
+
+	\subsection{Spielstart und Rangliste}
+	Die Anwendung wechselt zur \Gls{Arena} und das Spiel beginnt. Der Anwender spielt 5 Runden. Am Ende der 5 Runden zeigt die Anwendung dem Anwender die Rangliste an.
+
+    \section{Ressourcen}
+    Das Projekt ist realisierbar mit einem Team aus 4 Personen. Grundlegendes Wissen im Bereich der Server-Client-Kommunikation ist notwendig, sowie Kenntnisse von objektorientierter Programmierung (\Gls{OOP}), Java und Javascript. Dieses Wissen ist im Team vorhanden. Des Weiteren bestehen Kenntnisse zum Web-Design mit React, HTML5 und CSS3.
+    Der Gesamtaufwand für das finale Spiel mit Basisfunktionen und Original-Spielmodus wird auf ca. 500 - 600 Stunden geschätzt. Dies entspricht ungefähr 138 Stunden Aufwand pro Person.
+
+    \section{Wirtschaftlichkeit}
+
+    \subsection{Aufwand erste Version}
+    Um die erste, initiale, über das Netzwerk (\Gls{Game Server}) spielbare Version fertigzustellen, rechnen wir mit folgendem Aufwand. \\
+    \\
+    Kalkulationsformel:
+        \begin{center}
+            \begin{itshape}
+                Projektplanung + Entwicklung + Dokumentation/Testing/Deployment = \\
+                \vspace{0.5em}
+                2 Wochen * 1.5 Arbeitstage * 4 Mitarbeiter * 8 Arbeitsstunden + \\
+                \vspace{0.5em}
+                9 Wochen * 1.5 Arbeitstage * 4 Mitarbeiter * 8 Arbeitsstunden + \\
+                \vspace{0.5em}
+                1 Woche * 1.5 Arbeitstage * 4 Mitarbeiter * 8 Arbeitsstunden \\
+                \vspace{0.5em}
+                \textbf{= 576 Arbeitsstunden}
+            \end{itshape}
+        \end{center}
+
+    \subsection{Werbung als Einnahmequelle}
+    Einnahmen werden hauptsächlich durch Werbeanzeigen generiert. Genaue Berechnungen sind relativ schwierig, da sich die Besucheranzahl auf der Webseite über die Zeit ändern kann. Ebenfalls hat die Bezahlstrategie, welche abhängig ist von der "Werbemethode" (CPC, CPM, CPA), einen grossen Einfluss auf die Einnahmen, sowie die Relevanz des Inhaltes der angezeigten Werbung, auf den Webseitenbesucher\cite{CPCVsCPA2019}\cite{daswani2008online}. \\
+    \\
+    Berechnung nach Google Adsense Calculator \cite{GoogleAdSenseEarn}:
+    \begin{center}
+        \begin{tabular}{ | l | l | l | p{5cm} |}
+            \hline
+            Monthly page views & Monthly revenue [\$]  \\ \hline
+            500'000 & 1'925 \\ \hline
+            1'000'000 & 3'850 \\ \hline
+            2'500'000 & 9'625 \\ \hline
+            5'000'000 & 19'250 \\ \hline
+            10'000'000 & 38'500 \\ \hline
+        \end{tabular}
+    \end{center}
+    \subsection{Return of Invest}
+    Die geschätzte initiale Investition beträgt bei 576 Arbeitsstunden Aufwand und einem Stundensatz von 50.- pro Stunde plus einer kleinen Reserve für zusätzliche Ausgaben:
+    \[576\ h * 50.- + 5'000 = 33'800\ CHF\]
+    Die Einnahmen bei 2'500'000 monatlichen Besuchern (Laden der Webseite)  würden sich auf monatlich 9'625 CHF belaufen. Wenn wir die monatlichen Kosten für den Webseitenbetrieb vernachlässigen, hätten wir nach ca. 4 Monaten die Entwicklungskosten amortisiert    .\\
+
+    \newpage
+
+    \section{Literatur}
+    \printbibliography[heading=none]
+
+     \newpage
+
+    \section{Appendix}
+    \textit{Hinweis: Glossar-Referenznummern sind Seitennummern}
+    \printglossary
+
+
+\end{document}
+
