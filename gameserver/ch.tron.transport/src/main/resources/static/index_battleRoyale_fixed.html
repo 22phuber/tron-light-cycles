@@ -18,37 +18,6 @@
     let diffx = 0;
     let diffy = 0;
 
-    var Position = function(x,y){
-        this.x = x;
-        this.y = y;
-    }
-
-    var Player = function(id,color) {
-        this.id = id;
-        this.positions = [];
-        this.color = color;
-    }
-
-    Player.prototype.deletePositions = function(){
-        this.positions = [];
-    }
-
-    Player.prototype.addPositions = function(x,y){
-        this.positions.push(new Position(x,y));
-    }
-
-    Player.prototype.getPositions = function(){
-        return this.positions;
-    }
-
-    Player.prototype.removeOldestPosition = function(){
-        this.positions.shift();
-    }
-
-    let playersPositions = [];
-    let movementLimit = 100;
-    let movementCounter = 0;
-
     let playerColors = [];
     playerColors.push("rgb(44,123,246)");
     playerColors.push("rgb(155,86,163)");
@@ -106,20 +75,11 @@
 
             case "countdown":
                 console.log("Countdown: " + JSON.stringify(msg));
-                if(msg.count == 3){
-                    movementCounter = 0;
-                    for(player of playersPositions){
-                        player.deletePositions();
-                    }
-                }
                 break;
 
             case "initialGameState":
                 console.log("InitialGameState; gameId: " + msg.gameId + ", players: " + JSON.stringify(msg.players));
                 clearCanvas();
-                msg.players.forEach(player => {
-                    playersPositions.push(new Player(player.id, player.color));
-                });
                 break;
 
             case "canvasConfig":
@@ -148,11 +108,11 @@
         }
     };
 
-    function setUpCanvas () {
+    function setUpCanvas (width, height) {
         canvas = document.createElement('canvas');
         canvas.id = "canvas";
-        canvas.width = 400;
-        canvas.height = 400;
+        canvas.width = width;
+        canvas.height = height;
         document.body.appendChild(canvas);
         ctx = canvas.getContext("2d");
 
@@ -178,7 +138,7 @@
             "gameConfig": {
                 "name": "testGameName",
                 "public": true,
-                "mode": "battleroyal",
+                "mode": "battleRoyale",
                 "playersAllowed": 3,
             },
             "host":{
@@ -206,56 +166,19 @@
     function updateCanvas (players, cleaners, walls) {
 
         players.forEach(player => {
-            if(player.id = clientId){
-                if(clientPosX != player.posx){
-                    diffx = clientPosX - player.posx;
-                    diffy = 0;
-                }else if(clientPosY != player.posy){
-                    diffy = clientPosY - player.posy;
-                    diffx = 0;
-                }
-                clientPosX = player.posx;
-                clientPosY = player.posy;
-            }
+            ctx.fillStyle = player.color;
+            ctx.fillRect(player.posx, player.posy, lineThickness, lineThickness);
         });
 
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        ctx.beginPath();
-        ctx.strokeStyle = "black";
-        ctx.fillStyle = "black";
-        ctx.fillRect(-100 - clientPosX + (canvas.width / 2), -100 - clientPosY + (canvas.height / 2), walls.width + 100, walls.height + 100);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.strokeStyle = "black";
-        ctx.fillStyle = "white";
-        ctx.fillRect(walls.x - clientPosX + (canvas.width / 2), walls.y - clientPosY + (canvas.height / 2), walls.width, walls.height);
-        ctx.stroke();
-
-        players.forEach(player => {
-            for(let client of playersPositions){
-                if(player.id == client.id){
-                    client.addPositions(player.posx, player.posy);
-                }
-            }
+        cleaners.forEach(cleaner => {
+            ctx.fillStyle = "rgb(255,255,255)";
+            ctx.fillRect(cleaner.posx, cleaner.posy, lineThickness, lineThickness);
         });
 
-        for(player of playersPositions){
-            for(position of player.getPositions()){
-                if(clientPosX - position.x <= canvas.width && clientPosX - position.x >= 0 - canvas.width && clientPosY - position.y <= canvas.height && clientPosY - position.y >= 0 - canvas.height){
-                    ctx.fillStyle = player.color;
-                    ctx.fillRect(position.x - clientPosX + (canvas.width / 2), position.y - clientPosY + (canvas.height / 2), lineThickness, lineThickness);
-                }
-            }
-        }
-
-        if(movementCounter >= movementLimit){
-            for(player of playersPositions){
-                player.removeOldestPosition();
-            }
-        }else{
-            movementCounter++;
-        }
+        ctx.fillStyle = "rgb(0,0,0)";
+        ctx.beginPath();
+        ctx.rect(walls.x, walls.y, walls.width, walls.height);
+        ctx.stroke();
     }
 
     function sendPlayerUpdate (key) {
