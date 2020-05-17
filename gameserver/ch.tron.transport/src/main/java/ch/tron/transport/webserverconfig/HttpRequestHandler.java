@@ -34,7 +34,7 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
             ctx.fireChannelRead(request.retain());
         } else {
 
-            final InputStream in = getClass().getResourceAsStream("/static/index_battleroyal_follow.html");
+            final InputStream in = getClass().getResourceAsStream("/static/index_battleRoyale_follow.html");
 
             // Workaround:
             // Creating a temporary file as param for RandomAccessFile-Instance
