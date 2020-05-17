@@ -46,4 +46,3 @@ This starts a production ready docker-compose
 5. run `docker-compose up`
 6. Open `http://localhost/` in your browser
 
-
