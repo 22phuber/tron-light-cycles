@@ -14,7 +14,8 @@ public class SocketInitializer {
 
     public static void init() {
 
-        final String NETTY_HOST = "localhost";
+        final String NETTY_HOST = "0.0.0.0";
+        //final String NETTY_HOST = "localhost";
         final int NETTY_PORT = 9000;
 
         final EventLoopGroup eventLoopGroup = new NioEventLoopGroup();
