@@ -199,8 +199,7 @@ const App = () => {
   function handleWebsocket() {
     var connectInterval;
     // CONNECT
-    //websocketClient.current = WSHelpers.connectToWSGameServer();
-    websocketClient.current = WSHelpers.connectToWSNettyGameServer();
+    websocketClient.current = WSHelpers.connectToWSGameServer();
     // OPEN
     websocketClient.current.onopen = () => {
       console.log("Websocket connected");

@@ -7,7 +7,10 @@ services:
     restart: unless-stopped
     ports:
       - "80:80"
+      - "9090:9090"
       #- "443:443"
+    links:
+      - "gameserver"
 
   mysql:
     build:
@@ -37,3 +40,10 @@ services:
       MYSQL_DATABASE: tron_light_cycles
       MYSQL_USER: tron
       MYSQL_PASSWORD: tron
+
+  gameserver:
+    build:
+      context: ./gameserver
+    restart: unless-stopped
+    ports:
+      - "9000:9000"

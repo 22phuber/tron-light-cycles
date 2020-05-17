@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
@@ -20,8 +20,8 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   form: {
-    width: '100%'
-  }
+    width: "100%",
+  },
 }));
 
 const CreateGame = (props) => {
@@ -32,29 +32,67 @@ const CreateGame = (props) => {
     mode: "classic",
     playersAllowed: "10",
   });
+  const [formErrorState, setFormErrorState] = useState({ maxPlayers: false });
 
   const handleChange = (property) => (event) => {
     const targetValue = event.target.value;
-    if (property === "mode") {
-      switch (targetValue) {
-        case "battleRoyale":
-          setDefaultValues({ ...defaultValues, playersAllowed: 100, [property]: targetValue });
-          break;
-        case "classic":
-          setDefaultValues({ ...defaultValues, playersAllowed: 10, [property]: targetValue });
-          break;
-        default:
-          setDefaultValues({ ...defaultValues, [property]: targetValue });
-          break;
-      }
+    switch (property) {
+      case "mode":
+        switch (targetValue) {
+          case "battleRoyale":
+            setDefaultValues({
+              ...defaultValues,
+              playersAllowed: 100,
+              [property]: targetValue,
+            });
+            break;
+          case "classic":
+            setDefaultValues({
+              ...defaultValues,
+              playersAllowed: 10,
+              [property]: targetValue,
+            });
+            break;
+          default:
+            setDefaultValues({ ...defaultValues, [property]: targetValue });
+            break;
+        }
+        break;
+      case "maxPlayers":
+        console.log("Val: " + targetValue);
+        console.log("playersAllowed: " + defaultValues.playersAllowed);
+        if (
+          targetValue &&
+          (isNaN(parseInt(targetValue, 10)) ||
+            parseInt(targetValue, 10) > defaultValues.playersAllowed ||
+            parseInt(targetValue, 10) < 1)
+        ) {
+          setFormErrorState((prevFormErrorState) => {
+            return { ...prevFormErrorState, maxPlayers: true };
+          });
+        } else {
+          setFormErrorState((prevFormErrorState) => {
+            return { ...prevFormErrorState, maxPlayers: false };
+          });
+        }
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (formErrorState.maxPlayers) {
+      console.error("ERROR: maxPlayers");
     } else {
-      setDefaultValues({ ...defaultValues, [property]: targetValue });
+      props.handleSubmit(event);
     }
   };
 
   return (
     <div className={classes.root}>
-      <form onSubmit={props.handleSubmit} className={classes.form}>
+      <form onSubmit={handleSubmit} className={classes.form}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <TextField
@@ -120,6 +158,15 @@ const CreateGame = (props) => {
               fullWidth
               autoComplete="maxplayers"
               variant="outlined"
+              onChange={handleChange("maxPlayers")}
+              error={formErrorState.maxPlayers}
+              helperText={
+                formErrorState.maxPlayers
+                  ? "Values must be between 0 - " +
+                    defaultValues.playersAllowed +
+                    " (only digits)"
+                  : ""
+              }
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -132,7 +179,13 @@ const CreateGame = (props) => {
         </Grid>
         <Grid container spacing={3} justify="center">
           <Grid item xs={6}>
-            <Button variant="contained" color="primary" type="submit" fullWidth>
+            <Button
+              variant="contained"
+              color="primary"
+              type="submit"
+              fullWidth
+              // disabled={formErrorState.maxPlayers}
+            >
               Create
             </Button>
           </Grid>

@@ -4,18 +4,12 @@
 
 // Connections
 const WSURL = Object.freeze({
-  nettyGameServer: "ws://localhost:9000/ws", // java netty (gameserver)
-  gameServer: "ws://localhost:9090/ws", // local nodejs websocket test server
+  gameServer: "ws://localhost:9090/ws", // java netty (gameserver)
 });
-
-export function connectToWSNettyGameServer() {
-  return new WebSocket(WSURL.nettyGameServer);
-}
 
 export function connectToWSGameServer() {
   return new WebSocket(WSURL.gameServer);
 }
-
 // Settings
 
 // JSON query objects

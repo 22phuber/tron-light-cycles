@@ -35,16 +35,14 @@ Use Visual Studio Code or another Javascript/React compatible IDE. Open project 
 
 Original source guide: https://bezkoder.com/node-js-jwt-authentication-mysql/
 
-## NGiNX Reverse Proxy, node backend and Database
+# Build and run docker compose
 
-Start the react frontend prior to these steps.
-*Optionally*: You can also start the java Gameserver if needed
+This starts a production ready docker-compose
 
 1. Install Docker and docker-compose
 2. Open `docker/` folder
-3. run `./pre-build.sh` => Copies `/backend` files into docker `node/files` folder (needed fo buidling the backend)
-4. run `docker-compose build`
+3. run `./pre-build.sh`
+4. run `docker-compose build --no-cache`
 5. run `docker-compose up`
 6. Open `http://localhost/` in your browser
-
 
