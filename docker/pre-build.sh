@@ -61,6 +61,8 @@ cleanup "${nodeTargetFolder}" "${nginxTargetFolder}" "${gameserverTargetFolder}"
 echo "Building tron_ux Frontend: "
 (
     cd "${nginxFrontendFiles}" && \
+    npm install && \
+    npm audit fix && \
     npm run build && \
     cd "$(dirname "${BASH_SOURCE[0]}")"
 ) || exit 1

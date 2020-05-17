@@ -4,7 +4,8 @@
 
 // Connections
 const WSURL = Object.freeze({
-  gameServer: "ws://localhost:9090/ws", // java netty (gameserver)
+  // gameServer: "ws://localhost:9090/ws", // java netty (gameserver)
+  gameServer: "ws://212.51.138.112:9090/ws", // deployed to supportblog.ch
 });
 
 export function connectToWSGameServer() {
