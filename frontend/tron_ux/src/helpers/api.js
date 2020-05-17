@@ -59,7 +59,7 @@ export async function signIn(user, callback) {
       }
     })
     .catch((error) => {
-      console.log(error);
+      console.error(error);
     });
 }
 
@@ -97,6 +97,6 @@ export async function signUp(user, callback) {
       }
     })
     .catch((error) => {
-      console.log(error);
+      console.error(error);
     });
 }

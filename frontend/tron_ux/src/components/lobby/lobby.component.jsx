@@ -214,14 +214,6 @@ const LobbyTable = (props) => {
       host.clientId !== gameHost.clientId &&
       myPlayer.clientId === host.clientId
     ) {
-      console.log(
-        "Host: " +
-          JSON.stringify(host) +
-          " | Player: " +
-          JSON.stringify(myPlayer) +
-          " | gameHost: " +
-          JSON.stringify(gameHost)
-      );
       enqueueSnackbar(" Congrats, You are now the new Game Host!", {
         variant: "info",
         disableWindowBlurListener: true,
@@ -252,12 +244,10 @@ const LobbyTable = (props) => {
   };
 
   const handleColorPickerChange = (color) => {
-    // console.log("handleColorPickerChange: " + convertRGB(color.rgb));
     setPlayerColor(color.rgb);
   };
 
   const handleColorPickerChangeComplete = (color, event) => {
-    // console.log("handleColorPickerChangeComplete: " + convertRGB(color.rgb));
     props.handleMyPlayer("color", convertRGB(color.rgb));
   };
 
@@ -268,7 +258,6 @@ const LobbyTable = (props) => {
         return obj.clientId === obj2.clientId;
       });
     });
-    // console.log("Players joined game: " + JSON.stringify(joinedPlayers));
     joinedPlayers.forEach((joinedPlayer) => {
       if (joinedPlayer.clientId !== myPlayer.clientId) {
         enqueueSnackbar(
@@ -290,7 +279,6 @@ const LobbyTable = (props) => {
         return obj.clientId === obj2.clientId;
       });
     });
-    // console.log("Players left game: " + JSON.stringify(playersLeft));
     playersLeft.forEach((playerLeft) => {
       if (playerLeft.clientId !== myPlayer.clientId) {
         enqueueSnackbar(
@@ -307,14 +295,14 @@ const LobbyTable = (props) => {
 
   const copyToClipboard = (event) => {
     const textToCopy = gameLinkRef.current.innerText;
-    if (typeof navigator.clipboard.writeText !== "undefined") {
+    if (typeof navigator.clipboard != "undefined") {
       // using clipboard api
       navigator.clipboard.writeText(textToCopy).then(
         function () {
           console.log("Successful copied text to clipboard.");
         },
         function () {
-          console.log("Copy to clipboard failed!");
+          console.error("Copy to clipboard failed!");
         }
       );
     } else {
@@ -338,7 +326,7 @@ const LobbyTable = (props) => {
         var msg = document.execCommand("copy") ? "successful" : "unsuccessful";
         console.log("Copying text command was " + msg);
       } catch (error) {
-        console.log("ERROR: Unable to copy: " + error);
+        console.error("ERROR: Unable to copy: " + error);
       }
       document.body.removeChild(textArea);
     }
@@ -391,8 +379,7 @@ const LobbyTable = (props) => {
                       /* Logical shortcut for only displaying the
                        * Icon if the copy command exists */
                       (document.queryCommandSupported("copy") ||
-                        typeof navigator.clipboard.writeText !==
-                          "undefined") && (
+                        typeof navigator.clipboard != "undefined") && (
                         <Tooltip
                           title="Copy to clipboard"
                           aria-label="Copy to clipboard"

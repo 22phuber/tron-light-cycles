@@ -65,7 +65,6 @@ const TronAppBar = (props) => {
   };
 
   const handleLogin = (data) => {
-    console.log(data);
     props.handleMyPlayerData(data);
     setAuth(true);
   };

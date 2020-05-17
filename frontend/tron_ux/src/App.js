@@ -226,7 +226,6 @@ const App = () => {
             });
             break;
           case "lobbyState":
-            console.log("WS[lobbyState]: " + JSON.stringify(dataFromServer));
             setLobbyState({
               players: dataFromServer.players,
               host: dataFromServer.host,
@@ -236,15 +235,9 @@ const App = () => {
             });
             break;
           case "currentPublicGames":
-            // console.log(
-            //   "WS[currentPublicGames]: " + JSON.stringify(dataFromServer)
-            // );
             setPublicGames(dataFromServer.games);
             break;
           case "initialGameState":
-            console.log(
-              "WS[initialGameState]: " + JSON.stringify(dataFromServer)
-            );
             setClearCanvas((prevClearCanvas) => {
               return {
                 clear: !prevClearCanvas,
@@ -254,17 +247,14 @@ const App = () => {
             setPlayData(dataFromServer.players);
             break;
           case "countdown":
-            console.log("WS[countdown]: " + JSON.stringify(dataFromServer));
             roundInfoObject = dataFromServer.round;
             setRoundState(roundInfoObject);
             setCountdownState(dataFromServer.count);
             break;
           case "playerDeath":
-            console.log("WS[playerDeath]: " + JSON.stringify(dataFromServer));
             handlePlayerDeath(dataFromServer, myPlayerId);
             break;
           case "roundScores":
-            console.log("WS[roundScores]: " + JSON.stringify(dataFromServer));
             handleRoundScores(dataFromServer, myPlayerId);
             if (roundInfoObject.current === roundInfoObject.total) {
               setTimeout(function () {
@@ -273,7 +263,6 @@ const App = () => {
             }
             break;
           case "canvasConfig":
-            // console.log("WS[canvasConfig]: " + JSON.stringify(dataFromServer));
             const { width, height, lineThickness } = dataFromServer;
             setCanvasConfig({
               height: height,
@@ -282,22 +271,18 @@ const App = () => {
             });
             break;
           case "createGame":
-            // console.log("WS[createGame]: " + JSON.stringify(dataFromServer));
             setGameId(dataFromServer.gameId);
             setAppState({ playMode: true, lobbyMode: true });
             break;
           case "clientId":
-            // console.log("WS[clientId]: " + JSON.stringify(dataFromServer));
             myPlayerId = dataFromServer.id;
             setMyPlayerData((prevMyPlayerData) => {
               return { ...prevMyPlayerData, clientId: dataFromServer.id };
             });
-            console.log("WS[clientId] id: " + dataFromServer.id);
             break;
           default:
-            console.error("WARN: Unknown subject");
-            console.log(
-              "WS[Unknown subject]: " + JSON.stringify(dataFromServer)
+            console.error(
+              "WS[Unsupported subject]: " + JSON.stringify(dataFromServer)
             );
             break;
         }
@@ -341,10 +326,7 @@ const App = () => {
 
   // load public games and send client connected
   function fetchStateFromGameServer() {
-    // TODO: Remove?
-    //if (!myPlayerData.clientId) sendWsData(WSHelpers.QUERY.CLIENTCONNECTED);
     if (!appState.playMode && !appState.lobbyMode) {
-      console.log("loadGames");
       sendWsData(WSHelpers.QUERY.UPDATEPUBLICGAMES);
     }
   }
@@ -360,7 +342,6 @@ const App = () => {
   }
 
   function handleMyPlayerData(data) {
-    console.log(data);
     for (const [key, value] of Object.entries(data)) {
       switch (key) {
         case "cycle_color":
@@ -405,13 +386,6 @@ const App = () => {
         ...WSHelpers.QUERY.PLAYERCONFIGUPDATE,
         ...playerUpdate,
       });
-      console.log(
-        "WS Client: " +
-          JSON.stringify({
-            ...WSHelpers.QUERY.PLAYERCONFIGUPDATE,
-            ...playerUpdate,
-          })
-      );
       setMyPlayerData((prevMyPlayerData) => {
         return { ...prevMyPlayerData, [key]: val };
       });
@@ -509,13 +483,6 @@ const App = () => {
       ...WSHelpers.QUERY.LEAVEGAME,
       gameId: gameId,
     });
-    console.log(
-      "WS Client: " +
-        JSON.stringify({
-          ...WSHelpers.QUERY.LEAVEGAME,
-          gameId: gameId,
-        })
-    );
     setGameId(null);
     setGameCreator(false);
     setLobbyState({
@@ -542,7 +509,6 @@ const App = () => {
       ...WSHelpers.QUERY.STARTGAME,
       gameId: gameId,
     });
-    console.log("[WS]: Start game sent");
   }
 
   // player Death

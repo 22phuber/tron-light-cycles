@@ -59,8 +59,6 @@ const CreateGame = (props) => {
         }
         break;
       case "maxPlayers":
-        console.log("Val: " + targetValue);
-        console.log("playersAllowed: " + defaultValues.playersAllowed);
         if (
           targetValue &&
           (isNaN(parseInt(targetValue, 10)) ||

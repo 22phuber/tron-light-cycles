@@ -3,9 +3,14 @@
  */
 
 // Connections
+var WSgameServer = "ws://212.51.138.112:9090/ws";
+// development mode
+if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
+  WSgameServer = "ws://localhost:9000/ws";
+}
+
 const WSURL = Object.freeze({
-  // gameServer: "ws://localhost:9090/ws", // java netty (gameserver)
-  gameServer: "ws://212.51.138.112:9090/ws", // deployed to supportblog.ch
+  gameServer: WSgameServer,
 });
 
 export function connectToWSGameServer() {
@@ -16,7 +21,6 @@ export function connectToWSGameServer() {
 // JSON query objects
 // see: https://github.com/22phuber/tron-light-cycles/blob/develop/documents/client-server-messaging/json_messages.md
 export const QUERY = Object.freeze({
-  // CLIENTCONNECTED: { subject: "clientConnected" }, // TODO: REMOVE
   UPDATEPUBLICGAMES: { subject: "currentPublicGames" },
   UPDATEDIRECTION: {
     subject: "updateDirection",
