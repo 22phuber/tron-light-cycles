@@ -22,7 +22,7 @@ public class BattleRoyal extends GameMode{
     public BattleRoyal(String lobbyId, Map<String, Player> players, int x, int y) {
 
         super(x, y, 4, 2, lobbyId, players);
-        walls = new Wall(x, y);
+        walls = new Wall(x, y, 0 , 0);
 
         for(Map.Entry<String, Player> entry : players.entrySet()){
             wallCleaner.put(entry.getKey(), new WallCleaner(100));
@@ -96,7 +96,9 @@ public class BattleRoyal extends GameMode{
             posx = player.getPosx();
             posy = player.getPosy();
 
-            if (posx == walls.getWidth() || posx == fieldWitdh - walls.getWidth() || posy == walls.getHeight() || posy == fieldHeight - walls.getHeight() || field[posx][posy]) {
+            System.out.println("player: " + posx + "," + posy + " walls: " + walls.getWidth() + "," + walls.getHeight());
+
+            if (posx >= walls.getWidth() + walls.getX() || posy >= walls.getHeight() + walls.getY() || posx < walls.getX() || posy < walls.getY() ||field[posx][posy]) {
                 die(player);
             }
             else {
@@ -123,15 +125,17 @@ public class BattleRoyal extends GameMode{
         //move the outer walls closer to the center every "WALL_INTERVAL"
         if(remainingWallSteps > 0){
 
-            walls.setWidth(walls.getWidth() - velocity/2);
-            walls.setHeight(walls.getHeight() - velocity/2);
+            walls.setWidth(walls.getWidth() - velocity);
+            walls.setHeight(walls.getHeight() - velocity);
+            walls.setX(walls.getX() + velocity/2);
+            walls.setY(walls.getY() + velocity/2);
             remainingWallSteps--;
             if(remainingWallSteps == 0){
                 lastWallInterval = System.currentTimeMillis();
             }
         }else if(System.currentTimeMillis() - lastWallInterval >= WALL_INTERVAL){
             //move walls closer to the center
-            remainingWallSteps = 500 * velocity;
+            remainingWallSteps = 100 * velocity;
         }
     }
 
@@ -158,7 +162,7 @@ public class BattleRoyal extends GameMode{
 
         state.put("walls", new JSONObject()
                 .put("width", walls.getWidth()).put("height", walls.getHeight())
-                .put("x", fieldWitdh - walls.getHeight()).put("y", fieldHeight - walls.getHeight()));
+                .put("x", walls.getX()).put("y", walls.getY()));
 
         return state;
     }
