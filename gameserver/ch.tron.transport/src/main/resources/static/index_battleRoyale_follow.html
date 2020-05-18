@@ -204,10 +204,12 @@
     function updateCanvas (players, cleaners, walls) {
 
         players.forEach(player => {
+            if(clientId === player.id){
+                clientPosX = player.posx;
+                clientPosY = player.posy;
+            }
             for(let client of playersPositions){
-                if(player.id == client.id){
-                    clientPosX = player.posx;
-                    clientPosY = player.posy;
+                if(client.id === player.id){
                     client.addPositions(player.posx, player.posy);
                 }
             }
