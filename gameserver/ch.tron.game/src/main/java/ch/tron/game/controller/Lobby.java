@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Predicate;
 
 /**
  * Represents a lobby that holds all available types of tron
@@ -210,14 +209,53 @@ public class Lobby implements Runnable {
 
     private void resetPlayers() {
         int gridInterval = game.getGridInterval();
-        int x = 0;
-        int y = gridInterval;
+        int width = game.getFieldWitdh() - 2 * gridInterval;
+        int height = game.getFieldHeight() - 2 * gridInterval;
+        int startLine = 2 * width + 2 * height;
+        int clearance = startLine / players.size();
+        int posx = gridInterval;
+        int posy = gridInterval;
+        int dir = 1;
         for (Map.Entry<String, Player> player: players.entrySet()) {
-            x += 4 * gridInterval;
+            if (posy == gridInterval) {
+                int delta_x = gridInterval + width - posx;
+                if (delta_x >= clearance) {
+                    posx += clearance;
+                }
+                else {
+                    posx = gridInterval + width;
+                    posy = posy + clearance - delta_x;
+                    dir = 2;
+                }
+            }
+            else if (posx == width + gridInterval) {
+                int delta_y = height + gridInterval - posy;
+                if (delta_y >= clearance) {
+                    posy += clearance;
+                }
+                else {
+                    posy = gridInterval + height;
+                    posx = gridInterval + width - clearance + delta_y;
+                    dir = 3;
+                }
+            }
+            else if (posy == height + gridInterval) {
+                if (posx + gridInterval >= clearance) {
+                    posx -= clearance;
+                }
+                else {
+                    posy = posy - clearance + posx;
+                    posx = gridInterval;
+                    dir = 0;
+                }
+            }
+            else {
+                posy -= clearance;
+            }
             Player pl = player.getValue();
-            pl.setPosx(x);
-            pl.setPosy(y);
-            pl.setDir(1);
+            pl.setPosx(posx);
+            pl.setPosy(posy);
+            pl.setDir(dir);
             pl.getTurns().clear();
         }
     }

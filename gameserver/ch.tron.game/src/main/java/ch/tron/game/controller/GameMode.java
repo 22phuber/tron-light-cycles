@@ -199,6 +199,14 @@ public abstract class GameMode {
         return gridInterval;
     }
 
+    public int getFieldWitdh() {
+        return fieldWitdh;
+    }
+
+    public int getFieldHeight() {
+        return fieldHeight;
+    }
+
     private int calculateScore(int rank) {
         return rank * scoreFactor;
     }
