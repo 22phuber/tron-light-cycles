@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tron backend testing</title>
+</head>
+<body>
+<script>
+
+    let canvas;
+    let ctx;
+    let canvas_width;
+    let canvas_height;
+    let lineThickness;
+
+    let clientPosX = 0;
+    let clientPosy = 0;
+    let diffx = 0;
+    let diffy = 0;
+
+    var Position = function(x,y){
+        this.x = x;
+        this.y = y;
+    }
+
+    var Player = function(id,color) {
+        this.id = id;
+        this.positions = [];
+        this.color = color;
+    }
+
+    Player.prototype.deletePositions = function(){
+        this.positions = [];
+    }
+
+    Player.prototype.addPositions = function(x,y){
+        this.positions.push(new Position(x,y));
+    }
+
+    Player.prototype.getPositions = function(){
+        return this.positions;
+    }
+
+    Player.prototype.removeOldestPosition = function(){
+        this.positions.shift();
+    }
+
+    let playersPositions = [];
+    let movementLimit = 100;
+    let movementCounter = 0;
+
+    let playerColors = [];
+    playerColors.push("rgb(44,123,246)");
+    playerColors.push("rgb(155,86,163)");
+    playerColors.push("rgb(229,93,156)");
+    playerColors.push("rgb(237,95,93)");
+    playerColors.push("rgb(233,135,58)");
+    playerColors.push("rgb(243,185,75)");
+    playerColors.push("rgb(120,183,86)");
+    playerColors.push("rgb(140,140,140)");
+    playerColors.push("rgb(67,70,74)");
+    playerColors.push("rgb(28,29,30)");
+
+    let publicGames = [];
+
+    let clientId;
+    let gameId;
+
+    const ws_uri = "ws://localhost:9000/ws";
+
+    let ws = new WebSocket(ws_uri);
+
+    ws.onopen = () => requestCurrentPublicGames();
+
+    ws.onclose = () => console.log("Websocket closed");
+
+    ws.onerror = (err) => console.log("Error: " + err);
+
+    ws.onmessage = (msg) => {
+        msg = JSON.parse(msg.data);
+        switch (msg.subject) {
+
+            case "clientId":
+                clientId = msg.id;
+                console.log("New connection; clientId: " + clientId);
+                break;
+
+            case "currentPublicGames":
+                publicGames = msg.games;
+                if (publicGames.length > 0) {
+                    joinGame(publicGames[0].id);
+                } else {
+                    createGame();
+                }
+                break;
+
+            case "createGame":
+                gameId = msg.gameId;
+                console.log("CreateGame; new gameId: " + gameId);
+                startGame();
+                break;
+
+            case "lobbyState":
+                console.log("Current lobbyState: " + JSON.stringify(msg.players));
+                break;
+
+            case "countdown":
+                console.log("Countdown: " + JSON.stringify(msg));
+                if(msg.count == 3){
+                    movementCounter = 0;
+                    for(player of playersPositions){
+                        player.deletePositions();
+                    }
+                }
+                break;
+
+            case "initialGameState":
+                console.log("InitialGameState; gameId: " + msg.gameId + ", players: " + JSON.stringify(msg.players));
+                clearCanvas();
+                msg.players.forEach(player => {
+                    playersPositions.push(new Player(player.id, player.color));
+                });
+                break;
+
+            case "canvasConfig":
+                console.log("CanvasConfig: " + msg.width + " x " + msg.height);
+                if (canvas === undefined) {
+                    canvas_width = msg.width;
+                    canvas_height = msg.height;
+                    lineThickness = msg.lineThickness;
+                    setUpCanvas(canvas_width, canvas_height);
+                }
+                break;
+
+            case "gameState":
+                if (ctx !== undefined) {
+                    updateCanvas(msg.players, msg.cleaners, msg.walls);
+                }
+                break;
+
+            case "playerDeath":
+                console.log("PlayerDeath: " + JSON.stringify(msg));
+                break;
+
+            case "roundScores":
+                console.log("RoundScores: " + JSON.stringify(msg.playerScores));
+                break;
+        }
+    };
+
+    function setUpCanvas () {
+        canvas = document.createElement('canvas');
+        canvas.id = "canvas";
+        canvas.width = 400;
+        canvas.height = 400;
+        document.body.appendChild(canvas);
+        ctx = canvas.getContext("2d");
+
+        document.body.addEventListener('keydown', (event) => {
+            console.log("Event @body: " + event.key);
+            let key = event.key;
+            if (key === "ArrowLeft" ||
+                key === "ArrowRight" ||
+                key === "ArrowUp" ||
+                key === "ArrowDown") {
+                sendPlayerUpdate(key);
+            }
+        });
+    }
+
+    function requestCurrentPublicGames () {
+        ws.send(JSON.stringify({"subject": "currentPublicGames"}));
+    }
+
+    function createGame () {
+        let json = {
+            "subject": "createGame",
+            "gameConfig": {
+                "name": "testGameName",
+                "public": true,
+                "mode": "battleRoyale",
+                "playersAllowed": 3,
+            },
+            "host":{
+                "playerName": "username",
+                "color": playerColors[getRandomInt()]
+            }
+        };
+        ws.send(JSON.stringify(json));
+    }
+
+    function joinGame (id) {
+        gameId = id;
+        ws.send(JSON.stringify({
+            "subject": "joinGame",
+            "gameId": gameId,
+            "playerName": "username",
+            "playerColor": playerColors[getRandomInt()]}
+        ));
+    }
+
+    function startGame () {
+        ws.send(JSON.stringify({ "subject": "startGame", "gameId": gameId }));
+    }
+
+    function updateCanvas (players, cleaners, walls) {
+
+        players.forEach(player => {
+            if(player.id = clientId){
+                if(clientPosX != player.posx){
+                    diffx = clientPosX - player.posx;
+                    diffy = 0;
+                }else if(clientPosY != player.posy){
+                    diffy = clientPosY - player.posy;
+                    diffx = 0;
+                }
+                clientPosX = player.posx;
+                clientPosY = player.posy;
+            }
+        });
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        ctx.beginPath();
+        ctx.strokeStyle = "black";
+        ctx.fillStyle = "black";
+        ctx.fillRect(-100 - clientPosX + (canvas.width / 2), -100 - clientPosY + (canvas.height / 2), walls.width + 100, walls.height + 100);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.strokeStyle = "black";
+        ctx.fillStyle = "white";
+        ctx.fillRect(walls.x - clientPosX + (canvas.width / 2), walls.y - clientPosY + (canvas.height / 2), walls.width, walls.height);
+        ctx.stroke();
+
+        players.forEach(player => {
+            for(let client of playersPositions){
+                if(player.id == client.id){
+                    client.addPositions(player.posx, player.posy);
+                }
+            }
+        });
+
+        for(player of playersPositions){
+            for(position of player.getPositions()){
+                if(clientPosX - position.x <= canvas.width && clientPosX - position.x >= 0 - canvas.width && clientPosY - position.y <= canvas.height && clientPosY - position.y >= 0 - canvas.height){
+                    ctx.fillStyle = player.color;
+                    ctx.fillRect(position.x - clientPosX + (canvas.width / 2), position.y - clientPosY + (canvas.height / 2), lineThickness, lineThickness);
+                }
+            }
+        }
+
+        if(movementCounter >= movementLimit){
+            for(player of playersPositions){
+                player.removeOldestPosition();
+            }
+        }else{
+            movementCounter++;
+        }
+    }
+
+    function sendPlayerUpdate (key) {
+        let msg = { "subject": "updateDirection", "gameId": gameId, "key": key};
+        ws.send(JSON.stringify(msg));
+    }
+    
+    function clearCanvas() {
+        ctx.clearRect(0, 0, canvas_width, canvas_height);
+    }
+
+    function getRandomInt() {
+        let min = Math.ceil(0);
+        let max = Math.floor(9);
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function deleteGame(){
+        ws.send(JSON.stringify({ "subject": "deleteGame", "gameId": gameId}));
+    }
+
+    function leaveGame(){
+        ws.send(JSON.stringify({ "subject": "leaveGame", "gameId": gameId}));
+    }
+
+</script>
+</body>
+</html>

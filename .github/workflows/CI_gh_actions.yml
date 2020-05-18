@@ -18,10 +18,10 @@ jobs:
           java-version: ${{ matrix.java }}
       - name: Run maven clean compile
         run: mvn -f pom.xml clean compile
-        working-directory: ./app
+        working-directory: ./gameserver
       - name: Run maven test
         run: mvn test
-        working-directory: ./app
+        working-directory: ./gameserver
   npm_react:
     runs-on: ubuntu-latest
     strategy:
