@@ -15,8 +15,6 @@
 
     let clientPosX = 0;
     let clientPosy = 0;
-    let diffx = 0;
-    let diffy = 0;
 
     var Position = function(x,y){
         this.x = x;
@@ -206,16 +204,12 @@
     function updateCanvas (players, cleaners, walls) {
 
         players.forEach(player => {
-            if(player.id = clientId){
-                if(clientPosX != player.posx){
-                    diffx = clientPosX - player.posx;
-                    diffy = 0;
-                }else if(clientPosY != player.posy){
-                    diffy = clientPosY - player.posy;
-                    diffx = 0;
+            for(let client of playersPositions){
+                if(player.id == client.id){
+                    clientPosX = player.posx;
+                    clientPosY = player.posy;
+                    client.addPositions(player.posx, player.posy);
                 }
-                clientPosX = player.posx;
-                clientPosY = player.posy;
             }
         });
 
@@ -231,14 +225,6 @@
         ctx.fillStyle = "white";
         ctx.fillRect(walls.x - clientPosX + (canvas.width / 2), walls.y - clientPosY + (canvas.height / 2), walls.width, walls.height);
         ctx.stroke();
-
-        players.forEach(player => {
-            for(let client of playersPositions){
-                if(player.id == client.id){
-                    client.addPositions(player.posx, player.posy);
-                }
-            }
-        });
 
         for(player of playersPositions){
             for(position of player.getPositions()){
