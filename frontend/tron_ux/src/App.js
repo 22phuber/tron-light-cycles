@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useTheme } from '@material-ui/core/styles';
 import "./App.css";
 import { WebsocketSubjectMissing } from "./helpers/exceptions";
 import * as WSHelpers from "./helpers/websocket";
@@ -83,7 +84,8 @@ const useStyles = makeStyles((theme) => ({
 
 /* APP */
 const App = () => {
-  const classes = useStyles();
+  const theme = useTheme();
+  const classes = useStyles(theme);
   // Snackbar
   const { enqueueSnackbar } = useSnackbar();
   // get and parse queryString

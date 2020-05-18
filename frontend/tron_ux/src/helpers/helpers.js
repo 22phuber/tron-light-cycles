@@ -30,7 +30,7 @@ export function locationURL() {
 export function convertRGB(__color) {
   if (/rgb/i.test(__color)) {
     var rgb = __color.replace(/[^\d,]/g, "").split(",");
-    return { r: rgb[0], g: rgb[1], b: rgb[2], a: 1 };
+    return { r: rgb[0], g: rgb[1], b: rgb[2], a: "1" };
   }
   if (typeof __color === "object" && __color !== null) {
     return "rgb(" + __color.r + "," + __color.g + "," + __color.b + ")";

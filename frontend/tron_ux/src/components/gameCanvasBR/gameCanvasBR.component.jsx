@@ -8,7 +8,7 @@ import "./gameCanvasBR.styles.css";
 const GameCanvasBR = (props) => {
   const canvasRef = useRef(null);
 
-  const canvasId = "gameCanvasBR";
+  const canvasId = "gameCanvas";
   const { playersData, canvasConfig, clear } = props;
   const { width, height, lineThickness } = canvasConfig;
 
