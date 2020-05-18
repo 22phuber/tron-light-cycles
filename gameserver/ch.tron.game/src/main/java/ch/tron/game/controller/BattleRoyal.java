@@ -123,15 +123,15 @@ public class BattleRoyal extends GameMode{
         //move the outer walls closer to the center every "WALL_INTERVAL"
         if(remainingWallSteps > 0){
 
-            walls.setWidth(walls.getWidth() - velocity);
-            walls.setHeight(walls.getHeight() - velocity);
+            walls.setWidth(walls.getWidth() - velocity/2);
+            walls.setHeight(walls.getHeight() - velocity/2);
             remainingWallSteps--;
             if(remainingWallSteps == 0){
                 lastWallInterval = System.currentTimeMillis();
             }
         }else if(System.currentTimeMillis() - lastWallInterval >= WALL_INTERVAL){
             //move walls closer to the center
-            remainingWallSteps = 10;
+            remainingWallSteps = 500 * velocity;
         }
     }
 
