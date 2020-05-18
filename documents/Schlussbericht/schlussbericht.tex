@@ -8,7 +8,7 @@
 \usepackage{relsize}
 \usepackage{biblatex}
 \usepackage{hyperref}
-\usepackage{glossaries}
+\usepackage[toc]{glossaries}
 \usepackage{paralist}
 \usepackage[table, dvipsnames]{xcolor}
 \usepackage{booktabs}
@@ -95,51 +95,50 @@
     \newpage
 
     \tableofcontents
-    \listoftables
-    \listoffigures
     \newpage
 
-    \section{Ausgangslage}
+%%% Projektidee
+    \section{Projektidee}
 
-    \subsection{Original Tron}
-    1982 wurde der Film "Tron"\ von Steven Lisberger ausgestrahlt, der grosse Beliebtheit erlangte \cite{lisbergerTRON1982}\cite{TronFilm2020}. Danach wurden verschiedene Spielversionen von Tron produziert.
+    \subsection{Ursprüngliche Idee}
+    Es soll ein netzwerkfähiges und browserbasiertes Tron-Spiel entwickelt werden - genauer gesagt die Version mit den  Licht-Motorrädern - welches eine ansprechende und simple Benutzeroberfläche besitzt, sodass schnell und einfach gespielt werden kann. Das Spiel wird im \Gls{Multiplayer}-Modus angeboten. Ein Spieler wird gegen ihm bekannte oder unbekannte Spieler antreten können.
 
-    \subsection{Spielbeschreibung}
+    \subsubsection{Original Tron}
+    1982 wurde der Film "Tron"\ von Steven Lisberger ausgestrahlt, der grosse Beliebtheit erlangte \cite{lisbergerTRON1982}\cite{TronFilm2020}. Danach wurden verschiedene Spielversionen von Tron produziert. Unter anderem auch eine Version mit Licht-Motorrädern die gegeneinander antreten müssen.
+
+    \subsubsection{Spielbeschreibung}
     Ein Spieler besitzt ein sogenanntes Licht-Motorrad. Dieses zieht während der Fahrt eine Linie nach sich, die bestehen bleibt. Fährt ein Spieler in eine dieser Linien, scheidet dieser aus. Gewinner ist, wer im Spiel bleibt, bis alle anderen Spieler ausgeschieden sind.
 
-    \section{Idee}
-    Es soll ein Tron-Spiel entwickelt werden, welches eine ansprechende und simple Benutzeroberfläche besitzt, sodass schnell und einfach gespielt werden kann. Das Spiel wird im Multiplayer-Modus angeboten werden. Ein Spieler wird gegen ihm bekannte Spieler oder zufällig ausgewählte Spieler antreten können.
-
-    \section{Kundennutzen}
+    \subsection{Kundennutzen}
     Als kleine, spassige Ablenkungen in der Pause oder als sonstiger Zeitvertreib, versüsst unser Spiel den Alltag des Anwenders. Es besticht durch seine Einfachheit. Dies führt dazu, dass die Konzentration des Spielers voll und ganz auf das Spiel selbst gelenkt ist und er dieses in vollen Zügen geniessen kann. Danach wird er erholt zu seinen täglichen Aufgaben zurückkehren. Über ein Gastkonto ist es einem Spieler möglich, ohne jegliche Registrierung, sofort zu spielen. Möchte ein Spieler seine Fortschritte gespeichert und abrufbar haben, kann er einen Account einrichten. Die gespeicherten Punkte dienen dann als Indiz für die Applikation, um den Spieler gegen ähnlich starke Gegner antreten zu lassen. Ausserdem kann das Spiel mit Freunden gespielt werden. Ein spannender Feierabend oder Samstagnachmittag - reich an sozialer Interaktion - ist garantiert.
     Es gibt reichlich weitere Features, die gegebenenfalls implementiert werden können (siehe \ref{Weiterführende Ideen}), um kontinuierlicher Spielspass gewährleisten zu können.
 
-    \section{Stand der Technik / Konkurrenzanalyse}
+    \subsection{Stand der Technik / Konkurrenzanalyse}
     Es gibt mehrere kostenlose online Spiele, welche im Browser gespielt werden können. \Gls{Multiplayer} ist teilweise möglich. Mindestens Drei dieser Tron-Spiele können ebenfalls über das Netzwerk (\Gls{Game Server}) gespielt werden. \cite{TronGameBasisKostenlosOnline}\cite{sphinxCyclewarsIoOnline}\cite{TronLightCyclesEu}\cite{PlayersOnlineXtremeTron}
     Viele der vorhandenen Spiele nutzen veraltete Technologien wie den \Gls{Adobe Flash Player} \cite{SayingGoodbyeFlash2017}\cite{FlashFutureInteractive2017} und nicht mehr zeitgemässe Grafiken. Ausserdem sind die grafischen Oberflächen häufig schwer verständlich.
     Momentan sind zwei moderne Tron Spiele auf dem Markt, die sich jedoch nicht nur auf das fahren von Licht-Motorräder beschränken. Vielmehr handelt es sich dabei um komplexe Action Spiele in 3-D Grafik, jeweils mit geführter Storyline.\cite{TronEvolution2020}\cite{TRONRUNr}
 
-    \section{Hauptablauf (Kontextszenario)}
+    \subsection{Hauptablauf (Kontextszenario)}
 
-    \subsection{Anwender-Identifikation/-Verifikation}
+    \subsubsection{Anwender-Identifikation/-Verifikation}
 	Der Anwender meldet sich anonym als Gast in der Applikation an oder loggt sich mit einem bestehenden Account ein. Um in ein Spiel zu gelangen, kann der Anwender entscheiden, ob er eine Lobby erstellen oder einer bestehenden Lobby beitreten möchten.
 
-	\subsection{\Gls{Lobby} erstellen}
+	\subsubsection{\Gls{Lobby} erstellen}
 	Falls der Anwender eine Lobby erstellt, kann er auswählen ob diese nur für Freunde sichtbar ist oder auch andere Spieler beitreten können. Als Ersteller der Lobby kann der Anwender das Spiel starten, wenn alle anderen Spieler in der Lobby den Status auf 'bereit' gewechselt haben.
 
-	\subsection{\Gls{Lobby} beitreten}
+	\subsubsection{\Gls{Lobby} beitreten}
 	Falls der Anwender einer Lobby beitreten möchte, kann er sich eine gewünschte Lobby aus der Lobby-Liste aussuchen. Als Nicht-Ersteller der Lobby kann der Status auf 'bereit' gewechselt werden und auf den Start des Spiels gewartet werden.
 
-	\subsection{Spielstart und Rangliste}
+	\subsubsection{Spielstart und Rangliste}
 	Die Anwendung wechselt zur \Gls{Arena} und das Spiel beginnt. Der Anwender spielt 5 Runden. Am Ende der 5 Runden zeigt die Anwendung dem Anwender die Rangliste an.
 
-    \section{Ressourcen}
+    \subsection{Ressourcen}
     Das Projekt ist realisierbar mit einem Team aus 4 Personen. Grundlegendes Wissen im Bereich der Server-Client-Kommunikation ist notwendig, sowie Kenntnisse von objektorientierter Programmierung (\Gls{OOP}), Java und Javascript. Dieses Wissen ist im Team vorhanden. Des Weiteren bestehen Kenntnisse zum Web-Design mit React, HTML5 und CSS3.
     Der Gesamtaufwand für das finale Spiel mit Basisfunktionen und Original-Spielmodus wird auf ca. 500 - 600 Stunden geschätzt. Dies entspricht ungefähr 138 Stunden Aufwand pro Person.
 
-    \section{Wirtschaftlichkeit}
+    \subsection{Wirtschaftlichkeit}
 
-    \subsection{Aufwand erste Version}
+    \subsubsection{Aufwand erste Version}
     Um die erste, initiale, über das Netzwerk (\Gls{Game Server}) spielbare Version fertigzustellen, rechnen wir mit folgendem Aufwand. \\
     \\
     Kalkulationsformel:
@@ -157,7 +156,7 @@
             \end{itshape}
         \end{center}
 
-    \subsection{Werbung als Einnahmequelle}
+    \subsubsection{Werbung als Einnahmequelle}
     Einnahmen werden hauptsächlich durch Werbeanzeigen generiert. Genaue Berechnungen sind relativ schwierig, da sich die Besucheranzahl auf der Webseite über die Zeit ändern kann. Ebenfalls hat die Bezahlstrategie, welche abhängig ist von der "Werbemethode" (CPC, CPM, CPA), einen grossen Einfluss auf die Einnahmen, sowie die Relevanz des Inhaltes der angezeigten Werbung, auf den Webseitenbesucher\cite{CPCVsCPA2019}\cite{daswani2008online}. \\
     \\
     Berechnung nach Google Adsense Calculator \cite{GoogleAdSenseEarn}:
@@ -172,15 +171,18 @@
             10'000'000 & 38'500 \\ \hline
         \end{tabular}
     \end{center}
-    \subsection{Return of Invest}
+
+    \subsubsection{Return of Invest}
     Die geschätzte initiale Investition beträgt bei 576 Arbeitsstunden Aufwand und einem Stundensatz von 50.- pro Stunde plus einer kleinen Reserve für zusätzliche Ausgaben:
     \[576\ h * 50.- + 5'000 = 33'800\ CHF\]
     Die Einnahmen bei 2'500'000 monatlichen Besuchern (Laden der Webseite)  würden sich auf monatlich 9'625 CHF belaufen. Wenn wir die monatlichen Kosten für den Webseitenbetrieb vernachlässigen, hätten wir nach ca. 4 Monaten die Entwicklungskosten amortisiert    .\\
+% END Projektidee
 
     \newpage
-    
+
+%%% Analyse
     \section{Analyse}
-    
+
     \subsection{Anwendungsfälle}
     Die in \autoref{fig:UseCaseDiagram} ersichtlichen Anwendungsfälle sind hier übersichtlich und nach Priorität geordnet aufgelistet:
     \begin{multicols}{2}
@@ -195,7 +197,7 @@
     		\item \hyperref[sssec:UC8Statistikenbetrachten]{UC8: Statistiken betrachten - \quotes{brief}}
     	\end{itemize}
     \end{multicols}
-    
+
     \subsubsection{Anwendungsfalldiagramm}
     \begin{figure}[H]
     	\centering
@@ -203,7 +205,7 @@
     	\caption{Anwendungsfalldiagramm - Tron Licht-Motorräder Computerspiel}
     	\label{fig:UseCaseDiagram}
     \end{figure}
-    
+
     \subsubsection{Hauptanwendungsfälle}
     Wir haben zwei Hauptanwendungsfälle identifiziert:
     \begin{itemize}
@@ -211,11 +213,11 @@
     	\item\hyperref[ssec:UC2Spielspielen]{UC2: Spiel spielen - \quotes{fully dressed}}
     \end{itemize}
     Die Hauptanwendungsfälle werden in den nächsten zwei Abschnitten detailliert ausgeführt.
-    
+
     \subsubsection{UC1: Lobby erstellen - \quotes{fully dressed}}
     \label{ssec:UC1Lobbyerstellen}
     \begin{tcolorbox}[enhanced, breakable, sharp corners, width=\dimexpr\textwidth-15mm\relax ,enlarge left by=10mm ,fontupper=\linespread{1.1}\selectfont, boxrule=1pt, title={UC1: Lobby erstellen}, colback=white, colframe=gray!22, coltitle=black]
-    	
+
     	\textbf{Anwendungsfall:} Lobby erstellen \\
     	\textbf{Ebene:} Anwenderziel \\
     	\textbf{Primärakteur:} Spieler \\
@@ -278,13 +280,13 @@
     		\item Maximale Spieleranzahl muss eingehalten werden. Es gibt eine obere Grenze von Mitspielern, die durch den Spieler definiert wird.
     		\item Internationalisierung der Sprache in den Textanzeigen.
     	\end{itemize}
-    	
+
     \end{tcolorbox}
-    
+
     \subsubsection{UC2: Spiel spielen - \quotes{fully dressed}}
     \label{ssec:UC2Spielspielen}
     \begin{tcolorbox}[enhanced, breakable, sharp corners, width=\dimexpr\textwidth-15mm\relax ,enlarge left by=10mm ,fontupper=\linespread{1.1}\selectfont, boxrule=1pt, title={UC2: Spiel spielen}, colback=white, colframe=gray!22, coltitle=black]
-    	
+
     	\textbf{Anwendungsfall:} Spiel spielen \\
     	\textbf{Ebene:} Anwenderziel \\
     	\textbf{Primärakteur:} Spieler \\
@@ -329,9 +331,9 @@
     		\item System zeigt die Statistiken des Spiels bei allen Spielern/Mitspielern an.
     		\item System öffnet - nach Ablauf eines Timers  - erneut die \Gls{Lobby}.
     	\end{enumerate}
-    	
+
     \end{tcolorbox}
-    
+
     \newpage
     \subsubsection{System-Sequenzdiagramm (SSD)}
     Das System-Sequenzdiagramm für \quotes{Lobby erstellen} und \quotes{Spiel spielen}:
@@ -356,7 +358,7 @@
     	\caption{SSD Referenz - \Gls{Websocket} Close}
     	\label{fig:SSDReferenzWebsocketClose}
     \end{figure}
-    
+
     \subsection{Übrige Anwendungsfälle}
     \subsubsection{UC3: Ein \& Ausloggen  - \quotes{casual}}
     \label{sssec:UC3EinAusloggen}
@@ -370,7 +372,7 @@
     	\newline
     	Der Spieler möchte sich aus dem System ausloggen. Der Spieler navigiert sich in der Anwendung oben rechts und wählt die Funktion «Logout» aus. Das System beendet die Session und der Spieler wird als Gast neu angemeldet.
     \end{tcolorbox}
-    
+
     \subsubsection{UC4: Lobby beitreten - \quotes{casual}}
     \label{sssec:UC4Lobbybeitreten}
     \begin{tcolorbox}[enhanced, breakable, sharp corners, width=\dimexpr\textwidth-15mm\relax ,enlarge left by=10mm ,fontupper=\linespread{1.1}\selectfont, boxrule=1pt, title={UC4: Lobby beitreten }, colback=white, colframe=gray!22, coltitle=black]
@@ -381,34 +383,34 @@
     	Der Spieler erhält einen Link eines Freundes. Mit dem Link kann der Spieler einer privaten Lobby beitreten. \newline
     	Er befindet sich nun in derselben Lobby mit seinem Freund.
     \end{tcolorbox}
-    
+
     \subsubsection{UC5: Registrieren - \quotes{brief}}
     \label{sssec:UC5Registrieren}
     \begin{tcolorbox}[enhanced, breakable, sharp corners, width=\dimexpr\textwidth-15mm\relax ,enlarge left by=10mm ,fontupper=\linespread{1.1}\selectfont, boxrule=1pt, title={UC5: Registrieren}, colback=white, colframe=gray!22, coltitle=black]
     	Der Spieler navigiert sich zum Registrier-Bereich der Anwendung. Im Registrier-Bereich gibt er seinen Usernamen, Passwort und E-Mail an.\newline
     	Die Anwendung überprüft ob der Username bereits belegt ist. Der Spieler besitzt nun ein eigenes Konto
     \end{tcolorbox}
-    
+
     \subsubsection{UC6: Passwort zurücksetzen - \quotes{brief}}
     \label{sssec:UC6Passwortsetzen}
     \begin{tcolorbox}[enhanced, breakable, sharp corners, width=\dimexpr\textwidth-15mm\relax ,enlarge left by=10mm ,fontupper=\linespread{1.1}\selectfont, boxrule=1pt, title={UC6: Passwort zurücksetzen}, colback=white, colframe=gray!22, coltitle=black]
     	Der Spieler navigiert sich zum Login-Bereich der Anwendung. Dort hat er die Möglichkeit sein Passwort zurück zu setzen.\newline
     	Nun kann der Spieler ein neues Passwort angeben.
     \end{tcolorbox}
-    
+
     \subsubsection{UC7: Freunde einladen - \quotes{brief}}
     \label{sssec:UC7Freundeeinladen}
     \begin{tcolorbox}[enhanced, breakable, sharp corners, width=\dimexpr\textwidth-15mm\relax ,enlarge left by=10mm ,fontupper=\linespread{1.1}\selectfont, boxrule=1pt, title={UC7: Freunde einladen}, colback=white, colframe=gray!22, coltitle=black]
     	Der Spieler erstellt eine private Lobby. Er erhält einen Link, mit welchem Freunde beitreten können.\newline
     	Sobald seine Freunde den Link benutzen, befinden sie sich nun mit dem Spieler in derselben Lobby.
     \end{tcolorbox}
-    
+
     \subsubsection{UC8: Statistiken betrachten - \quotes{brief}}
     \label{sssec:UC8Statistikenbetrachten}
     \begin{tcolorbox}[enhanced, breakable, sharp corners, width=\dimexpr\textwidth-15mm\relax ,enlarge left by=10mm ,fontupper=\linespread{1.1}\selectfont, boxrule=1pt, title={UC8: Statistiken betrachten}, colback=white, colframe=gray!22, coltitle=black]
     	Der Spieler navigiert auf der Startseite der Anwendung zu den Statistiken. Dort ist eine Liste einsehbar, in welcher die besten Spieler mit ihren Punkten aufgelistet sind.
     \end{tcolorbox}
-    
+
     \subsection{Zusätzliche Anforderungen}
     Es ist wichtig konkrete Anforderungen für unser Spiel zu definieren, damit die Erwartungen der Spieler erfüllt werden können. Hierbei soll uns das FURPS+ Modell weiter helfen. Im Folgenden werden die einzelnen Punkte genauer erläutert.
     \subsubsection{Funktionalität}
@@ -441,7 +443,7 @@
     \subsubsection{Implementierungseinschränkungen}
     Um die Applikation so wartbar wie möglich zu behalten, wird alles so gut wie möglich mit Clean Code implementiert. Dies wird auch im späteren Verlauf des Implementierungsvorgangs immer wieder überprüft. Bei Git benutzen wir das \Gls{Continuous Integration} (CI), dies ermöglicht es uns nur kompilierbaren Code hinzuzufügen um einige Fehlerquellen bereits auszuschliessen.
     \subsubsection{Schnittstelleneinschränkungen}
-    
+
     \subsection{Domänenmodell}
     \begin{figure}[H]
     	\centering
@@ -451,22 +453,103 @@
     \end{figure}
     \subsubsection{Login und Gast-Account}
     Der Spieler hat die Freiheit sich mit einem anonymen Gastkonto  oder mit einem registriertem Konto anzumelden. Der Spieler kann sich in der Applikation nicht mit beiden Kontoarten gleichzeitig identifizieren.
-    
+
     \subsubsection{Spielemodi}
     Ein Spielmodus beeinflusst das Spiel, zwei Spielmodi werden schon implementiert sein. Im Spielmodus sind Eigenschaften der Licht-Motorräder und die Grösse der Arena definiert, so auch Spielablauf.
-    
-    
-    
 
-    \section{Literatur}
-    \printbibliography[heading=none]
+%%% END Analyse
 
-     \newpage
 
+%%%  Design
+% Die wichtigsten Aspekte der gewählten Lösung sind zu dokumentieren:
+%− Softwarearchitektur
+%− Design-Klassendiagramm (DCD)
+%− Ausgewählte Interaktionsdiagramme
+%− Dokumentation wichtiger Architekturaspekte, Designentscheide und angewendeter Design Patterns
+    \section{Design}
+
+    \subsection{Softwarearchitektur}
+
+    \subsection{Design-Klassendiagramm (DCD)}
+
+    \subsection{Interaktionsdiagramme}
+
+    \subsection{Designentscheide und Design Patterns}
+
+    \subsubsection{Kommunikation via Websocket}
+
+    \subsubsection{Gameserver  (Java)}
+
+    \subsubsection{User Interface mit React JavaScript library}
+
+    \subsubsection{Material-UI React Components}
+
+
+
+%%% END Design
+
+%%% Implementation
+%Die wichtigsten Informationen zur Implementation der Lösung (Packages, etc.) sowie die durch- geführten Tests sind hier zu dokumentieren:
+%− Testkonzept: Zusammenfassung des gemachten Tests (Unit-, Integrations- und System- tests) und Testresultate
+%− Installationsanleitung
+%− Code-Dokumentation
+%• Der vollständige Quellcode (inkl. Unit-Tests) wird in elektronischer Form abgegeben (auf OLAT im Team-Ordner als ZIP-File).
+%• Jede Klasse und alle öffentlichen Methoden und Attribute müssen (kurz) mittels JavaDoc dokumentiert werden. Der fertige JavaDoc-Kommentar muss ebenfalls (elektronisch) ab- gegeben werden.
+    \section{Implementation}
+
+    \subsection{Testkonzept}
+
+    \subsubsection{Unit Tests}
+
+    \subsubsection{Integration Tests}
+
+    \subsubsection{Systemtests}
+    % read: https://www.enzyklopaedie-der-wirtschaftsinformatik.de/lexikon/is-management/Systementwicklung/Hauptaktivitaten-der-Systementwicklung/Software-Implementierung/Testen-von-Software/Systemtest/index.html
+
+    \subsection{Continuous integration}
+    % github actions => https://github.com/features/actions
+
+    \subsection{Installationsanleitung}
+    % pre-build and  docker-compose
+
+    \subsection{Code-Dokumentation}
+    % Javadoc
+    % Jsdoc
+
+%%% END Implementation
+
+
+%%% Resultat
+%Die Projektresultate sind kurz zusammenzufassen und in Bezug auf die ursprüngliche Projek- tidee zu stellen:
+%− Zusammenfassung der erreichten Ziele
+%− Offene Punkte
+%− Ausblick auf mögliche Weiterentwicklungen
+    \section{Resultat}
+
+    \subsection{Erreichte Ziele}
+
+    \subsection{Offene Punkte}
+
+    \subsection{Weiterentwicklungsmöglichkeiten}
+
+%%% END Resultat
+
+%%%  Appendix
+% - Projektmanagement
+%Beschreibung des Vorgehens/Methodik (Phasen-/Iterationsplan). Zusammenfassung der tatsächlichen Aufwände mit den geplanten Aufwänden pro Iteration und insgesamt. Begrün- dung von signifikanten Abweichungen.
+%− Verzeichnisse
+%• Literatur-, Abbildungs-, Tabellenverzeichnis
+%• Glossar
     \section{Appendix}
-    \textit{Hinweis: Glossar-Referenznummern sind Seitennummern}
+
+    \subsection{Projektmanagement}
+
+    \listoffigures
+    \listoftables
+    \printbibliography
     \printglossary
+    \textit{Hinweis: Glossar-Referenznummern sind Seitennummern}
 
-
+\newpage
 \end{document}
 

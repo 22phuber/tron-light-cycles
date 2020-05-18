@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useTheme } from '@material-ui/core/styles';
+import { useTheme } from "@material-ui/core/styles";
 import "./App.css";
 import { WebsocketSubjectMissing } from "./helpers/exceptions";
 import * as WSHelpers from "./helpers/websocket";
@@ -117,7 +117,7 @@ const App = () => {
     gameName: null,
     openJoinGameDialog: false,
   });
-  var [playData, setPlayData] = useState(null);
+  var [playData, setPlayData] = useState({});
   const [clearCanvas, setClearCanvas] = useState({ clear: false });
   var roundInfoObject = {};
   const [roundState, setRoundState] = useState({});
@@ -224,7 +224,10 @@ const App = () => {
           case "gameState":
             setCountdownState(0);
             rAF = window.requestAnimationFrame(() => {
-              setPlayData(dataFromServer.players);
+              setPlayData({
+                players: dataFromServer.players,
+                walls: dataFromServer.walls,
+              });
             });
             break;
           case "lobbyState":
@@ -700,11 +703,21 @@ const App = () => {
                         </CardContent>
                       </Card>
                     </div>
-                    <GameCanvas
-                      canvasConfig={canvasConfig}
-                      playersData={playData}
-                      clear={clearCanvas}
-                    />
+                    {gameConfig.mode === "battleRoyale" ? (
+                      <GameCanvas
+                        canvasConfig={canvasConfig}
+                        playersData={playData.players}
+                        myPlayerId={myPlayerData.clientId}
+                        walls={playData.walls}
+                        clear={clearCanvas}
+                      />
+                    ) : (
+                      <GameCanvas
+                        canvasConfig={canvasConfig}
+                        playersData={playData.players}
+                        clear={clearCanvas}
+                      />
+                    )}
                   </Paper>
                 </Box>
               </Container>
