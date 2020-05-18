@@ -23,7 +23,7 @@ public class WallCleaner {
     }
 
     public Position peekPosition(){
-        if(positions.size() == wallSize){
+        if(positions.size() >= wallSize){
             return positions.peek();
         }
         return null;
