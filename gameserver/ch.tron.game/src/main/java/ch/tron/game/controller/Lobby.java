@@ -213,44 +213,62 @@ public class Lobby implements Runnable {
         int height = game.getFieldHeight() - 2 * gridInterval;
         int startLine = 2 * width + 2 * height;
         int clearance = startLine / players.size();
+        int factor = startLine / clearance;
         int posx = gridInterval;
         int posy = gridInterval;
         int dir = 1;
         for (Map.Entry<String, Player> player: players.entrySet()) {
-            if (posy == gridInterval) {
-                int delta_x = gridInterval + width - posx;
-                if (delta_x >= clearance) {
-                    posx += clearance;
+            if (factor >= 3) {
+                if (posy == gridInterval) {
+                    int delta_x = gridInterval + width - posx;
+                    if (delta_x >= clearance) {
+                        posx += clearance;
+                    }
+                    else {
+                        posx = gridInterval + width;
+                        posy = posy + clearance - delta_x;
+                        dir = 2;
+                    }
+                }
+                else if (posx == width + gridInterval) {
+                    int delta_y = height + gridInterval - posy;
+                    if (delta_y >= clearance) {
+                        posy += clearance;
+                    }
+                    else {
+                        posy = gridInterval + height;
+                        posx = gridInterval + width - clearance + delta_y;
+                        dir = 3;
+                    }
+                }
+                else if (posy == height + gridInterval) {
+                    if (posx + gridInterval >= clearance) {
+                        posx -= clearance;
+                    }
+                    else {
+                        posy = posy - clearance + posx;
+                        posx = gridInterval;
+                        dir = 0;
+                    }
                 }
                 else {
-                    posx = gridInterval + width;
-                    posy = posy + clearance - delta_x;
-                    dir = 2;
+                    posy -= clearance;
                 }
             }
-            else if (posx == width + gridInterval) {
-                int delta_y = height + gridInterval - posy;
-                if (delta_y >= clearance) {
-                    posy += clearance;
-                }
-                else {
+            else if (factor == 2) {
+                posx = gridInterval + width / 2;
+                if (posy == gridInterval) {
                     posy = gridInterval + height;
-                    posx = gridInterval + width - clearance + delta_y;
                     dir = 3;
                 }
-            }
-            else if (posy == height + gridInterval) {
-                if (posx + gridInterval >= clearance) {
-                    posx -= clearance;
-                }
                 else {
-                    posy = posy - clearance + posx;
-                    posx = gridInterval;
-                    dir = 0;
+                    posy = gridInterval;
+                    dir = 1;
                 }
             }
-            else {
-                posy -= clearance;
+            else if (factor == 1) {
+                posx = gridInterval + width / 2;
+                dir = 1;
             }
             Player pl = player.getValue();
             pl.setPosx(posx);
