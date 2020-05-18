@@ -96,8 +96,6 @@ public class BattleRoyal extends GameMode{
             posx = player.getPosx();
             posy = player.getPosy();
 
-            System.out.println("player: " + posx + "," + posy + " walls: " + walls.getWidth() + "," + walls.getHeight());
-
             if (posx >= walls.getWidth() + walls.getX() || posy >= walls.getHeight() + walls.getY() || posx < walls.getX() || posy < walls.getY() ||field[posx][posy]) {
                 die(player);
             }
