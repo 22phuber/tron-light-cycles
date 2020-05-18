@@ -156,18 +156,6 @@ public class BattleRoyal extends GameMode{
         });
         state.put("players", all);
 
-        JSONArray allCleaners = new JSONArray();
-        for(Map.Entry<String, WallCleaner> entry : wallCleaner.entrySet()){
-            if(entry.getValue().peekPosition() != null) {
-                JSONObject cleaner = new JSONObject();
-                Position position = entry.getValue().getPosition();
-                cleaner.put("posx", position.getX());
-                cleaner.put("posy", position.getY());
-                allCleaners.put(cleaner);
-            }
-        }
-        state.put("cleaners", allCleaners);
-
         state.put("walls", new JSONObject()
                 .put("width", walls.getWidth()).put("height", walls.getHeight())
                 .put("x", fieldWitdh - walls.getHeight()).put("y", fieldHeight - walls.getHeight()));
