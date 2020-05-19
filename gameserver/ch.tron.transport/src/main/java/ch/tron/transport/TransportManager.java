@@ -74,7 +74,7 @@ public class TransportManager {
     public static void handleInAppIncomingMessage(InAppMessage msg) {
         if (msg instanceof CurrentPublicGamesRequest) {
             out.sendJsonToChannel(
-                    WebSocketConnectionController.getLonelyChannel(((CurrentPublicGamesRequest) msg).getPlayerId()),
+                    WebSocketConnectionController.getLonelyChannel(((CurrentPublicGamesRequest) msg).getClientId()),
                     ((CurrentPublicGamesRequest) msg).getPublicGames());
         }
         else if (msg instanceof LobbyStateUpdateMessage) {
@@ -121,7 +121,7 @@ public class TransportManager {
                     .put("subject", "playerDeath")
                     .put("gameId", groupId)
                     .put("playerName", ((DeathMessage) msg).getPlayerName())
-                    .put("playerId", ((DeathMessage) msg).getPlayerId())
+                    .put("playerId", ((DeathMessage) msg).getClientId())
                     .put("posx", ((DeathMessage) msg).getPosx())
                     .put("posy", ((DeathMessage) msg).getPosy())
                     .put("turns", ((DeathMessage) msg).getTurns());
