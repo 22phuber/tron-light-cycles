@@ -1,7 +1,8 @@
-package ch.tron.game;
+package ch.tron.game.serviceProviders;
 
+import ch.tron.game.GameManager;
 import ch.tron.middleman.messagedto.InAppMessage;
-import ch.tron.middleman.ToGameMessageService;
+import ch.tron.middleman.services.ToGameMessageService;
 
 public class ToGameMessageServiceImpl implements ToGameMessageService {
     public void handle(InAppMessage msg) {

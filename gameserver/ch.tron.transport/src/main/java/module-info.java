@@ -1,3 +1,6 @@
+import ch.tron.middleman.services.ToTransportMessageService;
+import ch.tron.transport.serviceProviders.ToTransportMessageServiceImpl;
+
 module ch.tron.transport {
 
     // JSON
@@ -18,5 +21,5 @@ module ch.tron.transport {
 
     exports ch.tron.transport;
 
-    provides ch.tron.middleman.ToTransportMessageService with ch.tron.transport.ToTransportMessageServiceImpl;
+    provides ToTransportMessageService with ToTransportMessageServiceImpl;
 }

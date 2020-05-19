@@ -1,5 +1,5 @@
-import ch.tron.game.ToGameMessageServiceImpl;
-import ch.tron.middleman.ToGameMessageService;
+import ch.tron.game.serviceProviders.ToGameMessageServiceImpl;
+import ch.tron.middleman.services.ToGameMessageService;
 
 module ch.tron.game {
     // Java
