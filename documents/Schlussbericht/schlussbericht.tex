@@ -492,7 +492,13 @@
     
 	\includegraphics[scale=0.5]{figures/battleroyale_rendering_coordinates.png}
 	
+	Die grünen Koordinaten sind relativ des Licht-Motorrads. Dort wo das Motorrad steht ist die Koordinate (x:0/y:0). Das Canvas arbeitet aber mit den roten Koordinaten und der GameServer versendet wiederum Koordinaten die sich auf das Spielfeld referenzieren. Die korrekte X-Koordinate wird nun so berechnet:
 	
+	\centering \textit player.x - client.x + ( width / 2 )
+	
+	Wir nehmen die X-Koordinate eines Mitspielers subtrahieren sie mit der X-Koordinate vom spielender Spieler und addieren die Hälfte der Breite des zusehenden Spielfeldes hinzu. Das gleiche gilt für die Y-Koordinate. Wenn nun alle Spieler und Wände berechnet sind, können wir das Bild richtig anzeigen.
+	
+	\centering \includegraphics[scale=0.5]{figures/battleroyale_rendering1.png} \includegraphics[scale=0.5]{figures/battleroyale_rendering2.png}
 	
     \subsubsection{User Interface mit React JavaScript library}
 
