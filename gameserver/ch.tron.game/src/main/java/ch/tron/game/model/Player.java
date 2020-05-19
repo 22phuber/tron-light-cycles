@@ -17,6 +17,13 @@ public class Player {
     private int dir;
     private final LinkedList turns = new LinkedList<Turn>();
 
+    /**
+     * Player Constructor
+     *
+     * @param id
+     * @param name
+     * @param color
+     */
     public Player(String  id, String name, String color) {
         this.id = id;
         this.name = name;

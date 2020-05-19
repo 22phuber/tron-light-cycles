@@ -39,6 +39,18 @@ public class Lobby implements Runnable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Lobby.class);
 
+    /**
+     * Lobby Constructor
+     *
+     * @param id
+     * @param name
+     * @param hostName
+     * @param hostId
+     * @param hostColor
+     * @param mode
+     * @param maxPlayers
+     * @param visibleToPublic
+     */
     public Lobby(String id,
                  String name,
                  String hostName,

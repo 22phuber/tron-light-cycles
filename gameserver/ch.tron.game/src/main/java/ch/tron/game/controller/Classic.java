@@ -13,6 +13,13 @@ import java.util.function.BiPredicate;
  */
 public class Classic extends GameMode{
 
+    /**
+     * Classic Constructor
+     *
+     * @param lobbyId
+     * @param players
+     * @param gridInterval
+     */
     public Classic(String lobbyId, Map<String, Player> players, int gridInterval){
 
         super(gridInterval * 200,

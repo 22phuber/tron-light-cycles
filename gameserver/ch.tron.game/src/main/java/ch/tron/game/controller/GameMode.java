@@ -39,6 +39,16 @@ public abstract class GameMode {
     final long LOOP_INTERVAL = 1000000000 / FPS;
     final int scoreFactor = 1;
 
+    /**
+     * GameMode Constructor
+     *
+     * @param fieldWidth
+     * @param fieldHeight
+     * @param gridInterval
+     * @param velocity
+     * @param lobbyId
+     * @param players
+     */
     public GameMode (
             int fieldWidth,
             int fieldHeight,

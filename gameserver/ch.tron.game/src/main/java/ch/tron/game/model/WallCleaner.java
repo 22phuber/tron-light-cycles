@@ -3,10 +3,18 @@ package ch.tron.game.model;
 import java.util.LinkedList;
 import java.util.Queue;
 
+/**
+ * WallCleaner removes old traces of players in BattleRoyal
+ */
 public class WallCleaner {
     private Queue<Position> positions = new LinkedList<>();
     private int wallSize;
 
+    /**
+     * WallCleaner Constructor
+     *
+     * @param wallSize
+     */
     public WallCleaner(int wallSize) {
         this.wallSize = wallSize;
     }

@@ -24,6 +24,14 @@ public class BattleRoyal extends GameMode{
     private long lastWallInterval;
     private int remainingWallSteps;
 
+    /**
+     * BattleRoyal Constructor
+     *
+     * @param lobbyId
+     * @param players
+     * @param x
+     * @param y
+     */
     public BattleRoyal(String lobbyId, Map<String, Player> players, int x, int y) {
 
         super(x, y, 4, 2, lobbyId, players);

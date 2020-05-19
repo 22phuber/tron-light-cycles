@@ -9,7 +9,14 @@ public class Wall {
     private int x;
     private int y;
 
-
+    /**
+     * Wall Constructor
+     *
+     * @param width
+     * @param height
+     * @param x
+     * @param y
+     */
     public Wall(int width, int height, int x, int y) {
         this.width = width;
         this.height = height;

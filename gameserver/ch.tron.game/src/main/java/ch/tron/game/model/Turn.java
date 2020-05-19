@@ -7,6 +7,11 @@ public class Turn {
     private int posy;
     private boolean onHold = true;
 
+    /**
+     * Turn Constructor
+     *
+     * @param newDirection
+     */
     public Turn (int newDirection) {
         this.newDirection = newDirection;
     }

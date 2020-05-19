@@ -7,6 +7,12 @@ public class Position {
     private int x;
     private int y;
 
+    /**
+     * Position Constructor
+     *
+     * @param x
+     * @param y
+     */
     public Position(int x, int y) {
         this.x = x;
         this.y = y;
