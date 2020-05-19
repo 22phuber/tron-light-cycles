@@ -19,7 +19,7 @@
 
 ### Generate javadoc
 1. Open project folder: `gameserver`
-2. mvn javadoc:aggregate
+2. `mvn javadoc:aggregate`
 
 ## React frontend
 
