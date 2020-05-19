@@ -2,13 +2,13 @@
     border: solid 2px rgb(102,152,174);
     margin: 0px;
     padding: 0px;
-    width: 80vh;
-    height: 80vh;
+    width: 75vh;
+    height: 75vh;
     margin-left: auto;
     margin-right: auto;
-    background-color: rgb(23,39,44);
+    /* background-color: rgb(23,39,44);
     background-size: 20px 20px;  /* square size */
-    background-image:
+    /* background-image:
     linear-gradient(to right, rgba(102,152,174,0.25) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(102,152,174,0.25) 1px, transparent 1px);
+    linear-gradient(to bottom, rgba(102,152,174,0.25) 1px, transparent 1px); */
 }
