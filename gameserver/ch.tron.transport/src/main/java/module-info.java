@@ -20,6 +20,12 @@ module ch.tron.transport {
 
 
     exports ch.tron.transport;
+    // needed to be exported for javadoc reasons
+    exports ch.tron.transport.serviceProviders;
+    exports ch.tron.transport.webserverconfig;
+    exports ch.tron.transport.websocket.controller;
+    exports ch.tron.transport.websocket.inboundhandler;
+    exports ch.tron.transport.websocket.outboundhandler;
 
     provides ToTransportMessageService with ToTransportMessageServiceImpl;
 }

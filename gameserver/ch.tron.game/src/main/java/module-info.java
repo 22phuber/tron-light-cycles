@@ -17,5 +17,9 @@ module ch.tron.game {
     provides ToGameMessageService with ToGameMessageServiceImpl;
     
     exports ch.tron.game;
+    // needed to be exported for javadoc reasons
+    exports ch.tron.game.controller;
+    exports ch.tron.game.model;
+    exports ch.tron.game.serviceProviders;
 
 }
