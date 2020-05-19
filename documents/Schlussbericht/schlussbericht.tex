@@ -23,6 +23,7 @@
 \usepackage{enumitem}
 \usepackage{textcomp}
 \usepackage{listings}
+\usepackage[flushleft]{threeparttable}
 
 % Document geometry
 \geometry{a4paper, top=25mm, left=25mm, right=25mm, bottom=20mm,
@@ -663,31 +664,44 @@
 \subsection{Iterationsplan}
 \begin{table}[H]
 	\caption{Iterationsplan}
-	\begin{tabularx}{\textwidth}{l l l l l l X}
-		\toprule
-		Iterations Nr. & Start & Ende & Aufwand Soll [h] & Aufwand Ist [h] & Meilenstein & Ziele \\
-		\toprule
-		Inception &&&& \\
-		
-		1 & 19-02-20 & 04-03-20 & 73 & 102 & M1 & Vision definiert. Geschäftsmodell definiert. Anwendungsfälle definiert und Priorisierung vorgenommen. Wichtigste nicht-funktionalen Anforderungen definiert. Recherche zu Technologien angestellt. Projektskizze erstellen. \\
-		
-		\toprule
-		Elaboration &&&& \\
-		
-		2 & 04-03-20 & 25-03-20 & 62 & 74 & M2 & Weitere Technologie-Recherchen vornehmen. PoC Spiel spielen. Systemarchitektur definieren. Domänenmodell erstellen. Entwicklungsumgebung aufsetzen. Github Workflow, Continuous Integration einrichten. \\
-		
-		3 & 25-03-20 & 08-04-20 & 126 & 159 & M2 & Implementation Systemarchitektur. Frontend Spiel spielen. Frontend Webseite Grundstruktur. Datenbank Setup und Anbindung. Gameserver modularisiert und stabilisiert. \\
-		
-		\toprule
-		Construction &&&&\\
-		
-		4 & 08-04-20 & 22-04-20 & 60 & 1 & M3 & Implementation Spielregeln. Implementation Spiel generieren. Implementation Spiel auswählen. \\
-		
-		5 & 22-04-20 & 06-05-20 & 50 & 1 & M3 & \\
-		
-		6 & 06-05-20 & 20-05-20 & 35 & 1 & M3 & \\
-		\toprule
-	\end{tabularx}
+    \begin{threeparttable}
+	   \begin{tabularx}{\textwidth}{l l l l l l X}
+
+	   	\toprule
+	   	Nr.\tnote{1} & S\tnote{2} & E\tnote{3} &  Soll\tnote{4}  & Ist\tnote{5} & MS\tnote{6} & Ziele \\
+	   	\toprule
+	   	Inception &&&& \\
+
+	   	1 & 19-02-20 & 04-03-20 & 73 & 102 & M1 & Vision definiert. Geschäftsmodell definiert. Anwendungsfälle definiert und Priorisierung vorgenommen. Wichtigste nicht-funktionalen Anforderungen definiert. Recherche zu Technologien angestellt. Projektskizze erstellen. \\
+
+	   	\toprule
+	   	Elaboration &&&& \\
+
+	   	2 & 04-03-20 & 25-03-20 & 62 & 74 & M2 & Weitere Technologie-Recherchen vornehmen. PoC Spiel spielen. Systemarchitektur definieren. Domänenmodell erstellen. Entwicklungsumgebung aufsetzen. Github Workflow, Continuous Integration einrichten. \\
+
+	   	3 & 25-03-20 & 08-04-20 & 126 & 159 & M2 & Implementation Systemarchitektur. Frontend Spiel spielen. Frontend Webseite Grundstruktur. Datenbank Setup und Anbindung. Gameserver modularisiert und stabilisiert. \\
+
+	   	\toprule
+	   	Construction &&&&\\
+
+	   	4 & 08-04-20 & 22-04-20 & 60 & 1 & M3 & Implementation Spielregeln. Implementation Spiel generieren. Implementation Spiel auswählen. \\
+
+	   	5 & 22-04-20 & 06-05-20 & 50 & 1 & M3 & \\
+
+	   	6 & 06-05-20 & 20-05-20 & 35 & 1 & M3 & \\
+	   	\toprule
+
+	   \end{tabularx}
+    \begin{tablenotes}
+        \item[1] Iterations Nummer.
+        \item[2] Startdatum
+        \item[3] Enddatum
+        \item[4] Aufwand Soll [h]
+        \item[5] Aufwand Ist [h]
+        \item[6] Meilenstein
+    \end{tablenotes}
+   \end{threeparttable}
+
 
 	\label{tab:Iterationsplan}
 \end{table}
