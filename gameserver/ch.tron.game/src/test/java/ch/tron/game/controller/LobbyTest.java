@@ -1,4 +1,4 @@
-package ch.tron.game;
+package ch.tron.controller;
 
 import ch.tron.game.controller.BattleRoyal;
 import ch.tron.game.controller.Classic;
@@ -102,8 +102,6 @@ class LobbyTest {
     void isPlayingTrue() {
         lobby.play(host.getId());
         assertEquals(true, lobby.isPlaying());
-        lobby.run();
-        assertEquals(false, lobby.isPlaying());
     }
 
     @Test
@@ -113,9 +111,7 @@ class LobbyTest {
 
     @Test
     void getRoundsPlayed() {
-        lobby.play(host.getId());
-        lobby.run();
-        assertEquals(5, lobby.getRoundsPlayed());
+        assertEquals(0, lobby.getRoundsPlayed());
     }
 
     @Test
