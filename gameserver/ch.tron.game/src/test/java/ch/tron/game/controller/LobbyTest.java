@@ -1,4 +1,4 @@
-package ch.tron.controller;
+package ch.tron.game.controller;
 
 import ch.tron.game.controller.BattleRoyal;
 import ch.tron.game.controller.Classic;
