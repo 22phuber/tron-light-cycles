@@ -19,6 +19,8 @@ class PlayerTest {
 
     @Test
     void addTurn() {
+        player.addTurn(1);
+        assertEquals(1, player.getTurns().get(0).getNewDirection());
     }
 
     @Test
@@ -27,61 +29,41 @@ class PlayerTest {
     }
 
     @Test
-    void getPosx() {
+    void posx() {
+        player.setPosx(10);
+        assertEquals(10, player.getPosx());
     }
 
     @Test
-    void setPosx() {
+    void posy() {
+        player.setPosy(10);
+        assertEquals(10, player.getPosy());
     }
 
     @Test
-    void getPosy() {
+    void dir() {
+        player.setDir(1);
+        assertEquals(1, player.getDir());
     }
 
     @Test
-    void setPosy() {
-    }
-
-    @Test
-    void getDir() {
-    }
-
-    @Test
-    void setDir() {
-    }
-
-    @Test
-    void getColor() {
+    void color() {
         assertEquals("rgb(0,0,0)", player.getColor());
+        player.setColor("rgb(1,1,1)");
+        assertEquals("rgb(1,1,1)", player.getColor());
     }
 
     @Test
-    void setColor() {
-    }
-
-    @Test
-    void isReady() {
+    void ready() {
         assertFalse(player.isReady());
+        player.setReady(true);
+        assertTrue(player.isReady());
     }
 
     @Test
-    void setReady() {
-    }
-
-    @Test
-    void getReady() {
-    }
-
-    @Test
-    void getTurns() {
-    }
-
-    @Test
-    void getName() {
+    void name() {
         assertEquals("playerName", player.getName());
-    }
-
-    @Test
-    void setName() {
+        player.setName("playerName1");
+        assertEquals("playerName1", player.getName());
     }
 }
