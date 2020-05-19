@@ -5,6 +5,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Tests for WallCleaner
+ */
 class WallCleanerTest {
 
     private WallCleaner wallCleaner;

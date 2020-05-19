@@ -5,6 +5,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Tests for Player Class
+ */
 class PlayerTest {
 
     private Player player;

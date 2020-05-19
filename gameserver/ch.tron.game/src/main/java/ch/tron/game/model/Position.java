@@ -1,5 +1,8 @@
 package ch.tron.game.model;
 
+/**
+ * Position holds the x and y axis infos.
+ */
 public class Position {
     private int x;
     private int y;

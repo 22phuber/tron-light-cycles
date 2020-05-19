@@ -23,6 +23,12 @@ public class Player {
         this.color = color;
     }
 
+    /**
+     * Creates a Turn out of the newDirection and returns it.
+     *
+     * @param newDirection
+     * @return turn
+     */
     public Turn addTurn(int newDirection) {
         Turn turn = new Turn(newDirection);
         turns.addLast(turn);

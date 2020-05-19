@@ -56,10 +56,19 @@ public abstract class GameMode {
         this.field = new boolean[fieldWidth][fieldHeight];
     }
 
+    /**
+     * Main Game Loop
+     */
     public abstract void start();
 
+    /**
+     * The game logic should be implemented here.
+     */
     public abstract void move();
 
+    /**
+     * Sends a countdown to the clients before the game begins.
+     */
     public final void countdown(){
         int count = 3;
         Lobby lobby = GameManager.getLobbies().get(lobbyId);
@@ -79,6 +88,9 @@ public abstract class GameMode {
         }
     }
 
+    /**
+     * Sends out a CanvasConfig JSONObject to all clients.
+     */
     public final void initialize(){
         GameManager.getMessageForwarder().forwardMessage(new GameConfigMessage(lobbyId, fieldWitdh, fieldHeight, gridInterval));
 
@@ -88,6 +100,12 @@ public abstract class GameMode {
         gameStateUpdateMessage.setInitial(false);
     }
 
+    /**
+     * Creates a JSONObjet that gets send out to the clients.
+     *
+     * @return JSONObject containing all current player positions.
+     * @throws JSONException
+     */
     public JSONObject render() throws JSONException {
         JSONObject state = new JSONObject();
         state.put("subject", "gameState")
@@ -110,6 +128,12 @@ public abstract class GameMode {
         return state;
     }
 
+    /**
+     * Moves the player one tick forward.
+     *
+     * @param playerId
+     * @param key
+     */
     public final void updatePlayer(String playerId, String key) {
         Player pl = playersAlive.get(playerId);
         if (pl != null) {
@@ -152,6 +176,13 @@ public abstract class GameMode {
         }
     }
 
+    /**
+     *
+     * @param pl
+     * @param turn
+     * @param posx
+     * @param posy
+     */
     public void executeTurn(Player pl, Turn turn, int posx, int posy) {
         pl.setDir(turn.getNewDirection());
 

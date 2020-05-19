@@ -7,6 +7,10 @@ import ch.tron.game.model.Turn;
 import java.util.Map;
 import java.util.function.BiPredicate;
 
+/**
+ * Implements the Classic Tron game mode.
+ * It extends the GameMode Class.
+ */
 public class Classic extends GameMode{
 
     public Classic(String lobbyId, Map<String, Player> players, int gridInterval){
@@ -19,6 +23,13 @@ public class Classic extends GameMode{
                 players);
     }
 
+    /**
+     * Main Game Loop
+     *
+     * Runs as long as players are alive.
+     * It continously sends update to the clients.
+     * The loop is capped at 60 FPS.
+     */
     @Override
     public void start() {
 
@@ -39,6 +50,10 @@ public class Classic extends GameMode{
 
     }
 
+    /**
+     * Moves every player towards the direction it is headed.
+     * Checks if a player dies.
+     */
     @Override
     public void move() {
         playersAlive.values().forEach(player -> {

@@ -15,6 +15,9 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Tests for Lobby Class
+ */
 class LobbyTest {
 
     private Lobby lobby;
@@ -27,10 +30,6 @@ class LobbyTest {
         host = new Player("hostId", "hostName", "rgb(0,0,0)");
         player = new Player("playerId", "playerName", "rgb(1,1,1)");
         lobby = new Lobby("lobbyId", "lobbyName", host.getName(), host.getId(), host.getColor(), "classic", 10, true);
-    }
-
-    @Test
-    void run(){
     }
 
     @Test
@@ -51,14 +50,6 @@ class LobbyTest {
     void addPlayerAndGetPlayersJoined() {
         lobby.addPlayer(player.getId(), player.getName(), player.getColor());
         assertEquals(2, lobby.getPlayersJoined());
-    }
-
-    @Test
-    void updatePlayerConfig() {
-    }
-
-    @Test
-    void updatePlayer() {
     }
 
     @Test

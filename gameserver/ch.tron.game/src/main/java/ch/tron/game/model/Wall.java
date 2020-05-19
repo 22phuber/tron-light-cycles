@@ -1,5 +1,8 @@
 package ch.tron.game.model;
 
+/**
+ * Walls in BattleRoyale Mode
+ */
 public class Wall {
     private int width;
     private int height;

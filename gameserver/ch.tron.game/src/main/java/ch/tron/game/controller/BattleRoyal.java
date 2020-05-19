@@ -11,6 +11,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiPredicate;
 
+/**
+ * Implements the BattleRoyal game mode.
+ * It extends the GameMode Class.
+ */
+
 public class BattleRoyal extends GameMode{
 
     private Map<String, WallCleaner> wallCleaner = new HashMap<>();
@@ -29,6 +34,13 @@ public class BattleRoyal extends GameMode{
         }
     }
 
+    /**
+     * Main Game Loop
+     *
+     * Runs as long as players are alive.
+     * It continously sends update to the clients.
+     * The loop is capped at 60 FPS.
+     */
     @Override
     public void start() {
 
@@ -47,6 +59,11 @@ public class BattleRoyal extends GameMode{
         }
     }
 
+    /**
+     * Moves every player towards the direction it is headed.
+     * Moves the outter walls a bit closer, when the timer is up.
+     * Checks if a player dies.
+     */
     @Override
     public void move() {
         //gameplay logic comes in here
@@ -119,6 +136,9 @@ public class BattleRoyal extends GameMode{
         moveWalls();
     }
 
+    /**
+     * Moves the walls a bit to the center after a given amount of time.
+     */
     public void moveWalls(){
         //move the outer walls closer to the center every "WALL_INTERVAL"
         if(remainingWallSteps > 0){
@@ -137,6 +157,12 @@ public class BattleRoyal extends GameMode{
         }
     }
 
+    /**
+     * Creates a JSONObject with the render info to send out to the clients.
+     *
+     * @return JSONObject with position info of every player and wall
+     * @throws JSONException
+     */
     @Override
     public JSONObject render() throws JSONException {
         JSONObject state = new JSONObject();
@@ -165,6 +191,12 @@ public class BattleRoyal extends GameMode{
         return state;
     }
 
+    /**
+     * This function gets called when a player dies in-game.
+     * The player gets removed from the game and infos gets cleaned up.
+     *
+     * @param pl
+     */
     @Override
     public void die(Player pl) {
         playersAlive.remove(pl.getId());
