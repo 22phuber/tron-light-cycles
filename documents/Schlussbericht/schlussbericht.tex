@@ -23,6 +23,7 @@
 \usepackage{enumitem}
 \usepackage{textcomp}
 \usepackage{listings}
+\usepackage[flushleft]{threeparttable}
 
 % Document geometry
 \geometry{a4paper, top=25mm, left=25mm, right=25mm, bottom=20mm,
@@ -672,6 +673,117 @@
 	\end{compactitem}\\
 	\bottomrule
 \end{tabularx}
+
+\subsection{Iterationsplan}
+\begin{table}[H]
+	\caption{Iterationsplan}
+    \begin{threeparttable}
+	   \begin{tabularx}{\textwidth}{l l l l l l X}
+
+	   	\toprule
+	   	Nr.\tnote{1} & S\tnote{2} & E\tnote{3} &  Soll\tnote{4}  & Ist\tnote{5} & MS\tnote{6} & Ziele \\
+	   	\toprule
+	   	Inception &&&& \\
+
+	   	1 & 19-02-20 & 04-03-20 & 73 & 102 & M1 & Vision definiert. Geschäftsmodell definiert. Anwendungsfälle definiert und Priorisierung vorgenommen. Wichtigste nicht-funktionalen Anforderungen definiert. Recherche zu Technologien angestellt. Projektskizze erstellen. \\
+
+	   	\toprule
+	   	Elaboration &&&& \\
+
+	   	2 & 04-03-20 & 25-03-20 & 62 & 74 & M2 & Weitere Technologie-Recherchen vornehmen. PoC Spiel spielen. Systemarchitektur definieren. Domänenmodell erstellen. Entwicklungsumgebung aufsetzen. Github Workflow, Continuous Integration einrichten. \\
+
+	   	3 & 25-03-20 & 08-04-20 & 126 & 159 & M2 & Implementation Systemarchitektur. Frontend Spiel spielen. Frontend Webseite Grundstruktur. Datenbank Setup und Anbindung. Gameserver modularisiert und stabilisiert. \\
+
+	   	\toprule
+	   	Construction &&&&\\
+
+	   	4 & 08-04-20 & 22-04-20 & 60 & 1 & M3 & Implementation Spielregeln. Implementation Spiel generieren. Implementation Spiel auswählen. \\
+
+	   	5 & 22-04-20 & 06-05-20 & 50 & 1 & M3 & \\
+
+	   	6 & 06-05-20 & 20-05-20 & 35 & 1 & M3 & \\
+	   	\toprule
+
+	   \end{tabularx}
+    \begin{tablenotes}
+        \item[1] Iterations Nummer.
+        \item[2] Startdatum
+        \item[3] Enddatum
+        \item[4] Aufwand Soll [h]
+        \item[5] Aufwand Ist [h]
+        \item[6] Meilenstein
+    \end{tablenotes}
+   \end{threeparttable}
+
+
+	\label{tab:Iterationsplan}
+\end{table}
+
+\subsection{Iterations-Assessment}
+Nachfolgend die Iterations-Assessments der vergangenen Iterationen.
+
+\subsubsection{Iteration 1}
+\begin{table}[H]
+	\caption{Iterations-Assessment: Iteration 1}
+	\begin{tabularx}{\textwidth}{X l l l}
+		\toprule
+		Arbeitspackete & Aufwand Soll [h] & Aufwand Ist [h] & Verantwortlicher \\
+		\toprule
+		Ideensammlung & 2 & 4 & alle \\
+		Vision Definition & 3 & 4 & Huber \\
+		Erarbeitung Geschäftsmodell & 3 & 4 & Iten \\
+		Definition Anwendungsfälle, Priosierung & 10 & 15 & Akca \\
+		Definition Nichtfunktionale Anforderung & 5 & 5 & Iten \\
+		Projektskizze & 30 & 35 & alle \\
+		Recherche Technologie & 20 & 35 & alle \\
+		\bottomrule
+	\end{tabularx}
+	\label{tab:Iterations-Assessment: Iteration 1}
+\end{table}
+
+\subsubsection{Iteration 2}
+\begin{table}[H]
+	\caption{Iterations-Assessment: Iteration 2}
+	\begin{tabularx}{\textwidth}{X l l l}
+		\toprule
+		Arbeitspackete & Aufwand Soll [h] & Aufwand Ist [h] & Verantwortlicher \\
+		\toprule
+		Sitzungen, Diskussionen & 5 & 7 & alle \\
+		Recherche Technologien & 8 & 12 & alle \\
+		Systemarchitektur Artifact & 3 & 4 & Holenstein \\
+		Domänenmodell & 5 & 5 & Akca \\
+		PoC Gameserver & 15 & 15 & Holenstein \\
+		Systemarchitektur Implementation & 10 & 12 & Huber \\
+		Entwicklungsumgebung & 5 & 6 & Iten \\
+		Projektmanagement Github & 5 & 5 & Huber \\
+		Github Actions Continuous Integration Setup & 6 & 8 & Huber \\
+		\bottomrule
+	\end{tabularx}
+	\label{tab:Iterations-Assessment: Iteration 2}
+\end{table}
+
+\subsubsection{Iteration 3}
+\begin{table}[H]
+	\caption{Iterations-Assessment: Iteration 3}
+	\begin{tabularx}{\textwidth}{X l l l}
+		\toprule
+		Arbeitspackete & Aufwand Soll [h] & Aufwand Ist [h] & Verantwortlicher \\
+		\toprule
+		Sitzungen, Diskussionen & 6 & 6 & alle \\
+		Recherche Technologien & 15 & 17 & alle \\
+		Ausformilierung Anwendungsfälle & 15 & 20 & Akca, Iten, Huber \\
+		Frontend Spiel spielen & 10 & 20 & Huber \\
+		Frontend Mockup & 5 & 7 & Iten \\
+		Frontend Webseite Implementation & 10 & 14 & Iten \\
+		Game Server Stabilisierung Kernarchitektur & 15 & 20 & Holenstein \\
+		Datenbank Setup, Anbindung & 10 & 10 & Akca \\
+		Projektmanagement Github & 5 & 5 & Huber, Akca \\
+		Lösungsarchitektur Dokument, Artifakte & 35 & 40 & alle \\
+		\bottomrule
+	\end{tabularx}
+	\label{tab:Iterations-Assessment: Iteration 3}
+\end{table}
+
     \listoffigures
     \listoftables
     \printbibliography

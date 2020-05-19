@@ -95,10 +95,6 @@ var Player = function (id, color) {
   this.color = color;
 };
 
-// Player.prototype.deletePositions = function () {
-//   this.positions = [];
-// };
-
 Player.prototype.addPositions = function (x, y) {
   this.positions.push(new Position(x, y));
 };
