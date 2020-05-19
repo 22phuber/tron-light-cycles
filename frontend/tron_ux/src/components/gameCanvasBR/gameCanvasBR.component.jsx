@@ -5,37 +5,12 @@ import "./gameCanvasBR.styles.css";
  * gameCanvasBR for Battle Royale mode
  */
 
-var Position = function (x, y) {
-  this.x = x;
-  this.y = y;
-};
-
-var Player = function (id, color) {
-  this.id = id;
-  this.positions = [];
-  this.color = color;
-};
-
-// Player.prototype.deletePositions = function () {
-//   this.positions = [];
-// };
-
-Player.prototype.addPositions = function (x, y) {
-  this.positions.push(new Position(x, y));
-};
-
-Player.prototype.getPositions = function () {
-  return this.positions;
-};
-
-Player.prototype.removeOldestPosition = function () {
-  this.positions.shift();
-};
+var movementCounter = 0;
 
 const GameCanvasBR = (props) => {
   const canvasRef = useRef(null);
 
-  const canvasId = "gameCanvas";
+  const canvasId = "gameCanvasBR";
   const {
     playersData,
     canvasConfig,
@@ -44,13 +19,19 @@ const GameCanvasBR = (props) => {
     walls,
     playersPositions,
   } = props;
-  const { width, height, lineThickness } = canvasConfig;
+  const { lineThickness } = canvasConfig;
+  const width = 400;
+  const height = 400;
+  const halfWidth = width * 0.5;
+  const halfHeight = height * 0.5;
+  const movementLimit = 100;
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, width, height);
-  }, [clear, width, height]);
+    movementCounter = 0;
+  }, [clear]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -59,8 +40,6 @@ const GameCanvasBR = (props) => {
     if (playersData) {
       let clientPosX;
       let clientPosY;
-      let movementLimit = 100;
-      let movementCounter = 0;
 
       playersData.forEach((player) => {
         if (myPlayerId === player.id) {
@@ -73,24 +52,40 @@ const GameCanvasBR = (props) => {
           }
         }
       });
-      // draw outer canvas
+      // clear canvas
       ctx.clearRect(0, 0, width, height);
-      ctx.beginPath();
-      ctx.strokeStyle = "black";
+      // draw outer canvas
       ctx.fillStyle = "black";
       ctx.fillRect(0, 0, width, height);
       // draw inner canvas
-      // ctx.stroke();
-      ctx.beginPath();
-      ctx.strokeStyle = "black";
       ctx.fillStyle = "white";
       ctx.fillRect(
-        walls.x - clientPosX + width / 2,
-        walls.y - clientPosY + height / 2,
+        walls.x - clientPosX + halfWidth,
+        walls.y - clientPosY + halfHeight,
         walls.width,
         walls.height
       );
-      // ctx.stroke();
+
+      // SHIT DON'T GET IT
+      // var wallChangeX = walls.x - clientPosX + halfWidth;
+      // var wallChangeY = walls.y - clientPosY + halfHeight;
+      // console.log(wallChangeX);
+      // console.log(wallChangeY);
+      // // four outer rects
+      // // top (works correct)
+      // ctx.fillStyle = "black";
+      // ctx.fillRect(0, 0, width, wallChangeY);
+      // // left (works correct)
+      // ctx.fillStyle = "green";
+      // ctx.fillRect(0, 0, wallChangeX, height);
+      // //right
+      // ctx.fillStyle = "blue";
+      // ctx.fillRect(width - walls.x, 0, width, height);
+      // //bottom
+      // ctx.fillStyle = "purple";
+      // ctx.fillRect(0, height - walls.y, width, height);
+      // END SHIT DON'T GET IT
+
       playersPositions.forEach((player) => {
         player.getPositions().forEach((position) => {
           if (
@@ -101,32 +96,24 @@ const GameCanvasBR = (props) => {
           ) {
             ctx.fillStyle = player.color;
             ctx.fillRect(
-              position.x - clientPosX + width / 2,
-              position.y - clientPosY + height / 2,
+              position.x - clientPosX + halfWidth,
+              position.y - clientPosY + halfHeight,
               lineThickness,
               lineThickness
             );
           }
         });
-      });
-
-      if (movementCounter >= movementLimit) {
-        playersPositions.forEach((player) => {
+        if (movementCounter >= movementLimit) {
           player.removeOldestPosition();
-        });
-      } else {
-        movementCounter++;
-      }
+        } else {
+          movementCounter += 1;
+        }
+      });
     }
   });
 
   return (
-    <canvas
-      id={canvasId}
-      width={width}
-      height={height}
-      ref={canvasRef}
-    ></canvas>
+    <canvas id={canvasId} width={"400"} height={"400"} ref={canvasRef}></canvas>
   );
 };
 
