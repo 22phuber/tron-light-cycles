@@ -201,6 +201,11 @@ public abstract class GameMode {
         turn.setPosy(posy);
     }
 
+    /**
+     * Lets the thread sleep for a calculated amount of time to hit the 60 FPS cap.
+     *
+     * @param now
+     */
     public void sleepForDelta(long now) {
         long delta = System.nanoTime() - now;
         if(delta < LOOP_INTERVAL){
@@ -212,6 +217,11 @@ public abstract class GameMode {
         }
     }
 
+    /**
+     * Cleans up remainings from palyer in game after it died in game.
+     *
+     * @param pl
+     */
     public void die(Player pl) {
         playersAlive.remove(pl.getId());
         playersDead.add(pl.getId());
@@ -228,6 +238,9 @@ public abstract class GameMode {
         ));
     }
 
+    /**
+     *
+     */
     public void sendScore() {
         Map<String, Integer> scores = new HashMap<>();
         playersDead.forEach(playerId -> {
