@@ -7,17 +7,22 @@ import org.json.JSONObject;
 
 /**
  * Manages forwarding of messages of type {@link JSONObject}
- * from game server to game player (client).
+ * from game server to client.
  */
 public class JsonOutboundHandler {
+
+    /**
+     * Initializes a newly created {@code JsonOutboundHandler} object.
+     */
+    public JsonOutboundHandler() {}
 
     /**
      * Sends a JsonString to a client.
      *
      * @param channel   The {@link Channel} representing the connection
-     *                  to the client.
+     *                  to the client
      * @param jo        The {@link JSONObject} holding the information
-     *                  to be sent.
+     *                  to be sent
      */
     public void sendJsonToChannel(Channel channel, JSONObject jo) {
         channel.writeAndFlush(new TextWebSocketFrame(jo.toString()));
@@ -26,9 +31,9 @@ public class JsonOutboundHandler {
     /**
      * Sends a JsonString to a group of clients.
      *
-     * @param group     The {@link ChannelGroup} to send to.
+     * @param group     The {@link ChannelGroup} to send to
      * @param jo        The {@link JSONObject} holding the information
-     *                  to be sent.
+     *                  to be sent
      */
     public void sendJsonToChannelGroup(ChannelGroup group, JSONObject jo) {
         group.writeAndFlush(new TextWebSocketFrame(jo.toString()));

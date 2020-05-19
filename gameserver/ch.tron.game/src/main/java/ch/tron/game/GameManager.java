@@ -14,8 +14,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Connects {@link ch.tron.game} to {@code ch.tron.middleman}.
- * Manages forwarding of {@link InAppMessage}.
+ * Connects {@link ch.tron.game} to
+ * {@link ch.tron.middleman.messagehandler}. Manages forwarding
+ * of {@link InAppMessage}.
  */
 public class GameManager {
 
@@ -28,7 +29,8 @@ public class GameManager {
     public static ToTransportMessageForwarder getMessageForwarder() { return MESSAGE_FORWARDER; }
 
     /**
-     * Handles incoming {@link InAppMessage} from {@code ch.tron.middleman}.
+     * Handles incoming {@link InAppMessage} from
+     * {@link ch.tron.middleman.messagehandler}.
      *
      * @param msg   Message of type {@link InAppMessage}.
      */

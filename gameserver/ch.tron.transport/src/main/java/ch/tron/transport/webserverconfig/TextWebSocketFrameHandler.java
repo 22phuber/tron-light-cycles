@@ -11,13 +11,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Updates {@link io.netty.channel.ChannelPipeline} of a specific
- * client-server-connection on websocket handshake.
- * Handles incoming text-websocket-frames of a specific client.
+ * Updates {@link io.netty.channel.ChannelPipeline} of a
+ * specific client-server connection on websocket handshake.
+ * Handles incoming {@link TextWebSocketFrame} objects
+ * representing a text message sent by a client.
  */
 public class TextWebSocketFrameHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
 
     private final Logger logger = LoggerFactory.getLogger(TextWebSocketFrameHandler.class);
+
+    /**
+     * Initializes a {@code TextWebSocketFrameHandler} object.
+     */
+    public TextWebSocketFrameHandler() {}
 
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {

@@ -1,3 +1,6 @@
+import ch.tron.middleman.services.ToTransportMessageService;
+import ch.tron.transport.serviceProviders.ToTransportMessageServiceImpl;
+
 module ch.tron.transport {
 
     // JSON
@@ -17,6 +20,12 @@ module ch.tron.transport {
 
 
     exports ch.tron.transport;
+    // needed to be exported for javadoc reasons
+    exports ch.tron.transport.serviceProviders;
+    exports ch.tron.transport.webserverconfig;
+    exports ch.tron.transport.websocket.controller;
+    exports ch.tron.transport.websocket.inboundhandler;
+    exports ch.tron.transport.websocket.outboundhandler;
 
-    provides ch.tron.middleman.ToTransportMessageService with ch.tron.transport.ToTransportMessageServiceImpl;
+    provides ToTransportMessageService with ToTransportMessageServiceImpl;
 }

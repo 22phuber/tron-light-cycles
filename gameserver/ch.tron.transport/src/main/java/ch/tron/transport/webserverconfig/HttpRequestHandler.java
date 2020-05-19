@@ -22,6 +22,14 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
 
     private final String wsURI;
 
+    /**
+     * Constructs a {@code HttpRequestHandler} object listening on
+     * the given {@code URI} for requests to upgrade to a websocket
+     * connection.
+     *
+     * @param wsURI The {@code URI} to upgrade to a websocket
+     *              connection
+     */
     public HttpRequestHandler(String wsURI) { this.wsURI = wsURI; }
 
     @Override

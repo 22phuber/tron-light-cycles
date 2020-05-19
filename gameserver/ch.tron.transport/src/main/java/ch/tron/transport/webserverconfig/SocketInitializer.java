@@ -12,6 +12,14 @@ import java.net.InetSocketAddress;
  */
 public class SocketInitializer {
 
+    /**
+     * Initializes a {@code SocketInitializer} object.
+     */
+    public SocketInitializer() {}
+
+    /**
+     * Initializes a socket.
+     */
     public static void init() {
 
         final String NETTY_HOST = "0.0.0.0";
