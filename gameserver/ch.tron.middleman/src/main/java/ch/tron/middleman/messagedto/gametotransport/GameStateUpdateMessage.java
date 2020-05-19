@@ -4,10 +4,7 @@ import ch.tron.middleman.messagedto.InAppMessage;
 import org.json.JSONObject;
 
 /**
- * Is being sent from {@link ch.tron.game} to {@link ch.tron.transport} using
- * {@link ch.tron.middleman.messagehandler.ToTransportMessageForwarder} in
- * order to communicate the updated game state of a specific game round
- * the attending game players (clients).
+ * Holds the current game state.
  */
 public class GameStateUpdateMessage extends InAppMessage {
 
@@ -17,20 +14,37 @@ public class GameStateUpdateMessage extends InAppMessage {
 
     private boolean initial = false;
 
+    /**
+     * Constructs a {@code GameStateUpdateMessage} object.
+     *
+     * @param groupId   The id identifying the game of which this
+     *                  object will hold the updates
+     */
     public GameStateUpdateMessage(String groupId) {
         this.groupId = groupId;
     }
 
+    /**
+     * Returns the id identifying the game.
+     *
+     * @return  The game id
+     */
     public String getGroupId() {
         return groupId;
     }
 
+    /**
+     * Returns the current game state as a {@link JSONObject}.
+     *
+     * @return  The game state
+     */
     public JSONObject getUpdate() {
         return update;
     }
 
     /**
-     * Sets the current game state
+     * Updates the current game state.
+     *
      * @param update    The current game state as {@link JSONObject}
      *                  with the following pattern:
      *                  {
@@ -52,10 +66,21 @@ public class GameStateUpdateMessage extends InAppMessage {
         this.update = update;
     }
 
+    /**
+     * Tells whether this messages is a first or not.
+     *
+     * @return  {@code true} if it's the initial game state,
+     *          {@code false} if it's the updated game state
+     */
     public boolean isInitial() {
         return initial;
     }
 
+    /**
+     * Sets the initial value.
+     *
+     * @param initial   The initial value
+     */
     public void setInitial(boolean initial) {
         this.initial = initial;
     }

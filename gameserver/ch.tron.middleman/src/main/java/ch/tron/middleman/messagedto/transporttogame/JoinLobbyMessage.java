@@ -3,33 +3,64 @@ package ch.tron.middleman.messagedto.transporttogame;
 import ch.tron.middleman.messagedto.InAppMessage;
 
 /**
- * Is being sent from {@link ch.tron.transport} to {@link ch.tron.game}
- * using {@link ch.tron.middleman.messagehandler.ToGameMessageForwarder}
- * in order to add a new game player to a specific game round.
+ * Holds the id identifying a game a client joins and the meta
+ * information of the specific client.
  */
 public class JoinLobbyMessage extends InAppMessage {
 
-    private final String playerId;
+    private final String clientId;
     private final String playerName;
-    private final String color;
+    private final String playerColor;
     private final String  groupId;
 
-    public JoinLobbyMessage(String playerId, String playerName, String color, String groupId) {
-        this.playerId = playerId;
+    /**
+     * Constructs a {@code JoinLobbyMessage} object.
+     *
+     * @param clientId      The id identifying the client
+     *                      respectively the player who joins
+     *                      the game
+     * @param playerName    The players name
+     * @param playerColor   The players color
+     * @param groupId       The id identifying the game the player
+     *                      wants to join
+     */
+    public JoinLobbyMessage(String clientId, String playerName, String playerColor, String groupId) {
+        this.clientId = clientId;
         this.playerName = playerName;
-        this.color = color;
+        this.playerColor = playerColor;
         this.groupId = groupId;
     }
 
-    public String getPlayerId() {
-        return playerId;
+    /**
+     * Returns the id identifying the joining client.
+     *
+     * @return  The players id
+     */
+    public String getClientId() {
+        return clientId;
     }
 
-    public String getColor() { return color; }
+    /**
+     * Returns the name of the joining client.
+     *
+     * @return  The players name
+     */
+    public String getPlayerName() { return playerName; }
 
+    /**
+     * Returns the color of the joining client.
+     *
+     * @return  The players color
+     */
+    public String getPlayerColor() { return playerColor; }
+
+    /**
+     * Returns the id identifying the game the client wants to
+     * join.
+     *
+     * @return  The game id
+     */
     public String getGroupId() {
         return groupId;
     }
-
-    public String getPlayerName() { return playerName; }
 }

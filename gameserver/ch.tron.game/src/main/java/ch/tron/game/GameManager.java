@@ -63,9 +63,9 @@ public class GameManager {
                         groupId,
                         ((NewLobbyMessage) msg).getGroupName(),
                         ((NewLobbyMessage) msg).getPlayerName(),
-                        ((NewLobbyMessage) msg).getHostId(),
-                        ((NewLobbyMessage) msg).getHostColor(),
-                        ((NewLobbyMessage) msg).getMode(),
+                        ((NewLobbyMessage) msg).getClientId(),
+                        ((NewLobbyMessage) msg).getPlayerColor(),
+                        ((NewLobbyMessage) msg).getGameMode(),
                         ((NewLobbyMessage) msg).getPlayersAllowed(),
                         ((NewLobbyMessage) msg).isVisibleToPublic()
                 ));
@@ -73,29 +73,29 @@ public class GameManager {
             } else if (msg instanceof JoinLobbyMessage) {
 
                 lobbies.get(((JoinLobbyMessage) msg).getGroupId())
-                        .addPlayer(((JoinLobbyMessage) msg).getPlayerId(),
+                        .addPlayer(((JoinLobbyMessage) msg).getClientId(),
                                 ((JoinLobbyMessage) msg).getPlayerName(),
-                                ((JoinLobbyMessage) msg).getColor());
+                                ((JoinLobbyMessage) msg).getPlayerColor());
             } else if (msg instanceof PlayerUpdateMessage) {
 
                 String groupId = ((PlayerUpdateMessage) msg).getGroupId();
-                String playerId = ((PlayerUpdateMessage) msg).getPlayerId();
+                String playerId = ((PlayerUpdateMessage) msg).getClientId();
 
                 lobbies.get(groupId).updatePlayer(playerId, ((PlayerUpdateMessage) msg).getKey());
             } else if (msg instanceof PlayerConfigUpdateMessage) {
                 Lobby lobby = lobbies.get(((PlayerConfigUpdateMessage) msg).getGroupId());
                 lobby.updatePlayerConfig(
-                        ((PlayerConfigUpdateMessage) msg).getPlayerId(),
+                        ((PlayerConfigUpdateMessage) msg).getClientId(),
                         ((PlayerConfigUpdateMessage) msg).getPlayerName(),
                         ((PlayerConfigUpdateMessage) msg).getPlayerColor(),
                         ((PlayerConfigUpdateMessage) msg).isReady()
                 );
             }
             else if (msg instanceof StartGameMessage) {
-                lobbies.get(((StartGameMessage) msg).getGroupId()).play(((StartGameMessage) msg).getPlayerId());
+                lobbies.get(((StartGameMessage) msg).getGroupId()).play(((StartGameMessage) msg).getClientId());
             } else if(msg instanceof RemovePlayerMessage) {
                 Lobby lobby = lobbies.get(((RemovePlayerMessage) msg).getGroupId());
-                lobby.removePlayer(((RemovePlayerMessage) msg).getPlayerId());
+                lobby.removePlayer(((RemovePlayerMessage) msg).getClientId());
             } else {
                 LOGGER.info("Message type {} not supported", msg.getClass());
             }

@@ -5,6 +5,8 @@ import ch.tron.middleman.messagedto.InAppMessage;
 import ch.tron.middleman.services.ToGameMessageService;
 
 public class ToGameMessageServiceImpl implements ToGameMessageService {
+
+    @Override
     public void handle(InAppMessage msg) {
         GameManager.handleInAppIncomingMessage(msg);
     }
