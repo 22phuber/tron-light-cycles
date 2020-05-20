@@ -53,22 +53,34 @@ const GameCanvasBR = (props) => {
           }
         }
       });
-	  
-	  if(clientPosX - walls.x + clientPosOffset < halfWidth && walls.x + walls.width - clientPosX - clientPosOffset > halfWidth){
-		  clientPosX = walls.x + halfWidth - clientPosOffset;
-	  }else if(clientPosX - walls.x - clientPosOffset > halfWidth && walls.x + walls.width - clientPosX + clientPosOffset < halfWidth){
-		  clientPosX = walls.x + walls.width - halfWidth + clientPosOffset;
-	  }
-		  
-	  if(clientPosY - walls.y + clientPosOffset < halfHeight && walls.y + walls.height - clientPosY - clientPosOffset > halfHeight){
-		  clientPosY = walls.y + halfHeight - clientPosOffset;
-	  }else if(clientPosY - walls.y - clientPosOffset > halfHeight && walls.y + walls.height - clientPosY + clientPosOffset< halfHeight){
-		  clientPosY = walls.y + walls.height - halfHeight + clientPosOffset;
-	  }
-	  
+
+      if (
+        clientPosX - walls.x + clientPosOffset < halfWidth &&
+        walls.x + walls.width - clientPosX - clientPosOffset > halfWidth
+      ) {
+        clientPosX = walls.x + halfWidth - clientPosOffset;
+      } else if (
+        clientPosX - walls.x - clientPosOffset > halfWidth &&
+        walls.x + walls.width - clientPosX + clientPosOffset < halfWidth
+      ) {
+        clientPosX = walls.x + walls.width - halfWidth + clientPosOffset;
+      }
+
+      if (
+        clientPosY - walls.y + clientPosOffset < halfHeight &&
+        walls.y + walls.height - clientPosY - clientPosOffset > halfHeight
+      ) {
+        clientPosY = walls.y + halfHeight - clientPosOffset;
+      } else if (
+        clientPosY - walls.y - clientPosOffset > halfHeight &&
+        walls.y + walls.height - clientPosY + clientPosOffset < halfHeight
+      ) {
+        clientPosY = walls.y + walls.height - halfHeight + clientPosOffset;
+      }
+
       // clear canvas
       ctx.clearRect(0, 0, width, height);
-	  /*
+      /*
       // draw outer canvas
       ctx.fillStyle = "black";
       ctx.fillRect(0, 0, width, height);
@@ -80,8 +92,7 @@ const GameCanvasBR = (props) => {
         walls.width,
         walls.height
       );
-	*/
-      
+      */
 
       playersPositions.forEach((player) => {
         player.getPositions().forEach((position) => {
@@ -102,32 +113,45 @@ const GameCanvasBR = (props) => {
         });
         if (movementCounter >= movementLimit) {
           player.removeOldestPosition();
-		}
+        }
       });
-	  
-	  movementCounter += 1;
-	  
-	  console.log(walls.x + " " + walls.width);
-	  
-	  // SHIT DON'T GET IT
+
+      movementCounter += 1;
+
+      // SHIT DON'T GET IT
       var wallChangeX = walls.x - clientPosX + halfWidth;
       var wallChangeY = walls.y - clientPosY + halfHeight;
-	  var wallChangeXOpposite = walls.width + walls.x - clientPosX + halfWidth;
-	  var wallChangeYOpposite = walls.height + walls.y - clientPosY + halfHeight;
-      // console.log(wallChangeX);
-      // console.log(wallChangeY);
-      // // four outer rects
-      // // top (works correct)
+      var wallChangeXOpposite = walls.width + walls.x - clientPosX + halfWidth;
+      var wallChangeYOpposite =
+        walls.height + walls.y - clientPosY + halfHeight;
       ctx.fillStyle = "darkred";
-      ctx.fillRect(wallChangeX - halfWidth, wallChangeY - halfHeight, walls.width + halfWidth, halfHeight);
+      ctx.fillRect(
+        wallChangeX - halfWidth,
+        wallChangeY - halfHeight,
+        walls.width + halfWidth,
+        halfHeight
+      );
       // // left (works correct)
-      ctx.fillRect(wallChangeX - halfWidth, wallChangeY, halfWidth, walls.height + halfHeight);
+      ctx.fillRect(
+        wallChangeX - halfWidth,
+        wallChangeY,
+        halfWidth,
+        walls.height + halfHeight
+      );
       // //right
-      ctx.fillRect(wallChangeXOpposite, wallChangeY - halfHeight, halfWidth, walls.height + halfHeight);
+      ctx.fillRect(
+        wallChangeXOpposite,
+        wallChangeY - halfHeight,
+        halfWidth,
+        walls.height + halfHeight
+      );
       // //bottom
-      ctx.fillRect(wallChangeX, wallChangeYOpposite, walls.width + halfWidth, halfHeight);
-      // END SHIT DON'T GET IT
-	  
+      ctx.fillRect(
+        wallChangeX,
+        wallChangeYOpposite,
+        walls.width + halfWidth,
+        halfHeight
+      );
     }
   });
 
