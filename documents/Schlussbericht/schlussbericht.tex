@@ -644,7 +644,7 @@
 
 %%% Implementation
 %Die wichtigsten Informationen zur Implementation der Lösung (Packages, etc.) sowie die durch- geführten Tests sind hier zu dokumentieren:
-%− Testkonzept: Zusammenfassung des gemachten Tests (Unit-, Integrations- und System- tests) und Testresultate
+%− Testkonzept: Zusammenfassung des gedockermachten Tests (Unit-, Integrations- und System- tests) und Testresultate
 %− Installationsanleitung
 %− Code-Dokumentation
 %• Der vollständige Quellcode (inkl. Unit-Tests) wird in elektronischer Form abgegeben (auf OLAT im Team-Ordner als ZIP-File).
@@ -674,6 +674,14 @@
     \lstinputlisting[language=bash,label={lst:GHAction}, caption=Github Action workflow]{listings/CI_gh_actions.yml}
     \vspace{.5cm}
     % github actions => https://github.com/features/actions
+
+    Wie dies schlussendlilch auf Github aussieht, zeigt die \autoref{fig:GHActions_01} . Ein fehlerhafter Integrationstests, blockiert die Möglichkeit, den Code in den \inlinecode{bash}{master}-Branch einfliessen zu lassen, bis der Test erfolgreich ist.
+    \begin{figure}[H]
+        \centering
+        \makebox[\textwidth][c]{\includegraphics[scale=0.45]{figures/GHActions_01.png}}
+        \caption{Github Actions - Durchlauf eines kontinuierlichen Integrationstests als Reaktion auf einen \Gls{Pull Request} }
+        \label{fig:GHActions_01}
+    \end{figure}
 
     \subsection{Installationsanleitung}
     % pre-build and  docker-compose
@@ -790,6 +798,8 @@
     \section{Appendix}
 
     \subsection{Projektmanagement}
+    Um das Projekt erfolgreich durchzuführen, wurde mit \hyperlink{https://github.com/features/project-management/}{Github Projects} gearbeitet. Für die Kommunikation haben wir hauptsächlich \hyperlink{https://slack.com/}{Slack} verwendet. Jede Aktivität auf Github hat eine Slack-Nachricht ausgelöst in einem bestimmten Kanal. Somit waren alle Projektmitglieder immer auf dem neuesten Stand.
+
     \begin{tabularx}{\textwidth}{X}
     	\toprule
     	Phase: \textbf{Inception} Iteration: \textbf{1} Woche: \textbf{1} Dauer: \textbf{2 Wochen}\\
