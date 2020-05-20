@@ -38,6 +38,7 @@ const CreateGame = (props) => {
     const targetValue = event.target.value;
     switch (property) {
       case "mode":
+      case "visibility":
         switch (targetValue) {
           case "battleRoyale":
             setDefaultValues({
