@@ -540,7 +540,7 @@
     	\label{fig:UMLModulTransport}
     \end{figure}
 
-    \paragraph{Middleman}
+    \paragraph{Middleman (M)}
 	Das Modul Middleman wird benötigt, um eine zirkuläre Abhängigkeit zwischen den Modulen T und G zu vermeiden. Die gesammte Kommunikation von T und G erfolgt über M, deswegen auch der Name "Middleman". Technisch funktioniert dies folgendermassen: Wie im nachfolgenden Diagramm ersichtlich, definiert das Modul T Nachrichten-Objekte, die jeweils von der Klasse InAppMessage erben. Da T und G das Modul Middleman kennen, können die von M definierten Nachrichten-Objekte von T und G instanziert werden. Sendet das Modul T oder G eine Nachricht, wird mit Hilfe von Inversion of Control erreicht, dass das Empfänger-Modul die Nachricht bearbeitet.
 	
 	\begin{figure}[H]
@@ -550,7 +550,7 @@
     	\label{fig:UMLModulMiddleman}
     \end{figure}
 
-    \paragraph{Game}
+    \paragraph{Game (G)}
 	Das Modul Game beinhaltet das Management der \Gls{Lobby} und Spiellogik der einzelnen Spielmodi. Das Modul G leitet jeweils der Wechsel vom \Gls{Lobby}-Modus in den Spielmodus ein, berechnet auf verschiedenen Threads die Spielstände der laufenden Spiele und schickt diese über M an T. Nach Beenden einer Runde berechnet es die Scores der einzelnen Spieler und versendet auch diese. Nachfolgend das UML-Klassendiagramm zum Modul Game.
 
 	\begin{figure}[H]
