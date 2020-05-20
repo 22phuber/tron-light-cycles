@@ -1,5 +1,8 @@
 package ch.tron.game.model;
 
+/**
+ * Saves the next Direction change
+ */
 public class Turn {
 
     private final int newDirection;

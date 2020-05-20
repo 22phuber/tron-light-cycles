@@ -187,6 +187,7 @@ public abstract class GameMode {
     }
 
     /**
+     * Executes the next Direction change.
      *
      * @param pl
      * @param turn
@@ -239,7 +240,7 @@ public abstract class GameMode {
     }
 
     /**
-     *
+     * Sends a Message containing the score of the game to all players.
      */
     public void sendScore() {
         Map<String, Integer> scores = new HashMap<>();
