@@ -17,12 +17,25 @@ public class Player {
     private int dir;
     private final LinkedList turns = new LinkedList<Turn>();
 
+    /**
+     * Player Constructor
+     *
+     * @param id
+     * @param name
+     * @param color
+     */
     public Player(String  id, String name, String color) {
         this.id = id;
         this.name = name;
         this.color = color;
     }
 
+    /**
+     * Creates a Turn out of the newDirection and returns it.
+     *
+     * @param newDirection
+     * @return turn
+     */
     public Turn addTurn(int newDirection) {
         Turn turn = new Turn(newDirection);
         turns.addLast(turn);

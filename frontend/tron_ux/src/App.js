@@ -27,6 +27,7 @@ import GameTable from "./components/publicGames/publicGames.component";
 import CreateGame from "./components/createGame/createGame.component";
 import Footer from "./components/footer/footer.component";
 import GameCanvas from "./components/gameCanvas/gameCanvas.component";
+import GameCanvasBR from "./components/gameCanvasBR/gameCanvasBR.component";
 import LobbyTable from "./components/lobby/lobby.component";
 import JoinGameDialog from "./components/joinGameDialog/joinGameDialog.component";
 import { useSnackbar } from "notistack";
@@ -81,6 +82,32 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 14,
   },
 }));
+
+/* Player Class */
+var Position = function (x, y) {
+  this.x = x;
+  this.y = y;
+};
+
+var Player = function (id, color) {
+  this.id = id;
+  this.positions = [];
+  this.color = color;
+};
+
+Player.prototype.addPositions = function (x, y) {
+  this.positions.push(new Position(x, y));
+};
+
+Player.prototype.getPositions = function () {
+  return this.positions;
+};
+
+Player.prototype.removeOldestPosition = function () {
+  this.positions.shift();
+};
+
+let playersPositions = [];
 
 /* APP */
 const App = () => {
@@ -250,6 +277,10 @@ const App = () => {
             });
             setAppState({ playMode: true, lobbyMode: false });
             setPlayData(dataFromServer.players);
+            playersPositions = [];
+            dataFromServer.players.forEach((player) => {
+              playersPositions.push(new Player(player.id, player.color));
+            });
             break;
           case "countdown":
             roundInfoObject = dataFromServer.round;
@@ -704,12 +735,13 @@ const App = () => {
                       </Card>
                     </div>
                     {gameConfig.mode === "battleRoyale" ? (
-                      <GameCanvas
+                      <GameCanvasBR
                         canvasConfig={canvasConfig}
                         playersData={playData.players}
                         myPlayerId={myPlayerData.clientId}
                         walls={playData.walls}
                         clear={clearCanvas}
+                        playersPositions={playersPositions}
                       />
                     ) : (
                       <GameCanvas

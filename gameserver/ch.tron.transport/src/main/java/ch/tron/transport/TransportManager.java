@@ -17,10 +17,11 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * Connects {@link ch.tron.transport} to {@code ch.tron.middleman} by
- * holding an instance of {@link ToGameMessageForwarder}. Manages
- * forwarding of {@link InAppMessage}.
- * Initiates set up of the web server and manages new client-server-connections.
+ * Connects {@link ch.tron.transport} to
+ * {@link ch.tron.middleman.messagehandler} by holding an
+ * instance of {@link ToGameMessageForwarder}. Manages
+ * forwarding of {@link InAppMessage}. Initiates set up of the
+ * web server and manages new client-server connections.
  */
 public class TransportManager {
 
@@ -31,6 +32,9 @@ public class TransportManager {
 
     private static final ToGameMessageForwarder MESSAGE_FORWARDER = new ToGameMessageForwarder();
 
+    /**
+     * Initializes a newly created {@code TransportManager} object.
+     */
     public TransportManager() {
 
         LOGGER.info("Initialize transport");
@@ -39,11 +43,12 @@ public class TransportManager {
     }
 
     /**
-     * Manages a new client-server-connection and forwards the
-     * game player information using {@link ToGameMessageForwarder} to
-     * {@link ch.tron.game}.
+     * Adds a listener which handles a potential loss of connection
+     * to the newly connected client, safes the id of the client-
+     * server connection and sends it to the client.
      *
-     * @param channel   The {@link Channel} representing a client-server-connection.
+     * @param channel   The {@link Channel} representing a
+     *                  client-server connection
      */
     public static void manageNewChannel(Channel channel) {
 
@@ -58,16 +63,18 @@ public class TransportManager {
     }
 
     /**
-     * Handles incoming {@link InAppMessage} from {@code ch.tron.middleman}
-     * forwarding them to the game player (client).
+     * Handles incoming {@link InAppMessage} from
+     * {@link ch.tron.middleman.messagehandler} forwarding them to
+     * a client or a group of clients.
      *
-     * @param msg   Message of type {@link InAppMessage}.
+     * @param msg   Message of type {@link InAppMessage} holding
+     *              information that is to be passed to a client or
+     *              a group of clients
      */
     public static void handleInAppIncomingMessage(InAppMessage msg) {
-
         if (msg instanceof CurrentPublicGamesRequest) {
             out.sendJsonToChannel(
-                    WebSocketConnectionController.getLonelyChannel(((CurrentPublicGamesRequest) msg).getPlayerId()),
+                    WebSocketConnectionController.getLonelyChannel(((CurrentPublicGamesRequest) msg).getClientId()),
                     ((CurrentPublicGamesRequest) msg).getPublicGames());
         }
         else if (msg instanceof LobbyStateUpdateMessage) {
@@ -114,7 +121,7 @@ public class TransportManager {
                     .put("subject", "playerDeath")
                     .put("gameId", groupId)
                     .put("playerName", ((DeathMessage) msg).getPlayerName())
-                    .put("playerId", ((DeathMessage) msg).getPlayerId())
+                    .put("playerId", ((DeathMessage) msg).getClientId())
                     .put("posx", ((DeathMessage) msg).getPosx())
                     .put("posy", ((DeathMessage) msg).getPosy())
                     .put("turns", ((DeathMessage) msg).getTurns());
@@ -146,10 +153,22 @@ public class TransportManager {
         }
     }
 
+    /**
+     * Returns the {@link ToGameMessageForwarder} object held by
+     * this object.
+     *
+     * @return  The {@link ToGameMessageForwarder} object
+     */
     public static ToGameMessageForwarder getMessageForwarder() {
         return MESSAGE_FORWARDER;
     }
 
+    /**
+     * Returns the {@link JsonOutboundHandler} object held by this
+     * object.
+     *
+     * @return  The {@link JsonOutboundHandler} object
+     */
     public static JsonOutboundHandler getJsonOutboundHandler() { return out; }
 
     private static void handleConnectionLoss(Channel channel) {

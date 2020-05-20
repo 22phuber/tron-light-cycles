@@ -39,9 +39,6 @@
         return this.positions;
     }
 
-    Player.prototype.removeOldestPosition = function(){
-        this.positions.shift();
-    }
 
     let playersPositions = [];
     let movementLimit = 100;
@@ -250,7 +247,7 @@
         let msg = { "subject": "updateDirection", "gameId": gameId, "key": key};
         ws.send(JSON.stringify(msg));
     }
-    
+
     function clearCanvas() {
         ctx.clearRect(0, 0, canvas_width, canvas_height);
     }

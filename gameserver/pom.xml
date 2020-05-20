@@ -108,15 +108,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>3.2.0</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <addModulepath>true</addModulepath>
-                            <modulepathPrefix>lib</modulepathPrefix>
-                            <mainClass>ch.tron.appmain.GameServer</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
             </plugin>
         </plugins>
     </reporting>

@@ -15,7 +15,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Represents a lobby that holds all available types of tron
+ * Represents a Lobby
+ * Players will first join a Lobby and prepare or wait till the game starts.
+ * Lobby holds all necessary data like, Players and GameMode.
  */
 public class Lobby implements Runnable {
 
@@ -37,6 +39,18 @@ public class Lobby implements Runnable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Lobby.class);
 
+    /**
+     * Lobby Constructor
+     *
+     * @param id
+     * @param name
+     * @param hostName
+     * @param hostId
+     * @param hostColor
+     * @param mode
+     * @param maxPlayers
+     * @param visibleToPublic
+     */
     public Lobby(String id,
                  String name,
                  String hostName,
@@ -59,6 +73,11 @@ public class Lobby implements Runnable {
         this.lobbyStateUpdateMessage = new LobbyStateUpdateMessage(id);
     }
 
+    /**
+     * Main Lobby Loop
+     *
+     * Needs to run in a separate Thread for multiple lobby application.
+     */
     public void run() {
 
         while (players.size() > 0){
@@ -96,6 +115,11 @@ public class Lobby implements Runnable {
         terminateThisLobby();
     }
 
+    /**
+     * Host can set the start flag, to start a game.
+     *
+     * @param playerId
+     */
     public synchronized void play(String playerId) {
         if (hostId.equals(playerId)) {
             players.get(hostId).setReady(true);
@@ -103,6 +127,11 @@ public class Lobby implements Runnable {
         }
     }
 
+    /**
+     * Removes a player from the lobby.
+     *
+     * @param playerId
+     */
     public void removePlayer(String playerId){
         players.remove(playerId);
         if (playerId.equals(hostId)) {
@@ -110,7 +139,14 @@ public class Lobby implements Runnable {
         }
     }
 
-    //New Players are added to PlayerList in Lobby, they will join in the next GameRound
+
+    /**
+     * New Players are added to PlayerList in Lobby, they will join in the next GameRound
+     *
+     * @param playerId
+     * @param name
+     * @param color
+     */
     public void addPlayer(String playerId, String name, String color) {
         int player_count = players.size();
         if (player_count < maxPlayers) {
@@ -120,6 +156,14 @@ public class Lobby implements Runnable {
         }
     }
 
+    /**
+     * Updates info about a player.
+     *
+     * @param id
+     * @param name
+     * @param color
+     * @param ready
+     */
     public void updatePlayerConfig(String id, String name, String color, boolean ready) {
         Player pl = players.get(id);
         pl.setName(name);
@@ -127,6 +171,12 @@ public class Lobby implements Runnable {
         pl.setReady(ready);
     }
 
+    /**
+     * Moves the players once in game.
+     *
+     * @param playerId
+     * @param key
+     */
     public void updatePlayer(String playerId, String key) {
         game.updatePlayer(playerId, key);
     }
@@ -163,12 +213,25 @@ public class Lobby implements Runnable {
         return visibleToPublic;
     }
 
+    /**
+     * Returns the game mode by given name.
+     *
+     * @param name
+     * @param lobbyId
+     * @param players
+     * @return Classic or BattleRoyal or null
+     */
     private GameMode getGameModeByName(String name, String lobbyId, Map<String, Player> players) {
         if (name.equals("classic")) { return new Classic(lobbyId, players, 4); }
         else if(name.equals("battleRoyale")){return new BattleRoyal(lobbyId, players, 2000, 2000);}
         return null;
     }
 
+    /**
+     * Returns a HashMap with all Players that are ready.
+     *
+     * @return readyPlayers
+     */
     private HashMap<String, Player> getReadyPlayers() {
         HashMap<String, Player> readyPlayers = new HashMap<>();
         for(Map.Entry<String, Player>player : this.players.entrySet()){
@@ -179,6 +242,12 @@ public class Lobby implements Runnable {
         return readyPlayers;
     }
 
+    /**
+     * Returns a JSONObject with all infos about the lobby.
+     * All players in the lobby and there config, info and ready status.
+     *
+     * @return JSONObject
+     */
     private JSONObject getLobbyState() {
 
         JSONObject players = new JSONObject();
@@ -207,6 +276,9 @@ public class Lobby implements Runnable {
         return players;
     }
 
+    /**
+     * Resets all players.
+     */
     private void resetPlayers() {
         int gridInterval = game.getGridInterval();
         int width = game.getFieldWitdh() - 2 * gridInterval;
@@ -278,12 +350,18 @@ public class Lobby implements Runnable {
         }
     }
 
+    /**
+     * Host can delete the lobby.
+     */
     private void terminateThisLobby() {
         LOGGER.info("Terminating Lobby: {}", id);
         GameManager.removeLobby(id);
         GameManager.getMessageForwarder().forwardMessage(new TerminateGameMessage(id));
     }
 
+    /**
+     * Sets a new host when the old one leaves.
+     */
     private void setNewHost() {
         this.hostId = players.keySet().stream().findAny().orElse(null);
     }

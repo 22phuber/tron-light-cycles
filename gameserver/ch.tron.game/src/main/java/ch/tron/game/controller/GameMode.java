@@ -39,6 +39,16 @@ public abstract class GameMode {
     final long LOOP_INTERVAL = 1000000000 / FPS;
     final int scoreFactor = 1;
 
+    /**
+     * GameMode Constructor
+     *
+     * @param fieldWidth
+     * @param fieldHeight
+     * @param gridInterval
+     * @param velocity
+     * @param lobbyId
+     * @param players
+     */
     public GameMode (
             int fieldWidth,
             int fieldHeight,
@@ -56,10 +66,19 @@ public abstract class GameMode {
         this.field = new boolean[fieldWidth][fieldHeight];
     }
 
+    /**
+     * Main Game Loop
+     */
     public abstract void start();
 
+    /**
+     * The game logic should be implemented here.
+     */
     public abstract void move();
 
+    /**
+     * Sends a countdown to the clients before the game begins.
+     */
     public final void countdown(){
         int count = 3;
         Lobby lobby = GameManager.getLobbies().get(lobbyId);
@@ -79,6 +98,9 @@ public abstract class GameMode {
         }
     }
 
+    /**
+     * Sends out a CanvasConfig JSONObject to all clients.
+     */
     public final void initialize(){
         GameManager.getMessageForwarder().forwardMessage(new GameConfigMessage(lobbyId, fieldWitdh, fieldHeight, gridInterval));
 
@@ -88,6 +110,12 @@ public abstract class GameMode {
         gameStateUpdateMessage.setInitial(false);
     }
 
+    /**
+     * Creates a JSONObjet that gets send out to the clients.
+     *
+     * @return JSONObject containing all current player positions.
+     * @throws JSONException
+     */
     public JSONObject render() throws JSONException {
         JSONObject state = new JSONObject();
         state.put("subject", "gameState")
@@ -110,6 +138,12 @@ public abstract class GameMode {
         return state;
     }
 
+    /**
+     * Moves the player one tick forward.
+     *
+     * @param playerId
+     * @param key
+     */
     public final void updatePlayer(String playerId, String key) {
         Player pl = playersAlive.get(playerId);
         if (pl != null) {
@@ -152,6 +186,14 @@ public abstract class GameMode {
         }
     }
 
+    /**
+     * Executes the next Direction change.
+     *
+     * @param pl
+     * @param turn
+     * @param posx
+     * @param posy
+     */
     public void executeTurn(Player pl, Turn turn, int posx, int posy) {
         pl.setDir(turn.getNewDirection());
 
@@ -160,6 +202,11 @@ public abstract class GameMode {
         turn.setPosy(posy);
     }
 
+    /**
+     * Lets the thread sleep for a calculated amount of time to hit the 60 FPS cap.
+     *
+     * @param now
+     */
     public void sleepForDelta(long now) {
         long delta = System.nanoTime() - now;
         if(delta < LOOP_INTERVAL){
@@ -171,6 +218,11 @@ public abstract class GameMode {
         }
     }
 
+    /**
+     * Cleans up remainings from palyer in game after it died in game.
+     *
+     * @param pl
+     */
     public void die(Player pl) {
         playersAlive.remove(pl.getId());
         playersDead.add(pl.getId());
@@ -187,6 +239,9 @@ public abstract class GameMode {
         ));
     }
 
+    /**
+     * Sends a Message containing the score of the game to all players.
+     */
     public void sendScore() {
         Map<String, Integer> scores = new HashMap<>();
         playersDead.forEach(playerId -> {

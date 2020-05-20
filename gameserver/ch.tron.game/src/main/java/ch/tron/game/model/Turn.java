@@ -1,5 +1,8 @@
 package ch.tron.game.model;
 
+/**
+ * Saves the next Direction change
+ */
 public class Turn {
 
     private final int newDirection;
@@ -7,6 +10,11 @@ public class Turn {
     private int posy;
     private boolean onHold = true;
 
+    /**
+     * Turn Constructor
+     *
+     * @param newDirection
+     */
     public Turn (int newDirection) {
         this.newDirection = newDirection;
     }

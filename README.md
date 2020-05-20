@@ -17,6 +17,10 @@
 1. Start `GameServer.main()` in Intellij
 2. Goto `http://localhost:9000` to connect to the Gameserver
 
+### Generate javadoc
+1. Open project folder: `gameserver`
+2. `mvn javadoc:aggregate`
+
 ## React frontend
 
 1. Install nodejs (npm)

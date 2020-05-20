@@ -3,28 +3,28 @@ package ch.tron.middleman.messagedto.backAndForth;
 import ch.tron.middleman.messagedto.InAppMessage;
 import org.json.JSONObject;
 
-import java.util.HashSet;
-
 /**
- * Is being sent from {@link ch.tron.transport} to {@link ch.tron.game} using
- * {@link ch.tron.middleman.messagehandler.ToGameMessageForwarder} in
- * order to request the currently open public games. The object is expected
- * to be sent back from {@link ch.tron.game} to {@link ch.tron.transport} using
- * {@link ch.tron.middleman.messagehandler.ToTransportMessageForwarder} having
- * set the publicGames property.
+ * Holds all games currently open for public.
  */
 public class CurrentPublicGamesRequest extends InAppMessage {
 
-    private final String playerId;
+    private final String clientId;
 
     private JSONObject publicGames = null;
 
-    public CurrentPublicGamesRequest(String playerId) {
-        this.playerId = playerId;
+    /**
+     * Constructs a {@code CurrentPublicGamesRequest} object.
+     *
+     * @param clientId  The id identifying the client who requests
+     *                  information about currently available games
+     *                  that are open for public
+     */
+    public CurrentPublicGamesRequest(String clientId) {
+        this.clientId = clientId;
     }
 
-    public String getPlayerId() {
-        return playerId;
+    public String getClientId() {
+        return clientId;
     }
 
     public JSONObject getPublicGames() {
@@ -32,7 +32,7 @@ public class CurrentPublicGamesRequest extends InAppMessage {
     }
 
     /**
-     * Sets the publicGames property.
+     * Updates the publicGames property.
      *
      * @param publicGames   All currently publicly open games and their
      *                      associated properties as a {@link JSONObject}

@@ -12,16 +12,25 @@ import java.net.InetSocketAddress;
  */
 public class SocketInitializer {
 
+    /**
+     * Initializes a {@code SocketInitializer} object.
+     */
+    public SocketInitializer() {}
+
+    /**
+     * Initializes a socket.
+     */
     public static void init() {
 
         final String NETTY_HOST = "0.0.0.0";
         //final String NETTY_HOST = "localhost";
         final int NETTY_PORT = 9000;
 
-        final EventLoopGroup eventLoopGroup = new NioEventLoopGroup();
+        final EventLoopGroup bossGroup = new NioEventLoopGroup();
+        final EventLoopGroup workerGroup = new NioEventLoopGroup();
         final ServerBootstrap bootstrap = new ServerBootstrap();
 
-        bootstrap.group(eventLoopGroup)
+        bootstrap.group(bossGroup, workerGroup)
                 .channel(NioServerSocketChannel.class)
                 .childHandler(new WebSocketChannelInitializer())
                 .bind(new InetSocketAddress(NETTY_HOST, NETTY_PORT))
@@ -30,6 +39,7 @@ public class SocketInitializer {
                 .closeFuture()
                 .syncUninterruptibly();
 
-        eventLoopGroup.shutdownGracefully();
+        bossGroup.shutdownGracefully();
+        workerGroup.shutdownGracefully();
     }
 }

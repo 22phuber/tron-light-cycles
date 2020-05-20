@@ -1,12 +1,10 @@
 package ch.tron.middleman.messagehandler;
 
 import ch.tron.middleman.messagedto.InAppMessage;
-import ch.tron.middleman.ToGameMessageService;
+import ch.tron.middleman.services.ToGameMessageService;
 
 /**
- * Implements a service to send {@link InAppMessage} from
- * {@link ch.tron.transport} to {@link ch.tron.game} using the
- * {@link java.lang.reflect} API.
+ * Locates and loads {@link ToGameMessageService}.
  */
 public class ToGameMessageForwarder implements InAppMessageForwarder {
 
