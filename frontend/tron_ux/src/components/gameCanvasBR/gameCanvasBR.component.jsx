@@ -54,9 +54,6 @@ const GameCanvasBR = (props) => {
         }
       });
 	  
-	  
-	  // SHIT DON'T GET IT
-	  
 	  if(clientPosX - walls.x + clientPosOffset < halfWidth && walls.x + walls.width - clientPosX - clientPosOffset > halfWidth){
 		  clientPosX = walls.x + halfWidth - clientPosOffset;
 	  }else if(clientPosX - walls.x - clientPosOffset > halfWidth && walls.x + walls.width - clientPosX + clientPosOffset < halfWidth){
@@ -69,27 +66,9 @@ const GameCanvasBR = (props) => {
 		  clientPosY = walls.y + walls.height - halfHeight + clientPosOffset;
 	  }
 	  
-      // var wallChangeX = walls.x - clientPosX + halfWidth;
-      // var wallChangeY = walls.y - clientPosY + halfHeight;
-      // console.log(wallChangeX);
-      // console.log(wallChangeY);
-      // // four outer rects
-      // // top (works correct)
-      // ctx.fillStyle = "black";
-      // ctx.fillRect(0, 0, width, wallChangeY);
-      // // left (works correct)
-      // ctx.fillStyle = "green";
-      // ctx.fillRect(0, 0, wallChangeX, height);
-      // //right
-      // ctx.fillStyle = "blue";
-      // ctx.fillRect(width - walls.x, 0, width, height);
-      // //bottom
-      // ctx.fillStyle = "purple";
-      // ctx.fillRect(0, height - walls.y, width, height);
-      // END SHIT DON'T GET IT
-	  
       // clear canvas
       ctx.clearRect(0, 0, width, height);
+	  /*
       // draw outer canvas
       ctx.fillStyle = "black";
       ctx.fillRect(0, 0, width, height);
@@ -101,7 +80,7 @@ const GameCanvasBR = (props) => {
         walls.width,
         walls.height
       );
-
+	*/
       
 
       playersPositions.forEach((player) => {
@@ -127,6 +106,31 @@ const GameCanvasBR = (props) => {
           movementCounter += 1;
         }
       });
+	  
+	  console.log(walls.x + " " + walls.width);
+	  
+	  // SHIT DON'T GET IT
+      var wallChangeX = walls.x - clientPosX + halfWidth;
+      var wallChangeY = walls.y - clientPosY + halfHeight;
+	  var wallChangeXOpposite = walls.width + walls.x - clientPosX + halfWidth;
+	  var wallChangeYOpposite = walls.height + walls.y - clientPosY + halfHeight;
+      // console.log(wallChangeX);
+      // console.log(wallChangeY);
+      // // four outer rects
+      // // top (works correct)
+      ctx.fillStyle = "black";
+      ctx.fillRect(wallChangeX - clientPosOffset, wallChangeY - clientPosOffset, walls.width + clientPosOffset, clientPosOffset);
+      // // left (works correct)
+      ctx.fillStyle = "green";
+      ctx.fillRect(wallChangeX - clientPosOffset, wallChangeY, clientPosOffset, walls.height + clientPosOffset);
+      // //right
+      ctx.fillStyle = "blue";
+      ctx.fillRect(wallChangeXOpposite, wallChangeY - clientPosOffset, clientPosOffset, walls.height + clientPosOffset);
+      // //bottom
+      ctx.fillStyle = "purple";
+      ctx.fillRect(wallChangeX, wallChangeYOpposite, walls.width + clientPosOffset, clientPosOffset);
+      // END SHIT DON'T GET IT
+	  
     }
   });
 
