@@ -88,7 +88,7 @@
 % \listoftables in toc
 \renewcommand{\listoftables}{\begingroup
     \tocsection
-    \tocfile{\listtablename}{lof}
+    \tocfile{\listtablename}{lot}
     \endgroup}
 
 % Glossary
@@ -454,15 +454,15 @@
     \subsection{Zusätzliche Anforderungen}
     Es ist wichtig, konkrete Anforderungen für unser Spiel zu definieren, damit die Erwartungen der Spieler erfüllt werden können. Hierbei soll uns das FURPS+ Modell weiter helfen. Im Folgenden werden die einzelnen Punkte genauer erläutert.
     \subsubsection{Gastkonto}
-    Um das Spiel möglichst einfach zu gestalten, haben wir uns dazu entschieden, dass beim Öffnen der Webseite der Besucher automatisch mit einem Gastkonto \quotes{angemeldet} wird. Dadurch müssen Spieler nicht notwendigerweise zusätzliche Angaben machen und verlieren nicht unnötig Zeit. Spieler, die nur mit einem Gastkonto angemeldet sind, haben weniger Möglichkeiten als solche mit Benutzeraccount. Zum Beispiel werden die Punkte eines Gasts nicht in der Punktestatistik aufgeführt und es gibt keine Punktehistorie.
+    Um das Spiel möglichst einfach zu gestalten, wurde entschieden, dass beim Öffnen der Webseite der Besucher automatisch mit einem Gastkonto \quotes{angemeldet} wird. Dadurch müssen Spieler nicht notwendigerweise zusätzliche Angaben machen und verlieren nicht unnötig Zeit. Spieler, die nur mit einem Gastkonto angemeldet sind, haben weniger Möglichkeiten als solche, die einen Benutzeraccount besitzen. Zum Beispiel werden die Punkte eines Gasts nicht in der Punktestatistik aufgeführt und es gibt keine Punktehistorie.
     \subsubsection{Registrierung \& Benutzerkonto}
-    Ein Spieler kann sich jederzeit registrieren oder - falls dieser  schon über ein Benutzerkonto verfügt - anmelden. Ein Benutzerkonto gibt uns mehr Möglichkeiten. Es können zum Beispiel benutzerspezifische Erweiterungen wie In-App Käufe realisiert oder Einstellungen, wie die Motorradfarbe, gespeichert werden. Momentan ist das speichern der Punktezahl und Motorradfarbe vorgesehen.
+    Ein Spieler kann sich jederzeit registrieren oder - falls dieser schon über ein Benutzerkonto verfügt - anmelden. Das Existieren der Möglichkeit ein Benutzerkonto erstellen zu können, erlaubt das Realisieren von weiteren Features. Es können so zum Beispiel benutzerspezifische Erweiterungen wie In-App-Käufe realisiert oder Spielerkonfigurationen, wie zum Bespiel die Motorradfarbe, gespeichert werden. Zum jetzigen Zeitpunkt ist die Realiserung des Speicherns der Punktezahl und der Motorradfarbe geplant.
     \subsubsection{Server-Client-Architektur}
-    Damit die  mehrere Spieler einer Lobby beitreten und gemeinsam über das Internet bzw. Netzwerk spielen können, benutzen wir eine Server-Client-Architektur, auf die wir ausführlicher im \hyperref[sec:Softwarearchitektur]{Abschnitt Softwarearchitektur} eingehen.
+    Damit mehrere Spieler einer Lobby beitreten und gemeinsam über das Internet bzw. das Netzwerk spielen können, wird eine Server-Client-Architektur realisiert. Auf die Architektur wird ausführlich im \hyperref[sec:Softwarearchitektur]{Abschnitt Softwarearchitektur} eingegangen.
     \subsubsection{Sicherheit}
-    Standard-Sicherheitsmassnahmen, wie verschlüsselte Datenübertragung über \Gls{HTTPS} zwischen den \Gls{Webbrowser} und dem \Gls{Webserver}, sind vorgesehen und gewährleistet.
+    Standard-Sicherheitsmassnahmen, wie verschlüsselte Datenübertragung über \Gls{HTTPS} zwischen den \Gls{Webbrowser}n und dem \Gls{Webserver}, sind vorgesehen.
     \subsubsection{Benutzbarkeit}
-    Eines der wichtigsten Aspekte für uns, ist die Benutzbarkeit. Das Spiel soll übersichtlich, intuitiv und einfach gestaltet sein. Der Spieler muss mit wenigen Klicks alle wichtigen Funktionalitäten erreichen können. Damit wir dies anbieten können, benutzen wir ein rudimentäres Design und eine \Gls{SPA}-Applikation, welche diesen Aspekt unterstützt. Zusätzlich wird - zum Beispiel - der \Gls{Lobby} beitreten Button direkt auf der ersten Seite ersichtlich sein, welche der Spieler nach dem betreten der Applikation sieht.
+    Einer der wichtigsten Aspekte der Applikation ist die Benutzbarkeit. Das Spiel soll übersichtlich, intuitiv und einfach gestaltet sein. Der Spieler muss mit wenigen Klicks alle wichtigen Funktionalitäten erreichen können. Dies wird durch ein simples Design und durch den Aufbau einer \Gls{SPA}-Applikation erreicht. Der \Gls{Lobby}-Beitreten-Button wird zum Beispiel direkt auf der Startseite ersichtlich sein.
     \begin{figure}[H]
     	\centering
     	\includegraphics[scale=0.6]{figures/Mockup_Join.png}
@@ -470,17 +470,16 @@
     	\label{fig:MockupJoin}
     \end{figure}
     \subsubsection{Zuverlässigkeit}
-    Wir können mit Sicherheit sagen, dass unsere Applikation nicht sonderlich anfällig für Ausfälle ist. Da das Spiel nur eine geringe Leistung beansprucht, verringert das die Fehlerquellen enorm. Die Applikation ist auch Client abhängig. Das bedeutet, falls ein Spieler Verbindungsprobleme hat oder andere Schwierigkeiten, dann kann er verlieren. Die Lobby liegt auf dem Server, somit ist gewährleistet, dass falls der Spieler, welche die Lobby erstellt hat, Verbindungsprobleme hat, das Spiel weiterhin normal abläuft. Dies ist ebenso ein wichtiger Aspekt für uns, damit das Spiel reibungslos ohne Unterbrüche ablaufen kann.
+    Es kann mit Sicherheit gesagt werden, dass unsere Applikation nicht sonderlich anfällig für Ausfälle ist. Das Beanspruchen einer geringer Leistung seitens der Applikation, verringert die Möglichkeit eines Ausfalls enorm. Eine Lobby bzw. ein Spiel wird auf dem Server verarbeitet, somit ist gewährleistet, dass, auch wenn ein Spieler Verbindungsprobleme bekommt, ein Spiel weiterhin normal weiter läuft. Für den Spieler mit den Verbindungsproblemen sind kurze Unterbrechungen, dadurch, dass das der Spielstand ausschliesslich auf dem Server berechnet wird, nicht zu vermeiden.
     \subsubsection{Effizienz}
-    Da wie bereits erwähnt das Spiel nur eine geringe Leistung beansprucht, ist die Effizienz gut und zuverlässig. Hier spielt leider auch wieder der Client eine Rolle. Da der Server und der Client in Verbindung stehen und der Client Verbindungsprobleme oder sonstige Verzögerungen hat, kommt es schnell zu kurzen Unterbrechungen für den Spieler. Dies ist kaum zu vermeiden.
+    Da wie bereits erwähnt das Spiel nur eine geringe Leistung beansprucht, bringt es eine hohe Effizienz mit sich.
     \subsubsection{Änderbarkeit (Wartbarkeit)}
-    Die Applikation ist nur über den Browser erreichbar, dies macht die Wartbarkeit um einiges einfacher. Die diversen Browser müssen natürlich getestet werden und kompatibel sein. Die wichtigsten Browser sind Firefox, Google Chrome und Internet Explorer.  Das Testen neuerer Versionen der einzelnen Browser schliesst dies mit ein, um die Zuverlässigkeit weiterhin anbieten zu können.
+    Die Applikation ist nur über den Browser erreichbar, dies macht die Wartbarkeit um einiges einfacher. Die diversen Browser und deren Versionen müssen kontinuierlich auf die Kompatibilität mit der Applikation getestet werden. Die wichtigsten Browser sind Firefox, Google Chrome und Internet Explorer.
     \subsubsection{Internationalisierung}
-    In der ersten lauffähigen Version wird Englisch verwendet. Später sollen andere Sprachen folgen um grössere Reichweite zu generieren.
+    In der ersten lauffähigen Version wird Englisch als Sprache verwendet. Später sollen andere Sprachen folgen, um eine grössere Spielerschaft zu erreichen.
     \subsubsection{Designeinschränkungen}
-    Wir benutzen React und Material UI für das Design, da Material UI bereits einige Bibliotheken, beziehungsweise vordefinierte  Bausteine zur Verfügung stellt. Da wir mit einer \Gls{SPA} arbeiten wird Routing vorerst nicht nötig sein.
-    \subsubsection{Implementierungseinschränkungen}
-    Um die Applikation so wartbar wie möglich zu behalten, wird alles so gut wie möglich mit Clean Code implementiert. Dies wird auch im späteren Verlauf des Implementierungsvorgangs immer wieder überprüft. Bei Git benutzen wir das \Gls{Continuous Integration} (CI), dies ermöglicht es uns nur kompilierbaren Code hinzuzufügen um einige Fehlerquellen bereits auszuschliessen.
+    Das Frontend wird mit \Gls{React} implementiert. Für das Design wird zur Unterstützung die Bibliothek Material UI angewendet. Da eine simples UI gebaut wird, wird Routing vorerst nicht nötig sein.
+
 
     \subsection{Domänenmodell}
     \begin{figure}[H]
@@ -488,12 +487,13 @@
     	\makebox[\textwidth][c]{\includegraphics[width=1.1\textwidth]{figures/domain_model.png}}
     	\caption{Domänenmodell - Tron Licht-Motorräder Computerspiel}
     	\label{fig:DomainModel_TronLightCycles}
-    \end{figure}
+	\end{figure}
+
     \subsubsection{Login und Gast-Account}
-    Der Spieler hat die Freiheit sich mit einem anonymen Gastkonto  oder mit einem registriertem Konto anzumelden. Der Spieler kann sich in der Applikation nicht mit beiden Kontoarten gleichzeitig identifizieren.
+    Der Spieler hat die Freiheit sich mit einem anonymen Gastkonto oder mit einem registriertem Konto anzumelden. Der Spieler kann sich nicht mit beiden Kontoarten gleichzeitig identifizieren.
 
     \subsubsection{Spielemodi}
-    Ein Spielmodus beeinflusst das Spiel, zwei Spielmodi werden schon implementiert sein. Im Spielmodus sind Eigenschaften der Licht-Motorräder und die Grösse der Arena definiert, so auch Spielablauf.
+    Zwei Spielmodi werden implementiert. Im Spielmodus sind Eigenschaften der Licht-Motorräder, die Grösse der Arena definiert, wie auch der Spielablauf.
 
 %%% END Analyse
 
@@ -665,7 +665,7 @@
     Alle Tests sind Blackbox Tests, bei der wir das System nehmen einen gegeben Wert eingeben oder Aktion ausführen und einen bestimmten Wert oder Zustand erwarten. Was das System genau macht interessiert uns nicht beim Blackbox testen. Ein Testdurchlauf erfolgt indem zuerst alle einzelnen Elemente mit Unit Tests getestet werden, danach wird mit Integrationstests das Zusammenspiel der einzelnen Elemente geprüft und schlussendlich wird das ganze System getestet.
 
     \subsubsection{Unit Tests}
-	Beim Gameserver wird das fast das ganze Modul Game mit Unit Tests getestet. Hauptsächlich wird geprüft, dass die korrekten Werte gesetzt, zurück gegeben und berechnet werden.
+	Beim Gameserver werden sämtliche Klassen des Moduls Game mit Unit Tests getestet. Hauptsächlich wird geprüft, dass die korrekten Werte gesetzt, zurück gegeben und berechnet werden.
 	\begin{figure}[H]
 		\centering
 		\makebox[\textwidth][c]{\includegraphics[scale=0.5]{figures/lobby_unit_tests.png}}
@@ -674,7 +674,7 @@
 	\end{figure}
 
     \subsection{Continuous integration}
-    Um  die kontinuierliche Integration \Gls{Continuous Integration} zu gewährleisten und für ein schnelles Feedback und bessere Codequalität, haben wir Github Actions (\url{https://github.com/features/actions}) eingesetzt. Der Workflow ist in \autoref{lst:GHAction} ersichtlich  und ist in zwei Teile (jobs) gegliedert und führt - abstrakt erklärt - folgende Schritte aus:
+    Um  die kontinuierliche Integration \Gls{Continuous Integration} zu gewährleisten und für ein schnelles Feedback und bessere Codequalität, wurde Github Actions (\url{https://github.com/features/actions}) eingesetzt. Der Workflow ist in \autoref{lst:GHAction} ersichtlich. Er ist in zwei Teile (jobs) gegliedert und führt - abstrakt erklärt - folgende Schritte aus:
 
     \begin{itemize}
         \item \inlinecode{bash}{maven_java}: Der Java Code wird in der Java Version 11, 12 und 13 kompiliert und danach getestet.
@@ -694,7 +694,7 @@
 
     \subsection{Installationsanleitung}
     % pre-build and  docker-compose
-    Um  die Tron Licht-Motorräder Applikation zu installieren, haben  wir uns für ein auf \Gls{Docker}-Container basierendes \Gls{Docker-Compose}-Setup entschieden. Somit lässt sich die Applikation einfacher verteilen/skalieren und ist modular - in sogenannten \Glspl{Microservice} - aufgebaut.
+    Um die Tron Licht-Motorräder-Applikation zu installieren, haben  wir uns für ein auf \Gls{Docker}-Container basierendes \Gls{Docker-Compose}-Setup entschieden. Somit lässt sich die Applikation einfacher verteilen/skalieren und ist modular - in sogenannten \Glspl{Microservice} - aufgebaut.
 
     \subsubsection{Voraussetzungen}
     Um die Applikation Schritt für Schritt installieren zu können, müssen folgende Voraussetzungen auf dem Zielsystem erfüllt sein.
@@ -742,7 +742,7 @@
     \section{Resultat}
 
     \subsection{Erreichte Ziele}
-    Die Ziele, welche wir uns gesetzt haben, konnten wir erreichen. Das Unterfangen hat jedoch mehr Aufwand erfordert als ursprünglich gedacht. Die Schwierigkeit lag darin alles einfach zu halten. Sobald ein Problem auftrat, wurde uns klar, es fehlen noch 5 weitere Dinge. \newline
+    Die wichtigsten definierten Ziele konnten erreicht werden. Das Unterfangen hat jedoch mehr Aufwand erfordert als ursprünglich gedacht. Die Schwierigkeit lag darin, alles einfach zu halten. Sobald ein Problem auftrat, wurde uns klar, dass noch 5 weitere Dinge fehlen. \newline
     \newline
     \noindent Hinsichtlich des Projekts konnten wir folgende Ziele erreichen.
 
@@ -762,7 +762,7 @@
     Die Gruppe hat zusätzlich viel Wissen durch neue Technologien gesammelt. Trotz unbekannter Hürden, welche dadurch verursacht wurden.
 
     \subsection{Offene Punkte}
-    Die wichtigsten vordefinierten Ziele konnten erreicht werden. Folgende Punkte sind jedoch noch offen bzw. hinzugekommen beim Tests und Nutzung der Applikation.
+    Folgende Punkte sind noch offen bzw. hinzugekommen beim Testen und Nutzen der Applikation.
 
 	\begin{itemize}
         \item Backend:
