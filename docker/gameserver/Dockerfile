@@ -1,6 +1,6 @@
 FROM maven:3-openjdk-11 AS build_stage
 
-# ENV MAVEN_OPTS="-XX:+TieredCompilation -XX:TieredStopAtLevel=1"
+ENV MAVEN_OPTS="-Dmaven.test.skip=true"
 
 RUN mkdir -p "/app" "/builded/_modules"
 COPY files/gameserver /app
