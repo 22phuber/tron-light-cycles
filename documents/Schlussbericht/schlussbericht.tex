@@ -653,15 +653,16 @@
     \section{Implementation}
 
     \subsection{Testkonzept}
-    Unser System besteht aus mehreren Programmiersprachen und diese werden auf verschiedenen Systemen eingesetzt. Das als ganzes zu testen braucht es eben so viel Programmierarbeit. Wir haben uns daher auf das mögliche konzentriert und hauptsächlich Unit-Tests angewendet und das ganze System von Hand getestet.
+    Alle Tests sind Blackbox Tests, bei der wir das System nehmen einen gegeben Wert eingeben oder Aktion ausführen und einen bestimmten Wert oder Zustand erwarten. Was das System genau macht interessiert uns nicht beim Blackbox testen. Ein Testdurchlauf erfolgt indem zuerst alle einzelnen Elemente mit Unit Tests getestet werden, danach wird mit Integrationstests das Zusammenspiel der einzelnen Elemente geprüft und schlussendlich wird das ganze System getestet.
 
     \subsubsection{Unit Tests}
 	Beim Gameserver wird das fast das ganze Modul Game mit Unit Tests getestet. Hauptsächlich wird geprüft, dass die korrekten Werte gesetzt, zurück gegeben und berechnet werden.
-
-    \subsubsection{Integration Tests}
-
-    \subsubsection{Systemtests}
-    % read: https://www.enzyklopaedie-der-wirtschaftsinformatik.de/lexikon/is-management/Systementwicklung/Hauptaktivitaten-der-Systementwicklung/Software-Implementierung/Testen-von-Software/Systemtest/index.html
+	\begin{figure}[H]
+		\centering
+		\makebox[\textwidth][c]{\includegraphics[scale=0.5]{figures/lobby_unit_tests.png}
+		\caption{Ausschnitt aus den Unit Tests für die Klasse Lobby}
+		\label{fig:lobby unit tests}
+	\end{figure}
 
     \subsection{Continuous integration}
     Um  die kontinuierliche Integration \Gls{Continuous Integration} zu gewährleisten und für ein schnelles Feedback und bessere Codequalität, haben wir Github Actions (\url{https://github.com/features/actions}) eingesetzt. Der Workflow ist in \autoref{lst:GHAction} ersichtlich  und ist in zwei Teile (jobs) gegliedert und führt - abstrakt erklärt - folgende Schritte aus:
@@ -762,6 +763,8 @@
         \item Applikation:
             \begin{itemize}
                 \item Belastungstests. Wieviele Spieler können gleichzeitig, mit akzeptabler Latenz und Framerate, spielen?
+                \item Integrationstests. Automatisierte Tests die Zusammenarbeit der Module testet.
+                \item Systemtests. Automatisierte Tests die das ganze System testen.
             \end{itemize}
 	\end{itemize}
 
