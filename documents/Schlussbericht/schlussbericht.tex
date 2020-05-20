@@ -499,8 +499,6 @@
 
     \subsection{Softwarearchitektur}
 
-    \subsection{Design-Klassendiagramm (DCD)}
-
     \subsection{Interaktionsdiagramme}
 
     \subsubsection{SSD Hauptanwendungsfälle}
@@ -531,22 +529,60 @@
         \label{fig:SSDWS_GS_Client}
     \end{figure}
 
-    \subsection{Designentscheide und Design Patterns}
+    \subsection{Designentscheide und Design Patterns} % Delete???
 
     \subsubsection{Kommunikation via Websocket}
     \Gls{Websocket} eignet  sich hervorragend für bidirektionale Client-Server-Kommunikation mit niedriger Latenz. Das ermöglicht eine beinahe  \quotes{Echtzeit}-Kommunikation zwischen dem Client (\Gls{Webbrowser}) und der Applikation. Die Implementation ist sehr einfach gelöst und gut dokumentiert. Zusätzlich wird \Gls{Websocket} von fast allen \Gls{Webbrowser} unterstützt. Aus diesen Gründen, ist \Gls{Websocket} für unsere Tron-Licht-Motorräder-Applikation die perfekte Lösung für den schnellen Datenaustausch während dem Spiel.
 
     \subsubsection{Gameserver  (Java)}
-    Der GameServer ist in drei Teile aufgebaut.
+	Der Gameserver ist in vier Module aufgeteilt. Die strikte Modularisierung unter Verwendung von Java 9 Modules garantiert eine schwache Kopplung, wodurch die einzelnen Komponenten losgelöst voneinander implementiert werden konnten. Es existieren die Module Appmain (A), Transport (T), Game (G) und Middleman (M). Nachfolgend ein UML-Diagramm, das die Modul-Abhängigkeiten abbildet.
 
-    \paragraph{Transport}
-    Der Transport ist mittels Websocket an alle Clients verbunden. Dieser kümmert sich um den Datenaustausch zwischen Server und Clients.
+	\begin{figure}[H]
+    	\centering
+    	\includegraphics[scale=0.5]{figures/gameserver-uml/modules.png}
+    	\caption{UML - Module des Gameservers}
+    	\label{fig:UMLModule}
+    \end{figure}
 
-    \paragraph{Middleman}
-    Der Middleman ist zuständig für die interne Kommunikation des GameServers. Wenn eine Nachricht vom Game an alle Spieler gesendet werden muss, schickt der Game eine Nachricht an Middleman, dieser leite sie weiter an Transport. Dies funktioniert in beide Richtungen. Der Middleman sorgt dafür, dass Game und Transport nicht stark abhängig voneinander sind.
+	\paragraph{Appmain (A)}
+	Dieses Modul dient lediglich als Eintrittspunkt des Gameservers. Es beinhaltet die Main-Klasse, die die Hauptkomponenten der Module T, G und M initialisiert. Nachfolgend das Klassendiagramm zum Modul Appmain.
 
-    \paragraph{Game}
-    In Game befindet sich das ganze Management der Lobbies und deren Threads, ebenfalls ist hier drin auch die Spielelogik der einzelnen Spielmodi implementiert.
+	\begin{figure}[H]
+    	\centering
+    	\includegraphics[scale=0.4]{figures/gameserver-uml/appmain-classes.png}
+    	\caption{UML Klassendiagramm - Gameserver Modul Appmain}
+    	\label{fig:UMLModulAppmain}
+    \end{figure}
+
+    \paragraph{Transport (T)}
+	Das Modul Transport kümmert sich um den bidirektionalen Datenaustausch zwischen dem Gameserver und den Clients. Um einen kontinuierlichen Austausch gewährleisten zu können, werden zuverlässige Client-Server-Verbindungen mittels \Gls{Websocket}s aufgebaut. Ein Client sendet darüber die bei ihm auftretenden Events im Spiel wie zum Beispiel eine Richtungsänderung. Über das Modul M gibt das Modul T die erhaltenen Informationen an das Modul G weiter. Der Webserver wurde mit Hilfe des Netty-Frameworks implementiert. Das Klassendiagramm zum Modul T ist nachfolgend ersichtlich.
+
+	\begin{figure}[H]
+    	\centering
+    	\includegraphics[scale=0.3]{figures/gameserver-uml/transport-classes.png}
+    	\caption{UML Klassendiagramm - Gameserver Modul Transport}
+    	\label{fig:UMLModulTransport}
+    \end{figure}
+
+    \paragraph{Middleman (M)}
+	Das Modul Middleman wird benötigt, um eine zirkuläre Abhängigkeit zwischen den Modulen T und G zu vermeiden. Die gesammte Kommunikation von T und G erfolgt über M, deswegen auch der Name "Middleman". Technisch funktioniert dies folgendermassen: Wie im nachfolgenden Diagramm ersichtlich, definiert das Modul T Nachrichten-Objekte, die jeweils von der Klasse InAppMessage erben. Da T und G das Modul Middleman kennen, können die von M definierten Nachrichten-Objekte von T und G instanziert werden. Sendet das Modul T oder G eine Nachricht, wird mit Hilfe von Inversion of Control erreicht, dass das Empfänger-Modul die Nachricht bearbeitet.
+
+	\begin{figure}[H]
+    	\centering
+    	\includegraphics[scale=0.2]{figures/gameserver-uml/middleman-classes.png}
+    	\caption{UML Klassendiagramm - Gameserver Modul Middleman}
+    	\label{fig:UMLModulMiddleman}
+    \end{figure}
+
+    \paragraph{Game (G)}
+	Das Modul Game beinhaltet das Management der \Gls{Lobby} und Spiellogik der einzelnen Spielmodi. Das Modul G leitet jeweils der Wechsel vom \Gls{Lobby}-Modus in den Spielmodus ein, berechnet auf verschiedenen Threads die Spielstände der laufenden Spiele und schickt diese über M an T. Nach Beenden einer Runde berechnet es die Scores der einzelnen Spieler und versendet auch diese. Nachfolgend das UML-Klassendiagramm zum Modul Game.
+
+	\begin{figure}[H]
+    	\centering
+    	\includegraphics[scale=0.3]{figures/gameserver-uml/game-classes.png}
+    	\caption{UML Klassendiagramm - Gameserver Modul Game}
+    	\label{fig:UMLModulGame}
+    \end{figure}
 
     \subsubsection{Rendering}
     Die ganzen virtuellen Objekte müssen am Ende auf dem Bildschirm des Users angezeigt werden. Dies kann über mehrere Arten erreicht werden und auch in unserem Projekt verwenden wir für jeden Spielmodus einen anderen Algorithmus. Bei beiden wird ein \Gls{Canvas} verwendet, dieses wird aber jeweils anders aufgebaut.
@@ -601,8 +637,10 @@
 
 
     \subsection{Testkonzept}
+    Unser System besteht aus mehreren Programmiersprachen und diese werden auf verschiedenen Systemen eingesetzt. Das als ganzes zu testen braucht es eben so viel Programmierarbeit. Wir haben uns daher auf das mögliche konzentriert und hauptsächlich Unit-Tests angewendet und das ganze System von Hand getestet.
 
     \subsubsection{Unit Tests}
+	Beim Gameserver wird das fast das ganze Modul Game mit Unit Tests getestet. Hauptsächlich wird geprüft, dass die korrekten Werte gesetzt, zurück gegeben und berechnet werden.
 
     \subsubsection{Integration Tests}
 
