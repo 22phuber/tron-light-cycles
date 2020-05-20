@@ -513,7 +513,16 @@
         \item Der \textit{GameServer} schickt dem \textit{Client1} eine eindeutige \inlinecode{bash}{clientId}.
         \item \textit{Client1} erstellt etwas später ein Spiel und die \inlinecode{bash}{createGame} Mitteilung wir an den \textit{GameServer} geschickt.
         \item Der \textit{GameServer} erstellt ein Spiel und schickt dem \textit{Client1} die \inlinecode{bash}{gameId}.
-        \item Ein weiterer \textit{Client2} - auf der rechten Seite in Orange - hat in Zwischenzeit eine Websocketverbindung aufgebaut zum \textit{GameServer}.
+        \item Ein weiterer \textit{Client2} - auf der rechten Seite in Orange - hat in Zwischenzeit eine Websocketverbindung aufgebaut zum \textit{GameServer} und erhält eine \inlinecode{bash}{clientId} .
+        \item \textit{Client1} ist nach dem erstellen des Spiels nun in der Lobby und erhält regelmässig den \inlinecode{bash}{lobbyState}
+        \item \textit{Client2} tritt nun dem von \textit{Client1} erstellten Spiel bei mit \inlinecode{bash}{joinGame} und erhält darauf auch regelmässig den \inlinecode{bash}{lobbyState}. \textit{Client2} befindet sich nun auch in der Lobby.
+        \item \textit{Client1} startet das Spiel mit der Mitteilung \inlinecode{bash}{startGame}.
+        \item Der \textit{GameServer} schickt nun als erstes die \inlinecode{bash}{convasConfig}, dann den \inlinecode{bash}{initialGameState}, dann den \inlinecode{bash}{Countdown} und schlussendlich, in kurzen Intervallen, den \inlinecode{bash}{gameState}. Der \inlinecode{bash}{gameState} beeinhaltet die neu berechneten Positionen aller Spieler und somit beginnen diese sich zu bewegen.
+        \item Die Spieler schicken - je nach Bedarf - eine Aktualisierung ihrer Richtung mit \inlinecode{bash}{updateDirection}.
+        \item Der \textit{GameServer} schickt - je nach Bedarf - eine Benachrichtigung über das ausscheiden eines Spielers mit \inlinecode{bash}{playerDeath}.
+        \item Nachdem alle Spieler ausgeschieden sind, wird eine \inlinecode{bash}{roundScores} Mitteilung an alle Spieler verschickt. Das Spiel ist nun beendet und alle Spieler sind wieder in der Lobby.
+        \item Spieler können jederzeit das Spiel verlassen wenn diese \inlinecode{bash}{leaveGame} an den \textit{GameServer} schicken. \textit{Client1} und \textit{Client2} haben das Spiel verlassen.
+        \item \textit{Client2} schliesst schlussendlich die Websocketverbindung zum \textit{GameServer}. Dies wird zum Beispiel ausgelöst, wenn das Browserfenster geschlossen wird.
     \end{enumerate}
     \begin{figure}[H]
         \centering
@@ -525,6 +534,7 @@
     \subsection{Designentscheide und Design Patterns}
 
     \subsubsection{Kommunikation via Websocket}
+    \Gls{Websocket} eignet  sich hervorragend für bidirektionale Client-Server-Kommunikation mit niedriger Latenz. Das ermöglicht eine beinahe  \quotes{Echtzeit}-Kommunikation zwischen dem Client (\Gls{Webbrowser}) und der Applikation. Die Implementation ist sehr einfach gelöst und gut dokumentiert. Zusätzlich wird \Gls{Websocket} von fast allen \Gls{Webbrowser} unterstützt. Aus diesen Gründen, ist \Gls{Websocket} für unsere Tron-Licht-Motorräder-Applikation die perfekte Lösung für den schnellen Datenaustausch während dem Spiel.
 
     \subsubsection{Gameserver  (Java)}
     Der GameServer ist in drei Teile aufgebaut.
@@ -588,6 +598,7 @@
 %• Der vollständige Quellcode (inkl. Unit-Tests) wird in elektronischer Form abgegeben (auf OLAT im Team-Ordner als ZIP-File).
 %• Jede Klasse und alle öffentlichen Methoden und Attribute müssen (kurz) mittels JavaDoc dokumentiert werden. Der fertige JavaDoc-Kommentar muss ebenfalls (elektronisch) ab- gegeben werden.
     \section{Implementation}
+
 
     \subsection{Testkonzept}
 
