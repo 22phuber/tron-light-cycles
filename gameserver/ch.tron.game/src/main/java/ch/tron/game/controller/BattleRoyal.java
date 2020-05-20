@@ -9,6 +9,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.BiPredicate;
 
 /**
@@ -207,6 +208,14 @@ public class BattleRoyal extends GameMode{
      */
     @Override
     public void die(Player pl) {
+        while(wallCleaner.get(pl.getId()).peekPosition() != null){
+            Position position = wallCleaner.get(pl.getId()).getPosition();
+            for (int i = 0; i < velocity; i++) {
+                for (int j = 0; j < velocity; j++) {
+                    field[position.getX() + i][position.getY() + j] = false;
+                }
+            }
+        }
         playersAlive.remove(pl.getId());
         playersDead.add(pl.getId());
         JSONArray allTurns = new JSONArray();
