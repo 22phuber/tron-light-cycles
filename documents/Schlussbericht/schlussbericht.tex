@@ -531,7 +531,7 @@
     \end{figure}	
 
     \paragraph{Transport (T)}
-	Das Modul Transport kümmert sich um den bidirektionalen Datenaustausch zwischen dem Gameserver und den Clients. Um einen kontinuierlichen Austausch gewährleisten zu können, werden zuverlässige Client-Server-Verbindungen mittels \Gls{Websocket}s aufgebaut. Ein Client sendet darüber die bei ihm auftretenden Events im Spiel wie zum Beispiel eine Richtungsänderung. Über das Modul M gibt das Modul T die erhaltenen Informationen an das Modul G weiter. Der Webserver wurde mit Hilfe des Netty-Frameworks implementiert. Das Klassendiagramm zum Modul T ist nachfolgend ersichtlich. 
+	Das Modul Transport kümmert sich um den bidirektionalen Datenaustausch zwischen dem Gameserver und den Clients. Um einen kontinuierlichen Austausch gewährleisten zu können, werden zuverlässige Client-Server-Verbindungen mittels \Gls{Websocket}s aufgebaut. Ein Client sendet darüber die bei ihm auftretenden Events im Spiel wie zum Beispiel eine Richtungsänderung. Über das Modul M gibt das Modul T die erhaltenen Informationen an das Modul G weiter. Der Webserver wurde mit Hilfe von \Gls{Netty} implementiert. Das Klassendiagramm zum Modul T ist nachfolgend ersichtlich. 
 	
 	\begin{figure}[H]
     	\centering
@@ -541,7 +541,7 @@
     \end{figure}
 
     \paragraph{Middleman (M)}
-	Das Modul Middleman wird benötigt, um eine zirkuläre Abhängigkeit zwischen den Modulen T und G zu vermeiden. Die gesammte Kommunikation von T und G erfolgt über M, deswegen auch der Name "Middleman". Technisch funktioniert dies folgendermassen: Wie im nachfolgenden Diagramm ersichtlich, definiert das Modul T Nachrichten-Objekte, die jeweils von der Klasse InAppMessage erben. Da T und G das Modul Middleman kennen, können die von M definierten Nachrichten-Objekte von T und G instanziert werden. Sendet das Modul T oder G eine Nachricht, wird mit Hilfe von Inversion of Control erreicht, dass das Empfänger-Modul die Nachricht bearbeitet.
+	Das Modul Middleman wird benötigt, um eine zirkuläre Abhängigkeit zwischen den Modulen T und G zu vermeiden. Die gesammte Kommunikation von T und G erfolgt über M, deswegen auch der Name "Middleman". Technisch funktioniert dies folgendermassen: Wie im nachfolgenden Diagramm ersichtlich, definiert das Modul T Nachrichten-Objekte, die jeweils von der Klasse InAppMessage erben. Da T und G das Modul Middleman kennen, können die von M definierten Nachrichten-Objekte von T und G instanziert werden. Sendet das Modul T oder G eine Nachricht, wird durch Anwendung des Design-Patterns Inversion of Control erreicht, dass das Empfänger-Modul die Nachricht bearbeitet. Hierfür werden in M die Services ToTransportMessageService und ToGameMessageService definiert und die dazugehörigen Service-Providers in G und T implementiert.
 	
 	\begin{figure}[H]
     	\centering
