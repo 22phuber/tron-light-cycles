@@ -24,6 +24,7 @@
 \usepackage{textcomp}
 \usepackage{listings}
 \usepackage[flushleft]{threeparttable}
+\usepackage[nottoc,numbib]{tocbibind}
 
 % Document geometry
 \geometry{a4paper, top=25mm, left=25mm, right=25mm, bottom=20mm,
@@ -78,13 +79,24 @@
 }
 \lstset{style=mystyle}
 
+% listoffigure in toc
+\renewcommand{\listoffigures}{\begingroup
+    \tocsection
+    \tocfile{\listfigurename}{lof}
+    \endgroup}
+
+% \listoftables in toc
+\renewcommand{\listoftables}{\begingroup
+    \tocsection
+    \tocfile{\listtablename}{lof}
+    \endgroup}
+
 % Glossary
 % Das Glossar definiert alle wichtigen Begriffe zur Sicherstellung einer einheitlichen Terminologie.
 % Es sollen keine allgemeinen Begriffe erklärt werden, die den Adressaten bekannt sind (z. B. Java, CPU etc.).
 % Glossareinträge müssen im Text verwendet werden, damit diese im Glossar im Appendix \printglossary angezeigt werden
 \makeglossaries
 \loadglsentries{glossary} % loads glossary definitions from external file
-
 
 % bibliography file
 \addbibresource{\jobname.bib}
