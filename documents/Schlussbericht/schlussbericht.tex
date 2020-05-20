@@ -500,7 +500,13 @@
     \paragraph{BattleRoyale}
     Beim BattleRoyale Modus kann das \Gls{Canvas} nicht mehr als Bildspeicher verwendet werden. Da der Spieler nur einen Teil des ganzes Spielfeld sieht und sein Licht-Motorrad zentral im Bild erscheinen sollte, bewegt sich alles ausser der eigener Spieler. Um dies korrekt darzustellen wurden zwei Designänderungen gegenüber dem Classic Renderer vorgenommen. Das Bild muss jedes Mal komplett neu gezeichnet werden und die Kamera muss sich der Position des Licht-Motorrads anpassen. Da das Bild immer neu gezeichnet werden muss, kann also das \Gls{Canvas} nicht mehr als Speicher für die vergangenen Schritte oder im Rahmen vom Spiel von den Wänden benutzt werden. Glücklicherweise sind es im BattleRoyale keine fixen Wände sondern dienen eher einem Schweif. Dieser Schweif hat eine fixe Länge und nur die Positionen bis zur Länge müssen gespeichert werden.
     
-	\includegraphics[scale=0.5]{figures/battleroyale_rendering_coordinates.png}
+    \begin{figure}[H]
+    	\centering
+    	\makebox[\textwidth][c]{\includegraphics[scale=0.5]{figures/battleroyale_rendering_coordinates.png}}
+    	\caption{BattleRoyale - Koordinatenansicht}
+    	\label{fig:BattleRoyale_Coordinates}
+    \end{figure}
+	
 	
 	Die grünen Koordinaten sind relativ des Licht-Motorrads. Dort wo das Motorrad steht ist die Koordinate (x:0/y:0). Das Canvas arbeitet aber mit den roten Koordinaten und der GameServer versendet wiederum Koordinaten die sich auf das Spielfeld referenzieren. Die korrekte X-Koordinate wird nun so berechnet:
 	
@@ -510,12 +516,14 @@
 	
 	Wir nehmen die X-Koordinate eines Mitspielers subtrahieren sie mit der X-Koordinate vom spielender Spieler und addieren die Hälfte der Breite des zusehenden Spielfeldes hinzu. Das gleiche gilt für die Y-Koordinate. Wenn nun alle Spieler und Wände berechnet sind, können wir das Bild richtig anzeigen.
 	
-	\begin{center}
-	\includegraphics[scale=0.5]{figures/battleroyale_rendering1.png} \includegraphics[scale=0.5]{figures/battleroyale_rendering2.png}
+	\begin{figure}[H]
+		\centering
+		\makebox[\textwidth][c]{\includegraphics[scale=0.5]{figures/battleroyale_rendering1.png} \includegraphics[scale=0.5]{figures/battleroyale_rendering2.png}}
+		\caption{BattleRoyale - Screenshots}
+		\label{fig:BattleRoyale_screenshots}
+	\end{figure}
 	
-	Zwei Screenshots, links zeigt der Stand nach den ersten 5 Schritten, rechts zeigt der Stand nach 15 Schritten.
-	\end{center}
-	Zusehen ist, wie das Licht-Motorrad im Zentrum des Bildes bleibt, obwohl es sich nach unten bewegt.
+	Zwei Screenshots, links zeigt der Stand nach den ersten 5 Schritten, rechts zeigt der Stand nach 15 Schritten. Zusehen ist, wie das Licht-Motorrad im Zentrum des Bildes bleibt, obwohl es sich nach unten bewegt.
 	
     \subsubsection{User Interface mit React JavaScript library}
 
