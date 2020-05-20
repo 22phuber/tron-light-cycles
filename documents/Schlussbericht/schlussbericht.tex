@@ -52,6 +52,32 @@
 }
 \newcommand{\inlinecode}[2]{\colorbox{lightgray}{\lstinline[language=#1]$#2$}}
 
+% Code block settings
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2
+}
+\lstset{style=mystyle}
+
 % Glossary
 % Das Glossar definiert alle wichtigen Begriffe zur Sicherstellung einer einheitlichen Terminologie.
 % Es sollen keine allgemeinen Begriffe erklärt werden, die den Adressaten bekannt sind (z. B. Java, CPU etc.).
@@ -481,50 +507,50 @@
 
     \subsubsection{Gameserver  (Java)}
     Der GameServer ist in drei Teile aufgebaut.
-    
+
     \paragraph{Transport}
     Der Transport ist mittels Websocket an alle Clients verbunden. Dieser kümmert sich um den Datenaustausch zwischen Server und Clients.
-    
+
     \paragraph{Middleman}
     Der Middleman ist zuständig für die interne Kommunikation des GameServers. Wenn eine Nachricht vom Game an alle Spieler gesendet werden muss, schickt der Game eine Nachricht an Middleman, dieser leite sie weiter an Transport. Dies funktioniert in beide Richtungen. Der Middleman sorgt dafür, dass Game und Transport nicht stark abhängig voneinander sind.
-    
+
     \paragraph{Game}
     In Game befindet sich das ganze Management der Lobbies und deren Threads, ebenfalls ist hier drin auch die Spielelogik der einzelnen Spielmodi implementiert.
-    
+
     \subsubsection{Rendering}
     Die ganzen virtuellen Objekte müssen am Ende auf dem Bildschirm des Users angezeigt werden. Dies kann über mehrere Arten erreicht werden und auch in unserem Projekt verwenden wir für jeden Spielmodus einen anderen Algorithmus. Bei beiden wird ein \Gls{Canvas} verwendet, dieses wird aber jeweils anders aufgebaut.
-    
+
     \paragraph{Classic}
     Im Classic Modus sieht jeder Spieler das ganze Spielfeld, daher sind die einzigen bewegenden Elemente die Licht-Motorräder. Die neusten Positionen der Licht-Motorräder bekommt der Client vom GameServer 60 mal in der Sekunde aktualisiert über. Der Browser muss dann nur an der neuen Position die richtige Farbe setzen. Bis das Spiel fertig gespielt ist und das ganze \Gls{Canvas} zurückgesetzt wird.
-    
+
     \paragraph{BattleRoyale}
     Beim BattleRoyale Modus kann das \Gls{Canvas} nicht mehr als Bildspeicher verwendet werden. Da der Spieler nur einen Teil des ganzes Spielfeld sieht und sein Licht-Motorrad zentral im Bild erscheinen sollte, bewegt sich alles ausser der eigener Spieler. Um dies korrekt darzustellen wurden zwei Designänderungen gegenüber dem Classic Renderer vorgenommen. Das Bild muss jedes Mal komplett neu gezeichnet werden und die Kamera muss sich der Position des Licht-Motorrads anpassen. Da das Bild immer neu gezeichnet werden muss, kann also das \Gls{Canvas} nicht mehr als Speicher für die vergangenen Schritte oder im Rahmen vom Spiel von den Wänden benutzt werden. Glücklicherweise sind es im BattleRoyale keine fixen Wände sondern dienen eher einem Schweif. Dieser Schweif hat eine fixe Länge und nur die Positionen bis zur Länge müssen gespeichert werden.
-    
+
     \begin{figure}[H]
     	\centering
     	\makebox[\textwidth][c]{\includegraphics[scale=0.5]{figures/battleroyale_rendering_coordinates.png}}
     	\caption{BattleRoyale - Koordinatenansicht}
     	\label{fig:BattleRoyale_Coordinates}
     \end{figure}
-	
-	
+
+
 	Die grünen Koordinaten sind relativ des Licht-Motorrads. Dort wo das Motorrad steht ist die Koordinate (x:0/y:0). Das Canvas arbeitet aber mit den roten Koordinaten und der GameServer versendet wiederum Koordinaten die sich auf das Spielfeld referenzieren. Die korrekte X-Koordinate wird nun so berechnet:
-	
+
 	\begin{center}
 	\textit player.x - client.x + ( width / 2 )
 	\end{center}
-	
+
 	Wir nehmen die X-Koordinate eines Mitspielers subtrahieren sie mit der X-Koordinate vom spielender Spieler und addieren die Hälfte der Breite des zusehenden Spielfeldes hinzu. Das gleiche gilt für die Y-Koordinate. Wenn nun alle Spieler und Wände berechnet sind, können wir das Bild richtig anzeigen.
-	
+
 	\begin{figure}[H]
 		\centering
 		\makebox[\textwidth][c]{\includegraphics[scale=0.5]{figures/battleroyale_rendering1.png} \includegraphics[scale=0.5]{figures/battleroyale_rendering2.png}}
 		\caption{BattleRoyale - Screenshots}
 		\label{fig:BattleRoyale_screenshots}
 	\end{figure}
-	
+
 	Zwei Screenshots, links zeigt der Stand nach den ersten 5 Schritten, rechts zeigt der Stand nach 15 Schritten. Zusehen ist, wie das Licht-Motorrad im Zentrum des Bildes bleibt, obwohl es sich nach unten bewegt.
-	
+
     \subsubsection{User Interface mit React JavaScript library}
 
     \subsubsection{Material-UI React Components}
@@ -552,12 +578,47 @@
     % read: https://www.enzyklopaedie-der-wirtschaftsinformatik.de/lexikon/is-management/Systementwicklung/Hauptaktivitaten-der-Systementwicklung/Software-Implementierung/Testen-von-Software/Systemtest/index.html
 
     \subsection{Continuous integration}
+    Um  die kontinuierliche Integration \Gls{Continuous Integration} zu gewährleisten und für ein schnelles Feedback und bessere Codequalität, haben wir Github Actions (\url{https://github.com/features/actions}) eingesetzt. Der Workflow ist in \autoref{lst:GHAction} ersichtlich  und ist in zwei Teile (jobs) gegliedert und führt - abstrakt erklärt - folgende Schritte aus:
+
+    \begin{itemize}
+        \item \inlinecode{bash}{maven_java}: Der Java Code wird in der Java Version 11, 12 und 13 kompiliert und danach getestet.
+        \item \inlinecode{bash}{npm_react}: Das React Frontend wird in der Node.js Version 8.x, 10.x und 12.x installiert und danach getestet.
+    \end{itemize}
+
+    \lstinputlisting[language=bash,label={lst:GHAction}, caption=Github Action workflow]{listings/CI_gh_actions.yml}
+    \vspace{.5cm}
     % github actions => https://github.com/features/actions
 
     \subsection{Installationsanleitung}
     % pre-build and  docker-compose
+    Um  die Tron Licht-Motorräder Applikation zu installieren, haben  wir uns für ein auf \Gls{Docker}-Container basierendes \Gls{Docker-Compose}-Setup entschieden. Somit lässt sich die Applikation einfacher verteilen/skalieren und ist modular - in sogenannten \Glspl{Microservice} - aufgebaut.
+
+    \subsubsection{Voraussetzungen}
+    Um die Applikation Schritt für Schritt installieren zu können, müssen folgende Voraussetzungen auf dem Zielsystem erfüllt sein.
+    \begin{itemize}
+        \item Software:
+            \begin{itemize}
+                \item Docker Community Edition (Docker CE) - \url{https://docs.docker.com/get-docker/}
+                \item Node.js \& npm >= v8..x - \url{https://www.npmjs.com/get-npm}
+            \end{itemize}
+        \item …
+    \end{itemize}
+
+    \subsubsection{Installationsschritte}
+    Die einzelnen Schritte um die Applikation zu installieren:
+    \begin{enumerate}
+        \item Letzen Release der Applikation herunterladen: \url{https://github.com/22phuber/tron-light-cycles/releases}
+        \item In den Projektordner wechseln: \inlinecode{bash}{/pfad/zum/projekt/tron-light-cycles/docker}
+        \item Pre-Build Skript ausführen: \inlinecode{bash}{./pre-build.sh}
+        \item \Gls{Docker}-Container bauen: \inlinecode{bash}{docker-compose build --no-cache}
+        \item \Gls{Docker-Compose}-Setup starten: \inlinecode{bash}{docker-compose up -d}
+        \item \url{http://localhost/}im Browser öffnen
+    \end{enumerate}
+
 
     \subsection{Code-Dokumentation}
+    Javadoc
+    Jsdoc
     % Javadoc
     % Jsdoc
 
@@ -755,7 +816,7 @@ Nachfolgend die Iterations-Assessments der vergangenen Iterationen.
 
 \subsubsection{Iteration 1}
 
-Zu Beginn kamen viele Ideen für verschiedene Technologien zusammen. Dadurch haben wir viel Zeit damit aufgewendet, um die vorgeschlagenen Technologien zu studieren und die Vorteile, sowie die Nachteile abzuwägen. 
+Zu Beginn kamen viele Ideen für verschiedene Technologien zusammen. Dadurch haben wir viel Zeit damit aufgewendet, um die vorgeschlagenen Technologien zu studieren und die Vorteile, sowie die Nachteile abzuwägen.
 
 \begin{table}[H]
 	\caption{Iterations-Assessment: Iteration 1}
@@ -779,7 +840,7 @@ Zu Beginn kamen viele Ideen für verschiedene Technologien zusammen. Dadurch hab
 
 \subsubsection{Iteration 2}
 
-In der zweiten Iteration lag der Hauptfokus bei dem Festlegen der Grundarchitektur und wie die einzelnen Technologien zusammenspielen. Sowie der grobe Ablauf des Spiels. 
+In der zweiten Iteration lag der Hauptfokus bei dem Festlegen der Grundarchitektur und wie die einzelnen Technologien zusammenspielen. Sowie der grobe Ablauf des Spiels.
 
 \begin{table}[H]
 	\caption{Iterations-Assessment: Iteration 2}
@@ -872,7 +933,7 @@ In der fünften Iteration lag der Hauptfokus auf der Lobby. Zusätzlich wurden a
 
 \subsubsection{Iteration 6}
 
-In der letzten Iteration wurden noch auftretende Probleme behoben und der Battle Royal Modus eingebaut. 
+In der letzten Iteration wurden noch auftretende Probleme behoben und der Battle Royal Modus eingebaut.
 
 \begin{table}[H]
 	\caption{Iterations-Assessment: Iteration 6}
