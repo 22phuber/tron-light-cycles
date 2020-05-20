@@ -672,12 +672,11 @@
 
     \lstinputlisting[language=bash,label={lst:GHAction}, caption=Github Action workflow]{listings/CI_gh_actions.yml}
     \vspace{.5cm}
-    % github actions => https://github.com/features/actions
 
-    Wie dies schlussendlilch auf Github aussieht, zeigt die \autoref{fig:GHActions_01} . Ein fehlerhafter Integrationstests, blockiert die Möglichkeit, den Code in den \inlinecode{bash}{master}-Branch einfliessen zu lassen, bis der Test erfolgreich ist.
+    \noindent Wie dies schlussendlich auf Github aussieht, zeigt die \autoref{fig:GHActions_01}. Ein fehlerhafter Integrationstests, blockiert die Möglichkeit den Code in den \inlinecode{bash}{master}-Branch einfliessen zu lassen, bis der Code so angepasst wurde, dass der Test erfolgreich durchläuft.
     \begin{figure}[H]
         \centering
-        \makebox[\textwidth][c]{\includegraphics[scale=0.45]{figures/GHActions_01.png}}
+        \makebox[\textwidth][c]{\includegraphics[scale=0.48]{figures/GHActions_01.png}}
         \caption{Github Actions - Durchlauf eines kontinuierlichen Integrationstests als Reaktion auf einen \Gls{Pull Request} }
         \label{fig:GHActions_01}
     \end{figure}
@@ -700,6 +699,7 @@
                 \item Mindestens 1024 MB RAM
             \end{itemize}
     \end{itemize}
+    Die Hardware Anforderung ist stark von der Anzahl Nutzer abhängig.
 
     \subsubsection{Installationsschritte}
     Die einzelnen Schritte um die Applikation zu installieren:
