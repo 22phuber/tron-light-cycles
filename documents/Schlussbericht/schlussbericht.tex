@@ -497,6 +497,21 @@
     \section{Design}
 
     \subsection{Softwarearchitektur}
+    Abstrakter Überblick der Softwarearchitektur. \Gls{NGiNX} ist Webserver für den statischen Inhalt und \Gls{Reverse-Proxy} für GamerServer und Node.js Backend Anfragen, siehe \autoref{fig:Softwarearchitektur_abstract} .
+        \begin{figure}[H]
+        \centering
+        \makebox[\textwidth][c]{\includegraphics[width=0.9\textwidth]{figures/Tron_basic_architecture.png}}
+        \caption{Abstrakte Softwarearchitektur - \Glspl{Microservice}}
+        \label{fig:Softwarearchitektur_abstract}
+    \end{figure}
+    \newpage
+    Detailierter Überblick aller Programme und Kommunikationswege.
+    \begin{figure}[H]
+        \centering
+        \makebox[\textwidth][c]{\includegraphics[scale=0.3]{figures/architecture-draft_v3.png}}
+        \caption{Systemarchitektur}
+        \label{fig:Systemarchitecture}
+    \end{figure}
 
     \subsection{Interaktionsdiagramme}
 
@@ -528,7 +543,7 @@
         \label{fig:SSDWS_GS_Client}
     \end{figure}
 
-    \subsection{Designentscheide und Design Patterns} % Delete???
+    \subsection{Designentscheide}
 
     \subsubsection{Kommunikation via Websocket}
     \Gls{Websocket} eignet  sich hervorragend für bidirektionale Client-Server-Kommunikation mit niedriger Latenz. Das ermöglicht eine beinahe  \quotes{Echtzeit}-Kommunikation zwischen dem Client (\Gls{Webbrowser}) und der Applikation. Die Implementation ist sehr einfach gelöst und gut dokumentiert. Zusätzlich wird \Gls{Websocket} von fast allen \Gls{Webbrowser} unterstützt. Aus diesen Gründen, ist \Gls{Websocket} für unsere Tron-Licht-Motorräder-Applikation die perfekte Lösung für den schnellen Datenaustausch während dem Spiel.
@@ -620,10 +635,10 @@
 	Zwei Screenshots, links zeigt der Stand nach den ersten 5 Schritten, rechts zeigt der Stand nach 15 Schritten. Zusehen ist, wie das Licht-Motorrad im Zentrum des Bildes bleibt, obwohl es sich nach unten bewegt.
 
     \subsubsection{User Interface mit React JavaScript library}
+    Um die Benutzeroberfläche zu bauen, haben wir \Gls{React} eingesetzt. Die erlaubt es uns sogenannte Komponenten einzusetzen, die an diversen Orten wiederverwendet werden können.
 
     \subsubsection{Material-UI React Components}
-
-
+    Die Material-UI Sammlung (\url{https://material-ui.com/}) der \Gls{React} Komponenten erlaubte uns, fertige Komponenten einzusetzen, ohne diese selber entwickeln zu müssen. Dies bedeutet eine schnellere Entwicklung mit schon ausgereiften Komponenten welche schon in etlichen anderen Applikationen eingesetzt wurden.
 
 %%% END Design
 
@@ -635,7 +650,6 @@
 %• Der vollständige Quellcode (inkl. Unit-Tests) wird in elektronischer Form abgegeben (auf OLAT im Team-Ordner als ZIP-File).
 %• Jede Klasse und alle öffentlichen Methoden und Attribute müssen (kurz) mittels JavaDoc dokumentiert werden. Der fertige JavaDoc-Kommentar muss ebenfalls (elektronisch) ab- gegeben werden.
     \section{Implementation}
-
 
     \subsection{Testkonzept}
     Unser System besteht aus mehreren Programmiersprachen und diese werden auf verschiedenen Systemen eingesetzt. Das als ganzes zu testen braucht es eben so viel Programmierarbeit. Wir haben uns daher auf das mögliche konzentriert und hauptsächlich Unit-Tests angewendet und das ganze System von Hand getestet.
@@ -692,10 +706,11 @@
 
 
     \subsection{Code-Dokumentation}
-    Javadoc
-    Jsdoc
-    % Javadoc
-    % Jsdoc
+    Generieren der Javadoc. \Gls{Apache Maven} muss auf dem Systems installiert sein.
+    \begin{enumerate}
+        \item In den Projektordner wechseln: \inlinecode{bash}{/pfad/zum/projekt/gameserver}
+        \item \inlinecode{bash}{mvn javadoc:aggregate}
+    \end{enumerate}
 
 %%% END Implementation
 
@@ -708,9 +723,9 @@
     \section{Resultat}
 
     \subsection{Erreichte Ziele}
-    Die Ziele, welche wir uns gesetzt haben, konnten wir erreichen. Das Unterfangen hat jedoch mehr Aufwand erfordert als ursprünglich gedacht. Die Schwierigkeit lag darin alles einfach zu halten. Sobald ein Problem auftrat, wurde uns klar, es fehlen noch 5 weitere Dinge.
-
-    Hinsichtlich des Projekts konnten wir folgende Ziele erreichen.
+    Die Ziele, welche wir uns gesetzt haben, konnten wir erreichen. Das Unterfangen hat jedoch mehr Aufwand erfordert als ursprünglich gedacht. Die Schwierigkeit lag darin alles einfach zu halten. Sobald ein Problem auftrat, wurde uns klar, es fehlen noch 5 weitere Dinge. \newline
+    \newline
+    \noindent Hinsichtlich des Projekts konnten wir folgende Ziele erreichen.
 
 	\begin{itemize}
 		\item Anmeldung/Registrierung
@@ -750,7 +765,6 @@
 	\end{itemize}
 
     \subsection{Weiterentwicklungsmöglichkeiten}
-
     Damit das Spiel einen länger anhaltenden Spielspass gewähren kann, sowie zusätzlichen Profit generieren kann sind bereits einige Punkte notiert.
 
     \begin{itemize}
