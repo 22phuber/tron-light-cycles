@@ -52,21 +52,22 @@ const GameCanvasBR = (props) => {
           }
         }
       });
-      // clear canvas
-      ctx.clearRect(0, 0, width, height);
-      // draw outer canvas
-      ctx.fillStyle = "black";
-      ctx.fillRect(0, 0, width, height);
-      // draw inner canvas
-      ctx.fillStyle = "white";
-      ctx.fillRect(
-        walls.x - clientPosX + halfWidth,
-        walls.y - clientPosY + halfHeight,
-        walls.width,
-        walls.height
-      );
-
-      // SHIT DON'T GET IT
+	  
+	  
+	  // SHIT DON'T GET IT
+	  
+	  if(clientPosX - walls.x < halfWidth && walls.x + walls.width - clientPosX > halfWidth){
+		  clientPosX = walls.x + halfWidth;
+	  }else if(clientPosX - walls.x > halfWidth && walls.x + walls.width - clientPosX < halfWidth){
+		  clientPosX = walls.x + walls.width - halfWidth;
+	  }
+		  
+	  if(clientPosY - walls.y < halfHeight && walls.y + walls.height - clientPosY > halfHeight){
+		  clientPosY = walls.y + halfHeight;
+	  }else if(clientPosY - walls.y > halfHeight && walls.y + walls.height - clientPosY < halfHeight){
+		  clientPosY = walls.y + walls.height - halfHeight;
+	  }
+	  
       // var wallChangeX = walls.x - clientPosX + halfWidth;
       // var wallChangeY = walls.y - clientPosY + halfHeight;
       // console.log(wallChangeX);
@@ -85,6 +86,22 @@ const GameCanvasBR = (props) => {
       // ctx.fillStyle = "purple";
       // ctx.fillRect(0, height - walls.y, width, height);
       // END SHIT DON'T GET IT
+	  
+      // clear canvas
+      ctx.clearRect(0, 0, width, height);
+      // draw outer canvas
+      ctx.fillStyle = "black";
+      ctx.fillRect(0, 0, width, height);
+      // draw inner canvas
+      ctx.fillStyle = "white";
+      ctx.fillRect(
+        walls.x - clientPosX + halfWidth,
+        walls.y - clientPosY + halfHeight,
+        walls.width,
+        walls.height
+      );
+
+      
 
       playersPositions.forEach((player) => {
         player.getPositions().forEach((position) => {
