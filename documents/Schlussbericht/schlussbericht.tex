@@ -480,6 +480,16 @@
     \subsubsection{Kommunikation via Websocket}
 
     \subsubsection{Gameserver  (Java)}
+    Der GameServer ist in drei Teile aufgebaut.
+    
+    \paragraph{Transport}
+    Der Transport ist mittels Websocket an alle Clients verbunden. Dieser kümmert sich um den Datenaustausch zwischen Server und Clients.
+    
+    \paragraph{Middleman}
+    Der Middleman ist zuständig für die interne Kommunikation des GameServers. Wenn eine Nachricht vom Game an alle Spieler gesendet werden muss, schickt der Game eine Nachricht an Middleman, dieser leite sie weiter an Transport. Dies funktioniert in beide Richtungen. Der Middleman sorgt dafür, dass Game und Transport nicht stark abhängig voneinander sind.
+    
+    \paragraph{Game}
+    In Game befindet sich das ganze Management der Lobbies und deren Threads, ebenfalls ist hier drin auch die Spielelogik der einzelnen Spielmodi implementiert.
     
     \subsubsection{Rendering}
     Die ganzen virtuellen Objekte müssen am Ende auf dem Bildschirm des Users angezeigt werden. Dies kann über mehrere Arten erreicht werden und auch in unserem Projekt verwenden wir für jeden Spielmodus einen anderen Algorithmus. Bei beiden wird ein \Gls{Canvas} verwendet, dieses wird aber jeweils anders aufgebaut.
@@ -502,7 +512,10 @@
 	
 	\begin{center}
 	\includegraphics[scale=0.5]{figures/battleroyale_rendering1.png} \includegraphics[scale=0.5]{figures/battleroyale_rendering2.png}
+	
+	Zwei Screenshots, links zeigt der Stand nach den ersten 5 Schritten, rechts zeigt der Stand nach 15 Schritten.
 	\end{center}
+	Zusehen ist, wie das Licht-Motorrad im Zentrum des Bildes bleibt, obwohl es sich nach unten bewegt.
 	
     \subsubsection{User Interface mit React JavaScript library}
 
