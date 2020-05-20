@@ -234,6 +234,7 @@
     \end{figure}
 
     \subsubsection{Hauptanwendungsfälle}
+    \label{ssec:Hauptanwendungsfaelle}
     Wir haben zwei Hauptanwendungsfälle identifiziert:
     \begin{itemize}
     	\item  \hyperref[ssec:UC1Lobbyerstellen]{UC1: Lobby erstellen - \quotes{fully dressed}}
@@ -363,6 +364,7 @@
 
     \newpage
     \subsubsection{System-Sequenzdiagramm (SSD)}
+    \label{sssec:SSDFromProjectOutline}
     Das System-Sequenzdiagramm für \quotes{Lobby erstellen} und \quotes{Spiel spielen}:
     \begin{figure}[H]
     	\includegraphics[scale=0.5]{figures/SystemSequenceDiagram.png}
@@ -501,6 +503,25 @@
 
     \subsection{Interaktionsdiagramme}
 
+    \subsubsection{SSD Hauptanwendungsfälle}
+    Die zwei wichtigsten Hauptanwendungsfälle (siehe \ref{ssec:Hauptanwendungsfaelle} \nameref{ssec:Hauptanwendungsfaelle} ) sind in \ref{sssec:SSDFromProjectOutline} \nameref{sssec:SSDFromProjectOutline} dargestellt.
+
+    \subsubsection{SSD \Gls{Websocket} Kommunikation zwischen Gameserver und Client}
+    In \autoref{fig:SSDWS_GS_Client} sind die \Gls{Websocket} Mitteilungen ersichtlich die zweischen GameServer und Client verschickt werden. Der Ablauf kann folgendermassen erklärt werden:
+    \begin{enumerate}
+        \item \textit{Client1} - auf der linken Seite in Violet - baut eine Websocketverbindung zum \textit{GameServer} (in Grün) auf.
+        \item Der \textit{GameServer} schickt dem \textit{Client1} eine eindeutige \inlinecode{bash}{clientId}.
+        \item \textit{Client1} erstellt etwas später ein Spiel und die \inlinecode{bash}{createGame} Mitteilung wir an den \textit{GameServer} geschickt.
+        \item Der \textit{GameServer} erstellt ein Spiel und schickt dem \textit{Client1} die \inlinecode{bash}{gameId}.
+        \item Ein weiterer \textit{Client2} - auf der rechten Seite in Orange - hat in Zwischenzeit eine Websocketverbindung aufgebaut zum \textit{GameServer}.
+    \end{enumerate}
+    \begin{figure}[H]
+        \centering
+        \makebox[\textwidth][c]{\includegraphics[scale=0.4]{figures/SSD_GameProcedure.png}}
+        \caption{SSD - \Gls{Websocket} Kommunikation zwischen Gameserver und Client}
+        \label{fig:SSDWS_GS_Client}
+    \end{figure}
+
     \subsection{Designentscheide und Design Patterns}
 
     \subsubsection{Kommunikation via Websocket}
@@ -633,7 +654,6 @@
     \section{Resultat}
 
     \subsection{Erreichte Ziele}
-
     Die Ziele, welche wir uns gesetzt haben, konnten wir erreichen. Das Unterfangen hat jedoch mehr Aufwand erfordert als ursprünglich gedacht. Die Schwierigkeit lag darin alles einfach zu halten. Sobald ein Problem auftrat, wurde uns klar, es fehlen noch 5 weitere Dinge.
 
     Hinsichtlich des Projekts konnten wir folgende Ziele erreichen.
