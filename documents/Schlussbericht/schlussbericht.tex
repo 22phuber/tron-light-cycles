@@ -497,11 +497,19 @@
 
     \subsection{Softwarearchitektur}
     Übersicht aller Programme und wo sie eingesetzt werden.
+    \begin{figure}[H]
+    	\centering
+    	\makebox[\textwidth][c]{\includegraphics[scale=0.3]{figures/Tron_basic_architecture.png}}
+    	\caption{Systemarchitektur}
+    	\label{fig:Systemarchitecture}
+    \end{figure}
+
+	In dieser Abbildung ist die Kommunikation zwischen den Systemen detaillierter beschrieben.
 	\begin{figure}[H]
 		\centering
 		\makebox[\textwidth][c]{\includegraphics[scale=0.3]{figures/architecture-draft_v3.png}}
-		\caption{Systemarchitektur}
-		\label{fig:Systemarchitecture}
+		\caption{Systemarchitektur mit Kommunikation}
+		\label{fig:Systemarchitecture_Communication}
 	\end{figure}
 
     \subsection{Design-Klassendiagramm (DCD)}
@@ -619,8 +627,10 @@
     \section{Implementation}
 
     \subsection{Testkonzept}
+    Unser System besteht aus mehreren Programmiersprachen und diese werden auf verschiedenen Systemen eingesetzt. Das als ganzes zu testen braucht es eben so viel Programmierarbeit. Wir haben uns daher auf das mögliche konzentriert und hauptsächlich Unit-Tests angewendet und das ganze System von Hand getestet.
 
     \subsubsection{Unit Tests}
+	Beim Gameserver wird das fast das ganze Modul Game mit Unit Tests getestet. Hauptsächlich wird geprüft, dass die korrekten Werte gesetzt, zurück gegeben und berechnet werden.
 
     \subsubsection{Integration Tests}
 
