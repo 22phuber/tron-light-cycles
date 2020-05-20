@@ -665,7 +665,7 @@
     Alle Tests sind Blackbox Tests, bei der wir das System nehmen einen gegeben Wert eingeben oder Aktion ausführen und einen bestimmten Wert oder Zustand erwarten. Was das System genau macht interessiert uns nicht beim Blackbox testen. Ein Testdurchlauf erfolgt indem zuerst alle einzelnen Elemente mit Unit Tests getestet werden, danach wird mit Integrationstests das Zusammenspiel der einzelnen Elemente geprüft und schlussendlich wird das ganze System getestet.
 
     \subsubsection{Unit Tests}
-	Beim Gameserver wird das fast das ganze Modul Game mit Unit Tests getestet. Hauptsächlich wird geprüft, dass die korrekten Werte gesetzt, zurück gegeben und berechnet werden.
+	Beim Gameserver sämmtliche Klassen des Moduls Game mit Unit Tests getestet. Hauptsächlich wird geprüft, dass die korrekten Werte gesetzt, zurück gegeben und berechnet werden.
 	\begin{figure}[H]
 		\centering
 		\makebox[\textwidth][c]{\includegraphics[scale=0.5]{figures/lobby_unit_tests.png}}
@@ -674,7 +674,7 @@
 	\end{figure}
 
     \subsection{Continuous integration}
-    Um  die kontinuierliche Integration \Gls{Continuous Integration} zu gewährleisten und für ein schnelles Feedback und bessere Codequalität, haben wir Github Actions (\url{https://github.com/features/actions}) eingesetzt. Der Workflow ist in \autoref{lst:GHAction} ersichtlich  und ist in zwei Teile (jobs) gegliedert und führt - abstrakt erklärt - folgende Schritte aus:
+    Um  die kontinuierliche Integration \Gls{Continuous Integration} zu gewährleisten und für ein schnelles Feedback und bessere Codequalität, wurde Github Actions (\url{https://github.com/features/actions}) eingesetzt. Der Workflow ist in \autoref{lst:GHAction} ersichtlich. Er ist in zwei Teile (jobs) gegliedert und führt - abstrakt erklärt - folgende Schritte aus:
 
     \begin{itemize}
         \item \inlinecode{bash}{maven_java}: Der Java Code wird in der Java Version 11, 12 und 13 kompiliert und danach getestet.
@@ -694,7 +694,7 @@
 
     \subsection{Installationsanleitung}
     % pre-build and  docker-compose
-    Um  die Tron Licht-Motorräder Applikation zu installieren, haben  wir uns für ein auf \Gls{Docker}-Container basierendes \Gls{Docker-Compose}-Setup entschieden. Somit lässt sich die Applikation einfacher verteilen/skalieren und ist modular - in sogenannten \Glspl{Microservice} - aufgebaut.
+    Um die Tron Licht-Motorräder-Applikation zu installieren, haben  wir uns für ein auf \Gls{Docker}-Container basierendes \Gls{Docker-Compose}-Setup entschieden. Somit lässt sich die Applikation einfacher verteilen/skalieren und ist modular - in sogenannten \Glspl{Microservice} - aufgebaut.
 
     \subsubsection{Voraussetzungen}
     Um die Applikation Schritt für Schritt installieren zu können, müssen folgende Voraussetzungen auf dem Zielsystem erfüllt sein.
@@ -742,7 +742,7 @@
     \section{Resultat}
 
     \subsection{Erreichte Ziele}
-    Die Ziele, welche wir uns gesetzt haben, konnten wir erreichen. Das Unterfangen hat jedoch mehr Aufwand erfordert als ursprünglich gedacht. Die Schwierigkeit lag darin alles einfach zu halten. Sobald ein Problem auftrat, wurde uns klar, es fehlen noch 5 weitere Dinge. \newline
+    Die wichtigsten definierten Ziele konnten erreicht werden. Das Unterfangen hat jedoch mehr Aufwand erfordert als ursprünglich gedacht. Die Schwierigkeit lag darin, alles einfach zu halten. Sobald ein Problem auftrat, wurde uns klar, dass noch 5 weitere Dinge fehlen. \newline
     \newline
     \noindent Hinsichtlich des Projekts konnten wir folgende Ziele erreichen.
 
@@ -762,7 +762,7 @@
     Die Gruppe hat zusätzlich viel Wissen durch neue Technologien gesammelt. Trotz unbekannter Hürden, welche dadurch verursacht wurden.
 
     \subsection{Offene Punkte}
-    Die wichtigsten vordefinierten Ziele konnten erreicht werden. Folgende Punkte sind jedoch noch offen bzw. hinzugekommen beim Tests und Nutzung der Applikation.
+    Folgende Punkte sind noch offen bzw. hinzugekommen beim Testen und Nutzen der Applikation.
 
 	\begin{itemize}
         \item Backend:
