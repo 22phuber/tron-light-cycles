@@ -496,12 +496,62 @@
     \section{Design}
 
     \subsection{Softwarearchitektur}
+    Übersicht aller Programme und wo sie eingesetzt werden.
+	\begin{figure}[H]
+		\centering
+		\makebox[\textwidth][c]{\includegraphics[scale=0.3]{figures/architecture-draft_v3.png}}
+		\caption{Systemarchitektur}
+		\label{fig:Systemarchitecture}
+	\end{figure}
 
     \subsection{Design-Klassendiagramm (DCD)}
+    Alle Klassen des Gameservers aufgeteilt in seine drei Module. Innerhalb der einzelnen Module wird die Benutzung und die Vererbung der Klasse verdeutlicht.
+	\begin{figure}[H]
+		\centering
+		\makebox[\textwidth][c]{\includegraphics[scale=0.3]{figures/gameserver-uml/appmain-classes.png}}
+		\caption{Startpunkt}
+		\label{fig:appmain_class}
+	\end{figure}
 
+	\begin{figure}[H]
+		\centering
+		\makebox[\textwidth][c]{\includegraphics[scale=0.3]{figures/gameserver-uml/modules.png}}
+		\caption{Die drei Module}
+		\label{fig:modules}
+	\end{figure}
+
+	\begin{figure}[H]
+		\centering
+		\makebox[\textwidth][c]{\includegraphics[scale=0.3]{figures/gameserver-uml/transport-classes.png}}
+		\caption{Das Transport Modul}
+		\label{fig:transport_module}
+	\end{figure}
+	
+	\begin{figure}[H]
+		\centering
+		\makebox[\textwidth][c]{\includegraphics[scale=0.2]{figures/gameserver-uml/middleman-classes.png}}
+		\caption{Das Middleman Modul}
+		\label{fig:middleman_module}
+	\end{figure}
+	
+	\begin{figure}[H]
+		\centering
+		\makebox[\textwidth][c]{\includegraphics[scale=0.3]{figures/gameserver-uml/game-classes.png}}
+		\caption{Das Game Modul}
+		\label{fig:game_module}
+	\end{figure}
+	
+	
     \subsection{Interaktionsdiagramme}
+    \begin{figure}[H]
+    	\centering
+    	\makebox[\textwidth][c]{\includegraphics[scale=0.4]{figures/GameProcedure_SSD.png}}
+    	\caption{System Sequenz Diagramm mit JSON Objekte}
+    	\label{fig:Game_SSD_with_JSON}
+    \end{figure}
+	In der Darstellung wird dargestellt wie der ganze Ablauf eines Spiels von der Erstellung der Lobby über alle Spielrunden bis hin zum Austritt der Lobby. Der linke Client ist der Ersteller der Lobby und somit auch der Host. Der rechte Client repräsentiert ein Mitspieler Beispielsweise ein Freund vom Host. In dieser Abbildung wird die Kommunikation zwischen Server und Client verdeutlicht. Hier sind die verschiedenen JSON-Nachrichten mit ihren Eigenschaften aufgezeichnet.
 
-    \subsection{Designentscheide und Design Patterns}
+    %\subsection{Designentscheide und Design Patterns}Delete???
 
     \subsubsection{Kommunikation via Websocket}
 
