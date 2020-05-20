@@ -24,6 +24,7 @@
 \usepackage{textcomp}
 \usepackage{listings}
 \usepackage[flushleft]{threeparttable}
+\usepackage[nottoc,numbib]{tocbibind}
 
 % Document geometry
 \geometry{a4paper, top=25mm, left=25mm, right=25mm, bottom=20mm,
@@ -78,13 +79,24 @@
 }
 \lstset{style=mystyle}
 
+% listoffigure in toc
+\renewcommand{\listoffigures}{\begingroup
+    \tocsection
+    \tocfile{\listfigurename}{lof}
+    \endgroup}
+
+% \listoftables in toc
+\renewcommand{\listoftables}{\begingroup
+    \tocsection
+    \tocfile{\listtablename}{lof}
+    \endgroup}
+
 % Glossary
 % Das Glossar definiert alle wichtigen Begriffe zur Sicherstellung einer einheitlichen Terminologie.
 % Es sollen keine allgemeinen Begriffe erklärt werden, die den Adressaten bekannt sind (z. B. Java, CPU etc.).
 % Glossareinträge müssen im Text verwendet werden, damit diese im Glossar im Appendix \printglossary angezeigt werden
 \makeglossaries
 \loadglsentries{glossary} % loads glossary definitions from external file
-
 
 % bibliography file
 \addbibresource{\jobname.bib}
@@ -468,6 +480,7 @@
     \subsubsection{Designeinschränkungen}
     Das Frontend wird mit \Gls{React} implementiert. Für das Design wird zur Unterstützung die Bibliothek Material UI angewendet. Da eine simples UI gebaut wird, wird Routing vorerst nicht nötig sein.
 
+
     \subsection{Domänenmodell}
     \begin{figure}[H]
     	\centering
@@ -649,15 +662,16 @@
     \section{Implementation}
 
     \subsection{Testkonzept}
-    Unser System besteht aus mehreren Programmiersprachen und diese werden auf verschiedenen Systemen eingesetzt. Das als ganzes zu testen braucht es eben so viel Programmierarbeit. Wir haben uns daher auf das mögliche konzentriert und hauptsächlich Unit-Tests angewendet und das ganze System von Hand getestet.
+    Alle Tests sind Blackbox Tests, bei der wir das System nehmen einen gegeben Wert eingeben oder Aktion ausführen und einen bestimmten Wert oder Zustand erwarten. Was das System genau macht interessiert uns nicht beim Blackbox testen. Ein Testdurchlauf erfolgt indem zuerst alle einzelnen Elemente mit Unit Tests getestet werden, danach wird mit Integrationstests das Zusammenspiel der einzelnen Elemente geprüft und schlussendlich wird das ganze System getestet.
 
     \subsubsection{Unit Tests}
 	Beim Gameserver wird das fast das ganze Modul Game mit Unit Tests getestet. Hauptsächlich wird geprüft, dass die korrekten Werte gesetzt, zurück gegeben und berechnet werden.
-
-    \subsubsection{Integration Tests}
-
-    \subsubsection{Systemtests}
-    % read: https://www.enzyklopaedie-der-wirtschaftsinformatik.de/lexikon/is-management/Systementwicklung/Hauptaktivitaten-der-Systementwicklung/Software-Implementierung/Testen-von-Software/Systemtest/index.html
+	\begin{figure}[H]
+		\centering
+		\makebox[\textwidth][c]{\includegraphics[scale=0.5]{figures/lobby_unit_tests.png}}
+		\caption{Ausschnitt aus den Unit Tests für die Klasse Lobby}
+		\label{fig:lobby_unit_tests}
+	\end{figure}
 
     \subsection{Continuous integration}
     Um  die kontinuierliche Integration \Gls{Continuous Integration} zu gewährleisten und für ein schnelles Feedback und bessere Codequalität, haben wir Github Actions (\url{https://github.com/features/actions}) eingesetzt. Der Workflow ist in \autoref{lst:GHAction} ersichtlich  und ist in zwei Teile (jobs) gegliedert und führt - abstrakt erklärt - folgende Schritte aus:
@@ -669,12 +683,11 @@
 
     \lstinputlisting[language=bash,label={lst:GHAction}, caption=Github Action workflow]{listings/CI_gh_actions.yml}
     \vspace{.5cm}
-    % github actions => https://github.com/features/actions
 
-    Wie dies schlussendlilch auf Github aussieht, zeigt die \autoref{fig:GHActions_01} . Ein fehlerhafter Integrationstests, blockiert die Möglichkeit, den Code in den \inlinecode{bash}{master}-Branch einfliessen zu lassen, bis der Test erfolgreich ist.
+    \noindent Wie dies schlussendlich auf Github aussieht, zeigt die \autoref{fig:GHActions_01}. Ein fehlerhafter Integrationstests, blockiert die Möglichkeit den Code in den \inlinecode{bash}{master}-Branch einfliessen zu lassen, bis der Code so angepasst wurde, dass der Test erfolgreich durchläuft.
     \begin{figure}[H]
         \centering
-        \makebox[\textwidth][c]{\includegraphics[scale=0.45]{figures/GHActions_01.png}}
+        \makebox[\textwidth][c]{\includegraphics[scale=0.48]{figures/GHActions_01.png}}
         \caption{Github Actions - Durchlauf eines kontinuierlichen Integrationstests als Reaktion auf einen \Gls{Pull Request} }
         \label{fig:GHActions_01}
     \end{figure}
@@ -697,6 +710,7 @@
                 \item Mindestens 1024 MB RAM
             \end{itemize}
     \end{itemize}
+    Die Hardware Anforderung ist stark von der Anzahl Nutzer abhängig.
 
     \subsubsection{Installationsschritte}
     Die einzelnen Schritte um die Applikation zu installieren:
@@ -766,6 +780,8 @@
         \item Applikation:
             \begin{itemize}
                 \item Belastungstests. Wieviele Spieler können gleichzeitig, mit akzeptabler Latenz und Framerate, spielen?
+                \item Integrationstests. Automatisierte Tests die Zusammenarbeit der Module testet.
+                \item Systemtests. Automatisierte Tests die das ganze System testen.
             \end{itemize}
 	\end{itemize}
 

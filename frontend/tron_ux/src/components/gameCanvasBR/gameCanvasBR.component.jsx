@@ -102,10 +102,10 @@ const GameCanvasBR = (props) => {
         });
         if (movementCounter >= movementLimit) {
           player.removeOldestPosition();
-        } else {
-          movementCounter += 1;
-        }
+		}
       });
+	  
+	  movementCounter += 1;
 	  
 	  console.log(walls.x + " " + walls.width);
 	  
