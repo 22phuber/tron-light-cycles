@@ -56,16 +56,16 @@ const GameCanvasBR = (props) => {
 	  
 	  // SHIT DON'T GET IT
 	  
-	  if(clientPosX - walls.x < halfWidth && walls.x + walls.width - clientPosX > halfWidth){
-		  clientPosX = walls.x + halfWidth;
-	  }else if(clientPosX - walls.x > halfWidth && walls.x + walls.width - clientPosX < halfWidth){
-		  clientPosX = walls.x + walls.width - halfWidth;
+	  if(clientPosX - walls.x + 50 < halfWidth && walls.x + walls.width - clientPosX - 50 > halfWidth){
+		  clientPosX = walls.x + halfWidth - 50;
+	  }else if(clientPosX - walls.x - 50 > halfWidth && walls.x + walls.width - clientPosX + 50 < halfWidth){
+		  clientPosX = walls.x + walls.width - halfWidth + 50;
 	  }
 		  
-	  if(clientPosY - walls.y < halfHeight && walls.y + walls.height - clientPosY > halfHeight){
-		  clientPosY = walls.y + halfHeight;
-	  }else if(clientPosY - walls.y > halfHeight && walls.y + walls.height - clientPosY < halfHeight){
-		  clientPosY = walls.y + walls.height - halfHeight;
+	  if(clientPosY - walls.y + 50 < halfHeight && walls.y + walls.height - clientPosY - 50 > halfHeight){
+		  clientPosY = walls.y + halfHeight - 50;
+	  }else if(clientPosY - walls.y - 50 > halfHeight && walls.y + walls.height - clientPosY + 50< halfHeight){
+		  clientPosY = walls.y + walls.height - halfHeight + 50;
 	  }
 	  
       // var wallChangeX = walls.x - clientPosX + halfWidth;
