@@ -118,17 +118,14 @@ const GameCanvasBR = (props) => {
       // console.log(wallChangeY);
       // // four outer rects
       // // top (works correct)
-      ctx.fillStyle = "black";
-      ctx.fillRect(wallChangeX - clientPosOffset, wallChangeY - clientPosOffset, walls.width + clientPosOffset, clientPosOffset);
+      ctx.fillStyle = "darkred";
+      ctx.fillRect(wallChangeX - halfWidth, wallChangeY - halfHeight, walls.width + halfWidth, halfHeight);
       // // left (works correct)
-      ctx.fillStyle = "green";
-      ctx.fillRect(wallChangeX - clientPosOffset, wallChangeY, clientPosOffset, walls.height + clientPosOffset);
+      ctx.fillRect(wallChangeX - halfWidth, wallChangeY, halfWidth, walls.height + halfHeight);
       // //right
-      ctx.fillStyle = "blue";
-      ctx.fillRect(wallChangeXOpposite, wallChangeY - clientPosOffset, clientPosOffset, walls.height + clientPosOffset);
+      ctx.fillRect(wallChangeXOpposite, wallChangeY - halfHeight, halfWidth, walls.height + halfHeight);
       // //bottom
-      ctx.fillStyle = "purple";
-      ctx.fillRect(wallChangeX, wallChangeYOpposite, walls.width + clientPosOffset, clientPosOffset);
+      ctx.fillRect(wallChangeX, wallChangeYOpposite, walls.width + halfWidth, halfHeight);
       // END SHIT DON'T GET IT
 	  
     }

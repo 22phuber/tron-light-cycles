@@ -556,8 +556,8 @@
 
     \paragraph{Transport (T)}
 
-	Das Modul Transport kümmert sich um den bidirektionalen Datenaustausch zwischen dem Gameserver und den Clients. Um einen kontinuierlichen Austausch gewährleisten zu können, werden zuverlässige Client-Server-Verbindungen mittels \Gls{Websocket}s aufgebaut. Ein Client sendet darüber die bei ihm auftretenden Events im Spiel wie zum Beispiel eine Richtungsänderung. Über das Modul M gibt das Modul T die erhaltenen Informationen an das Modul G weiter. Der Webserver wurde mit Hilfe von \Gls{Netty} implementiert. Das Klassendiagramm zum Modul T ist nachfolgend ersichtlich. 
-	
+	Das Modul Transport kümmert sich um den bidirektionalen Datenaustausch zwischen dem Gameserver und den Clients. Um einen kontinuierlichen Austausch gewährleisten zu können, werden zuverlässige Client-Server-Verbindungen mittels \Gls{Websocket}s aufgebaut. Ein Client sendet darüber die bei ihm auftretenden Events im Spiel wie zum Beispiel eine Richtungsänderung. Über das Modul M gibt das Modul T die erhaltenen Informationen an das Modul G weiter. Der Webserver wurde mit Hilfe von \Gls{Netty} implementiert. Das Klassendiagramm zum Modul T ist nachfolgend ersichtlich.
+
 	\begin{figure}[H]
     	\centering
     	\includegraphics[scale=0.3]{figures/gameserver-uml/transport-classes.png}
@@ -566,9 +566,9 @@
     \end{figure}
 
 	\paragraph{Middleman (M)}
-	
+
 	Das Modul Middleman wird benötigt, um eine zirkuläre Abhängigkeit zwischen den Modulen T und G zu vermeiden. Die gesammte Kommunikation von T und G erfolgt über M, deswegen auch der Name "Middleman". Technisch funktioniert dies folgendermassen: Wie im nachfolgenden Diagramm ersichtlich, definiert das Modul T Nachrichten-Objekte, die jeweils von der Klasse InAppMessage erben. Da T und G das Modul Middleman kennen, können die von M definierten Nachrichten-Objekte von T und G instanziert werden. Sendet das Modul T oder G eine Nachricht, wird durch Anwendung des Design-Patterns Inversion of Control erreicht, dass das Empfänger-Modul die Nachricht bearbeitet. Hierfür werden in M die Services ToTransportMessageService und ToGameMessageService definiert und die dazugehörigen Service-Providers in G und T implementiert.
-	
+
 	\begin{figure}[H]
     	\centering
     	\includegraphics[scale=0.2]{figures/gameserver-uml/middleman-classes.png}
@@ -671,7 +671,7 @@
         \item Software:
             \begin{itemize}
                 \item Docker Community Edition (Docker CE) - \url{https://docs.docker.com/get-docker/}
-                \item Node.js \& npm >= v8..x - \url{https://www.npmjs.com/get-npm}
+                \item Node.js (v8.x oder neuer) \& npm  - \url{https://www.npmjs.com/get-npm}
             \end{itemize}
         \item Hardware :
             \begin{itemize}
