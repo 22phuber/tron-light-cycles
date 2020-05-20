@@ -151,7 +151,7 @@
 	Der Anwender meldet sich anonym als Gast in der Applikation an oder loggt sich mit einem bestehenden Account ein. Um in ein Spiel zu gelangen, kann der Anwender entscheiden, ob er eine Lobby erstellen oder einer bestehenden Lobby beitreten möchten.
 
 	\subsubsection{\Gls{Lobby} erstellen}
-	Falls der Anwender eine Lobby erstellt, kann er auswählen ob diese nur für Freunde sichtbar ist oder auch andere Spieler beitreten können. Als Ersteller der Lobby kann der Anwender das Spiel starten, wenn alle anderen Spieler in der Lobby den Status auf 'bereit' gewechselt haben.
+	Falls der Anwender eine Lobby erstellt, kann er auswählen ob diese nur für ausgewählte Spieler sichtbar ist oder jegliche Spieler beitreten können. Als Ersteller der Lobby kann der Anwender das Spiel starten, wenn alle anderen Spieler in der Lobby den Status auf 'bereit' gewechselt haben.
 
 	\subsubsection{\Gls{Lobby} beitreten}
 	Falls der Anwender einer Lobby beitreten möchte, kann er sich eine gewünschte Lobby aus der Lobby-Liste aussuchen. Als Nicht-Ersteller der Lobby kann der Status auf 'bereit' gewechselt und auf den Start des Spiels gewartet werden.
@@ -220,7 +220,7 @@
     		\item \hyperref[sssec:UC4Lobbybeitreten]{UC4: Lobby beitreten - \quotes{casual}}
     		\item \hyperref[sssec:UC5Registrieren]{UC5: Registrieren - \quotes{brief}}
     		\item \hyperref[sssec:UC6Passwortsetzen]{UC6: Passwort zurücksetzen - \quotes{brief}}
-    		\item  \hyperref[sssec:UC7Freundeeinladen]{UC7: Freunde einladen - \quotes{brief}}
+    		\item  \hyperref[sssec:UC7Spielereinladen]{UC7: Spieler einladen - \quotes{brief}}
     		\item \hyperref[sssec:UC8Statistikenbetrachten]{UC8: Statistiken betrachten - \quotes{brief}}
     	\end{itemize}
     \end{multicols}
@@ -283,7 +283,7 @@
     		\item[2a.] Spieler können eigene \Gls{Lobby} erstellen:
     		\begin{enumerate}
     			\item Spieler klickt auf \Gls{Lobby} erstellen.
-    			\item Spieler bestimmt, ob die \Gls{Lobby} öffentlich (public) oder nur für Freunde (private) zugänglich sein soll.
+    			\item Spieler bestimmt, ob die \Gls{Lobby} öffentlich (public) oder nur für bestimmte Spieler (private) zugänglich sein soll.
     			\item System erstellt eine \Gls{Lobby}.
     			\item System fügt den Spieler als Lobby-Ersteller der \Gls{Lobby} hinzu.
     		\end{enumerate}
@@ -426,9 +426,9 @@
     	Nun kann der Spieler ein neues Passwort angeben.
     \end{tcolorbox}
 
-    \subsubsection{UC7: Freunde einladen - \quotes{brief}}
-    \label{sssec:UC7Freundeeinladen}
-    \begin{tcolorbox}[enhanced, breakable, sharp corners, width=\dimexpr\textwidth-15mm\relax ,enlarge left by=10mm ,fontupper=\linespread{1.1}\selectfont, boxrule=1pt, title={UC7: Freunde einladen}, colback=white, colframe=gray!22, coltitle=black]
+    \subsubsection{UC7: Spieler einladen - \quotes{brief}}
+    \label{sssec:UC7Spielereinladen}
+    \begin{tcolorbox}[enhanced, breakable, sharp corners, width=\dimexpr\textwidth-15mm\relax ,enlarge left by=10mm ,fontupper=\linespread{1.1}\selectfont, boxrule=1pt, title={UC7: Spieler einladen}, colback=white, colframe=gray!22, coltitle=black]
     	Der Spieler erstellt eine private \Gls{Lobby}. Er erhält ein vom System generierten Link, mit welchem er andere Spieler zum Eintreten in seine \Gls{Lobby} einladen kann.\newline
     	Benutzen die eingeladenen Spieler den Link, befinden sie sich mit dem einladenden Spieler in derselben Lobby.
     \end{tcolorbox}
@@ -441,9 +441,8 @@
 
     \subsection{Zusätzliche Anforderungen}
     Es ist wichtig, konkrete Anforderungen für unser Spiel zu definieren, damit die Erwartungen der Spieler erfüllt werden können. Hierbei soll uns das FURPS+ Modell weiter helfen. Im Folgenden werden die einzelnen Punkte genauer erläutert.
-    \subsubsection{Funktionalität}
     \subsubsection{Gastkonto}
-    Um das Spiel möglichst einfach zu gestalten, haben wir uns dazu entschieden, dass beim Öffnen der Webseite der Besucher automatisch mit einem Gastkonto \quotes{angemeldet} wird. Dadurch müssen Spieler, welche nur für ein kurzes Spielvergnügen vorbei schauen, keine zusätzliche Angaben machen und verlieren nicht unnötig Zeit. Spieler, die nur mit einem Gastkonto angemeldet sind, haben weniger Möglichkeiten als solche mit Benutzeraccount. Zum Beispiel werden die Punkte eines Gasts nicht in der Punktestatistik aufgeführt und es gibt keine Punktehistorie.
+    Um das Spiel möglichst einfach zu gestalten, haben wir uns dazu entschieden, dass beim Öffnen der Webseite der Besucher automatisch mit einem Gastkonto \quotes{angemeldet} wird. Dadurch müssen Spieler nicht notwendigerweise zusätzliche Angaben machen und verlieren nicht unnötig Zeit. Spieler, die nur mit einem Gastkonto angemeldet sind, haben weniger Möglichkeiten als solche mit Benutzeraccount. Zum Beispiel werden die Punkte eines Gasts nicht in der Punktestatistik aufgeführt und es gibt keine Punktehistorie.
     \subsubsection{Registrierung \& Benutzerkonto}
     Ein Spieler kann sich jederzeit registrieren oder - falls dieser  schon über ein Benutzerkonto verfügt - anmelden. Ein Benutzerkonto gibt uns mehr Möglichkeiten. Es können zum Beispiel benutzerspezifische Erweiterungen wie In-App Käufe realisiert oder Einstellungen, wie die Motorradfarbe, gespeichert werden. Momentan ist das speichern der Punktezahl und Motorradfarbe vorgesehen.
     \subsubsection{Server-Client-Architektur}
@@ -742,7 +741,7 @@
 		\item Lobby beitreten
 		\item Private und public Lobbys
 		\item Komplexer Lobbymechanismus
-		\item Freunde einladen mit Browser-Link
+		\item Spieler einladen mit Browser-Link
 		\item Spielstart und spielen über das Netzwerk
 		\item Akzeptable Latenz
 		\item Zentraler Server
