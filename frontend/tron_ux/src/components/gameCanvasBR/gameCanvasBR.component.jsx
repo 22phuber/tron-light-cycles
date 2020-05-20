@@ -25,6 +25,7 @@ const GameCanvasBR = (props) => {
   const halfWidth = width * 0.5;
   const halfHeight = height * 0.5;
   const movementLimit = 100;
+  const clientPosOffset = 50;
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -56,16 +57,16 @@ const GameCanvasBR = (props) => {
 	  
 	  // SHIT DON'T GET IT
 	  
-	  if(clientPosX - walls.x + 50 < halfWidth && walls.x + walls.width - clientPosX - 50 > halfWidth){
-		  clientPosX = walls.x + halfWidth - 50;
-	  }else if(clientPosX - walls.x - 50 > halfWidth && walls.x + walls.width - clientPosX + 50 < halfWidth){
-		  clientPosX = walls.x + walls.width - halfWidth + 50;
+	  if(clientPosX - walls.x + clientPosOffset < halfWidth && walls.x + walls.width - clientPosX - clientPosOffset > halfWidth){
+		  clientPosX = walls.x + halfWidth - clientPosOffset;
+	  }else if(clientPosX - walls.x - clientPosOffset > halfWidth && walls.x + walls.width - clientPosX + clientPosOffset < halfWidth){
+		  clientPosX = walls.x + walls.width - halfWidth + clientPosOffset;
 	  }
 		  
-	  if(clientPosY - walls.y + 50 < halfHeight && walls.y + walls.height - clientPosY - 50 > halfHeight){
-		  clientPosY = walls.y + halfHeight - 50;
-	  }else if(clientPosY - walls.y - 50 > halfHeight && walls.y + walls.height - clientPosY + 50< halfHeight){
-		  clientPosY = walls.y + walls.height - halfHeight + 50;
+	  if(clientPosY - walls.y + clientPosOffset < halfHeight && walls.y + walls.height - clientPosY - clientPosOffset > halfHeight){
+		  clientPosY = walls.y + halfHeight - clientPosOffset;
+	  }else if(clientPosY - walls.y - clientPosOffset > halfHeight && walls.y + walls.height - clientPosY + clientPosOffset< halfHeight){
+		  clientPosY = walls.y + walls.height - halfHeight + clientPosOffset;
 	  }
 	  
       // var wallChangeX = walls.x - clientPosX + halfWidth;
